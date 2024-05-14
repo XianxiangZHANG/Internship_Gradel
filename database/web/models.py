@@ -18,7 +18,7 @@ class User(models.Model):
 
 class Project(models.Model):
     """ ProjectTable """
-    projectName = models.CharField(verbose_name="Project Name", max_length=32)
+    projectName = models.CharField(verbose_name="Project Name", max_length=32, unique= True)
     equipment = models.CharField(verbose_name="Equipment", max_length=32, null=True, blank=True)
     customer = models.CharField(verbose_name="Customer", max_length=32, null=True, blank=True)
     projectNo = models.CharField(verbose_name="Project No", max_length=32, null=True, blank=True)
@@ -41,7 +41,7 @@ class Project(models.Model):
 class Part(models.Model):
     """ PartTable """
     ########   1   ########
-    partName = models.CharField(verbose_name="Part Name", max_length=32)
+    partName = models.CharField(verbose_name="Part Name", max_length=32, unique=True)
 
     resinName = models.CharField(verbose_name="Resin Name", max_length=32, null=True, blank=True)
     resinDensity = models.FloatField(verbose_name="Resin Density[kg/m^3]", null=True, blank=True)
@@ -55,6 +55,8 @@ class Part(models.Model):
     fiberSectionCalc = models.FloatField(verbose_name="Fiber Section calc.[mm^2]", null=True, blank=True)
     fiberSectionAcc = models.FloatField(verbose_name="Fiber Section acc.[mm^2]", null=True, blank=True)
 
+    defaultInterfaceHeight = models.IntegerField(verbose_name="Default Interface Height[mm]", null=True, blank=True)
+    defaultInterfaceIntDiam = models.IntegerField(verbose_name="Default Interface Int. Diam.[mm]", null=True, blank=True)
     defaultLinkType = models.CharField(verbose_name="Default Link(Element) Type", max_length=32, null=True, blank=True)
     defaultLinkDefined = models.CharField(verbose_name="Default Link defined by", max_length=32, null=True, blank=True)
     defaultCycleNumber = models.IntegerField(verbose_name="Default Cycle Number", null=True, blank=True)
@@ -93,25 +95,30 @@ class Part(models.Model):
     part_mp4 = models.CharField(verbose_name="Document.mp4", max_length=32, null=True, blank=True)
     part_jpg = models.CharField(verbose_name="Document.jpg", max_length=32, null=True, blank=True)
 
-    project = models.ForeignKey(verbose_name="Project Name", to=Project, on_delete=models.CASCADE)
+    project = models.ForeignKey(verbose_name="Project Name", to=Project, on_delete=models.CASCADE, to_field='id')
+    # project = models.ForeignKey(verbose_name="Project Name", to=Project, on_delete=models.CASCADE)
 
+    def __str__(self):
+        # if self.lastUpdate is not None:
+        #     formatted_date = self.lastUpdate.strftime("%m-%d-%Y")
+        # else:
+        #     formatted_date = "N/A"  # 或者其他你想要显示的默认值
+        return self.partName
 
 class Bushing(models.Model):
     """ BushingTable """
     ########   1   ########
-    bushingName = models.CharField(verbose_name="Part Name", max_length=32)
+    bushingName = models.CharField(verbose_name="Bushing Name", max_length=32)
 
-    defaultInterfaceHeight = models.IntegerField(verbose_name="Default Interface Height[mm]", null=True, blank=True)
-    defaultInterfaceIntDiam = models.IntegerField(verbose_name="Default Interface Int. Diam.[mm]", null=True, blank=True)
     numberInterface = models.IntegerField(verbose_name="Number of Interface", null=True, blank=True)
-
 
     bushingDrawNb = models.CharField(verbose_name="Bushing Draw. Nb", max_length=32, null=True, blank=True)
     AccOnBushing = models.FloatField(verbose_name="Acc. On Bushing[g]", null=True, blank=True)
     bushingMass = models.FloatField(verbose_name="Bushing Mass[g]", null=True, blank=True)
     totalBushingMass = models.FloatField(verbose_name="Total Bushing Mass[g]", null=True, blank=True)
 
-    part = models.ForeignKey(verbose_name="Part Name", to=Part, on_delete=models.CASCADE)
+    project = models.ForeignKey(verbose_name="Project Name", to=Project, on_delete=models.CASCADE, to_field='id')
+    part = models.ForeignKey(verbose_name="Part Name", to=Part, on_delete=models.CASCADE,  to_field='id')
 
 
 class Interface(models.Model):

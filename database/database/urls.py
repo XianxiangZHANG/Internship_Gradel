@@ -15,7 +15,11 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from web.views import account, project, part, bushing, interface, link, winding
+from django.conf import settings
+from django.conf.urls.static import static
+from web.views import account, project, part, bushing, interface, link, winding, form
+from web.views.load_parts import load_parts
+# from web.views.bushing_add_multiple import bushing_add_multiple
 
 urlpatterns = [
     # path('', account.login),
@@ -46,4 +50,11 @@ urlpatterns = [
     path('bushing/add/', bushing.bushing_add),
     path('bushing/edit/<int:aid>/', bushing.bushing_edit),
     path('bushing/delete/', bushing.bushing_delete),
+    # path('bushing/load-parts/', load_parts.load_parts),
+    path('bushing/load-parts/', load_parts, name='load_parts'),
+    
+    path('bushing/add-multiple/', bushing.bushing_add_multiple),
+    # path('bushing/add-multiple/', bushing_add_multiple, name='bushing_add_multiple'),
 ]
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

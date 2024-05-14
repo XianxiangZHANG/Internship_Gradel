@@ -85,7 +85,7 @@ WSGI_APPLICATION = 'database.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'mssql',
-        'NAME': 'TestDB',
+        'NAME': 'TestDB2',
         'USER': 'SA',
         'PASSWORD': 'Zxx990605',
         'HOST': 'localhost',

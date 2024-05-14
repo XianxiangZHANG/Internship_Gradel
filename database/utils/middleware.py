@@ -5,16 +5,16 @@ from django.shortcuts import redirect
 class AuthMiddleware(MiddlewareMixin):
 
     def process_request(self, request):
-        # 1.不用登录就可以访问处理
+        # 1.Access processing without logging in
         if request.path_info in ["/login/", "/img/code/"]:
             return
 
-        # 2.获取session
+        # 2.Get session
         info_dict = request.session.get("info")
 
-        # 未登录
+        # Not logged in
         if not info_dict:
             return redirect('/login/')
 
-        # 已登录
+        # Has logged
         request.info_dict = info_dict

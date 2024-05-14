@@ -9,8 +9,14 @@
         </a>
     </div> -->
     <div>
-        
-    <table class="table table-bordered" id="normalTable" style="display: none;">
+        <h3>Part List:</h3>
+        <form method="get" id="filterForm">
+            {{ filter.form.as_p }}
+            <button type="submit" id="btnf1">Filter</button>
+            <button type="reset" id="resetButton" class="btnf2">Reset</button>
+        </form>
+        <!-- <table id="transposedTable"></table> -->
+    <table class="table table-bordered" id="normalTable" >
         <thead>
         <tr>
             <!-- <th>Part ID</th> -->
@@ -25,6 +31,8 @@
             <th>Winding Density</th>
             <th>Fiber Section Calc.</th>
             <th>Fiber Section Acc.</th>
+            <th>Default Interface Height</th>
+            <th>Default Interface Int Diam</th>
             <th>Default Link Type</th>
             <th>Default Link Defined</th>
             <th>Default Cycle Number</th>
@@ -72,6 +80,8 @@
                 <td>{{ row.windingDensity }}</td>
                 <td>{{ row.fiberSectionCalc }}</td>
                 <td>{{ row.fiberSectionAcc }}</td>
+                <td>{{ row.defaultInterfaceHeight }}</td>
+                <td>{{ row.defaultInterfaceIntDiam }}</td>
                 <td>{{ row.defaultLinkType }}</td>
                 <td>{{ row.defaultLinkDefined }}</td>
                 <td>{{ row.defaultCycleNumber }}</td>
@@ -91,6 +101,7 @@
                 <td>{{ row.totalFiberLength }}</td>
                 <td>{{ row.totalFiberMass }}</td>
                 <td>{{ row.totalResinMass }}</td>
+                <!-- <td><img src="{{ project.projectImage.url }}" alt="Project Image"></td> -->
                 <td>{{ row.projectImage }}</td>
                 <td>{{ row.part_gh }}</td>
                 <td>{{ row.part_mod }}</td>
@@ -109,13 +120,7 @@
         {% endfor %}
         </tbody>
     </table></div>
-    <h3>Part List:</h3>
-    <form method="get" id="filterForm">
-        {{ filter.form.as_p }}
-        <button type="submit" id="btnf1">Filter</button>
-        <button type="reset" id="resetButton" class="btnf2">Reset</button>
-    </form>
-    <table id="transposedTable"></table>
+    
 
     <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
         <div class="modal-dialog" role="document">
@@ -203,6 +208,16 @@
             DELETE_ID = 0;
             $('#myModal').modal('hide');
         }
+
+        // $(function() {
+        //     $("#id_project").autocomplete({
+        //         source: "/part/list/",  // 指向您定义的 URL
+        //         minLength: 2,  // 最小字符触发自动完成
+        //         select: function(event, ui) {
+        //             $('#id_project').val(ui.item.value);  // 用户选择后，设置输入框的值
+        //         }
+        //     });
+        // });
     </script>
 {% endblock %}
 
@@ -236,7 +251,7 @@
         border-radius: 4px;
         cursor: pointer; 
     }
-    input[type="text"] {
+    #id_project, input[type="text"] {
         width: 100%; 
         padding: 8px; 
         margin: 0px 0; 

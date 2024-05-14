@@ -7,9 +7,13 @@ from utils.encrypt import md5
 import django_filters
 
 class PartFilter(django_filters.FilterSet):
+    # projectName = django_filters.CharFilter(field_name='project__projectName', lookup_expr='icontains')
+    # projectName = django_filters.CharFilter(field_name='project__projectName', lookup_expr='exact')
+
     class Meta:
         model = models.Part
         fields = {
+            'project': ['exact'], 
             'partName': ['icontains'],
             'resinName': ['icontains'],
             'fiberName': ['icontains'],
@@ -44,7 +48,7 @@ class PartModelForm(forms.ModelForm):
         # fields = ['username', 'password', 'age', 'gender', 'depart']
         # fields = ['partName', 'equipment', 'customer', 'partNo', 'partsNumber', 'relativeDesign', 'structureDrawingNb', 'documentNb', 'revision', 'lastUpdate']
         fields = ['project', 'partName', 'resinName', 'resinDensity', 'fiberName', 'totalTowNumber', 'fiberDensity', 'fiberVolumeRatio', 'windingDensity', 'fiberSectionCalc',
-                  'fiberSectionAcc', 'defaultLinkType', 'defaultLinkDefined', 'defaultCycleNumber', 'tensileYoungModulus', 'tensileUtimateStress', 'tensileYieldStress',
+                  'fiberSectionAcc', 'defaultInterfaceHeight', 'defaultInterfaceIntDiam', 'defaultLinkType', 'defaultLinkDefined', 'defaultCycleNumber', 'tensileYoungModulus', 'tensileUtimateStress', 'tensileYieldStress',
                   'compressionYoungModulus', 'flexuralModulus', 'numberLink', 'numberBushing', 'totalMassLink', 'totalMassAccumulation', 'totalMassWinding',
                   'totalMassBushing', 'additionalMass', 'totalMassStructure', 'totalFiberLength', 'totalFiberMass', 'totalResinMass', 'projectImage',
                   'part_gh', 'part_mod', 'part_csv', 'part_rs', 'part_log', 'part_mp4', 'part_jpg']
@@ -80,7 +84,7 @@ class PartEditModelForm(forms.ModelForm):
         # fields = ['username', 'age', 'gender', 'depart']
         # fields = ['partName', 'equipment', 'customer', 'partNo', 'partsNumber', 'relativeDesign', 'structureDrawingNb', 'documentNb', 'revision', 'lastUpdate']
         fields = ['project', 'partName', 'resinName', 'resinDensity', 'fiberName', 'totalTowNumber', 'fiberDensity', 'fiberVolumeRatio', 'windingDensity', 'fiberSectionCalc',
-                  'fiberSectionAcc', 'defaultLinkType', 'defaultLinkDefined', 'defaultCycleNumber', 'tensileYoungModulus', 'tensileUtimateStress', 'tensileYieldStress',
+                  'fiberSectionAcc', 'defaultInterfaceHeight', 'defaultInterfaceIntDiam', 'defaultLinkType', 'defaultLinkDefined', 'defaultCycleNumber', 'tensileYoungModulus', 'tensileUtimateStress', 'tensileYieldStress',
                   'compressionYoungModulus', 'flexuralModulus', 'numberLink', 'numberBushing', 'totalMassLink', 'totalMassAccumulation', 'totalMassWinding',
                   'totalMassBushing', 'additionalMass', 'totalMassStructure', 'totalFiberLength', 'totalFiberMass', 'totalResinMass', 'projectImage',
                   'part_gh', 'part_mod', 'part_csv', 'part_rs', 'part_log', 'part_mp4', 'part_jpg'] 
@@ -120,3 +124,11 @@ def part_delete(request):
     # return JsonResponse({"status": False, 'error': "ID不能为空"})
     return JsonResponse({"status": True})
 
+
+# def search_projects(request):
+#     if request.is_ajax():
+#         query = request.GET.get('term', '')  # "term" 是 jQuery UI Autocomplete 发送的默认参数
+#         projects = models.Project.objects.filter(name__icontains=query)[:10]  # 返回最多10个结果
+#         results = [{'id': project.id, 'label': project.name, 'value': project.name} for project in projects]
+#         return JsonResponse(results, safe=False)
+#     return JsonResponse([], safe=False)
