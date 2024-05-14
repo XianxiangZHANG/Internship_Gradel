@@ -1,0 +1,88 @@
+from io import BytesIO
+
+from django import forms
+from django.core.validators import RegexValidator
+from django.shortcuts import render, HttpResponse, redirect
+
+from web import models
+from utils.encrypt import md5
+from utils.helper import check_code
+
+
+class LoginForm(forms.Form):
+    username = forms.CharField(
+        label="Username",
+        widget=forms.TextInput(attrs={'class': "form-control", 'placeholder': "Please enter your username"}),
+    )
+    password = forms.CharField(
+        label="Password",
+        widget=forms.PasswordInput(attrs={'class': "form-control", 'placeholder': "Please enter your passwaord"}, render_value=True),
+    )
+
+    code = forms.CharField(
+        label="Code",
+        widget=forms.TextInput(attrs={'class': "form-control", 'placeholder': "Please enter the code"}),
+    )
+
+
+def login(request):
+    """ User Login """
+    if request.method == "GET":
+        form = LoginForm()
+        return render(request, 'login.html', {"form": form})
+
+    form = LoginForm(data=request.POST)
+    if not form.is_valid():
+        return render(request, 'login.html', {"form": form})
+
+    # Determine whether the verification code is correct
+    image_code = request.session.get("image_code")
+    if not image_code:
+        form.add_error("code", "The code has expired")
+        return render(request, 'login.html', {"form": form})
+    if image_code.upper() != form.cleaned_data['code'].upper():
+        form.add_error("code", "The code error")
+        return render(request, 'login.html', {"form": form})
+
+    # The verification code is correct, go to the database to verify the username and password
+    user = form.cleaned_data['username']
+    pwd = form.cleaned_data['password']
+    encrypt_pasword = md5(pwd)
+    print(user, encrypt_pasword)
+    User_object = models.User.objects.filter(username=user, password=encrypt_pasword).first()
+    if not User_object:
+        return render(request, 'login.html', {"form": form, 'error': "Wrong username or password"})
+
+    request.session['info'] = {"id": User_object.id, 'name': User_object.username}
+    request.session.set_expiry(60 * 60 * 24 * 7)
+
+    return redirect("/home/")
+
+
+def img_code(request):
+    # 1.Generate Image
+    image_object, code_str = check_code()
+
+    # 2.The image content is returned and written to the memory, read from the memory and returned
+    stream = BytesIO()
+    image_object.save(stream, 'png')
+
+    # 3.The content of the image is written to the session + 60s
+    request.session['image_code'] = code_str
+    request.session.set_expiry(60)
+
+    return HttpResponse(stream.getvalue())
+
+
+def logout(request):
+    request.session.clear()
+    return redirect('/login/')
+
+
+def home(request):
+    # request.info_dict['name']
+    return render(request, 'home.html')
+
+def check(request):
+    # request.info_dict['name']
+    return render(request, 'check.html')

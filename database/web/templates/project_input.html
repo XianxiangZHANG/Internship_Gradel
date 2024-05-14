@@ -1,0 +1,24 @@
+{% extends 'layout.html' %}
+
+
+{% block content %}
+
+    <div style="margin-top: 50px; text-align: center;">
+        <a class="btn btn-success" href="/project/add/" style="width: 500px; font-size: 30px;">
+            <span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span> Create New Project
+        </a>
+        <br><br>
+        <a class="btn btn-success" href="/part/add/" style="width: 500px; font-size: 30px;">
+            <span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span> Create New Part
+        </a>
+        <br><br>
+        <a class="btn btn-success" href="/part/input/" style="width: 500px; font-size: 30px;">
+            <span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span> Edit from existing project
+        </a>
+    </div>
+
+{% endblock %}
+
+{% block js %}
+    
+{% endblock %}

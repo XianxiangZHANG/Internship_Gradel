@@ -1,0 +1,249 @@
+{% extends 'layout.html' %}
+
+
+{% block content %}
+
+    <!-- <div style="margin-bottom: 10px">
+        <a class="btn btn-success" href="/part/add/">
+            <span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span> New part
+        </a>
+    </div> -->
+    <div>
+        
+    <table class="table table-bordered" id="normalTable" style="display: none;">
+        <thead>
+        <tr>
+            <!-- <th>Part ID</th> -->
+            <th>Project Name</th>
+            <th>Part Name</th>
+            <th>Resin Name</th>
+            <th>Resin Density</th>
+            <th>Fiber Name</th>
+            <th>Total Tow Number</th>
+            <th>Fiber Density</th>
+            <th>Fiber Volume Ratio</th>
+            <th>Winding Density</th>
+            <th>Fiber Section Calc.</th>
+            <th>Fiber Section Acc.</th>
+            <th>Default Link Type</th>
+            <th>Default Link Defined</th>
+            <th>Default Cycle Number</th>
+            <th>Tensile Young Modulus</th>
+            <th>Tensile Utimate Stress</th>
+            <th>Tensile Yield Stress</th>
+            <th>Compression Young Modulus</th>
+            <th>Flexural Modulus</th>
+            <th>Number Link</th>
+            <th>Number Bushing</th>
+            <th>Total Mass Link</th>
+            <th>Total Mass Accumulation</th>
+            <th>Total Mass Winding</th>
+            <th>Total Mass Bushing</th>
+            <th>Additional Mass</th>
+            <th>Total Mass Structure</th>
+            <th>Total Fiber Length</th>
+            <th>Total Fiber Mass</th>
+            <th>Total Resin Mass</th>
+            <th>Project Image</th>
+            <th>.gh</th>
+            <th>.mod</th>
+            <th>.csv</th>
+            <th>.rs</th>
+            <th>.log</th>
+            <th>.mp4</th>
+            <th>.jpg</th>
+            <th>Operations</th>
+
+
+        </tr>
+        </thead>
+        <tbody>
+        {% for row in filter.qs %}
+            <tr>
+                <!-- <td>{{ row.id }}</td> -->
+                <td>{{ row.project.projectName }}</td>
+                <td>{{ row.partName }}</td>
+                <td>{{ row.resinName }}</td>
+                <td>{{ row.resinDensity }}</td>
+                <td>{{ row.fiberName }}</td>
+                <td>{{ row.totalTowNumber }}</td>
+                <td>{{ row.fiberDensity }}</td>
+                <td>{{ row.fiberVolumeRatio }}</td>
+                <td>{{ row.windingDensity }}</td>
+                <td>{{ row.fiberSectionCalc }}</td>
+                <td>{{ row.fiberSectionAcc }}</td>
+                <td>{{ row.defaultLinkType }}</td>
+                <td>{{ row.defaultLinkDefined }}</td>
+                <td>{{ row.defaultCycleNumber }}</td>
+                <td>{{ row.tensileYoungModulus }}</td>
+                <td>{{ row.tensileUtimateStress }}</td>
+                <td>{{ row.tensileYieldStress }}</td>
+                <td>{{ row.compressionYoungModulus }}</td>
+                <td>{{ row.flexuralModulus }}</td>
+                <td>{{ row.numberLink }}</td>
+                <td>{{ row.numberBushing }}</td>
+                <td>{{ row.totalMassLink }}</td>
+                <td>{{ row.totalMassAccumulation }}</td>
+                <td>{{ row.totalMassWinding }}</td>
+                <td>{{ row.totalMassBushing }}</td>
+                <td>{{ row.additionalMass }}</td>
+                <td>{{ row.totalMassStructure }}</td>
+                <td>{{ row.totalFiberLength }}</td>
+                <td>{{ row.totalFiberMass }}</td>
+                <td>{{ row.totalResinMass }}</td>
+                <td>{{ row.projectImage }}</td>
+                <td>{{ row.part_gh }}</td>
+                <td>{{ row.part_mod }}</td>
+                <td>{{ row.part_csv }}</td>
+                <td>{{ row.part_rs }}</td>
+                <td>{{ row.part_log }}</td>
+                <td>{{ row.part_mp4 }}</td>
+                <td>{{ row.part_jpg }}</td>
+                <td>
+                    <a class="btn btn-primary btn-xs" href="/part/edit/{{ row.id }}/" style="width: 70px; text-align: center; margin-bottom: 5px;"> Edit </a>
+                    <br>
+                    <input type="button" value="Delete" class="btn btn-danger btn-xs" style="width: 70px; text-align: center;"
+                           onclick="deleteAction({{ row.id }});"/>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table></div>
+    <h3>Part List:</h3>
+    <form method="get" id="filterForm">
+        {{ filter.form.as_p }}
+        <button type="submit" id="btnf1">Filter</button>
+        <button type="reset" id="resetButton" class="btnf2">Reset</button>
+    </form>
+    <table id="transposedTable"></table>
+
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+
+
+            <div class="alert alert-danger alert-dismissible fade in" role="alert">
+                <button type="button" class="close"></button>
+                <h4>Are you sure you want to delete it?</h4>
+                <p style="margin: 20px 0;">After deletion, all related data associated with it will be deleted. Are you sure you want to continue?</p>
+                <p>
+                    <button type="button" class="btn btn-danger" onclick="confirmDelete()">Confirm</button>
+                    <button type="button" class="btn btn-default" onclick="cancelDelete()">Cancel</button>
+                </p>
+            </div>
+        </div>
+
+    </div>
+{% endblock %}
+
+{% block js %}
+        <script>
+            function transposeTable() {
+            const normalTable = document.getElementById('normalTable');
+            const transposedTable = document.getElementById('transposedTable');
+
+            // Get the maximum number of columns any row has
+            let maxCols = 0;
+            for (const row of normalTable.rows) {
+                if (row.cells.length > maxCols) {
+                    maxCols = row.cells.length;
+                }
+            }
+
+            // Create new rows for each column in the original table
+            for (let i = 0; i < maxCols; i++) {
+                const newRow = transposedTable.insertRow();
+                for (const row of normalTable.rows) {
+                    const newCell = newRow.insertCell();
+                    if (i < row.cells.length) {
+                        newCell.innerHTML = row.cells[i].innerHTML;
+                    } else {
+                        newCell.innerHTML = ''; // Fill in empty if no data exists for this transposed cell
+                    }
+                }
+            }
+        }
+
+        transposeTable();
+
+        document.getElementById('resetButton').addEventListener('click', function() {
+        window.location.href = window.location.pathname; // 重定向到相同页面但无查询参数
+        });
+
+        // ID currently to be deleted
+        DELETE_ID = 0;
+        function deleteAction(id) {
+            DELETE_ID = id;
+            $('#myModal').modal('show');
+        }
+
+        function confirmDelete() {
+            // Send request to backend DELETE_ID -> Delete
+            // Page refresh
+            // /part/delete/?aid=12
+            $.ajax({
+                url: "/part/delete/",
+                type: "GET",
+                data: {
+                    aid: DELETE_ID
+                },
+                dataType: "JSON",
+                success: function (res) {
+                    // {status: true} -> obj
+                    if (res.status) {
+                        // Deletion successful, refresh the page
+                        location.reload()
+                    } else {
+                        alert(res.error);
+                    }
+                }
+            })
+        }
+
+        function cancelDelete() {
+            DELETE_ID = 0;
+            $('#myModal').modal('hide');
+        }
+    </script>
+{% endblock %}
+
+{% block css %}
+<style>
+    table {
+        border-collapse: collapse;
+        width: 100%;
+        margin-bottom: 100px;
+    }
+    th, td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: center;
+    }
+    tr:nth-child(even) {
+        background-color: #f2f2f2;
+    }
+    th {
+        background-color: #4CAF50;
+        color: white;
+    }
+    #btnf1, .btnf2{
+        width: 100px; 
+        background-color: #49b7be; 
+        color: white; 
+        padding: 5px 10px; 
+        margin: 8px;
+        margin-right: 0px;
+        border: none; 
+        border-radius: 4px;
+        cursor: pointer; 
+    }
+    input[type="text"] {
+        width: 100%; 
+        padding: 8px; 
+        margin: 0px 0; 
+        display: inline-block;
+        border: 1px solid #ccc; 
+        border-radius: 4px; 
+        box-sizing: border-box; 
+    }
+</style>
+{% endblock %}

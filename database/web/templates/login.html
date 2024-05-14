@@ -1,0 +1,73 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login GLW</title>
+    <link rel="stylesheet" href="{% static 'plugins/bootstrap-3.4.1/css/bootstrap.min.css' %}">
+    <style>
+        .login-box {
+            width: 400px;
+            margin-left: auto;
+            margin-right: auto;
+            border: 1px solid #dddddd;
+            margin-top: 220px;
+            padding-left: 20px;
+            padding-right: 20px;
+            padding-bottom: 20px
+        }
+
+        .login-box h2 {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+<div class="login-box">
+    <a style="margin-left: 70px;">
+        <img src="{% static 'images/logo_gradel.png' %}" alt="Gradel Logo" width="200" height="100">
+    </a>
+    <h2>Login</h2>
+    
+    <form method="post" action="/login/" novalidate>
+        {% csrf_token %}
+        <div class="form-group">
+            <label>{{ form.username.label }}</label>
+            {{ form.username }}
+            <span style="color: red;">{{ form.username.errors.0 }}</span>
+        </div>
+        <div class="form-group">
+            <label>{{ form.password.label }}</label>
+            {{ form.password }}
+            <span style="color: red;">{{ form.password.errors.0 }}</span>
+        </div>
+        <div class="form-group">
+            <label>{{ form.code.label }}</label>
+            <div class="row">
+                <div class="col-xs-6">
+                    {{ form.code }}
+                </div>
+                <div class="col-xs-6">
+                    <img src="/img/code/" id="codeImage"/>
+                </div>
+            </div>
+            <span style="color: red;">{{ form.code.errors.0 }}</span>
+        </div>
+
+        <button type="submit" class="btn btn-primary" style="width: 165px;">Submit</button>
+        <span style="color: red;">{{ error }}</span>
+    </form>
+</div>
+
+<script src="{% static 'js/jquery-3.6.0.min.js' %}"></script>
+<script>
+    $(function () {
+        $("#codeImage").click(function () {
+            var url = $(this).attr('src');  // "/img/code/?"
+            $(this).attr('src', url + "?");
+        });
+    })
+</script>
+</body>
+</html>
