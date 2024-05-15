@@ -26,10 +26,11 @@ urlpatterns = [
     path('logout/', account.logout),
     path('img/code/', account.img_code),
     path('home/', account.home),
+    path('upload/', account.upload),
     path('check/', account.check),
 
     path('project/list/', project.project_list),
-    path('project/input/', project.project_input),
+    # path('project/input/', project.project_input),
     path('project/add/', project.project_add),
 
     # /project/edit/123/

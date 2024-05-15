@@ -83,6 +83,9 @@ def home(request):
     # request.info_dict['name']
     return render(request, 'home.html')
 
+def upload(request):
+    return render(request, 'upload.html')
+
 def check(request):
     # request.info_dict['name']
     return render(request, 'check.html')

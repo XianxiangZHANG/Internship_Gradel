@@ -29,15 +29,15 @@ def project_list(request):
     project_filter = ProjectFilter(request.GET, queryset=models.Project.objects.all())
     return render(request, 'project_list.html', {'filter': project_filter})
 
-def project_input(request):
-    """ list of project """
+# def project_input(request):
+#     """ list of project """
 
-    # [obj,]
-    queryset = models.Project.objects.all().order_by("id")
-    # for row in queryset:
-    #     print(row.username, row.password, row.gender, row.get_gender_display(), row.depart_id, row.depart.title)
+#     # [obj,]
+#     queryset = models.Project.objects.all().order_by("id")
+#     # for row in queryset:
+#     #     print(row.username, row.password, row.gender, row.get_gender_display(), row.depart_id, row.depart.title)
 
-    return render(request, 'project_input.html', {"queryset": queryset})
+#     return render(request, 'project_input.html', {"queryset": queryset})
 
 class ProjectModelForm(forms.ModelForm):
     class Meta:
