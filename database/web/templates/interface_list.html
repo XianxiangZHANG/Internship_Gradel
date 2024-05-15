@@ -22,12 +22,25 @@
             <!-- <th>Part ID</th> -->
             <th>Project Name</th>
             <th>Part Name</th>
-            <th>Bushing Name</th>
-            <th>Number of Interface</th>
-            <th>Bushing Draw. Nb</th>
-            <th>Acc. On Bushing[g]</th>
-            <th>Bushing Mass[g]</th>
-            <th>Total Bushing Mass[g]</th>
+            <th>Interface Name</th>
+            <th>Height [mm]</th>
+            <th>Int. Diameter [mm]</th>
+            <th>Total Link</th>
+            <th>Total Arm</th>
+            <th>Total Section [mm²]</th>
+            <th>Ext. Diameter [mm]</th>
+            <th>Theo. height [mm]</th>
+            <th>Acc. Mass [g]</th>
+            <th>Fin. O. Diam. [mm]</th>
+            <th>Fin. Acc. section [mm²]</th>
+            <th>Safety Factor [%]</th>
+            <th>Interface's center X [mm]</th>
+            <th>Interface's centerY [mm]</th>
+            <th>Interface's centerZ [mm]</th>
+            <th>Direction vectorX [mm]</th>
+            <th>Direction vectorY [mm]</th>
+            <th>Direction vectorZ [mm]</th>
+            <th>*divisionStep*</th>
             <th>Operations</th>
             
         </tr>
@@ -38,12 +51,28 @@
                 <!-- <td>{{ row.id }}</td> -->
                 <td>{{ row.project.projectName }}</td>
                 <td>{{ row.part.partName }}</td>
-                <td>{{ row.bushingName }}</td>
-                <td>{{ row.numberInterface }}</td>
-                <td>{{ row.bushingDrawNb }}</td>
-                <td>{{ row.AccOnBushing }}</td>
-                <td>{{ row.bushingMass }}</td>
-                <td>{{ row.totalBushingMass }}</td>
+
+                <td>{{ row.interfaceName }}</td>
+                <td>{{ row.height }}</td>
+                <td>{{ row.intDiameter }}</td>
+                <td>{{ row.totalLink }}</td>
+                <td>{{ row.totalArm }}</td>
+                <td>{{ row.totalSection }}</td>
+                <td>{{ row.extDiameter }}</td>
+                <td>{{ row.theoHeight }}</td>
+                <td>{{ row.accMass }}</td>
+                <td>{{ row.finODiam }}</td>
+                <td>{{ row.finAccSection }}</td>
+                <td>{{ row.safetyFactor }}</td>
+                <td>{{ row.interfaceCenterX }}</td>
+                <td>{{ row.interfaceCenterY }}</td>
+                <td>{{ row.interfaceCenterZ }}</td>
+                <td>{{ row.directionVectorX }}</td>
+                <td>{{ row.directionVectorY }}</td>
+                <td>{{ row.directionVectorZ }}</td>
+                <td>{{ row.divisionStep }}</td>
+               
+                
                 <td>
                     <a class="btn btn-primary btn-xs" href="/bushing/edit/{{ row.id }}/" style="width: 70px; text-align: center; margin-bottom: 5px;"> Edit </a>
                     <br>

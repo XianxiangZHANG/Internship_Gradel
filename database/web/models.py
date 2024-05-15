@@ -99,10 +99,6 @@ class Part(models.Model):
     # project = models.ForeignKey(verbose_name="Project Name", to=Project, on_delete=models.CASCADE)
 
     def __str__(self):
-        # if self.lastUpdate is not None:
-        #     formatted_date = self.lastUpdate.strftime("%m-%d-%Y")
-        # else:
-        #     formatted_date = "N/A"  # 或者其他你想要显示的默认值
         return self.partName
 
 class Bushing(models.Model):
@@ -119,6 +115,9 @@ class Bushing(models.Model):
 
     project = models.ForeignKey(verbose_name="Project Name", to=Project, on_delete=models.CASCADE, to_field='id')
     part = models.ForeignKey(verbose_name="Part Name", to=Part, on_delete=models.CASCADE,  to_field='id')
+
+    def __str__(self):
+        return self.bushingName
 
 
 class Interface(models.Model):
@@ -150,12 +149,17 @@ class Interface(models.Model):
     ########   3   ########
     divisionStep = models.IntegerField(verbose_name="Division Step", null=True, blank=True)
 
-    bushing = models.ForeignKey(verbose_name="Bushing Name", to=Bushing, on_delete=models.CASCADE)
+    project = models.ForeignKey(verbose_name="Project Name", to=Project, on_delete=models.CASCADE, to_field='id')
+    part = models.ForeignKey(verbose_name="Part Name", to=Part, on_delete=models.CASCADE,  to_field='id')
+    # bushing = models.ForeignKey(verbose_name="Bushing Name", to=Bushing, on_delete=models.CASCADE, to_field='id')
+
+    def __str__(self):
+        return self.interfaceName
 
 class Link(models.Model):
     """ InterfaceTable """
     ########   2   ########
-    LinkName = models.CharField(verbose_name="Link Name", max_length=32)
+    linkName = models.CharField(verbose_name="Link Name", max_length=32)
 
     length = models.FloatField(verbose_name="Length[mm]", null=True, blank=True)
     linkType = models.CharField(verbose_name="Link Type", max_length=32, null=True, blank=True)
@@ -172,6 +176,9 @@ class Link(models.Model):
 
     part = models.ForeignKey(verbose_name="Part Name", to="Part", on_delete=models.CASCADE)
     interface = models.ForeignKey(verbose_name="Interface Name", to=Interface, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.linkName
                                      
 class WindingType(models.Model):
     """ WindingTypeTable """

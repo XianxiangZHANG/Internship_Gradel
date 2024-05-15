@@ -2,7 +2,7 @@
 
 {% block content %}
 <div class="panel panel-default">
-    <div class="panel-heading"><span class="glyphicon glyphicon-indent-right" aria-hidden="true"></span> Add Multiple Bushings</div>
+    <div class="panel-heading"><span class="glyphicon glyphicon-indent-right" aria-hidden="true"></span> Add Multiple Interfaces</div>
     <div class="panel-body">
         <form class="form-horizontal" method="post" novalidate>
             {% csrf_token %}
@@ -32,25 +32,33 @@
                     </div>
                 </div>
                 {{ formset.management_form }}
-                <table class="table table-bordered" id="bushing-table">
+                <table class="table table-bordered" id="interface-table">
                     <thead>
                         <tr>
-                            <th style="width: 15%;">Bushing Name
-                                <!-- {% if bushingError %}
-                                <br>
-                                <span style="color: red;">{{ bushingError }}</span>
-                                {% endif %} -->
-                            </th>
-                            <th style="width: 15%;">Number Interface</th>
-                            <th style="width: 15%;">Bushing Draw. Nr.</th>
-                            <th style="width: 15%;">Acc. On Bushing[g]</th>
-                            <th style="width: 15%;">Bushing Mass[g]</th>
-                            <th style="width: 15%;">Total Bushing Mass[g]</th>
+                            <th>Interface Name</th>
+                            <th>Height [mm]</th>
+                            <th>Int. Diameter [mm]</th>
+                            <th>Total Link</th>
+                            <th>Total Arm</th>
+                            <th>Total Section [mm²]</th>
+                            <th>Ext. Diameter [mm]</th>
+                            <th>Theo. height [mm]</th>
+                            <th>Acc. Mass [g]</th>
+                            <th>Fin. O. Diam. [mm]</th>
+                            <th>Fin. Acc. section [mm²]</th>
+                            <th>Safety Factor [%]</th>
+                            <th>Interface's center X [mm]</th>
+                            <th>Interface's centerY [mm]</th>
+                            <th>Interface's centerZ [mm]</th>
+                            <th>Direction vectorX [mm]</th>
+                            <th>Direction vectorY [mm]</th>
+                            <th>Direction vectorZ [mm]</th>
+                            <th>*divisionStep*</th>
                         </tr>
                     </thead>
                     <tbody contenteditable="true">
                         {% for form in formset %}
-                        <tr class="bushing-form">
+                        <tr class="interface-form">
                             {% for field in form %}
                             <td contenteditable="true">{{ field }}</td>
                             <span style="color: red;">{{ field.errors.0 }}</span>
@@ -65,7 +73,7 @@
                 <div class="form-group">
                     <div class="col-xs-12">
                         <div class="col-sm-offset-6 col-sm-10">
-                            <button type="button" id="add-bushing" class="btn btn-secondary" style="width: 200px;">Add Bushing</button>
+                            <button type="button" id="add-interface" class="btn btn-secondary" style="width: 200px;">Add Interface</button>
                             <button type="submit" class="btn btn-primary" style="width: 200px;">Save</button>
                         </div>
                     </div>
@@ -76,86 +84,6 @@
 </div>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<!-- <script type="text/javascript">
-    $(document).ready(function() {
-        function loadParts(projectId) {
-            var url = '{% url "load_parts" %}';
-            $.ajax({
-                url: url,
-                data: {
-                    'project_id': projectId
-                },
-                success: function(data) {
-                    $("#id_part").html('<option value="">Please select one</option>');
-                    $.each(data, function(key, value) {
-                        $("#id_part").append('<option value="' + value.id + '">' + value.partName + '</option>');
-                    });
-                }
-            });
-        }
-
-        $('#id_project').change(function() {
-            var projectId = $(this).val();
-            loadParts(projectId);
-        });
-
-        $('#add-bushing').click(function() {
-            var formCount = $('#id_form-TOTAL_FORMS').val();
-            var newForm = $('.bushing-form:first').clone(true).removeClass('bushing-form');
-            newForm.find('input').each(function() {
-                var name = $(this).attr('name').replace('-0-', '-' + formCount + '-');
-                var id = 'id_' + name;
-                $(this).attr({'name': name, 'id': id}).val('');
-            });
-            newForm.find('td:last').html('<button type="button" class="btn btn-danger remove-form">Remove</button>');
-            $('#bushing-table tbody').append(newForm);
-            $('#id_form-TOTAL_FORMS').val(parseInt(formCount) + 1);
-        });
-
-        $(document).on('click', '.remove-form', function() {
-            if ($('#bushing-table tbody tr').length > 1) {
-                $(this).closest('tr').remove();
-                var formCount = $('#id_form-TOTAL_FORMS').val();
-                $('#id_form-TOTAL_FORMS').val(parseInt(formCount) - 1);
-                // 重新调整所有表单行的索引
-                $('#bushing-table tbody tr').each(function(index) {
-                    $(this).find('input').each(function() {
-                        var name = $(this).attr('name').replace(/-\d+-/, '-' + index + '-');
-                        var id = 'id_' + name;
-                        $(this).attr({'name': name, 'id': id});
-                    });
-                });
-            }
-        });
-
-        // Handle paste event to populate table cells
-        $('#bushing-table tbody').on('paste', 'td', function(e) {
-            e.preventDefault();
-            var text = (e.originalEvent || e).clipboardData.getData('text/plain');
-            var rows = text.split('\n');
-            var $currentRow = $(this).closest('tr');
-            var startRowIndex = $currentRow.index();
-            var startColIndex = $(this).index();
-
-            rows.forEach(function(row, rowIndex) {
-                if (row.trim() !== '') {
-                    var cols = row.split('\t');
-                    var $row = $('#bushing-table tbody tr').eq(startRowIndex + rowIndex);
-                    if ($row.length === 0) {
-                        $('#add-bushing').click();
-                        $row = $('#bushing-table tbody tr').last();
-                    }
-                    cols.forEach(function(col, colIndex) {
-                        var $cell = $row.find('td').eq(startColIndex + colIndex);
-                        $cell.text(col || '');
-                        $cell.find('input').val(col || '');
-                    });
-                }
-            });
-        });
-    });
-</script> -->
-
 <script type="text/javascript">
     $(document).ready(function() {
         function loadParts(projectId) {
@@ -179,26 +107,26 @@
             loadParts(projectId);
         });
 
-        $('#add-bushing').click(function() {
+        $('#add-interface').click(function() {
             var formCount = $('#id_form-TOTAL_FORMS').val();
-            var newForm = $('.bushing-form:first').clone(true).removeClass('bushing-form');
+            var newForm = $('.interface-form:first').clone(true).removeClass('interface-form');
             newForm.find('input').each(function() {
                 var name = $(this).attr('name').replace('-0-', '-' + formCount + '-');
                 var id = 'id_' + name;
                 $(this).attr({'name': name, 'id': id}).val('');
             });
             newForm.find('td:last').html('<button type="button" class="btn btn-danger remove-form">Remove</button>');
-            $('#bushing-table tbody').append(newForm);
+            $('#interface-table tbody').append(newForm);
             $('#id_form-TOTAL_FORMS').val(parseInt(formCount) + 1);
         });
 
         $(document).on('click', '.remove-form', function() {
-            if ($('#bushing-table tbody tr').length > 1) {
+            if ($('#interface-table tbody tr').length > 1) {
                 $(this).closest('tr').remove();
                 var formCount = $('#id_form-TOTAL_FORMS').val();
                 $('#id_form-TOTAL_FORMS').val(parseInt(formCount) - 1);
                 // 重新调整所有表单行的索引
-                $('#bushing-table tbody tr').each(function(index) {
+                $('#interface-table tbody tr').each(function(index) {
                     $(this).find('input').each(function() {
                         var name = $(this).attr('name').replace(/-\d+-/, '-' + index + '-');
                         var id = 'id_' + name;
@@ -209,7 +137,7 @@
         });
 
         // Handle paste event to populate table cells
-        $('#bushing-table tbody').on('paste', 'td', function(e) {
+        $('#interface-table tbody').on('paste', 'td', function(e) {
             e.preventDefault();
             var text = (e.originalEvent || e).clipboardData.getData('text/plain');
             var rows = text.split('\n');
@@ -220,10 +148,10 @@
             rows.forEach(function(row, rowIndex) {
                 if (row.trim() !== '') {
                     var cols = row.split('\t');
-                    var $row = $('#bushing-table tbody tr').eq(startRowIndex + rowIndex);
+                    var $row = $('#interface-table tbody tr').eq(startRowIndex + rowIndex);
                     if ($row.length === 0) {
-                        $('#add-bushing').click();
-                        $row = $('#bushing-table tbody tr').last();
+                        $('#add-interface').click();
+                        $row = $('#interface-table tbody tr').last();
                     }
                     cols.forEach(function(col, colIndex) {
                         var $cell = $row.find('td').eq(startColIndex + colIndex);
