@@ -1,0 +1,166 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+<div class="panel panel-default">
+    <div class="panel-heading"><span class="glyphicon glyphicon-indent-right" aria-hidden="true"></span> Add Multiple Links</div>
+    <div class="panel-body">
+        <form class="form-horizontal" method="post" novalidate>
+            {% csrf_token %}
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="form-group" style="margin-bottom: 25px;">
+                        <label class="col-sm-1 control-label">Project</label>
+                        <div class="col-sm-11" style="position: relative">
+                            <select id="id_project" name="project" class="form-control">
+                                <option value=""> - - - - Please select one - - - - </option>
+                                {% for project in projects %}
+                                    <option value="{{ project.id }}">{{ project.projectName }}</option>
+                                {% endfor %}
+                            </select>
+                            <span style="color: red;">{{ project_part_form.project.errors.0 }}</span>
+                        </div>
+                    </div>
+                    <div class="form-group" style="margin-bottom: 25px;">
+                        <label class="col-sm-1 control-label">Part</label>
+                        <div class="col-sm-11" style="position: relative">
+                            <select id="id_part" name="part" class="form-control">
+                                <option value=""> - - - - Please select one - - - - </option>
+                                <!-- Options will be loaded dynamically -->
+                            </select>
+                            <span style="color: red;">{{ project_part_form.part.errors.0 }}</span>
+                        </div>
+                    </div>
+                </div>
+                {{ formset.management_form }}
+                <table class="table table-bordered" id="link-table">
+                    <thead>
+                        <tr>
+                            <th>Link Name</th>
+                            <th>Height [mm]</th>
+                            <th>Int. Diameter [mm]</th>
+                            <th>Total Link</th>
+                            <th>Total Arm</th>
+                            <th>Total Section [mm²]</th>
+                            <th>Ext. Diameter [mm]</th>
+                            <th>Theo. height [mm]</th>
+                            <th>Acc. Mass [g]</th>
+                            <th>Fin. O. Diam. [mm]</th>
+                            <th>Fin. Acc. section [mm²]</th>
+                            <th>Safety Factor [%]</th>
+                            <th>Link's center X [mm]</th>
+                            <th>Link's centerY [mm]</th>
+                            <th>Link's centerZ [mm]</th>
+                            <th>Direction vectorX [mm]</th>
+                            <th>Direction vectorY [mm]</th>
+                            <th>Direction vectorZ [mm]</th>
+                            <th>*divisionStep*</th>
+                        </tr>
+                    </thead>
+                    <tbody contenteditable="true">
+                        {% for form in formset %}
+                        <tr class="link-form">
+                            {% for field in form %}
+                            <td contenteditable="true">{{ field }}</td>
+                            <span style="color: red;">{{ field.errors.0 }}</span>
+                            {% endfor %}
+                            <td class="text-center">{% if not forloop.first %}<button type="button" class="btn btn-danger remove-form">Remove</button>{% endif %}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <div class="row">
+                <div class="form-group">
+                    <div class="col-xs-12">
+                        <div class="col-sm-offset-6 col-sm-10">
+                            <button type="button" id="add-link" class="btn btn-secondary" style="width: 200px;">Add Link</button>
+                            <button type="submit" class="btn btn-primary" style="width: 200px;">Save</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function() {
+        function loadParts(projectId) {
+            var url = '{% url "load_parts" %}';
+            $.ajax({
+                url: url,
+                data: {
+                    'project_id': projectId
+                },
+                success: function(data) {
+                    $("#id_part").html('<option value=""> - - - - Please select one - - - - </option>');
+                    $.each(data, function(key, value) {
+                        $("#id_part").append('<option value="' + value.id + '">' + value.partName + '</option>');
+                    });
+                }
+            });
+        }
+
+        $('#id_project').change(function() {
+            var projectId = $(this).val();
+            loadParts(projectId);
+        });
+
+        $('#add-link').click(function() {
+            var formCount = $('#id_form-TOTAL_FORMS').val();
+            var newForm = $('.link-form:first').clone(true).removeClass('link-form');
+            newForm.find('input').each(function() {
+                var name = $(this).attr('name').replace('-0-', '-' + formCount + '-');
+                var id = 'id_' + name;
+                $(this).attr({'name': name, 'id': id}).val('');
+            });
+            newForm.find('td:last').html('<button type="button" class="btn btn-danger remove-form">Remove</button>');
+            $('#link-table tbody').append(newForm);
+            $('#id_form-TOTAL_FORMS').val(parseInt(formCount) + 1);
+        });
+
+        $(document).on('click', '.remove-form', function() {
+            if ($('#link-table tbody tr').length > 1) {
+                $(this).closest('tr').remove();
+                var formCount = $('#id_form-TOTAL_FORMS').val();
+                $('#id_form-TOTAL_FORMS').val(parseInt(formCount) - 1);
+                // 重新调整所有表单行的索引
+                $('#link-table tbody tr').each(function(index) {
+                    $(this).find('input').each(function() {
+                        var name = $(this).attr('name').replace(/-\d+-/, '-' + index + '-');
+                        var id = 'id_' + name;
+                        $(this).attr({'name': name, 'id': id});
+                    });
+                });
+            }
+        });
+
+        // Handle paste event to populate table cells
+        $('#link-table tbody').on('paste', 'td', function(e) {
+            e.preventDefault();
+            var text = (e.originalEvent || e).clipboardData.getData('text/plain');
+            var rows = text.split('\n');
+            var $currentRow = $(this).closest('tr');
+            var startRowIndex = $currentRow.index();
+            var startColIndex = $(this).index();
+
+            rows.forEach(function(row, rowIndex) {
+                if (row.trim() !== '') {
+                    var cols = row.split('\t');
+                    var $row = $('#link-table tbody tr').eq(startRowIndex + rowIndex);
+                    if ($row.length === 0) {
+                        $('#add-link').click();
+                        $row = $('#link-table tbody tr').last();
+                    }
+                    cols.forEach(function(col, colIndex) {
+                        var $cell = $row.find('td').eq(startColIndex + colIndex);
+                        $cell.find('input').val(col.trim() || '');
+                    });
+                }
+            });
+        });
+    });
+</script>
+
+{% endblock %}

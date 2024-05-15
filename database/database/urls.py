@@ -61,6 +61,14 @@ urlpatterns = [
     path('interface/load-parts/', load_parts, name='load_parts'),
     path('interface/add-multiple/', interface.interface_add_multiple),
 
+    path('link/list/', link.link_list),
+    # path('link/input/', link.link_input),
+    path('link/add/', link.link_add),
+    path('link/edit/<int:aid>/', link.link_edit),
+    path('link/delete/', link.link_delete),
+    path('link/load-parts/', load_parts, name='load_parts'),
+    path('link/add-multiple/', link.link_add_multiple),
+
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

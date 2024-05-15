@@ -174,8 +174,9 @@ class Link(models.Model):
     mass = models.FloatField(verbose_name="Mass[g]", null=True, blank=True)
     angle = models.FloatField(verbose_name="Angle", null=True, blank=True)
 
-    part = models.ForeignKey(verbose_name="Part Name", to="Part", on_delete=models.CASCADE)
-    interface = models.ForeignKey(verbose_name="Interface Name", to=Interface, on_delete=models.CASCADE)
+    project = models.ForeignKey(verbose_name="Project Name", to=Project, on_delete=models.CASCADE, to_field='id')
+    part = models.ForeignKey(verbose_name="Part Name", to=Part, on_delete=models.CASCADE, to_field='id')
+    interface = models.ForeignKey(verbose_name="Interface Name", to=Interface, on_delete=models.CASCADE, to_field='id')
 
     def __str__(self):
         return self.linkName
