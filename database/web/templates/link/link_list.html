@@ -46,28 +46,20 @@
                 <!-- <td>{{ row.id }}</td> -->
                 <td>{{ row.project.projectName }}</td>
                 <td>{{ row.part.partName }}</td>
-
-                <td>{{ row.interfaceName }}</td>
-                <td>{{ row.height }}</td>
-                <td>{{ row.intDiameter }}</td>
-                <td>{{ row.totalLink }}</td>
-                <td>{{ row.totalArm }}</td>
-                <td>{{ row.totalSection }}</td>
-                <td>{{ row.extDiameter }}</td>
-                <td>{{ row.theoHeight }}</td>
-                <td>{{ row.accMass }}</td>
-                <td>{{ row.finODiam }}</td>
-                <td>{{ row.finAccSection }}</td>
-                <td>{{ row.safetyFactor }}</td>
-                <td>{{ row.interfaceCenterX }}</td>
-                <td>{{ row.interfaceCenterY }}</td>
-                <td>{{ row.interfaceCenterZ }}</td>
-                <td>{{ row.directionVectorX }}</td>
-                <td>{{ row.directionVectorY }}</td>
-                <td>{{ row.directionVectorZ }}</td>
-                <td>{{ row.divisionStep }}</td>
-               
-                
+                <td>{{ row.linkName }}</td>
+                <td>{{ row.interface1 }}</td>
+                <td>{{ row.interface2 }}</td>
+                <td>{{ row.length }}</td>
+                <td>{{ row.linkType }}</td>
+                <td>{{ row.armDiam }}</td>
+                <td>{{ row.armSection }}</td>
+                <td>{{ row.cycle }}</td>
+                <td>{{ row.sequence }}</td>
+                <td>{{ row.finArmSection }}</td>
+                <td>{{ row.finArmDiam }}</td>
+                <td>{{ row.finArmRadius }}</td>
+                <td>{{ row.mass }}</td>
+                <td>{{ row.angle }}</td>
                 <td>
                     <a class="btn btn-primary btn-xs" href="/link/edit/{{ row.id }}/" style="width: 70px; text-align: center; margin-bottom: 5px;"> Edit </a>
                     <br>

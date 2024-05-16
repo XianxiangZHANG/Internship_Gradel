@@ -30,7 +30,7 @@ def part_list(request):
 
     # return render(request, 'part_list.html', {"queryset": queryset})
     part_filter = PartFilter(request.GET, queryset=models.Part.objects.all())
-    return render(request, 'part_list.html', {'filter': part_filter})
+    return render(request, 'part/part_list.html', {'filter': part_filter})
 
 def part_input(request):
     """ list of part """
@@ -40,7 +40,7 @@ def part_input(request):
     # for row in queryset:
     #     print(row.username, row.password, row.gender, row.get_gender_display(), row.depart_id, row.depart.title)
     
-    return render(request, 'part_input.html', {"queryset": queryset})
+    return render(request, 'part/part_input.html', {"queryset": queryset})
 
 class PartModelForm(forms.ModelForm):
     class Meta:
@@ -66,11 +66,11 @@ class PartModelForm(forms.ModelForm):
 def part_add(request):
     if request.method == "GET":
         form = PartModelForm()
-        return render(request, 'part_form.html', {"form": form})
+        return render(request, 'part/part_form.html', {"form": form})
 
     form = PartModelForm(data=request.POST)
     if not form.is_valid():
-        return render(request, 'part_form.html', {"form": form})
+        return render(request, 'part/part_form.html', {"form": form})
 
 
     # 保存到数据库
@@ -104,11 +104,11 @@ def part_edit(request, aid):
 
     if request.method == "GET":
         form = PartEditModelForm(instance=part_object)
-        return render(request, 'part_form.html', {"form": form})
+        return render(request, 'part/part_form.html', {"form": form})
 
     form = PartEditModelForm(instance=part_object, data=request.POST)
     if not form.is_valid():
-        return render(request, 'part_form.html', {"form": form})
+        return render(request, 'part/part_form.html', {"form": form})
 
     # 更新
     form.save()

@@ -28,7 +28,7 @@ def bushing_list(request):
 
     # return render(request, 'bushing_list.html', {"queryset": queryset})
     bushing_filter = BushingFilter(request.GET, queryset=models.Bushing.objects.all())
-    return render(request, 'bushing_list.html', {'filter': bushing_filter})
+    return render(request, 'bushing/bushing_list.html', {'filter': bushing_filter})
 
 def bushing_input(request):
     """ list of bushing """
@@ -38,7 +38,7 @@ def bushing_input(request):
     # for row in queryset:
     #     print(row.username, row.password, row.gender, row.get_gender_display(), row.depart_id, row.depart.title)
     
-    return render(request, 'bushing_input.html', {"queryset": queryset})
+    return render(request, 'bushing/bushing_input.html', {"queryset": queryset})
 
    
 class BushingModelForm(forms.ModelForm):
@@ -127,7 +127,7 @@ def bushing_add_multiple(request):
                 instance.save()
             return redirect('/bushing/list/')  # Replace with your redirect URL
 
-    return render(request, 'bushing_add_multiple.html', {
+    return render(request, 'bushing/bushing_add_multiple.html', {
         'projects': projects,
         'formset': formset,
         'project_part_form': project_part_form,
@@ -138,11 +138,11 @@ def bushing_add_multiple(request):
 def bushing_add(request):
     if request.method == "GET":
         form = BushingModelForm()
-        return render(request, 'bushing_form.html', {"form": form})
+        return render(request, 'bushing/bushing_form.html', {"form": form})
 
     form = BushingModelForm(data=request.POST)
     if not form.is_valid():
-        return render(request, 'bushing_form.html', {"form": form})
+        return render(request, 'bushing/bushing_form.html', {"form": form})
 
 
     # save -> DB
@@ -172,11 +172,11 @@ def bushing_edit(request, aid):
 
     if request.method == "GET":
         form = BushingEditModelForm(instance=bushing_object)
-        return render(request, 'bushing_form.html', {"form": form})
+        return render(request, 'bushing/bushing_form.html', {"form": form})
 
     form = BushingEditModelForm(instance=bushing_object, data=request.POST)
     if not form.is_valid():
-        return render(request, 'bushing_form.html', {"form": form})
+        return render(request, 'bushing/bushing_form.html', {"form": form})
 
     # 更新
     form.save()

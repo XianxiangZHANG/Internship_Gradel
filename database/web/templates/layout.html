@@ -52,7 +52,7 @@
                        aria-expanded="false">{{ request.info_dict.name }} <span class="caret"></span></a>
                     <ul class="dropdown-menu">
                         <li><a href="#">Check my log</a></li>
-                        <li><a href="#">Modify my password</a></li>
+                        <li><a href="/changePassword/">Change my password</a></li>
                         <li role="separator" class="divider"></li>
                         <li><a href="/logout/">Logout</a></li>
                     </ul>
@@ -62,7 +62,7 @@
     </div><!-- /.container-fluid -->
 </nav>
 
-<div class="container" style="width: 99%;">
+<div class="container" style="width: 80%;">
     {% block content %}{% endblock %}
 
 </div>

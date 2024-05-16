@@ -27,7 +27,7 @@ def project_list(request):
 
     # return render(request, 'project_list.html', {"queryset": queryset})
     project_filter = ProjectFilter(request.GET, queryset=models.Project.objects.all())
-    return render(request, 'project_list.html', {'filter': project_filter})
+    return render(request, 'project/project_list.html', {'filter': project_filter})
 
 # def project_input(request):
 #     """ list of project """
@@ -58,11 +58,11 @@ class ProjectModelForm(forms.ModelForm):
 def project_add(request):
     if request.method == "GET":
         form = ProjectModelForm()
-        return render(request, 'project_form.html', {"form": form})
+        return render(request, 'project/project_form.html', {"form": form})
 
     form = ProjectModelForm(data=request.POST)
     if not form.is_valid():
-        return render(request, 'project_form.html', {"form": form})
+        return render(request, 'project/project_form.html', {"form": form})
 
     # 读取密码并更新成md5加密之后的密文
     # form.instance.password = md5(form.instance.password)
@@ -93,11 +93,11 @@ def project_edit(request, aid):
 
     if request.method == "GET":
         form = ProjectEditModelForm(instance=project_object)
-        return render(request, 'project_form.html', {"form": form})
+        return render(request, 'project/project_form.html', {"form": form})
 
     form = ProjectEditModelForm(instance=project_object, data=request.POST)
     if not form.is_valid():
-        return render(request, 'project_form.html', {"form": form})
+        return render(request, 'project/project_form.html', {"form": form})
 
     # 更新
     form.save()

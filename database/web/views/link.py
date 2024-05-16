@@ -15,12 +15,16 @@ class LinkFilter(django_filters.FilterSet):
             'part': ['exact'],
             'linkName': ['icontains'],
         }
+        # widgets = {
+        #     'interface1': forms.Select(attrs={'class': 'select2'}),
+        #     'interface2': forms.Select(attrs={'class': 'select2'}),
+        # }
 
 def link_list(request):
     """ list of link """
 
     link_filter = LinkFilter(request.GET, queryset=models.Link.objects.all())
-    return render(request, 'link_list.html', {'filter': link_filter})
+    return render(request, 'link/link_list.html', {'filter': link_filter})
 
 def link_input(request):
     """ list of link """
@@ -28,13 +32,13 @@ def link_input(request):
     # [obj,]
     queryset = models.Link.objects.all().order_by("id")
   
-    return render(request, 'link_input.html', {"queryset": queryset})
+    return render(request, 'link/link_input.html', {"queryset": queryset})
 
    
 class LinkModelForm(forms.ModelForm):
     class Meta:
         model = models.Link
-        fields = ['linkName', 'interface', 'length', 'linkType', 'armDiam', 'armSection', 
+        fields = ['project', 'part', 'linkName', 'interface1', 'interface2', 'length', 'linkType', 'armDiam', 'armSection', 
                   'cycle', 'sequence', 'finArmSection', 'finArmDiam', 'finArmRadius',
                 'mass', 'angle',]
 
@@ -83,7 +87,7 @@ def link_add_multiple(request):
             print(formset.errors)
             print(project_part_form.errors)
 
-    return render(request, 'link_add_multiple.html', {
+    return render(request, 'link/link_add_multiple.html', {
         'projects': projects,
         'formset': formset,
         'project_part_form': project_part_form,
@@ -110,7 +114,7 @@ def link_add(request):
 class LinkEditModelForm(forms.ModelForm):
     class Meta:
         model = models.Link
-        fields = ['linkName', 'interface', 'length', 'linkType', 'armDiam', 'armSection', 
+        fields = ['project', 'part', 'linkName', 'interface1', 'interface2', 'length', 'linkType', 'armDiam', 'armSection', 
                   'cycle', 'sequence', 'finArmSection', 'finArmDiam', 'finArmRadius',
                 'mass', 'angle',]
 
@@ -131,11 +135,11 @@ def link_edit(request, aid):
 
     if request.method == "GET":
         form = LinkEditModelForm(instance=link_object)
-        return render(request, 'link_form.html', {"form": form})
+        return render(request, 'link/link_form.html', {"form": form})
 
     form = LinkEditModelForm(instance=link_object, data=request.POST)
     if not form.is_valid():
-        return render(request, 'link_form.html', {"form": form})
+        return render(request, 'link/link_form.html', {"form": form})
 
     # 更新
     form.save()

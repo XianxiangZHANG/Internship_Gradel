@@ -20,7 +20,7 @@ def interface_list(request):
     """ list of interface """
 
     interface_filter = InterfaceFilter(request.GET, queryset=models.Interface.objects.all())
-    return render(request, 'interface_list.html', {'filter': interface_filter})
+    return render(request, 'interface/interface_list.html', {'filter': interface_filter})
 
 def interface_input(request):
     """ list of interface """
@@ -28,7 +28,7 @@ def interface_input(request):
     # [obj,]
     queryset = models.Interface.objects.all().order_by("id")
   
-    return render(request, 'interface_input.html', {"queryset": queryset})
+    return render(request, 'interface/interface_input.html', {"queryset": queryset})
 
    
 class InterfaceModelForm(forms.ModelForm):
@@ -85,7 +85,7 @@ def interface_add_multiple(request):
             print(formset.errors)
             print(project_part_form.errors)
 
-    return render(request, 'interface_add_multiple.html', {
+    return render(request, 'interface/interface_add_multiple.html', {
         'projects': projects,
         'formset': formset,
         'project_part_form': project_part_form,
@@ -97,11 +97,11 @@ def interface_add_multiple(request):
 def interface_add(request):
     if request.method == "GET":
         form = InterfaceModelForm()
-        return render(request, 'interface_form.html', {"form": form})
+        return render(request, 'interface/interface_form.html', {"form": form})
 
     form = InterfaceModelForm(data=request.POST)
     if not form.is_valid():
-        return render(request, 'interface_form.html', {"form": form})
+        return render(request, 'interface/interface_form.html', {"form": form})
 
 
     # save -> DB
@@ -112,7 +112,7 @@ def interface_add(request):
 class InterfaceEditModelForm(forms.ModelForm):
     class Meta:
         model = models.Interface
-        fields = ['interfaceName', 'height', 'intDiameter', 'totalLink', 'totalArm', 'totalSection',
+        fields = ['project', 'part', 'interfaceName', 'height', 'intDiameter', 'totalLink', 'totalArm', 'totalSection',
                 'extDiameter', 'theoHeight', 'accMass', 'finODiam', 'finAccSection', 'safetyFactor',
                 'interfaceCenterX', 'interfaceCenterY', 'interfaceCenterZ',
                 'directionVectorX', 'directionVectorY', 'directionVectorZ',
@@ -135,11 +135,11 @@ def interface_edit(request, aid):
 
     if request.method == "GET":
         form = InterfaceEditModelForm(instance=interface_object)
-        return render(request, 'interface_form.html', {"form": form})
+        return render(request, 'interface/interface_form.html', {"form": form})
 
     form = InterfaceEditModelForm(instance=interface_object, data=request.POST)
     if not form.is_valid():
-        return render(request, 'interface_form.html', {"form": form})
+        return render(request, 'interface/interface_form.html', {"form": form})
 
     # 更新
     form.save()

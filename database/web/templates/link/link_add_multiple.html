@@ -36,24 +36,19 @@
                     <thead>
                         <tr>
                             <th>Link Name</th>
-                            <th>Height [mm]</th>
-                            <th>Int. Diameter [mm]</th>
-                            <th>Total Link</th>
-                            <th>Total Arm</th>
-                            <th>Total Section [mm²]</th>
-                            <th>Ext. Diameter [mm]</th>
-                            <th>Theo. height [mm]</th>
-                            <th>Acc. Mass [g]</th>
-                            <th>Fin. O. Diam. [mm]</th>
-                            <th>Fin. Acc. section [mm²]</th>
-                            <th>Safety Factor [%]</th>
-                            <th>Link's center X [mm]</th>
-                            <th>Link's centerY [mm]</th>
-                            <th>Link's centerZ [mm]</th>
-                            <th>Direction vectorX [mm]</th>
-                            <th>Direction vectorY [mm]</th>
-                            <th>Direction vectorZ [mm]</th>
-                            <th>*divisionStep*</th>
+                            <th>Interface1 Name</th>
+                            <th>Interface2 Name</th>
+                            <th>Length[mm]</th>
+                            <th>Link Type</th>
+                            <th>Arm Diam.[mm]</th>
+                            <th>Arm Section[mm²]</th>
+                            <th>Cycle #</th>
+                            <th>Sequence</th>
+                            <th>Fin. Arm Section[mm²]</th>
+                            <th>Fin. Arm Diam.[mm]</th>
+                            <th>Fin. Arm Radius[m]</th>
+                            <th>Mass[g]</th>
+                            <th>*Angle*</th>
                         </tr>
                     </thead>
                     <tbody contenteditable="true">
@@ -84,6 +79,7 @@
 </div>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <script type="text/javascript">
     $(document).ready(function() {
         function loadParts(projectId) {
@@ -102,10 +98,31 @@
             });
         }
 
+        // function loadInterfaces(projectId) {
+        //     var url = '{% url "load_interfaces" %}';
+        //     $.ajax({
+        //         url: url,
+        //         data: {
+        //             'part_id': partId
+        //         },
+        //         success: function(data) {
+        //             $("#id_interface").html('<option value=""> - - - - </option>');
+        //             $.each(data, function(key, value) {
+        //                 $("#id_interface").append('<option value="' + value.id + '">' + value.interfaceName + '</option>');
+        //             });
+        //         }
+        //     });
+        // }
+
         $('#id_project').change(function() {
             var projectId = $(this).val();
             loadParts(projectId);
         });
+
+        // $('#id_part').change(function() {
+        //     var partId = $(this).val();
+        //     loadInterfaces(partId);
+        // });
 
         $('#add-link').click(function() {
             var formCount = $('#id_form-TOTAL_FORMS').val();
@@ -114,10 +131,17 @@
                 var name = $(this).attr('name').replace('-0-', '-' + formCount + '-');
                 var id = 'id_' + name;
                 $(this).attr({'name': name, 'id': id}).val('');
+                // $(this).next('.select2-container').remove();  // Remove the Select2 container to reinitialize it
             });
             newForm.find('td:last').html('<button type="button" class="btn btn-danger remove-form">Remove</button>');
             $('#link-table tbody').append(newForm);
             $('#id_form-TOTAL_FORMS').val(parseInt(formCount) + 1);
+
+            // newForm.find('.select2').select2({
+            //     placeholder: 'Select or type to search',
+            //     allowClear: true,
+            //     tags: true
+            // });
         });
 
         $(document).on('click', '.remove-form', function() {

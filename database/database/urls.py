@@ -17,17 +17,19 @@ from django.contrib import admin
 from django.urls import path
 from django.conf import settings
 from django.conf.urls.static import static
-from web.views import account, project, part, bushing, interface, link, winding
-from web.views.load_parts import load_parts
+from web.views import account, project, part, bushing, interface, link, winding, user, department
+from web.views.load_parts import load_parts, load_interfaces
 
 urlpatterns = [
     # path('', account.login),
+    # path('accounts/login/', account.login),
     path('login/', account.login),
     path('logout/', account.logout),
     path('img/code/', account.img_code),
     path('home/', account.home),
     path('upload/', account.upload),
     path('check/', account.check),
+    path('changePassword/', account.changePassword),
 
     path('project/list/', project.project_list),
     # path('project/input/', project.project_input),
@@ -67,7 +69,18 @@ urlpatterns = [
     path('link/edit/<int:aid>/', link.link_edit),
     path('link/delete/', link.link_delete),
     path('link/load-parts/', load_parts, name='load_parts'),
+    path('link/load-interface/', load_interfaces, name='load_interfaces'),
     path('link/add-multiple/', link.link_add_multiple),
+
+    path('user/list/', user.user_list),
+    path('user/edit/<int:aid>/', user.user_edit),
+    path('user/delete/', user.user_delete),
+    path('user/add-multiple/', user.user_add_multiple),
+
+    path('department/list/', department.department_list),
+    path('department/edit/<int:aid>/', department.department_edit),
+    path('department/delete/', department.department_delete),
+    path('department/add-multiple/', department.department_add_multiple),
 
 ]
 if settings.DEBUG:
