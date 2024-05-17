@@ -51,6 +51,17 @@ class BushingModelForm(forms.ModelForm):
         for name, field_object in self.fields.items():
             field_object.widget.attrs = {"class": "form-control"}
 
+class BushingForm(forms.ModelForm):
+    class Meta:
+        model = models.Bushing
+        fields = ['project', 'part', 'bushingName', 'numberInterface', 'bushingDrawNb', 'AccOnBushing', 'bushingMass', 'totalBushingMass']
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for name, field_object in self.fields.items():
+            field_object.widget.attrs = {"class": "form-control"}
+
+
 class ProjectPartForm(forms.Form):
     project = forms.ModelChoiceField(queryset=models.Project.objects.all(), required=True)
     part = forms.ModelChoiceField(queryset=models.Part.objects.all(), required=True)
@@ -61,6 +72,11 @@ BushingFormSet = modelformset_factory(
     extra=1  # 初始化时额外添加的表单数量
 )
 
+BushingMultFormSet = modelformset_factory(
+    models.Bushing,
+    form=BushingForm,
+    extra=1  # 初始化时额外添加的表单数量
+)
 
 # def bushing_add_multiple(request):
 #     BushingFormSet = modelformset_factory(models.Bushing, form=BushingModelForm, extra=1)
@@ -133,6 +149,28 @@ def bushing_add_multiple(request):
         'project_part_form': project_part_form,
         # 'bushingError': bushingError,
     })
+
+
+def bushing_modify_multiple(request):
+    # 获取筛选后的数据
+    bushing_filter = BushingFilter(request.GET, queryset=models.Bushing.objects.all())
+    
+    # 定义表单集
+    BushingFormSet = modelformset_factory(models.Bushing, form=BushingModelForm, extra=0)
+    
+    if request.method == 'POST':
+        formset = BushingFormSet(request.POST)
+        if formset.is_valid():
+            formset.save()
+            return redirect('/bushing/list/')
+    else:
+        formset = BushingFormSet(queryset=bushing_filter.qs)
+
+    return render(request, 'bushing/bushing_modify_multiple.html', {
+        'filter': bushing_filter,
+        'formset': formset,
+    })
+
 
 
 def bushing_add(request):

@@ -1,3 +1,4 @@
+import hashlib
 from io import BytesIO
 
 from django import forms
@@ -6,6 +7,8 @@ from django.shortcuts import render, HttpResponse, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth import update_session_auth_hash
+from django.contrib.auth.hashers import check_password
+from django.core.exceptions import ValidationError
 
 
 from web import models
@@ -29,18 +32,44 @@ class LoginForm(forms.Form):
     )
 
 class ChangePasswordForm(forms.Form):
+
     old_password = forms.CharField(
         label='Old Password',
-        widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': "Please enter your old passwaord"}, render_value=True)
+        widget=forms.PasswordInput(attrs={'class': 'form-control', 'class': 'input__field', 'placeholder': "Please enter your old passwaord"}, render_value=True)
     )
-    new_password1 = forms.CharField(
+    
+    new_password = forms.CharField(
         label='New Password',
-        widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': "Please enter your new passwaord"}, render_value=True)
+        widget=forms.PasswordInput(attrs={'class': 'form-control', 'class': 'input__field', 'placeholder': "Please enter your new passwaord"}, render_value=True)
     )
-    new_password2 = forms.CharField(
+    confirm_password = forms.CharField(
         label='Confirm New Password',
-        widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': "Please enter your new passwaord again"}, render_value=True)
+        widget=forms.PasswordInput(attrs={'class': 'form-control', 'class': 'input__field', 'placeholder': "Please enter your new passwaord again"}, render_value=True)
     )
+    # code = forms.CharField(
+    #     label="Code",
+    #     widget=forms.TextInput(attrs={'class': "form-control", 'placeholder': "Please enter the code"}),
+    # )
+
+    def __init__(self, user, *args, **kwargs):
+        self.user = user
+        super(ChangePasswordForm, self).__init__(*args, **kwargs)
+
+    def clean_old_password(self):
+        old_password = md5(self.cleaned_data.get('old_password'))
+        print(old_password)
+        if old_password != self.user.password:
+            # print(self.user.password)
+            raise ValidationError("Old password is incorrect.")
+        return old_password
+
+    def clean(self):
+        cleaned_data = super().clean()
+        new_password = cleaned_data.get('new_password')
+        confirm_password = cleaned_data.get('confirm_password')
+        if new_password and new_password != confirm_password:
+            self.add_error('confirm_password', "New passwords must match.")
+
 
 
 def login(request):
@@ -77,25 +106,22 @@ def login(request):
     return redirect("/home/")
 
 
-def changePassword(request):
+
+def changePassword(request, aid):
+    user = models.User.objects.filter(id=request.info_dict['id']).first()
+
     if request.method == 'POST':
-        form = PasswordChangeForm(request.user, request.POST)
-        
+        form = ChangePasswordForm(user, request.POST)
         if form.is_valid():
-            user = form.save()
-            update_session_auth_hash(request, user)  # 重要！更新会话以防用户被登出
-            print(user)
-            return redirect('password_change_done')  # 成功后重定向到一个页面
-        else:
-            print(user)
-            error = 'Please correct the error below.'
+            new_password = form.cleaned_data['new_password']
+            encrypt_pasword = md5(new_password)
+            user.password = encrypt_pasword
+            user.save()
+            return render(request, 'account/password_changed.html')  # 密码修改成功后的跳转页面
     else:
-        form = PasswordChangeForm(request.user)
-        error = None
-    return render(request, 'account/change_password.html', {
-        'form': form,
-        'error': error,
-    })
+        form = ChangePasswordForm(user)
+    return render(request, 'account/change_password.html', {'form': form})
+
 
 def img_code(request):
     # 1.Generate Image
@@ -118,6 +144,7 @@ def logout(request):
 
 
 def home(request):
+    print(request.info_dict)
     # request.info_dict['name']
     return render(request, 'account/home.html')
 
@@ -125,7 +152,6 @@ def upload(request):
     return render(request, 'account/upload.html')
 
 def check(request):
-    # request.info_dict['name']
     return render(request, 'account/check.html')
 
 

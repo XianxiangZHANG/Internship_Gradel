@@ -22,14 +22,14 @@ from web.views.load_parts import load_parts, load_interfaces
 
 urlpatterns = [
     # path('', account.login),
-    # path('accounts/login/', account.login),
+    # path('accounts/login/', account.loginA),
     path('login/', account.login),
     path('logout/', account.logout),
     path('img/code/', account.img_code),
     path('home/', account.home),
     path('upload/', account.upload),
     path('check/', account.check),
-    path('changePassword/', account.changePassword),
+    path('changePassword/<int:aid>/', account.changePassword),
 
     path('project/list/', project.project_list),
     # path('project/input/', project.project_input),
@@ -54,6 +54,7 @@ urlpatterns = [
     path('bushing/delete/', bushing.bushing_delete),
     path('bushing/load-parts/', load_parts, name='load_parts'),
     path('bushing/add-multiple/', bushing.bushing_add_multiple),
+    path('bushing/modify-multiple/', bushing.bushing_modify_multiple),
 
     path('interface/list/', interface.interface_list),
     # path('interface/input/', interface.interface_input),

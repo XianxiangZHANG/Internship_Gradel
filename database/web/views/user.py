@@ -42,8 +42,7 @@ def user_list(request):
 class UserModelForm(forms.ModelForm):
     class Meta:
         model = models.User
-        # fields = ['username', 'password', 'age', 'gender', 'depart']
-        fields = ['username', 'depart',]
+        fields = ['username', 'depart']
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
