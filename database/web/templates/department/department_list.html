@@ -9,7 +9,7 @@
         </a>
     </div> -->
     
-    <div>
+    <div id="cont">
     <h3>Project List:</h3>
     <form method="get" id="filterForm" class="from_f">
         {{ filter.form.as_p }}
@@ -20,8 +20,8 @@
         <thead>
         <tr>
             <!-- <th>Project ID</th> -->
-            <th>Department</th>
-            <th>Operations</th>
+            <th style="width: 60%;">Department</th>
+            <th style="width: 40%;">Operations</th>
         </tr>
         </thead>
         <tbody>
@@ -31,8 +31,8 @@
                 <td>{{ row.title }}</td>
                 <td>
                     <a class="btn btn-primary btn-xs" href="/department/edit/{{ row.id }}/" style="width: 70px; text-align: center; margin-bottom: 5px;"> Edit </a>
-                    <br>
-                    <input type="button" value="Delete" class="btn btn-danger btn-xs" style="width: 70px; text-align: center;"
+                
+                    <input type="button" value="Delete" class="btn btn-danger btn-xs" style="width: 70px; text-align: center; margin-bottom: 5px;"
                            onclick="deleteAction({{ row.id }});"/>
                 </td>
             </tr>
@@ -102,7 +102,12 @@
 
 {% block css %}
 <style>
-    table {
+    #cont {
+        width: 600px;
+        margin: auto;
+    }
+
+    .table.table-bordered {
         border-collapse: collapse;
         width: 100%;
         margin-bottom: 100px;

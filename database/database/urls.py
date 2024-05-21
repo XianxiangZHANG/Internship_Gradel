@@ -42,13 +42,11 @@ urlpatterns = [
     path('project/delete/', project.project_delete),
 
     path('part/list/', part.part_list),
-    # path('part/input/', part.part_input),
     path('part/add/', part.part_add),
     path('part/edit/<int:aid>/', part.part_edit),
     path('part/delete/', part.part_delete),
 
     path('bushing/list/', bushing.bushing_list),
-    # path('bushing/input/', bushing.bushing_input),
     path('bushing/add/', bushing.bushing_add),
     path('bushing/edit/<int:aid>/', bushing.bushing_edit),
     path('bushing/delete/', bushing.bushing_delete),
@@ -57,15 +55,14 @@ urlpatterns = [
     path('bushing/modify-multiple/', bushing.bushing_modify_multiple),
 
     path('interface/list/', interface.interface_list),
-    # path('interface/input/', interface.interface_input),
     path('interface/add/', interface.interface_add),
     path('interface/edit/<int:aid>/', interface.interface_edit),
     path('interface/delete/', interface.interface_delete),
     path('interface/load-parts/', load_parts, name='load_parts'),
     path('interface/add-multiple/', interface.interface_add_multiple),
+    path('interface/modify-multiple/', interface.interface_modify_multiple),
 
     path('link/list/', link.link_list),
-    # path('link/input/', link.link_input),
     path('link/add/', link.link_add),
     path('link/edit/<int:aid>/', link.link_edit),
     path('link/delete/', link.link_delete),

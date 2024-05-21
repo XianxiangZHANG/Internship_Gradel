@@ -67,9 +67,9 @@
             <div class="row">
                 <div class="form-group">
                     <div class="col-xs-12">
-                        <div class="col-sm-offset-6 col-sm-10">
-                            <button type="button" id="add-link" class="btn btn-secondary" style="width: 200px;">Add Link</button>
-                            <button type="submit" class="btn btn-primary" style="width: 200px;">Save</button>
+                        <div class="col-sm-offset-9 col-sm-12">
+                            <button type="button" id="add-link" class="btn btn-secondary" style="width: 14%;">Add Link</button>
+                            <button type="submit" class="btn btn-primary" style="width: 6%; margin-left: 3%;">Save</button>
                         </div>
                     </div>
                 </div>
@@ -187,4 +187,46 @@
     });
 </script>
 
+{% endblock %}
+{% block css %}
+<style>
+    table {
+        border-collapse: collapse;
+        width: 100%;
+        margin-bottom: 100px;
+    }
+    th, td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: center;
+    }
+    tr:nth-child(even) {
+        background-color: #f2f2f2;
+    }
+    th {
+        width: 6.5%;
+        background-color: #4CAF50;
+        color: white;
+    }
+    #btnf1, .btnf2{
+        width: 100px; 
+        background-color: #49b7be; 
+        color: white; 
+        padding: 5px 10px; 
+        margin: 8px;
+        margin-right: 0px;
+        border: none; 
+        border-radius: 4px;
+        cursor: pointer; 
+    }
+    #id_project, input[type="text"] {
+        width: 100%; 
+        padding: 8px; 
+        margin: 0px 0; 
+        display: inline-block;
+        border: 1px solid #ccc; 
+        border-radius: 4px; 
+        box-sizing: border-box; 
+    }
+</style>
 {% endblock %}

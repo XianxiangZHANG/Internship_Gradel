@@ -46,10 +46,6 @@ class ChangePasswordForm(forms.Form):
         label='Confirm New Password',
         widget=forms.PasswordInput(attrs={'class': 'form-control', 'class': 'input__field', 'placeholder': "Please enter your new passwaord again"}, render_value=True)
     )
-    # code = forms.CharField(
-    #     label="Code",
-    #     widget=forms.TextInput(attrs={'class': "form-control", 'placeholder': "Please enter the code"}),
-    # )
 
     def __init__(self, user, *args, **kwargs):
         self.user = user
@@ -95,7 +91,7 @@ def login(request):
     user = form.cleaned_data['username']
     pwd = form.cleaned_data['password']
     encrypt_pasword = md5(pwd)
-    print(user, encrypt_pasword)
+    # print(user, encrypt_pasword)
     User_object = models.User.objects.filter(username=user, password=encrypt_pasword).first()
     if not User_object:
         return render(request, 'account/login.html', {"form": form, 'error': "Wrong username or password"})

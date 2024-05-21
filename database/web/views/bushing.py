@@ -19,14 +19,6 @@ class BushingFilter(django_filters.FilterSet):
 def bushing_list(request):
     """ list of bushing """
 
-    # # [obj,]
-    # queryset = models.Bushing.objects.all().order_by("id")
-    # # for row in queryset:
-    # #     print(row.username, row.password, row.gender, row.get_gender_display(), row.depart_id, row.depart.title)
-    # # for row in queryset:
-    # #     print(row.project.projectName)
-
-    # return render(request, 'bushing_list.html', {"queryset": queryset})
     bushing_filter = BushingFilter(request.GET, queryset=models.Bushing.objects.all())
     return render(request, 'bushing/bushing_list.html', {'filter': bushing_filter})
 
@@ -69,58 +61,15 @@ class ProjectPartForm(forms.Form):
 BushingFormSet = modelformset_factory(
     models.Bushing,
     form=BushingModelForm,
-    extra=1  # 初始化时额外添加的表单数量
+    extra=1  # The number of additional forms added during initialization
 )
 
 BushingMultFormSet = modelformset_factory(
     models.Bushing,
     form=BushingForm,
-    extra=1  # 初始化时额外添加的表单数量
+    extra=1  # The number of additional forms added during initialization
 )
 
-# def bushing_add_multiple(request):
-#     BushingFormSet = modelformset_factory(models.Bushing, form=BushingModelForm, extra=1)
-
-    
-#     # formset = BushingFormSet(queryset=models.Bushing.objects.none())
-#     project_error = part_error = bushing_error = None
-
-#     if request.method == 'POST':
-#         formset = BushingFormSet(request.POST)
-#         project_s = request.POST.get('project')
-#         part_s = request.POST.get('part')
-#         bushingName = request.POST.get('bushingName')
-
-#         if not project_s:
-#             project_error = 'Project is required.'
-                
-#         if not part_s:
-#             part_error = 'Part is required.'
-        
-#         if not bushingName:
-#             bushing_error = 'Required.'
-            
-#         if formset.is_valid() and project_s and part_s and bushingName:
-#             instances = formset.save(commit=False)
-#             project = models.Project.objects.get(id=project_s)
-#             part = models.Part.objects.get(id=part_s)
-#             for instance in instances:
-#                 instance.project_id = project
-#                 instance.part_id = part
-#                 instance.save()
-#             return redirect('/bushing/list/')  # 替换为你的重定向URL
-
-#     else:
-#         formset = BushingFormSet(queryset=models.Bushing.objects.none())
-
-#     projects = models.Project.objects.all()
-#     return render(request, 'bushing_add_multiple.html', {
-#         'projects': projects,
-#         'formset': formset,
-#         'project_error': project_error,
-#         'part_error': part_error,
-#         'bushing_error': bushing_error,
-#     })
 def bushing_add_multiple(request):
     projects = models.Project.objects.all()
     formset = BushingFormSet(queryset=models.Bushing.objects.none())
@@ -152,10 +101,10 @@ def bushing_add_multiple(request):
 
 
 def bushing_modify_multiple(request):
-    # 获取筛选后的数据
+    # Get filtered data
     bushing_filter = BushingFilter(request.GET, queryset=models.Bushing.objects.all())
     
-    # 定义表单集
+    # Define form set
     BushingFormSet = modelformset_factory(models.Bushing, form=BushingModelForm, extra=0)
     
     if request.method == 'POST':
@@ -196,8 +145,6 @@ class BushingEditModelForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        # 自定义操作，找到所有的字段
-        # print(self.fields)
         self.fields['part'].queryset = models.Part.objects.all()
         self.fields['project'].queryset = models.Project.objects.all()
         for name, filed_object in self.fields.items():
@@ -224,9 +171,18 @@ def bushing_edit(request, aid):
 
 def bushing_delete(request):
     aid = request.GET.get("aid")
-    # print("要删除的ID:", aid)
     models.Bushing.objects.filter(id=aid).delete()
 
-    # return JsonResponse({"status": False, 'error': "ID不能为空"})
     return JsonResponse({"status": True})
 
+def bushing_delete_mult(request):
+    aid = request.GET.get("aid")
+    if not aid:
+        return JsonResponse({"status": False, "error": "ID cannot be empty"})
+
+    try:
+        bushing = models.Bushing.objects.get(id=aid)
+        bushing.delete()
+        return JsonResponse({"status": True})
+    except models.Bushing.DoesNotExist:
+        return JsonResponse({"status": False, "error": "Bushing not found"})

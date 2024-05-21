@@ -54,7 +54,7 @@ class ProjectPartForm(forms.Form):
 InterfaceFormSet = modelformset_factory(
     models.Interface,
     form=InterfaceModelForm,
-    extra=1  # 初始化时额外添加的表单数量
+    extra=1  
 )
 
 def interface_add_multiple(request):
@@ -66,10 +66,6 @@ def interface_add_multiple(request):
     if request.method == 'POST':
         formset = InterfaceFormSet(request.POST)
         project_part_form = ProjectPartForm(request.POST)
-        # interfaceName = request.POST.get('bushingName')
-        # print("aaaaaaaa",interfaceName)
-        # if not interfaceName:
-        #     interfaceError = "Required"
 
         if formset.is_valid() and project_part_form.is_valid(): 
             instances = formset.save(commit=False)
@@ -108,6 +104,25 @@ def interface_add(request):
     form.save()
     return redirect('/interface/list/')
 
+def interface_modify_multiple(request):
+    # Get filtered data
+    interface_filter = InterfaceFilter(request.GET, queryset=models.Interface.objects.all())
+    
+    # Define form set
+    InterfaceFormSet = modelformset_factory(models.Interface, form=InterfaceModelForm, extra=0)
+    
+    if request.method == 'POST':
+        formset = InterfaceFormSet(request.POST)
+        if formset.is_valid():
+            formset.save()
+            return redirect('/interface/list/')
+    else:
+        formset = InterfaceFormSet(queryset=interface_filter.qs)
+
+    return render(request, 'interface/interface_modify_multiple.html', {
+        'filter': interface_filter,
+        'formset': formset,
+    })
 
 class InterfaceEditModelForm(forms.ModelForm):
     class Meta:
@@ -121,12 +136,9 @@ class InterfaceEditModelForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        # 自定义操作，找到所有的字段
-        # print(self.fields)
         self.fields['part'].queryset = models.Part.objects.all()
         self.fields['project'].queryset = models.Project.objects.all()
         for name, filed_object in self.fields.items():
-            # print(name, filed_object)
             filed_object.widget.attrs = {"class": "form-control"}
 
 
@@ -141,7 +153,6 @@ def interface_edit(request, aid):
     if not form.is_valid():
         return render(request, 'interface/interface_form.html', {"form": form})
 
-    # 更新
     form.save()
 
     return redirect('/interface/list/')
@@ -149,9 +160,7 @@ def interface_edit(request, aid):
 
 def interface_delete(request):
     aid = request.GET.get("aid")
-    # print("要删除的ID:", aid)
     models.Interface.objects.filter(id=aid).delete()
 
-    # return JsonResponse({"status": False, 'error': "ID不能为空"})
     return JsonResponse({"status": True})
 

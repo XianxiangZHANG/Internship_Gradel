@@ -15,10 +15,6 @@ class LinkFilter(django_filters.FilterSet):
             'part': ['exact'],
             'linkName': ['icontains'],
         }
-        # widgets = {
-        #     'interface1': forms.Select(attrs={'class': 'select2'}),
-        #     'interface2': forms.Select(attrs={'class': 'select2'}),
-        # }
 
 def link_list(request):
     """ list of link """
@@ -38,7 +34,7 @@ def link_input(request):
 class LinkModelForm(forms.ModelForm):
     class Meta:
         model = models.Link
-        fields = ['project', 'part', 'linkName', 'interface1', 'interface2', 'length', 'linkType', 'armDiam', 'armSection', 
+        fields = ['linkName', 'interface1', 'interface2', 'length', 'linkType', 'armDiam', 'armSection', 
                   'cycle', 'sequence', 'finArmSection', 'finArmDiam', 'finArmRadius',
                 'mass', 'angle',]
 
@@ -56,22 +52,18 @@ class ProjectPartForm(forms.Form):
 LinkFormSet = modelformset_factory(
     models.Link,
     form=LinkModelForm,
-    extra=1  # 初始化时额外添加的表单数量
+    extra=1 
 )
 
 def link_add_multiple(request):
     projects = models.Project.objects.all()
     formset = LinkFormSet(queryset=models.Link.objects.none())
     project_part_form = ProjectPartForm()
-    # linkError = None
+   
 
     if request.method == 'POST':
         formset = LinkFormSet(request.POST)
         project_part_form = ProjectPartForm(request.POST)
-        # linkName = request.POST.get('bushingName')
-        # print("aaaaaaaa",linkName)
-        # if not linkName:
-        #     linkError = "Required"
 
         if formset.is_valid() and project_part_form.is_valid(): 
             instances = formset.save(commit=False)
@@ -91,7 +83,6 @@ def link_add_multiple(request):
         'projects': projects,
         'formset': formset,
         'project_part_form': project_part_form,
-        # 'linkError': linkError,
     })
 
 
@@ -121,12 +112,9 @@ class LinkEditModelForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        # 自定义操作，找到所有的字段
-        # print(self.fields)
         self.fields['part'].queryset = models.Part.objects.all()
         self.fields['project'].queryset = models.Project.objects.all()
         for name, filed_object in self.fields.items():
-            # print(name, filed_object)
             filed_object.widget.attrs = {"class": "form-control"}
 
 
@@ -141,7 +129,6 @@ def link_edit(request, aid):
     if not form.is_valid():
         return render(request, 'link/link_form.html', {"form": form})
 
-    # 更新
     form.save()
 
     return redirect('/link/list/')
@@ -149,9 +136,7 @@ def link_edit(request, aid):
 
 def link_delete(request):
     aid = request.GET.get("aid")
-    # print("要删除的ID:", aid)
     models.Link.objects.filter(id=aid).delete()
-
-    # return JsonResponse({"status": False, 'error': "ID不能为空"})
+    
     return JsonResponse({"status": True})
 

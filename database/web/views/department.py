@@ -19,45 +19,25 @@ class DepartmentFilter(django_filters.FilterSet):
 def department_list(request):
     """ list of department """
 
-    # # [obj,]
-    # queryset = models.Department.objects.all().order_by("id")
-    # # for row in queryset:
-    # #     print(row.departmentname, row.password, row.gender, row.get_gender_display(), row.depart_id, row.depart.title)
-
-    # return render(request, 'department_list.html', {"queryset": queryset})
     department_filter = DepartmentFilter(request.GET, queryset=models.Department.objects.all())
     return render(request, 'department/department_list.html', {'filter': department_filter})
-
-# def department_input(request):
-#     """ list of department """
-
-#     # [obj,]
-#     queryset = models.Department.objects.all().order_by("id")
-#     # for row in queryset:
-#     #     print(row.departmentname, row.password, row.gender, row.get_gender_display(), row.depart_id, row.depart.title)
-
-#     return render(request, 'department_input.html', {"queryset": queryset})
 
 class DepartmentModelForm(forms.ModelForm):
     class Meta:
         model = models.Department
-        # fields = ['departmentname', 'password', 'age', 'gender', 'depart']
         fields = ['title',]
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        # 自定义操作，找到所有的字段
-        # print(self.fields)
         for name, filed_object in self.fields.items():
-            # print(name, filed_object)
             filed_object.widget.attrs = {"class": "form-control"}
 
 
 DepartmentFormSet = modelformset_factory(
     models.Department,
     form=DepartmentModelForm,
-    extra=1  # 初始化时额外添加的表单数量
+    extra=1  
 )
 
 
@@ -70,10 +50,6 @@ def department_add(request):
     if not form.is_valid():
         return render(request, 'department/department_form.html', {"form": form})
 
-    # 读取密码并更新成md5加密之后的密文
-    # form.instance.password = md5(form.instance.password)
-
-    # 保存到数据库
     form.save()
     return redirect('/department/list/')
 
@@ -103,16 +79,12 @@ def department_add_multiple(request):
 class DepartmentEditModelForm(forms.ModelForm):
     class Meta:
         model = models.Department
-        # fields = ['departmentname', 'age', 'gender', 'depart']
         fields = ['title',]
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        # 自定义操作，找到所有的字段
-        # print(self.fields)
         for name, filed_object in self.fields.items():
-            # print(name, filed_object)
             filed_object.widget.attrs = {"class": "form-control"}
 
 
@@ -127,7 +99,6 @@ def department_edit(request, aid):
     if not form.is_valid():
         return render(request, 'department/department_form.html', {"form": form})
 
-    # 更新
     form.save()
 
     return redirect('/department/list/')
@@ -135,9 +106,7 @@ def department_edit(request, aid):
 
 def department_delete(request):
     aid = request.GET.get("aid")
-    # print("要删除的ID:", aid)
     models.Department.objects.filter(id=aid).delete()
 
-    # return JsonResponse({"status": False, 'error': "ID不能为空"})
     return JsonResponse({"status": True})
 

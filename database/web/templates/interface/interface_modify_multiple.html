@@ -2,7 +2,7 @@
 
 {% block content %}
 <div>
-    <h3>Bushing List:</h3>
+    <h3>Interface List:</h3>
     <form method="get" id="filterForm">
         {{ filter.form.as_p }}
         <button type="submit" id="btnf1">Filter</button>
@@ -12,20 +12,35 @@
     <form method="post">
         {% csrf_token %}
         {{ formset.management_form }}
-        <table class="table table-bordered" id="bushing-table">
+        <table class="table table-bordered" id="interface-table">
             <thead>
-                <tr>
-                    <th style="width: 15%;">Bushing Name</th>
-                    <th style="width: 15%;">Number Interface</th>
-                    <th style="width: 15%;">Bushing Draw. Nr.</th>
-                    <th style="width: 15%;">Acc. On Bushing[g]</th>
-                    <th style="width: 15%;">Bushing Mass[g]</th>
-                    <th style="width: 15%;">Total Bushing Mass[g]</th>
-                </tr>
+                <thead>
+                    <tr>
+                        <th>Interface Name</th>
+                        <th style="width: 1%;">Height [mm]</th>
+                        <th style="width: 1%;">Int. Diameter [mm]</th>
+                        <th style="width: 1%;"> Total Link</th>
+                        <th>Total Arm</th>
+                        <th>Total Section [mm²]</th>
+                        <th>Ext. Diameter [mm]</th>
+                        <th>Theo. height [mm]</th>
+                        <th>Acc. Mass [g]</th>
+                        <th>Fin. O. Diam. [mm]</th>
+                        <th>Fin. Acc. section [mm²]</th>
+                        <th>Safety Factor [%]</th>
+                        <th>Interface's center X [mm]</th>
+                        <th>Interface's center Y [mm]</th>
+                        <th>Interface's center Z [mm]</th>
+                        <th>Direction vector X [mm]</th>
+                        <th>Direction vector Y [mm]</th>
+                        <th>Direction vector Z [mm]</th>
+                        <th>*divisionStep*</th>
+                    </tr>
+                </thead>
             </thead>
             <tbody>
                 {% for form in formset %}
-                <tr class="bushing-form">
+                <tr class="interface-form">
                     {% for field in form %}
                     <td contenteditable="true">{{ field }}</td>
                     <span style="color: red;">{{ field.errors.0 }}</span>
@@ -64,7 +79,7 @@
     th, td {
         width: 17%;
         border: 1px solid #ddd;
-        padding: 8px;
+        padding: 0px;
         text-align: center;
     }
     tr:nth-child(even) {
@@ -125,7 +140,7 @@ $(document).ready(function() {
     // 确认删除操作
     function confirmDelete() {
         $.ajax({
-            url: "/bushing/delete/",
+            url: "/interface/delete/",
             type: "GET",
             data: { aid: DELETE_ID },
             dataType: "JSON",
@@ -148,9 +163,9 @@ $(document).ready(function() {
     // 绑定删除按钮点击事件
     $(document).on('click', '.remove-form', function() {
         let row = $(this).closest('tr');
-        let bushingId = row.find('input[name$="-id"]').val();
-        if (bushingId) {
-            deleteAction(bushingId);
+        let interfaceId = row.find('input[name$="-id"]').val();
+        if (interfaceId) {
+            deleteAction(interfaceId);
         } else {
             row.remove();
         }
@@ -163,30 +178,32 @@ $(document).ready(function() {
     $('#cancelDeleteBtn').click(function() {
         cancelDelete();
     });
-    // Handle paste event to populate table cells
-    $('#bushing-table tbody').on('paste', 'td', function(e) {
-            e.preventDefault();
-            var text = (e.originalEvent || e).clipboardData.getData('text/plain');
-            var rows = text.split('\n');
-            var $currentRow = $(this).closest('tr');
-            var startRowIndex = $currentRow.index();
-            var startColIndex = $(this).index();
 
-            rows.forEach(function(row, rowIndex) {
-                if (row.trim() !== '') {
-                    var cols = row.split('\t');
-                    var $row = $('#bushing-table tbody tr').eq(startRowIndex + rowIndex);
-                    if ($row.length === 0) {
-                        $('#add-bushing').click();
-                        $row = $('#bushing-table tbody tr').last();
-                    }
-                    cols.forEach(function(col, colIndex) {
-                        var $cell = $row.find('td').eq(startColIndex + colIndex);
-                        $cell.find('input').val(col.trim() || '');
-                    });
+
+    // Handle paste event to populate table cells
+    $('#interface-table tbody').on('paste', 'td', function(e) {
+        e.preventDefault();
+        var text = (e.originalEvent || e).clipboardData.getData('text/plain');
+        var rows = text.split('\n');
+        var $currentRow = $(this).closest('tr');
+        var startRowIndex = $currentRow.index();
+        var startColIndex = $(this).index();
+
+        rows.forEach(function(row, rowIndex) {
+            if (row.trim() !== '') {
+                var cols = row.split('\t');
+                var $row = $('#interface-table tbody tr').eq(startRowIndex + rowIndex);
+                if ($row.length === 0) {
+                    $('#add-interface').click();
+                    $row = $('#interface-table tbody tr').last();
                 }
-            });
+                cols.forEach(function(col, colIndex) {
+                    var $cell = $row.find('td').eq(startColIndex + colIndex);
+                    $cell.find('input').val(col.trim() || '');
+                });
+            }
         });
+    });
 });
 </script>
 {% endblock %}
