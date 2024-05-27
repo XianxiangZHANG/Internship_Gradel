@@ -2,7 +2,7 @@
 
 {% block content %}
 <div>
-    <h3>Bushing List:</h3>
+    <h3>Resin List:</h3>
     <form method="get" id="filterForm">
         {{ filter.form.as_p }}
         <button type="submit" id="btnf1">Filter</button>
@@ -12,20 +12,45 @@
     <form method="post">
         {% csrf_token %}
         {{ formset.management_form }}
-        <table class="table table-bordered" id="bushing-table">
+        <table class="table table-bordered" id="resin-table">
             <thead>
                 <tr>
-                    <th style="width: 15%;">Bushing Name</th>
-                    <th style="width: 15%;">Number Interface</th>
-                    <th style="width: 15%;">Bushing Draw. Nr.</th>
-                    <th style="width: 15%;">Acc. On Bushing[g]</th>
-                    <th style="width: 15%;">Bushing Mass[g]</th>
-                    <th style="width: 15%;">Total Bushing Mass[g]</th>
+                    <th>Manufacturer</th>
+                    <th>Resin system - Resin</th>
+                    <th>Resin system - Hardener</th>
+                    <th>Resin system - Accelerator</th>
+                    <th>Ratio(weight) R</th>
+                    <th>Ratio(weight) H</th>
+                    <th>Ratio(weight) A</th>
+                    <th>Ratio(volume) R</th>
+                    <th>Ratio(volume) H</th>
+                    <th>Ratio(volume) A</th>
+                    <th>Pot life (Process T°;h)</th>
+                    <th>Process T (°C)</th>
+                    <th>Curing cycle</th>
+                    <th>Tg (°C)</th>
+                    <th>Price resin</th>
+                    <th>Price hardener</th>
+                    <th>Density (g/cm³)</th>
+                    <th>Flexural strength (MPa)</th>
+                    <th>Flexural modulus (GPa)</th>
+                    <th>Modulus of elasticity (GPa) (tensile)</th>
+                    <th>Tensile strength (MPa)</th>
+                    <th>Elongation at break (%)</th>
+                    <th>Compression ult. strength (MPa)</th>
+                    <th>Compression modulus (GPa)</th>
+                    <th>Thermal expansion coefficient (ppm/K)</th>
+                    <th>Charpy impact at RT (mJ/mm²)</th>
+                    <th>Fracture toughness K1C (Mpa.m1/2)</th>
+                    <th>Fracture energy G1C (J/m²)</th>
+                    <th>Total shrinkage at RT (Vol%)</th>
+                    <th>Hardness at RT</th>
+                    <th>Water absorption (7d at 23°C)</th>
                 </tr>
             </thead>
             <tbody>
                 {% for form in formset %}
-                <tr class="bushing-form">
+                <tr class="resin-form">
                     {% for field in form %}
                     <td contenteditable="true">{{ field }}</td>
                     <span style="color: red;">{{ field.errors.0 }}</span>
@@ -125,7 +150,7 @@ $(document).ready(function() {
     // 确认删除操作
     function confirmDelete() {
         $.ajax({
-            url: "/bushing/delete/",
+            url: "/resin/delete/",
             type: "GET",
             data: { aid: DELETE_ID },
             dataType: "JSON",
@@ -148,9 +173,9 @@ $(document).ready(function() {
     // 绑定删除按钮点击事件
     $(document).on('click', '.remove-form', function() {
         let row = $(this).closest('tr');
-        let bushingId = row.find('input[name$="-id"]').val();
-        if (bushingId) {
-            deleteAction(bushingId);
+        let resinId = row.find('input[name$="-id"]').val();
+        if (resinId) {
+            deleteAction(resinId);
         } else {
             row.remove();
         }
@@ -165,7 +190,7 @@ $(document).ready(function() {
     });
     
     // Handle paste event to populate table cells
-    $('#bushing-table tbody').on('paste', 'td', function(e) {
+    $('#resin-table tbody').on('paste', 'td', function(e) {
         e.preventDefault();
         var text = (e.originalEvent || e).clipboardData.getData('text/plain');
         var rows = text.split('\n');
@@ -176,10 +201,10 @@ $(document).ready(function() {
         rows.forEach(function(row, rowIndex) {
             if (row.trim() !== '') {
                 var cols = row.split('\t');
-                var $row = $('#bushing-table tbody tr').eq(startRowIndex + rowIndex);
+                var $row = $('#resin-table tbody tr').eq(startRowIndex + rowIndex);
                 if ($row.length === 0) {
-                    $('#add-bushing').click();
-                    $row = $('#bushing-table tbody tr').last();
+                    $('#add-resin').click();
+                    $row = $('#resin-table tbody tr').last();
                 }
                 cols.forEach(function(col, colIndex) {
                     var $cell = $row.find('td').eq(startColIndex + colIndex);

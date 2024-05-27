@@ -2,7 +2,7 @@
 
 {% block content %}
 <div>
-    <h3>Bushing List:</h3>
+    <h3>Fiber List:</h3>
     <form method="get" id="filterForm">
         {{ filter.form.as_p }}
         <button type="submit" id="btnf1">Filter</button>
@@ -12,20 +12,30 @@
     <form method="post">
         {% csrf_token %}
         {{ formset.management_form }}
-        <table class="table table-bordered" id="bushing-table">
+        <table class="table table-bordered" id="fiber-table">
             <thead>
                 <tr>
-                    <th style="width: 15%;">Bushing Name</th>
-                    <th style="width: 15%;">Number Interface</th>
-                    <th style="width: 15%;">Bushing Draw. Nr.</th>
-                    <th style="width: 15%;">Acc. On Bushing[g]</th>
-                    <th style="width: 15%;">Bushing Mass[g]</th>
-                    <th style="width: 15%;">Total Bushing Mass[g]</th>
+                    <th>Material</th>
+                    <th>Manufacturer</th>
+                    <th>Distributor</th>
+                    <th>Grade</th>
+                    <th>Single filament diameter (mm)</th>
+                    <th>Tow</th>
+                    <th>Tow (in thousands)</th>
+                    <th>Tex (g/km)</th>
+                    <th>Density (g/cm3)</th>
+                    <th>Theoretical dry section (mm2)</th>
+                    <th>Tensile strength (MPa)</th>
+                    <th>Tensile modulus (GPa)</th>
+                    <th>Price euros/kg (2021 to febrary 2022)</th>
+                    <th>Price euros/kg (after 02/2022)</th>
+                    <th>Price euros/kg (after 02/2023)</th>
+                    <th>Price euros/kg (after 01/2024)</th>
                 </tr>
             </thead>
             <tbody>
                 {% for form in formset %}
-                <tr class="bushing-form">
+                <tr class="fiber-form">
                     {% for field in form %}
                     <td contenteditable="true">{{ field }}</td>
                     <span style="color: red;">{{ field.errors.0 }}</span>
@@ -125,7 +135,7 @@ $(document).ready(function() {
     // 确认删除操作
     function confirmDelete() {
         $.ajax({
-            url: "/bushing/delete/",
+            url: "/fiber/delete/",
             type: "GET",
             data: { aid: DELETE_ID },
             dataType: "JSON",
@@ -148,9 +158,9 @@ $(document).ready(function() {
     // 绑定删除按钮点击事件
     $(document).on('click', '.remove-form', function() {
         let row = $(this).closest('tr');
-        let bushingId = row.find('input[name$="-id"]').val();
-        if (bushingId) {
-            deleteAction(bushingId);
+        let fiberId = row.find('input[name$="-id"]').val();
+        if (fiberId) {
+            deleteAction(fiberId);
         } else {
             row.remove();
         }
@@ -165,7 +175,7 @@ $(document).ready(function() {
     });
     
     // Handle paste event to populate table cells
-    $('#bushing-table tbody').on('paste', 'td', function(e) {
+    $('#fiber-table tbody').on('paste', 'td', function(e) {
         e.preventDefault();
         var text = (e.originalEvent || e).clipboardData.getData('text/plain');
         var rows = text.split('\n');
@@ -176,10 +186,10 @@ $(document).ready(function() {
         rows.forEach(function(row, rowIndex) {
             if (row.trim() !== '') {
                 var cols = row.split('\t');
-                var $row = $('#bushing-table tbody tr').eq(startRowIndex + rowIndex);
+                var $row = $('#fiber-table tbody tr').eq(startRowIndex + rowIndex);
                 if ($row.length === 0) {
-                    $('#add-bushing').click();
-                    $row = $('#bushing-table tbody tr').last();
+                    $('#add-fiber').click();
+                    $row = $('#fiber-table tbody tr').last();
                 }
                 cols.forEach(function(col, colIndex) {
                     var $cell = $row.find('td').eq(startColIndex + colIndex);

@@ -92,7 +92,7 @@ DATABASES = {
         'PORT': '',
 
         'OPTIONS': {
-            'driver': 'ODBC Driver 17 for SQL Server',  # 或您实际安装的其他 ODBC 驱动
+            'driver': 'ODBC Driver 17 for SQL Server',  
         },
     }
 }

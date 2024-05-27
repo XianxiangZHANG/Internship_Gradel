@@ -1,0 +1,176 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+<div class="panel panel-default">
+    <div class="panel-heading"><span class="glyphicon glyphicon-indent-right" aria-hidden="true"></span> Add Multiple Resins</div>
+    <div class="panel-body">
+        <form class="form-horizontal" method="post" novalidate>
+            {% csrf_token %}
+            <div class="row">
+                {{ formset.management_form }}
+                <table class="table table-bordered" id="resin-table">
+                    <thead>
+                        <tr>
+                            <th>Manufacturer</th>
+                            <th>Resin system - Resin</th>
+                            <th>Resin system - Hardener</th>
+                            <th>Resin system - Accelerator</th>
+                            <th>Ratio(weight) R</th>
+                            <th>Ratio(weight) H</th>
+                            <th>Ratio(weight) A</th>
+                            <th>Ratio(volume) R</th>
+                            <th>Ratio(volume) H</th>
+                            <th>Ratio(volume) A</th>
+                            <th>Pot life (Process T°;h)</th>
+                            <th>Process T (°C)</th>
+                            <th>Curing cycle</th>
+                            <th>Tg (°C)</th>
+                            <th>Price resin</th>
+                            <th>Price hardener</th>
+                            <th>Density (g/cm³)</th>
+                            <th>Flexural strength (MPa)</th>
+                            <th>Flexural modulus (GPa)</th>
+                            <th>Modulus of elasticity (GPa) (tensile)</th>
+                            <th>Tensile strength (MPa)</th>
+                            <th>Elongation at break (%)</th>
+                            <th>Compression ult. strength (MPa)</th>
+                            <th>Compression modulus (GPa)</th>
+                            <th>Thermal expansion coefficient (ppm/K)</th>
+                            <th>Charpy impact at RT (mJ/mm²)</th>
+                            <th>Fracture toughness K1C (Mpa.m1/2)</th>
+                            <th>Fracture energy G1C (J/m²)</th>
+                            <th>Total shrinkage at RT (Vol%)</th>
+                            <th>Hardness at RT</th>
+                            <th>Water absorption (7d at 23°C)</th>
+                        </tr>
+                    </thead>
+                    <tbody contenteditable="true">
+                        {% for form in formset %}
+                        <tr class="resin-form">
+                            {% for field in form %}
+                            <td contenteditable="true">{{ field }}</td>
+                            <span style="color: red;">{{ field.errors.0 }}</span>
+                            {% endfor %}
+                            <td class="text-center">{% if not forloop.first %}<button type="button" class="btn btn-danger remove-form">Remove</button>{% endif %}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <div class="row">
+                <div class="form-group">
+                    <div class="col-xs-12">
+                        <div class="col-sm-offset-9 col-sm-12">
+                            <button type="button" id="add-resin" class="btn btn-secondary" style="width: 14%;">Add Resin</button>
+                            <button type="submit" class="btn btn-primary" style="width: 6%; margin-left: 3%;">Save</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function() {
+        
+
+        $('#add-resin').click(function() {
+            var formCount = $('#id_form-TOTAL_FORMS').val();
+            var newForm = $('.resin-form:first').clone(true).removeClass('resin-form');
+            newForm.find('input').each(function() {
+                var name = $(this).attr('name').replace('-0-', '-' + formCount + '-');
+                var id = 'id_' + name;
+                $(this).attr({'name': name, 'id': id}).val('');
+            });
+            newForm.find('td:last').html('<button type="button" class="btn btn-danger remove-form">Remove</button>');
+            $('#resin-table tbody').append(newForm);
+            $('#id_form-TOTAL_FORMS').val(parseInt(formCount) + 1);
+        });
+
+        $(document).on('click', '.remove-form', function() {
+            if ($('#resin-table tbody tr').length > 1) {
+                $(this).closest('tr').remove();
+                var formCount = $('#id_form-TOTAL_FORMS').val();
+                $('#id_form-TOTAL_FORMS').val(parseInt(formCount) - 1);
+                // 重新调整所有表单行的索引
+                $('#resin-table tbody tr').each(function(index) {
+                    $(this).find('input').each(function() {
+                        var name = $(this).attr('name').replace(/-\d+-/, '-' + index + '-');
+                        var id = 'id_' + name;
+                        $(this).attr({'name': name, 'id': id});
+                    });
+                });
+            }
+        });
+
+        // Handle paste event to populate table cells
+        $('#resin-table tbody').on('paste', 'td', function(e) {
+            e.preventDefault();
+            var text = (e.originalEvent || e).clipboardData.getData('text/plain');
+            var rows = text.split('\n');
+            var $currentRow = $(this).closest('tr');
+            var startRowIndex = $currentRow.index();
+            var startColIndex = $(this).index();
+
+            rows.forEach(function(row, rowIndex) {
+                if (row.trim() !== '') {
+                    var cols = row.split('\t');
+                    var $row = $('#resin-table tbody tr').eq(startRowIndex + rowIndex);
+                    if ($row.length === 0) {
+                        $('#add-resin').click();
+                        $row = $('#resin-table tbody tr').last();
+                    }
+                    cols.forEach(function(col, colIndex) {
+                        var $cell = $row.find('td').eq(startColIndex + colIndex);
+                        $cell.find('input').val(col.trim() || '');
+                    });
+                }
+            });
+        });
+    });
+</script>
+
+{% endblock %}
+{% block css %}
+<style>
+    table {
+        border-collapse: collapse;
+        width: 100%;
+        margin-bottom: 100px;
+    }
+    th, td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: center;
+    }
+    tr:nth-child(even) {
+        background-color: #f2f2f2;
+    }
+    th {
+        background-color: #4CAF50;
+        color: white;
+    }
+    #btnf1, .btnf2{
+        width: 100px; 
+        background-color: #49b7be; 
+        color: white; 
+        padding: 5px 10px; 
+        margin: 8px;
+        margin-right: 0px;
+        border: none; 
+        border-radius: 4px;
+        cursor: pointer; 
+    }
+    #id_project, input[type="text"] {
+        width: 100%; 
+        padding: 8px; 
+        margin: 0px 0; 
+        display: inline-block;
+        border: 1px solid #ccc; 
+        border-radius: 4px; 
+        box-sizing: border-box; 
+    }
+</style>
+{% endblock %}

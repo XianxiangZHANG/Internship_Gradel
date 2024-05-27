@@ -4,7 +4,6 @@ from django import forms
 from django.forms import modelformset_factory
 
 from web import models
-from utils.encrypt import md5
 import django_filters
 
 class BushingFilter(django_filters.FilterSet):

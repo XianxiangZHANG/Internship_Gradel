@@ -13,8 +13,6 @@ class PartFilter(django_filters.FilterSet):
         fields = {
             'project': ['exact'], 
             'partName': ['icontains'],
-            'resinName': ['icontains'],
-            'fiberName': ['icontains'],
         }
 def part_list(request):
     """ list of part """
@@ -32,9 +30,8 @@ def part_input(request):
 class PartModelForm(forms.ModelForm):
     class Meta:
         model = models.Part
-        fields = ['project', 'partName', 'resinName', 'resinDensity', 'fiberName', 'totalTowNumber', 'fiberDensity', 'fiberVolumeRatio', 'windingDensity', 'fiberSectionCalc',
-                  'fiberSectionAcc', 'defaultInterfaceHeight', 'defaultInterfaceIntDiam', 'defaultLinkType', 'defaultLinkDefined', 'defaultCycleNumber', 'tensileYoungModulus', 'tensileUtimateStress', 'tensileYieldStress',
-                  'compressionYoungModulus', 'flexuralModulus', 'numberLink', 'numberBushing', 'totalMassLink', 'totalMassAccumulation', 'totalMassWinding',
+        fields = ['project', 'partName',
+                  'defaultInterfaceHeight', 'defaultInterfaceIntDiam', 'defaultLinkType', 'defaultLinkDefined', 
                   'totalMassBushing', 'additionalMass', 'totalMassStructure', 'totalFiberLength', 'totalFiberMass', 'totalResinMass', 'projectImage',
                   'part_gh', 'part_mod', 'part_csv', 'part_rs', 'part_log', 'part_mp4', 'part_jpg']
 
@@ -62,9 +59,8 @@ def part_add(request):
 class PartEditModelForm(forms.ModelForm):
     class Meta:
         model = models.Part
-        fields = ['project', 'partName', 'resinName', 'resinDensity', 'fiberName', 'totalTowNumber', 'fiberDensity', 'fiberVolumeRatio', 'windingDensity', 'fiberSectionCalc',
-                  'fiberSectionAcc', 'defaultInterfaceHeight', 'defaultInterfaceIntDiam', 'defaultLinkType', 'defaultLinkDefined', 'defaultCycleNumber', 'tensileYoungModulus', 'tensileUtimateStress', 'tensileYieldStress',
-                  'compressionYoungModulus', 'flexuralModulus', 'numberLink', 'numberBushing', 'totalMassLink', 'totalMassAccumulation', 'totalMassWinding',
+        fields = ['project', 'partName',
+                  'defaultInterfaceHeight', 'defaultInterfaceIntDiam', 'defaultLinkType', 'defaultLinkDefined', 
                   'totalMassBushing', 'additionalMass', 'totalMassStructure', 'totalFiberLength', 'totalFiberMass', 'totalResinMass', 'projectImage',
                   'part_gh', 'part_mod', 'part_csv', 'part_rs', 'part_log', 'part_mp4', 'part_jpg'] 
 

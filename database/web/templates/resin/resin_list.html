@@ -3,14 +3,14 @@
 
 {% block content %}
 
-    <!-- <div style="margin-bottom: 10px">
-        <a class="btn btn-success" href="/project/add/">
-            <span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span> New project
+    <div style="margin-bottom: 10px">
+        <a class="btn btn-success" href="/resin/add/">
+            <span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span> New Resin
         </a>
-    </div> -->
+    </div>
     
     <div>
-    <h3>Project List:</h3>
+    <h3>Resin List:</h3>
     <form method="get" id="filterForm" class="from_f">
         {{ filter.form.as_p }}
         <button type="submit" id="btnf1">Filter</button>
@@ -19,17 +19,37 @@
     <table class="table table-bordered">
         <thead>
         <tr>
-            <!-- <th>Project ID</th> -->
-            <th>Project Name</th>
-            <th>Equipment</th>
-            <th>Customer</th>
-            <th>Project No.</th>
-            <th>Number Of Parts</th>
-            <th>Relative Design</th>
-            <th>Structure Drawing Nb</th>
-            <th>Document No.</th>
-            <th>Revision</th>
-            <th>Last Updata</th>
+            <th>Manufacturer</th>
+            <th>Resin system - Resin</th>
+            <th>Resin system - Hardener</th>
+            <th>Resin system - Accelerator</th>
+            <th>Ratio(weight) R</th>
+            <th>Ratio(weight) H</th>
+            <th>Ratio(weight) A</th>
+            <th>Ratio(volume) R</th>
+            <th>Ratio(volume) H</th>
+            <th>Ratio(volume) A</th>
+            <th>Pot life (Process T°;h)</th>
+            <th>Process T (°C)</th>
+            <th>Curing cycle</th>
+            <th>Tg (°C)</th>
+            <th>Price resin</th>
+            <th>Price hardener</th>
+            <th>Density (g/cm³)</th>
+            <th>Flexural strength (MPa)</th>
+            <th>Flexural modulus (GPa)</th>
+            <th>Modulus of elasticity (GPa) (tensile)</th>
+            <th>Tensile strength (MPa)</th>
+            <th>Elongation at break (%)</th>
+            <th>Compression ult. strength (MPa)</th>
+            <th>Compression modulus (GPa)</th>
+            <th>Thermal expansion coefficient (ppm/K)</th>
+            <th>Charpy impact at RT (mJ/mm²)</th>
+            <th>Fracture toughness K1C (Mpa.m1/2)</th>
+            <th>Fracture energy G1C (J/m²)</th>
+            <th>Total shrinkage at RT (Vol%)</th>
+            <th>Hardness at RT</th>
+            <th>Water absorption (7d at 23°C)</th>
             <th>Operations</th>
         </tr>
         </thead>
@@ -37,20 +57,43 @@
         {% for row in filter.qs %}
             <tr>
                 <!-- <td>{{ row.id }}</td> -->
-                <td>{{ row.projectName }}</td>
-                <td>{{ row.equipment }}</td>
-                <td>{{ row.customer }}</td>
-                <td>{{ row.projectNo }}</td>
-                <td>{{ row.partsNumber }}</td>
+                <td>{{ row.manufacturer }}</td>
+                <td>{{ row.resin }}</td>
+                <td>{{ row.hardener }}</td>
+                <td>{{ row.accelerator }}</td>
+
+                <td>{{ row.ratioWR }}</td>
+                <td>{{ row.ratioWH }}</td>
+                <td>{{ row.ratioWA }}</td>
+                <td>{{ row.ratioVR }}</td>
+                <td>{{ row.ratioVH }}</td>
+                <td>{{ row.ratioVA }}</td>
+
+                <td>{{ row.potLife }}</td>
+                <td>{{ row.processT }}</td>
+                <td>{{ row.curingCycle }}</td>
+                <td>{{ row.tg }}</td>
+                <td>{{ row.priceResin }}</td>
+                <td>{{ row.priceHardener }}</td>
+                <td>{{ row.densityR }}</td>
+                <td>{{ row.flexuralStrength }}</td>
+                <td>{{ row.flexuralmodulus }}</td>
+                <td>{{ row.modulusElasticity }}</td>
+                <td>{{ row.tensileStrength }}</td>
+                <td>{{ row.elongationBreak }}</td>
+                <td>{{ row.compressionUltStrength }}</td>
+                <td>{{ row.compressionModulus }}</td>
+                <td>{{ row.thermalExpansionCoefficient }}</td>
+                <td>{{ row.charpyimpact }}</td>
+                <td>{{ row.fractureToughness }}</td>
+                <td>{{ row.fractureEnergy }}</td>
+                <td>{{ row.totalShrinkage }}</td>
+                <td>{{ row.hardness }}</td>
+                <td>{{ row.waterAbsorption }}</td>
 
 
-                <td>{{ row.relativeDesign }}</td>
-                <td>{{ row.structureDrawingNb }}</td>
-                <td>{{ row.documentNb }}</td>
-                <td>{{ row.revision }}</td>
-                <td>{{ row.lastUpdate }}</td>
                 <td>
-                    <a class="btn btn-primary btn-xs" href="/project/edit/{{ row.id }}/" style="width: 70px; text-align: center; margin-bottom: 5px;"> Edit </a>
+                    <a class="btn btn-primary btn-xs" href="/resin/edit/{{ row.id }}/" style="width: 70px; text-align: center; margin-bottom: 5px;"> Edit </a>
                     <br>
                     <!-- <a class="btn btn-info btn-xs" href="/part/list/{{ row.id }}" style="width: 70px; text-align: center; margin-bottom: 5px;"> Details </a>
                     <br> -->
@@ -97,9 +140,9 @@
         function confirmDelete() {
             // Send request to backend DELETE_ID -> Delete
             // Page refresh
-            // /project/delete/?aid=12
+            // /resin/delete/?aid=12
             $.ajax({
-                url: "/project/delete/",
+                url: "/resin/delete/",
                 type: "GET",
                 data: {
                     aid: DELETE_ID

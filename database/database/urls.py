@@ -17,7 +17,7 @@ from django.contrib import admin
 from django.urls import path
 from django.conf import settings
 from django.conf.urls.static import static
-from web.views import account, project, part, bushing, interface, link, winding, user, department
+from web.views import account, project, part, bushing, interface, link, winding, user, department, fiber, resin
 from web.views.load_parts import load_parts, load_interfaces
 
 urlpatterns = [
@@ -31,13 +31,23 @@ urlpatterns = [
     path('check/', account.check),
     path('changePassword/<int:aid>/', account.changePassword),
 
+    path('fiber/list/', fiber.fiber_list),
+    path('fiber/add/', fiber.fiber_add),
+    path('fiber/add-multiple/', fiber.fiber_add_multiple),
+    path('fiber/edit/<int:aid>/', fiber.fiber_edit),
+    path('fiber/delete/', fiber.fiber_delete),
+
+    path('resin/list/', resin.resin_list),
+    path('resin/add/', resin.resin_add),
+    path('resin/add-multiple/', resin.resin_add_multiple),
+    path('resin/edit/<int:aid>/', resin.resin_edit),
+    path('v/delete/', resin.resin_delete),
+
     path('project/list/', project.project_list),
     # path('project/input/', project.project_input),
     path('project/add/', project.project_add),
-
     # /project/edit/123/
     path('project/edit/<int:aid>/', project.project_edit),
-
     # /project/delete/?aid=123
     path('project/delete/', project.project_delete),
 

@@ -3,14 +3,14 @@
 
 {% block content %}
 
-    <!-- <div style="margin-bottom: 10px">
-        <a class="btn btn-success" href="/project/add/">
-            <span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span> New project
+    <div style="margin-bottom: 10px">
+        <a class="btn btn-success" href="/fiber/add/">
+            <span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span> New Fiber
         </a>
-    </div> -->
+    </div>
     
     <div>
-    <h3>Project List:</h3>
+    <h3>Fiber List:</h3>
     <form method="get" id="filterForm" class="from_f">
         {{ filter.form.as_p }}
         <button type="submit" id="btnf1">Filter</button>
@@ -19,17 +19,23 @@
     <table class="table table-bordered">
         <thead>
         <tr>
-            <!-- <th>Project ID</th> -->
-            <th>Project Name</th>
-            <th>Equipment</th>
-            <th>Customer</th>
-            <th>Project No.</th>
-            <th>Number Of Parts</th>
-            <th>Relative Design</th>
-            <th>Structure Drawing Nb</th>
-            <th>Document No.</th>
-            <th>Revision</th>
-            <th>Last Updata</th>
+            <!-- <th>Fiber ID</th> -->
+            <th>Material</th>
+            <th>Manufacturer</th>
+            <th>Distributor</th>
+            <th>Grade</th>
+            <th>Single filament diameter (mm)</th>
+            <th>Tow</th>
+            <th>Tow (in thousands)</th>
+            <th>Tex (g/km)</th>
+            <th>Density (g/cm3)</th>
+            <th>Theoretical dry section (mm2)</th>
+            <th>Tensile strength (MPa)</th>
+            <th>Tensile modulus (GPa)</th>
+            <th>Price euros/kg (2021 to febrary 2022)</th>
+            <th>Price euros/kg (after 02/2022)</th>
+            <th>Price euros/kg (after 02/2023)</th>
+            <th>Price euros/kg (after 01/2024)</th>
             <th>Operations</th>
         </tr>
         </thead>
@@ -37,20 +43,26 @@
         {% for row in filter.qs %}
             <tr>
                 <!-- <td>{{ row.id }}</td> -->
-                <td>{{ row.projectName }}</td>
-                <td>{{ row.equipment }}</td>
-                <td>{{ row.customer }}</td>
-                <td>{{ row.projectNo }}</td>
-                <td>{{ row.partsNumber }}</td>
+                <td>{{ row.material }}</td>
+                <td>{{ row.manufacturer }}</td>
+                <td>{{ row.distributor }}</td>
+                <td>{{ row.grade }}</td>
+                <td>{{ row.singleFilamentDiameter }}</td>
 
 
-                <td>{{ row.relativeDesign }}</td>
-                <td>{{ row.structureDrawingNb }}</td>
-                <td>{{ row.documentNb }}</td>
-                <td>{{ row.revision }}</td>
-                <td>{{ row.lastUpdate }}</td>
+                <td>{{ row.tow }}</td>
+                <td>{{ row.towInThousands }}</td>
+                <td>{{ row.tex }}</td>
+                <td>{{ row.density }}</td>
+                <td>{{ row.theoreticalDrySection }}</td>
+                <td>{{ row.tensileStrength }}</td>
+                <td>{{ row.tensileModulus }}</td>
+                <td>{{ row.price21 }}</td>
+                <td>{{ row.price22 }}</td>
+                <td>{{ row.price23 }}</td>
+                <td>{{ row.price24 }}</td>
                 <td>
-                    <a class="btn btn-primary btn-xs" href="/project/edit/{{ row.id }}/" style="width: 70px; text-align: center; margin-bottom: 5px;"> Edit </a>
+                    <a class="btn btn-primary btn-xs" href="/fiber/edit/{{ row.id }}/" style="width: 70px; text-align: center; margin-bottom: 5px;"> Edit </a>
                     <br>
                     <!-- <a class="btn btn-info btn-xs" href="/part/list/{{ row.id }}" style="width: 70px; text-align: center; margin-bottom: 5px;"> Details </a>
                     <br> -->
@@ -97,9 +109,9 @@
         function confirmDelete() {
             // Send request to backend DELETE_ID -> Delete
             // Page refresh
-            // /project/delete/?aid=12
+            // /fiber/delete/?aid=12
             $.ajax({
-                url: "/project/delete/",
+                url: "/fiber/delete/",
                 type: "GET",
                 data: {
                     aid: DELETE_ID

@@ -113,7 +113,7 @@ def changePassword(request, aid):
             encrypt_pasword = md5(new_password)
             user.password = encrypt_pasword
             user.save()
-            return render(request, 'account/password_changed.html')  # 密码修改成功后的跳转页面
+            return render(request, 'account/password_changed.html')
     else:
         form = ChangePasswordForm(user)
     return render(request, 'account/change_password.html', {'form': form})
