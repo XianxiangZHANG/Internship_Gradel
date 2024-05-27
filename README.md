@@ -1,5 +1,5 @@
 # Internship_GRADEL
-## Database for Gradel
+## Database of Gradel
  Auther: Xianxiang ZHANG
 
 Created a database by Django.
