@@ -17,8 +17,11 @@ from django.contrib import admin
 from django.urls import path
 from django.conf import settings
 from django.conf.urls.static import static
-from web.views import account, project, part, bushing, interface, link, winding, user, department, fiber, resin
+from web.views import account, project, part, bushing, interface, link, winding, user, department, fiber, resin, r_and_d
 from web.views.load_parts import load_parts, load_interfaces
+from web.views.load_fiber_resin import get_fiber_data, get_resin_data
+
+
 
 urlpatterns = [
     # path('', account.login),
@@ -36,12 +39,23 @@ urlpatterns = [
     path('fiber/add-multiple/', fiber.fiber_add_multiple),
     path('fiber/edit/<int:aid>/', fiber.fiber_edit),
     path('fiber/delete/', fiber.fiber_delete),
+    path('fiber/modify-multiple/', fiber.fiber_modify_multiple),
 
     path('resin/list/', resin.resin_list),
     path('resin/add/', resin.resin_add),
     path('resin/add-multiple/', resin.resin_add_multiple),
     path('resin/edit/<int:aid>/', resin.resin_edit),
-    path('v/delete/', resin.resin_delete),
+    path('resin/delete/', resin.resin_delete),
+    path('resin/modify-multiple/', resin.resin_modify_multiple),
+
+    path('r_and_d/list/', r_and_d.r_and_d_list),
+    path('r_and_d/add/', r_and_d.r_and_d_add),
+    path('r_and_d/add-multiple/', r_and_d.r_and_d_add_multiple),
+    path('r_and_d/edit/<int:aid>/', r_and_d.r_and_d_edit),
+    path('r_and_d/delete/', r_and_d.r_and_d_delete),
+    path('r_and_d/modify-multiple/', r_and_d.r_and_d_modify_multiple),
+    path('r_and_d/load-parts/', get_fiber_data, name='get_fiber_data'),
+    path('r_and_d/load-interface/', get_resin_data, name='get_resin_data'),
 
     path('project/list/', project.project_list),
     # path('project/input/', project.project_input),

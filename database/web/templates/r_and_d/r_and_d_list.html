@@ -1,0 +1,216 @@
+{% extends 'layout.html' %}
+
+
+{% block content %}
+
+    <div style="margin-bottom: 10px">
+        <a class="btn btn-success" href="/r_and_d/add/">
+            <span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span> New R&D
+        </a>
+    </div>
+    
+    <div>
+        <h3>R&D List:</h3>
+        <form method="get" id="filterForm">
+            {{ filter.form.as_p }}
+            <button type="submit" id="btnf1">Filter</button>
+            <button type="reset" id="resetButton" class="btnf2">Reset</button>
+        </form>
+    <table class="table table-bordered">
+        
+        {% for field in filter.qs %}
+        <tr>
+            <tr><th>Program :</th><td>{{ field.program }}</td></tr>
+            <tr><th>Project Nr. :</th><td>{{ field.projectNr }}</td></tr>
+
+            <tr><th>ERMDS Nr. :</th><td>{{ field.ERMDS }}</td></tr>
+            <tr><th>Last update :</th><td>{{ field.lastUpdate }}</td></tr>
+            <tr><th>Verified by :</th><td>{{ field.verifiedBy }}</td></tr>
+            <tr><th>Approved by :</th><td>{{ field.approvedBy }}</td></tr>
+
+            <tr><th style="background-color: #49b7be;">Materials references</th></tr>
+            <tr><th>Fiber</th><td>{{ field.fiber }}</td></tr>
+            <tr><th>Number of bobbins</th><td>{{ field.numberOfBobbins }}</td></tr>
+            <tr><th>Resin</th><td>{{ field.resin.resin }}</td></tr>
+            <tr><th>Hardener</th><td>{{ field.resin.hardener }}</td></tr>
+
+            <tr><th style="background-color: #49b7be;">Materials references</th></tr>
+            <tr><th>End-effector N°</th><td>{{ field.endEffector }}</td></tr>
+            <tr><th>Impregnation bath</th><td>{{ field.impregnationBath }}</td></tr>
+            <tr><th>Entry nozzle diameter (mm)</th><td>{{ field.entryNozzleDiam }}</td></tr>
+            <tr><th>Exit nozzle diameter (mm)</th><td>{{ field.exitNozzleDiam }}</td></tr>
+
+            <tr><th>Room temperature (°C)</th><td>{{ field.roomTemperature }}</td></tr>
+            <tr><th>Room humidity (%)</th><td>{{ field.roomhumidity }}</td></tr>
+
+            <tr><th>Brake force/bobbin (N) (kg) (bar)</th><td>{{ field.brakeForcebobin }}</td></tr>
+            <tr><th>Windng speed range (mm/s)</th><td>{{ field.windingSpeedRange }}</td></tr>
+
+            <tr><th>FVR (%)</th><td>{{ field.FVR }}</td></tr>
+            <tr><th>Composite density ρ (g/cm3)</th><td>{{ field.compositeDensity }}</td></tr>
+            <tr><th>Porosity (%)</th><td>{{ field.porosity }}</td></tr>
+            <tr><th>Theoretical sample section (mm²)</th><td>{{ field.theoreticalSampleSection }}</td></tr>
+            <tr><th>Experimental sample section (mm²)</th><td>{{ field.experimentalSampleSection }}</td></tr>
+            <tr><th>Aged / Non-aged</th><td>{{ field.aged }}</td></tr>
+            <tr><th>Temperature of the tests</th><td>{{ field.temperatureOfTests }}</td></tr>
+
+            <tr><th>Number of samples</th><td>{{ field.numberOfSamples }}</td></tr>
+            <tr><th>Configuration</th><td>{{ field.configurarion }}</td></tr>
+            <tr><th>Sample length</th><td>{{ field.sampleLength }}</td></tr>
+            <tr><th>Number of cycles</th><td>{{ field.numberOfCycles }}</td></tr>
+            <tr><th>Sleeve diameter / height (mm)</th><td>{{ field.sleeve }}</td></tr>
+
+            <tr><th>Thermal expansion coefficient A (/K)</th><td>{{ field.thermalExpansionCoefficient }}</td></tr>
+            <tr><th>Thermal conductivity K (W/(m.K))</th><td>{{ field.thermalConductivity }}</td></tr>
+
+            <tr><th>Tensile Young's modulus - Average (MPa)</th><td>{{ field.tensileYoungModulus }}</td></tr>
+            <tr><th>Tensile Ultimate Stress - Average (MPa)</th><td>{{ field.tensileUltimateStress }}</td></tr>
+            <tr><th>Tensile Ultimate Stress - Min A (MPa)</th><td>{{ field.tensileUltimateStressMA }}</td></tr>
+            <tr><th>Tensile Ultimate Stress - Min B (MPa)</th><td>{{ field.tensileUltimateStressMB }}</td></tr>
+            <tr><th>Tensile Ultimate Load - Average (kN)</th><td>{{ field.tensileUltimateLoad }}</td></tr>
+            <tr><th>Tensile Yield Stress - Average (MPa)</th><td>{{ field.tensileYieldStress }}</td></tr>
+            <tr><th>Tensile Yield Stress - Min A (MPa)</th><td>{{ field.tensileYieldStressMA }}</td></tr>
+            <tr><th>Tensile Yield Stress - Min B (MPa)</th><td>{{ field.tensileYieldStressMB }}</td></tr>
+            <tr><th>Tensile Yield Load - Average (kN)</th><td>{{ field.tensileYieldLoad }}</td></tr>
+
+            <tr><th>Compression Young's modulus - Average (MPa)</th><td>{{ field.compressionYoungModulus }}</td></tr>
+            <tr><th>Compression Ultimate Stress - Average (MPa)</th><td>{{ field.compressionUltimateStress }}</td></tr>
+            <tr><th>Compression Ultimate Stress - Min A (MPa)</th><td>{{ field.compressionUltimateStressMA }}</td></tr>
+            <tr><th>Compression Ultimate Stress - Min B (MPa)</th><td>{{ field.compressionUltimateStressMB }}</td></tr>
+            <tr><th>Compression Ultimate Load - Average (kN)</th><td>{{ field.compressionUltimateLoad }}</td></tr>
+            <tr><th>Compression Yield Stress- Average (MPa)</th><td>{{ field.compressionYieldStress }}</td></tr>
+            <tr><th>Compression Yield Stress - Min A (MPa)</th><td>{{ field.compressionYieldStressMA }}</td></tr>
+            <tr><th>Compression Yield Stress - Min B (MPa)</th><td>{{ field.compressionYieldStressMB }}</td></tr>
+            <tr><th>Compression Yield Load - Average (kN)</th><td>{{ field.compressionYieldLoad }}</td></tr>
+            <tr><th>Poisson's ratio ν (-)</th><td>{{ field.poissonRatio }}</td></tr>
+
+            <tr><th>Flexural modulus - Average (MPa)</th><td>{{ field.flexuralModulusILSS }}</td></tr>
+            <tr><th>Ultimate Shear Force - Average (kN)</th><td>{{ field.ultimateShearForce }}</td></tr>
+            <tr><th>Ultimate Shear Stress - Average (MPa)</th><td>{{ field.ultimateShearStress }}</td></tr>
+            <tr><th>Ultimate Shear Stress - Min A (MPa)</th><td>{{ field.ultimateShearStressMA }}</td></tr>
+            <tr><th>Ultimate Shear Stress - Min B (MPa)</th><td>{{ field.ultimateShearStressMB }}</td></tr>
+
+            <tr><th>Flexural modulus - Average (MPa)</th><td>{{ field.flexuralModulusF }}</td></tr>
+            <tr><th>Flexural Ultimate strength - Average (MPa)</th><td>{{ field.flexuralUltimateStrength }}</td></tr>
+            <tr><th>Flexural Ultimate strength - Min A (MPa)</th><td>{{ field.flexuralUltimateStrengthMA }}</td></tr>
+            <tr><th>Flexural Ultimate strength - Min B (MPa)</th><td>{{ field.flexuralUltimateStrengthMB }}</td></tr>
+            <tr><th>Strain at ultimate strength (%)</th><td>{{ field.strainUltimateStrength }}</td></tr>
+            <tr><th>Flexural Ultimate Force (N)</th><td>{{ field.flexuralUltimateForce }}</td></tr>
+
+            <tr><th>Yield Torque (Nm)</th><td>{{ field.yieldTorque }}</td></tr>
+            <tr><th>Maxi Torque (Nm)</th><td>{{ field.maxiTorque }}</td></tr>
+            <tr><th>Yield angle (°)</th><td>{{ field.yieldAngle }}</td></tr>
+            <tr><th>Maxi Twisted Angle (°)</th><td>{{ field.maxiTwistedAngle }}</td></tr>
+        </tr>
+        
+            
+        {% endfor %}
+        </tbody>
+    </table></div>
+
+
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+
+
+            <div class="alert alert-danger alert-dismissible fade in" role="alert">
+                <button type="button" class="close"></button>
+                <h4>Are you sure you want to delete it?</h4>
+                <p style="margin: 20px 0;">After deletion, all related data associated with it will be deleted. Are you sure you want to continue?</p>
+                <p>
+                    <button type="button" class="btn btn-danger" onclick="confirmDelete()">Confirm</button>
+                    <button type="button" class="btn btn-default" onclick="cancelDelete()">Cancel</button>
+                </p>
+            </div>
+        </div>
+
+    </div>
+{% endblock %}
+
+{% block js %}
+    <script>
+        document.getElementById('resetButton').addEventListener('click', function() {
+        window.location.href = window.location.pathname; 
+        });
+
+        // ID currently to be deleted
+        DELETE_ID = 0;
+        function deleteAction(id) {
+            DELETE_ID = id;
+            $('#myModal').modal('show');
+        }
+
+        function confirmDelete() {
+            // Send request to backend DELETE_ID -> Delete
+            // Page refresh
+            // /r_and_d/delete/?aid=12
+            $.ajax({
+                url: "/r_and_d/delete/",
+                type: "GET",
+                data: {
+                    aid: DELETE_ID
+                },
+                dataType: "JSON",
+                success: function (res) {
+                    // {status: true} -> obj
+                    if (res.status) {
+                        // Deletion successful, refresh the page
+                        location.reload()
+                    } else {
+                        alert(res.error);
+                    }
+                }
+            })
+        }
+
+        function cancelDelete() {
+            DELETE_ID = 0;
+            $('#myModal').modal('hide');
+        }
+    </script>
+{% endblock %}
+
+{% block css %}
+<style>
+    table {
+        border-collapse: collapse;
+        width: 100%;
+        margin-bottom: 100px;
+    }
+    th, td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: center;
+    }
+    tr:nth-child(even) {
+        background-color: #f2f2f2;
+    }
+    th {
+        background-color: #4CAF50;
+        color: white;
+    }
+  
+    #btnf1, .btnf2{
+        width: 100px; 
+        background-color: #49b7be; 
+        color: white; 
+        padding: 5px 10px; 
+        margin: 8px;
+        margin-right: 0px;
+        border: none; 
+        border-radius: 4px;
+        cursor: pointer; 
+    }
+    #filterForm, input[type="text"] {
+        width: 100%; 
+        padding: 8px; 
+        margin: 0px 0; 
+        display: inline-block;
+        border: 1px solid #ccc; 
+        border-radius: 4px; 
+        box-sizing: border-box; 
+    }
+ 
+   
+</style>
+{% endblock %}

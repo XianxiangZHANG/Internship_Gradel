@@ -9,6 +9,6 @@ def load_parts(request):
 
 def load_interfaces(request):
     part_id = request.GET.get('part_id')
-    interfaces = models.interface.objects.filter(part_id=part_id).order_by('interfaceName')
+    interfaces = models.Interface.objects.filter(part_id=part_id).order_by('interfaceName')
     interface_list = list(interfaces.values('id', 'interfaceName'))
     return JsonResponse(interface_list, safe=False)

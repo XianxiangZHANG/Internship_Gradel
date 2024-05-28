@@ -18,9 +18,9 @@ class User(models.Model):
 
 class Resin(models.Model):
     """ Resin Table """
-    manufacturer = models.CharField(verbose_name="Manufacturer", max_length=255)    
-    resin = models.CharField(verbose_name="Resin system - Resin", max_length=255)
-    hardener = models.CharField(verbose_name="Resin system - Hardener", max_length=255, unique= True)
+    manufacturer = models.CharField(verbose_name="Manufacturer", max_length=255, null=True, blank=True)    
+    resin = models.CharField(verbose_name="Resin system - Resin", max_length=255, null=True, blank=True)
+    hardener = models.CharField(verbose_name="Resin system - Hardener", max_length=255, null=True, blank=True)
     accelerator = models.CharField(verbose_name="Resin system - Accelerator", max_length=255, null=True, blank=True)
     
     ratioWR = models.CharField(verbose_name="Ratio(weight) R", max_length=255, null=True, blank=True)
@@ -56,7 +56,7 @@ class Resin(models.Model):
     waterAbsorption = models.CharField(verbose_name="Water absorption (7d at 23°C)", max_length=255, null=True, blank=True)
     
     def __str__(self):
-        return self.resin, self.hardener
+        return f"{self.resin} / {self.hardener}"
 
 class Fiber(models.Model):
     """ Fiber Table """
@@ -167,6 +167,13 @@ class R_and_D(models.Model):
 
 class RDComment(models.Model):
     """ R&D comment Table """
+    program = models.CharField(max_length=255, null=True, blank=True)
+    projectNr = models.CharField(max_length=255, null=True, blank=True)
+
+    ERMDS = models.CharField(max_length=255, unique= True)
+    lastUpdate = models.CharField(max_length=255, null=True, blank=True)
+    verifiedBy = models.CharField(max_length=255, null=True, blank=True)
+    approvedBy = models.CharField(max_length=255, null=True, blank=True)
     fiber = models.CharField(max_length=255, null=True, blank=True)
     numberOfBobbins = models.CharField(max_length=255, null=True, blank=True)
     resin = models.CharField(max_length=255, null=True, blank=True)
@@ -262,7 +269,7 @@ class Project(models.Model):
     structureDrawingNb = models.CharField(verbose_name="Structure Drawing Nb", max_length=255, null=True, blank=True)
     documentNb = models.CharField(verbose_name="Document Nr", max_length=255, null=True, blank=True)
     revision = models.CharField(verbose_name="Revision", max_length=255, null=True, blank=True)
-    lastUpdate = models.DateTimeField(verbose_name="Last Update M/D/Y", null=True, blank=True)
+    lastUpdate = models.DateField(verbose_name="Last Update M/D/Y", null=True, blank=True)
 
     def __str__(self):
         return self.projectName

@@ -1,0 +1,241 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+<div class="panel panel-default">
+    <div class="panel-heading"><span class="glyphicon glyphicon-indent-right" aria-hidden="true"></span> Add Multiple R&D</div>
+    <div class="panel-body">
+        <form class="form-horizontal" method="post" novalidate>
+            {% csrf_token %}
+            <div class="row">
+                {{ formset.management_form}}{{ formsetC.management_form }}
+                <table class="table table-bordered" id="r_and_d-table">
+
+                    <!-- <thead> -->
+                        
+                        <tr>
+                            
+                            
+                            {% for field in formset %}
+                            <tr><th>Program :</th><td>{{ field.program }}</td></tr>
+                            <tr><th>Project Nr. :</th><td>{{ field.projectNr }}</td></tr>
+
+                            <tr><th>ERMDS Nr. :</th><td>{{ field.ERMDS }}</td></tr>
+                            <tr><th>Last update :</th><td>{{ field.lastUpdate }}</td></tr>
+                            <tr><th>Verified by :</th><td>{{ field.verifiedBy }}</td></tr>
+                            <tr><th>Approved by :</th><td>{{ field.approvedBy }}</td></tr>
+                        
+                            
+                            <tr><th>Fiber</th><td>{{ field.fiber }}</td><td>{{ comment.fiber }}</td></tr>
+                            <tr><th>Number of bobbins</th><td>{{ field.numberOfBobbins }}</td></tr>
+                            <tr><th>Resin</th><td>{{ field.resin }}</td></tr>
+                            <!-- <tr><th>Hardener</th><td>{{ field.resin.hardener }}</td></tr>
+                            <tr><th>Curing cycle (+ ramp) (°C)</th><td>{{ field.resin.curingCycle }}</td></tr>
+
+                            <tr><th>Fiber tow</th><td>{{ field.fiber.tow }}</td></tr>
+                            <tr><th>Fiber tex (g/1000m)</th><td>{{ field.fiber.tex }}</td></tr>
+                            <tr><th>Fibre density (g/cm3)</th><td>{{ field.fiber.density }}</td></tr>
+                            <tr><th>Matrix density (g/cm3)</th><td>{{ field.resin.density }}</td></tr> -->
+         
+                            <tr><th>End-effector N°</th><td>{{ field.endEffector }}</td></tr>
+                            <tr><th>Impregnation bath</th><td>{{ field.impregnationBath }}</td></tr>
+                            <tr><th>Entry nozzle diameter (mm)</th><td>{{ field.entryNozzleDiam }}</td></tr>
+                            <tr><th>Exit nozzle diameter (mm)</th><td>{{ field.exitNozzleDiam }}</td></tr>
+
+                            <tr><th>Room temperature (°C)</th><td>{{ field.roomTemperature }}</td></tr>
+                            <tr><th>Room humidity (%)</th><td>{{ field.roomhumidity }}</td></tr>
+
+                            <tr><th>Brake force/bobbin (N) (kg) (bar)</th><td>{{ field.brakeForcebobin }}</td></tr>
+                            <tr><th>Windng speed range (mm/s)</th><td>{{ field.windingSpeedRange }}</td></tr>
+
+                            <tr><th>FVR (%)</th><td>{{ field.FVR }}</td></tr>
+                            <tr><th>Composite density ρ (g/cm3)</th><td>{{ field.compositeDensity }}</td></tr>
+                            <tr><th>Porosity (%)</th><td>{{ field.porosity }}</td></tr>
+                            <tr><th>Theoretical sample section (mm²)</th><td>{{ field.theoreticalSampleSection }}</td></tr>
+                            <tr><th>Experimental sample section (mm²)</th><td>{{ field.experimentalSampleSection }}</td></tr>
+                            <tr><th>Aged / Non-aged</th><td>{{ field.aged }}</td></tr>
+                            <tr><th>Temperature of the tests</th><td>{{ field.temperatureOfTests }}</td></tr>
+
+                            <tr><th>Number of samples</th><td>{{ field.numberOfSamples }}</td></tr>
+                            <tr><th>Configuration</th><td>{{ field.configurarion }}</td></tr>
+                            <tr><th>Sample length</th><td>{{ field.sampleLength }}</td></tr>
+                            <tr><th>Number of cycles</th><td>{{ field.numberOfCycles }}</td></tr>
+                            <tr><th>Sleeve diameter / height (mm)</th><td>{{ field.sleeve }}</td></tr>
+
+                            <tr><th>Thermal expansion coefficient A (/K)</th><td>{{ field.thermalExpansionCoefficient }}</td></tr>
+                            <tr><th>Thermal conductivity K (W/(m.K))</th><td>{{ field.thermalConductivity }}</td></tr>
+
+                            <tr><th>Tensile Young's modulus - Average (MPa)</th><td>{{ field.tensileYoungModulus }}</td></tr>
+                            <tr><th>Tensile Ultimate Stress - Average (MPa)</th><td>{{ field.tensileUltimateStress }}</td></tr>
+                            <tr><th>Tensile Ultimate Stress - Min A (MPa)</th><td>{{ field.tensileUltimateStressMA }}</td></tr>
+                            <tr><th>Tensile Ultimate Stress - Min B (MPa)</th><td>{{ field.tensileUltimateStressMB }}</td></tr>
+                            <tr><th>Tensile Ultimate Load - Average (kN)</th><td>{{ field.tensileUltimateLoad }}</td></tr>
+                            <tr><th>Tensile Yield Stress - Average (MPa)</th><td>{{ field.tensileYieldStress }}</td></tr>
+                            <tr><th>Tensile Yield Stress - Min A (MPa)</th><td>{{ field.tensileYieldStressMA }}</td></tr>
+                            <tr><th>Tensile Yield Stress - Min B (MPa)</th><td>{{ field.tensileYieldStressMB }}</td></tr>
+                            <tr><th>Tensile Yield Load - Average (kN)</th><td>{{ field.tensileYieldLoad }}</td></tr>
+
+                            <tr><th>Compression Young's modulus - Average (MPa)</th><td>{{ field.compressionYoungModulus }}</td></tr>
+                            <tr><th>Compression Ultimate Stress - Average (MPa)</th><td>{{ field.compressionUltimateStress }}</td></tr>
+                            <tr><th>Compression Ultimate Stress - Min A (MPa)</th><td>{{ field.compressionUltimateStressMA }}</td></tr>
+                            <tr><th>Compression Ultimate Stress - Min B (MPa)</th><td>{{ field.compressionUltimateStressMB }}</td></tr>
+                            <tr><th>Compression Ultimate Load - Average (kN)</th><td>{{ field.compressionUltimateLoad }}</td></tr>
+                            <tr><th>Compression Yield Stress- Average (MPa)</th><td>{{ field.compressionYieldStress }}</td></tr>
+                            <tr><th>Compression Yield Stress - Min A (MPa)</th><td>{{ field.compressionYieldStressMA }}</td></tr>
+                            <tr><th>Compression Yield Stress - Min B (MPa)</th><td>{{ field.compressionYieldStressMB }}</td></tr>
+                            <tr><th>Compression Yield Load - Average (kN)</th><td>{{ field.compressionYieldLoad }}</td></tr>
+                            <tr><th>Poisson's ratio ν (-)</th><td>{{ field.poissonRatio }}</td></tr>
+
+                            <tr><th>Flexural modulus - Average (MPa)</th><td>{{ field.flexuralModulusILSS }}</td></tr>
+                            <tr><th>Ultimate Shear Force - Average (kN)</th><td>{{ field.ultimateShearForce }}</td></tr>
+                            <tr><th>Ultimate Shear Stress - Average (MPa)</th><td>{{ field.ultimateShearStress }}</td></tr>
+                            <tr><th>Ultimate Shear Stress - Min A (MPa)</th><td>{{ field.ultimateShearStressMA }}</td></tr>
+                            <tr><th>Ultimate Shear Stress - Min B (MPa)</th><td>{{ field.ultimateShearStressMB }}</td></tr>
+
+                            <tr><th>Flexural modulus - Average (MPa)</th><td>{{ field.flexuralModulusF }}</td></tr>
+                            <tr><th>Flexural Ultimate strength - Average (MPa)</th><td>{{ field.flexuralUltimateStrength }}</td></tr>
+                            <tr><th>Flexural Ultimate strength - Min A (MPa)</th><td>{{ field.flexuralUltimateStrengthMA }}</td></tr>
+                            <tr><th>Flexural Ultimate strength - Min B (MPa)</th><td>{{ field.flexuralUltimateStrengthMB }}</td></tr>
+                            <tr><th>Strain at ultimate strength (%)</th><td>{{ field.strainUltimateStrength }}</td></tr>
+                            <tr><th>Flexural Ultimate Force (N)</th><td>{{ field.flexuralUltimateForce }}</td></tr>
+
+                            <tr><th>Yield Torque (Nm)</th><td>{{ field.yieldTorque }}</td></tr>
+                            <tr><th>Maxi Torque (Nm)</th><td>{{ field.maxiTorque }}</td></tr>
+                            <tr><th>Yield angle (°)</th><td>{{ field.yieldAngle }}</td></tr>
+                            <tr><th>Maxi Twisted Angle (°)</th><td>{{ field.maxiTwistedAngle }}</td></tr>
+                        </tr>
+                        
+                            
+                        {% endfor %}
+                    <!-- </thead>
+                    <tbody contenteditable="true">
+                        {% for form in formset %}
+                        <tr class="r_and_d-form">
+                            {% for field in form %}
+                            <td contenteditable="true">{{ field }}</td>
+                            <span style="color: red;">{{ field.errors.0 }}</span>
+                            {% endfor %}
+                            <td class="text-center">{% if not forloop.first %}<button type="button" class="btn btn-danger remove-form">Remove</button>{% endif %}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody> -->
+                </table>
+            </div>
+            <div class="row">
+                <div class="form-group">
+                    <div class="col-xs-12">
+                        <div class="col-sm-offset-9 col-sm-12">
+                            <button type="button" id="add-r_and_d" class="btn btn-secondary" style="width: 14%;">Add R&D</button>
+                            <button type="submit" class="btn btn-primary" style="width: 6%; margin-left: 3%;">Save</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function() {
+        
+
+        $('#add-r_and_d').click(function() {
+            var formCount = $('#id_form-TOTAL_FORMS').val();
+            var newForm = $('.r_and_d-form:first').clone(true).removeClass('r_and_d-form');
+            newForm.find('input').each(function() {
+                var name = $(this).attr('name').replace('-0-', '-' + formCount + '-');
+                var id = 'id_' + name;
+                $(this).attr({'name': name, 'id': id}).val('');
+            });
+            newForm.find('td:last').html('<button type="button" class="btn btn-danger remove-form">Remove</button>');
+            $('#r_and_d-table tbody').append(newForm);
+            $('#id_form-TOTAL_FORMS').val(parseInt(formCount) + 1);
+        });
+
+        $(document).on('click', '.remove-form', function() {
+            if ($('#r_and_d-table tbody tr').length > 1) {
+                $(this).closest('tr').remove();
+                var formCount = $('#id_form-TOTAL_FORMS').val();
+                $('#id_form-TOTAL_FORMS').val(parseInt(formCount) - 1);
+                // 重新调整所有表单行的索引
+                $('#r_and_d-table tbody tr').each(function(index) {
+                    $(this).find('input').each(function() {
+                        var name = $(this).attr('name').replace(/-\d+-/, '-' + index + '-');
+                        var id = 'id_' + name;
+                        $(this).attr({'name': name, 'id': id});
+                    });
+                });
+            }
+        });
+
+        // Handle paste event to populate table cells
+        $('#r_and_d-table tbody').on('paste', 'td', function(e) {
+            e.preventDefault();
+            var text = (e.originalEvent || e).clipboardData.getData('text/plain');
+            var rows = text.split('\n');
+            var $currentRow = $(this).closest('tr');
+            var startRowIndex = $currentRow.index();
+            var startColIndex = $(this).index();
+
+            rows.forEach(function(row, rowIndex) {
+                if (row.trim() !== '') {
+                    var cols = row.split('\t');
+                    var $row = $('#r_and_d-table tbody tr').eq(startRowIndex + rowIndex);
+                    if ($row.length === 0) {
+                        $('#add-r_and_d').click();
+                        $row = $('#r_and_d-table tbody tr').last();
+                    }
+                    cols.forEach(function(col, colIndex) {
+                        var $cell = $row.find('td').eq(startColIndex + colIndex);
+                        $cell.find('input').val(col.trim() || '');
+                    });
+                }
+            });
+        });
+        
+    });
+</script>
+
+{% endblock %}
+
+{% block css %}
+<style>
+    table {
+        border-collapse: collapse;
+        width: 100%;
+        margin-bottom: 100px;
+    }
+    th, td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: center;
+    }
+    tr:nth-child(even) {
+        background-color: #f2f2f2;
+    }
+    th {
+        background-color: #4CAF50;
+        color: white;
+    }
+    #btnf1, .btnf2{
+        width: 100px; 
+        background-color: #49b7be; 
+        color: white; 
+        padding: 5px 10px; 
+        margin: 8px;
+        margin-right: 0px;
+        border: none; 
+        border-radius: 4px;
+        cursor: pointer; 
+    }
+    #id_project, input[type="text"] {
+        width: 100%; 
+        padding: 8px; 
+        margin: 0px 0; 
+        display: inline-block;
+        border: 1px solid #ccc; 
+        border-radius: 4px; 
+        box-sizing: border-box; 
+    }
+</style>
+{% endblock %}
