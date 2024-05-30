@@ -19,24 +19,12 @@
     <table class="table table-bordered" id="normalTable">
         <thead>
         <tr>
-            <!-- <th>Part ID</th> -->
-            <th>Project Name</th>
-            <th>Part Name</th>
-            <th>Link Name</th>
-            <th>Interface1</th>
-            <th>Interface2</th>
-            <th>Length [mm]</th>
-            <th>Link Type</th>
-            <th>Arm diam. [mm]</th>
-            <th>Arm Sec. [mm²]</th>
-            <th>Cycle #</th>
-            <th>Sequence</th>
-            <th>Fin. Arm Sec. [mm²]</th>
-            <th>Fin. Arm diam. [mm]</th>
-            <th>Fin. Arm radius [m]</th>
-            <th>Mass [g]</th>
-            <th>*Angle*</th>
-            <th>Operations</th>
+            <th style="width: 20%;">Link</th>
+            <th style="width: 20%;">Interface Start</th>
+            <th style="width: 20%;">Interface Transition</th>
+            <th style="width: 20%;">Interface End</th>
+            <th style="width: 10%;">Winding Type</th>
+            <th style="width: 10%;">Operations</th>
             
         </tr>
         </thead>
@@ -44,26 +32,15 @@
         {% for row in filter.qs %}
             <tr>
                 <!-- <td>{{ row.id }}</td> -->
-                <td>{{ row.project.projectName }}</td>
-                <td>{{ row.part.partName }}</td>
-                <td>{{ row.linkName }}</td>
+                <td>{{ row.link }}</td>
                 <td>{{ row.interface1 }}</td>
                 <td>{{ row.interface2 }}</td>
-                <td>{{ row.length }}</td>
-                <td>{{ row.linkType }}</td>
-                <td>{{ row.armDiam }}</td>
-                <td>{{ row.armSection }}</td>
-                <td>{{ row.cycle }}</td>
+                <td>{{ row.interface3 }}</td>
                 <td>{{ row.sequence }}</td>
-                <td>{{ row.finArmSection }}</td>
-                <td>{{ row.finArmDiam }}</td>
-                <td>{{ row.finArmRadius }}</td>
-                <td>{{ row.mass }}</td>
-                <td>{{ row.angle }}</td>
                 <td>
-                    <a class="btn btn-primary btn-xs" href="/link/edit/{{ row.id }}/" style="width: 70px; text-align: center; margin-bottom: 5px;"> Edit </a>
-                    <br>
-                    <input type="button" value="Delete" class="btn btn-danger btn-xs" style="width: 70px; text-align: center;"
+                    <a class="btn btn-primary btn-xs" href="/winding/edit/{{ row.id }}/" style="width: 70px; text-align: center; margin-bottom: 5px;"> Edit </a>
+                   
+                    <input type="button" value="Delete" class="btn btn-danger btn-xs" style="width: 70px; text-align: center; margin-bottom: 5px;"
                            onclick="deleteAction({{ row.id }});"/>
                 </td>
             </tr>
@@ -136,7 +113,7 @@
             // Page refresh
             // /part/delete/?aid=12
             $.ajax({
-                url: "/link/delete/",
+                url: "/winding/delete/",
                 type: "GET",
                 data: {
                     aid: DELETE_ID

@@ -2,7 +2,7 @@
 
 {% block content %}
 <div>
-    <h3>Interface List:</h3>
+    <h3>Winding List:</h3>
     <form method="get" id="filterForm">
         {{ filter.form.as_p }}
         <button type="submit" id="btnf1">Filter</button>
@@ -12,35 +12,21 @@
     <form method="post">
         {% csrf_token %}
         {{ formset.management_form }}
-        <table class="table table-bordered" id="interface-table">
+        <table class="table table-bordered" id="winding-table">
             <thead>
                 <thead>
                     <tr>
-                        <th>Interface Name</th>
-                        <th style="width: 1%;">Height [mm]</th>
-                        <th style="width: 1%;">Int. Diameter [mm]</th>
-                        <th style="width: 1%;"> Total Link</th>
-                        <th>Total Arm</th>
-                        <th>Total Section [mm²]</th>
-                        <th>Ext. Diameter [mm]</th>
-                        <th>Theo. height [mm]</th>
-                        <th>Acc. Mass [g]</th>
-                        <th>Fin. O. Diam. [mm]</th>
-                        <th>Fin. Acc. section [mm²]</th>
-                        <th>Safety Factor [%]</th>
-                        <th>Interface's center X [mm]</th>
-                        <th>Interface's center Y [mm]</th>
-                        <th>Interface's center Z [mm]</th>
-                        <th>Direction vector X [mm]</th>
-                        <th>Direction vector Y [mm]</th>
-                        <th>Direction vector Z [mm]</th>
-                        <th>*divisionStep*</th>
+                        <th>Link</th>
+                        <th style="width: 20%;">Interface Start</th>
+                        <th style="width: 20%;">Interface Transition</th>
+                        <th style="width: 20%;">Interface End</th>
+                        <th style="width: 10%;">Winding Type</th>
                     </tr>
                 </thead>
             </thead>
             <tbody>
                 {% for form in formset %}
-                <tr class="interface-form">
+                <tr class="winding-form">
                     {% for field in form %}
                     <td contenteditable="true">{{ field }}</td>
                     <span style="color: red;">{{ field.errors.0 }}</span>
@@ -140,7 +126,7 @@ $(document).ready(function() {
     // 确认删除操作
     function confirmDelete() {
         $.ajax({
-            url: "/interface/delete/",
+            url: "/winding/delete/",
             type: "GET",
             data: { aid: DELETE_ID },
             dataType: "JSON",
@@ -163,9 +149,9 @@ $(document).ready(function() {
     // 绑定删除按钮点击事件
     $(document).on('click', '.remove-form', function() {
         let row = $(this).closest('tr');
-        let interfaceId = row.find('input[name$="-id"]').val();
-        if (interfaceId) {
-            deleteAction(interfaceId);
+        let windingId = row.find('input[name$="-id"]').val();
+        if (windingId) {
+            deleteAction(windingId);
         } else {
             row.remove();
         }
@@ -181,7 +167,7 @@ $(document).ready(function() {
 
 
     // Handle paste event to populate table cells
-    $('#interface-table tbody').on('paste', 'td', function(e) {
+    $('#winding-table tbody').on('paste', 'td', function(e) {
         e.preventDefault();
         var text = (e.originalEvent || e).clipboardData.getData('text/plain');
         var rows = text.split('\n');
@@ -192,10 +178,10 @@ $(document).ready(function() {
         rows.forEach(function(row, rowIndex) {
             if (row.trim() !== '') {
                 var cols = row.split('\t');
-                var $row = $('#interface-table tbody tr').eq(startRowIndex + rowIndex);
+                var $row = $('#winding-table tbody tr').eq(startRowIndex + rowIndex);
                 if ($row.length === 0) {
-                    $('#add-interface').click();
-                    $row = $('#interface-table tbody tr').last();
+                    $('#add-winding').click();
+                    $row = $('#winding-table tbody tr').last();
                 }
                 cols.forEach(function(col, colIndex) {
                     var $cell = $row.find('td').eq(startColIndex + colIndex);

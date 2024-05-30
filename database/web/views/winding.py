@@ -33,7 +33,7 @@ def winding_input(request):
 class WindingModelForm(forms.ModelForm):
     class Meta:
         model = models.Winding
-        fields = ['link', 'interface', 'sequence',]
+        fields = ['link', 'interface1','interface2','interface3', 'sequence',]
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -44,6 +44,7 @@ class WindingModelForm(forms.ModelForm):
 class ProjectPartForm(forms.Form):
     project = forms.ModelChoiceField(queryset=models.Project.objects.all(), required=True)
     part = forms.ModelChoiceField(queryset=models.Part.objects.all(), required=True)
+    link = forms.ModelChoiceField(queryset=models.Link.objects.all(), required=True)
     
 
 WindingFormSet = modelformset_factory(
@@ -66,9 +67,11 @@ def winding_add_multiple(request):
             instances = formset.save(commit=False)
             project = project_part_form.cleaned_data['project']
             part = project_part_form.cleaned_data['part']
+            link = project_part_form.cleaned_data['link']
             for instance in instances:
                 instance.project = project
                 instance.part = part
+                instance.link = link
                 instance.save()
             return redirect('/winding/list/')  # Replace with your redirect URL
         else:
@@ -120,7 +123,7 @@ def winding_add(request):
 class WindingEditModelForm(forms.ModelForm):
     class Meta:
         model = models.Winding
-        fields = ['project', 'part', 'link', 'interface', 'sequence',]
+        fields = ['project', 'part', 'link', 'interface1','interface2','interface3',  'sequence',]
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

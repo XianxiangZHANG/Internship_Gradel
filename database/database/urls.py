@@ -18,7 +18,7 @@ from django.urls import path
 from django.conf import settings
 from django.conf.urls.static import static
 from web.views import account, project, part, bushing, interface, link, winding, user, department, fiber, resin, r_and_d, sequenceType
-from web.views.load_parts import load_parts, load_interfaces
+from web.views.load_parts import load_parts, load_interfaces, load_links
 from web.views.load_fiber_resin import get_fiber_data, get_resin_data
 
 
@@ -103,6 +103,7 @@ urlpatterns = [
     path('winding/delete/', winding.winding_delete),
     path('winding/load-parts/', load_parts, name='load_parts'),
     path('winding/load-interface/', load_interfaces, name='load_interfaces'),
+    path('winding/load-link/', load_links, name='load_links'),
     path('winding/add-multiple/', winding.winding_add_multiple),
     path('winding/modify-multiple/', winding.winding_modify_multiple),
 

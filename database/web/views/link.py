@@ -36,7 +36,7 @@ class LinkModelForm(forms.ModelForm):
         model = models.Link
         fields = ['linkName', 'interface1', 'interface2', 'length', 'linkType', 'armDiam', 'armSection', 
                   'cycle', 'sequence', 'finArmSection', 'finArmDiam', 'finArmRadius',
-                'mass', 'angle',]
+                'mass', 'angle']
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

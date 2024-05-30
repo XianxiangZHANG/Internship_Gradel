@@ -43,15 +43,34 @@
                             <th style="width: 100px;">Operation</th>
                         </tr>
                     </thead>
-                    <tbody contenteditable="true">
+                    <tbody>
                         {% for field in formset %}
                         <tr class="winding-form">
                             
-                            <td contenteditable="true">{{ field.link }}<span style="color: red;">{{ field.errors.0 }}</span></td>
-                            <td contenteditable="true">{{ field.interface }}<span style="color: red;">{{ field.errors.0 }}</span></td>
-                            <td contenteditable="true">{{ field.interface }}<span style="color: red;">{{ field.errors.0 }}</span></td>
-                            <td contenteditable="true">{{ field.interface }}<span style="color: red;">{{ field.errors.0 }}</span></td>
-                            <td contenteditable="true">{{ field.sequence }}<span style="color: red;">{{ field.errors.0 }}</span></td>
+                            <td><select id="id_link" name="link" class="form-control">
+                                <option value=""> - - Please select one - -</option>
+                                <!-- Options will be loaded dynamically -->
+                            </select><span style="color: red;">{{ field.errors.0 }}</span>
+                            </td>
+                            <td contenteditable="true">{{ field.interface1 }}<span style="color: red;">{{ field.errors.0 }}</span></td>
+                            <td contenteditable="true">{{ field.interface2 }}<span style="color: red;">{{ field.errors.0 }}</span></td>
+                            <td contenteditable="true">{{ field.interface3 }}<span style="color: red;">{{ field.errors.0 }}</span></td>
+                            <!-- <td><select id="id_interface1" name="interface" class="form-control">
+                                <option value=""> - - Please select one - -</option>
+                                
+                            </select><span style="color: red;">{{ field.errors.0 }}</span>
+                            </td>
+                            <td><select id="id_interface2" name="interface" class="form-control">
+                                <option value=""> - - Please select one - -</option>
+                                
+                            </select><span style="color: red;">{{ field.errors.0 }}</span>
+                            </td>
+                            <td><select id="id_interface3" name="interface" class="form-control">
+                                <option value=""> - - Please select one - -</option>
+                                
+                            </select><span style="color: red;">{{ field.errors.0 }}</span>
+                            </td> -->
+                            <td>{{ field.sequence }}<span style="color: red;">{{ field.errors.0 }}</span></td>
                            
                             <td class="text-center">{% if not forloop.first %}<button type="button" class="btn btn-danger remove-form">Remove</button>{% endif %}</td>
                         </tr>
@@ -77,47 +96,18 @@
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <script type="text/javascript">
     $(document).ready(function() {
-        function loadParts(projectId) {
-            var url = '{% url "load_parts" %}';
-            $.ajax({
-                url: url,
-                data: {
-                    'project_id': projectId
-                },
-                success: function(data) {
-                    $("#id_part").html('<option value=""> - - - - Please select one - - - - </option>');
-                    $.each(data, function(key, value) {
-                        $("#id_part").append('<option value="' + value.id + '">' + value.partName + '</option>');
-                    });
-                }
-            });
-        }
-
-        // function loadInterfaces(projectId) {
-        //     var url = '{% url "load_interfaces" %}';
-        //     $.ajax({
-        //         url: url,
-        //         data: {
-        //             'part_id': partId
-        //         },
-        //         success: function(data) {
-        //             $("#id_interface").html('<option value=""> - - - - </option>');
-        //             $.each(data, function(key, value) {
-        //                 $("#id_interface").append('<option value="' + value.id + '">' + value.interfaceName + '</option>');
-        //             });
-        //         }
-        //     });
-        // }
-
         $('#id_project').change(function() {
             var projectId = $(this).val();
             loadParts(projectId);
         });
 
-        // $('#id_part').change(function() {
-        //     var partId = $(this).val();
-        //     loadInterfaces(partId);
-        // });
+        $('#id_part').change(function() {
+            var partId = $(this).val();
+            loadInterfaces(partId);
+
+            loadLinks(partId);
+
+        });
 
         $('#add-winding').click(function() {
             var formCount = $('#id_form-TOTAL_FORMS').val();
@@ -180,6 +170,61 @@
             });
         });
     });
+    function loadParts(projectId) {
+        var url = '{% url "load_parts" %}';
+        $.ajax({
+            url: url,
+            data: {
+                'project_id': projectId
+            },
+            success: function(data) {
+                $("#id_part").html('<option value=""> - - - - Please select one - - - - </option>');
+                $.each(data, function(key, value) {
+                    $("#id_part").append('<option value="' + value.id + '">' + value.partName + '</option>');
+                });
+            }
+        });
+    }
+
+    function loadInterfaces(partId) {
+        var url = '{% url "load_interfaces" %}';
+        $.ajax({
+            url: url,
+            data: {
+                'part_id': partId
+            },
+            success: function(data) {
+                $("#id_interface1").html('<option value="">  - - Please select one - -  </option>');
+                $.each(data, function(key, value) {
+                    $("#id_interface1").append('<option value="' + value.id + '">' + value.interfaceName + '</option>');
+                });
+                $("#id_interface2").html('<option value="">  - - Please select one - -  </option>');
+                $.each(data, function(key, value) {
+                    $("#id_interface2").append('<option value="' + value.id + '">' + value.interfaceName + '</option>');
+                });
+                $("#id_interface3").html('<option value="">  - - Please select one - -  </option>');
+                $.each(data, function(key, value) {
+                    $("#id_interface3").append('<option value="' + value.id + '">' + value.interfaceName + '</option>');
+                });
+            }
+        });
+    }
+
+    function loadLinks(partId) {
+        var url = '{% url "load_links" %}';
+        $.ajax({
+            url: url,
+            data: {
+                'part_id': partId
+            },
+            success: function(data) {
+                $("#id_link").html('<option value=""> - - Please select one - -  </option>');
+                $.each(data, function(key, value) {
+                    $("#id_link").append('<option value="' + value.id + '">' + value.linkName + '</option>');
+                });
+            }
+        });
+    }
 </script>
 
 {% endblock %}
