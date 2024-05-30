@@ -3,14 +3,15 @@
 
 {% block content %}
 
-    <!-- <div style="margin-bottom: 10px">
-        <a class="btn btn-success" href="/project/add/">
-            <span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span> New project
-        </a>
-    </div> -->
+    
     
     <div id="cont">
-    <h3>Project List:</h3>
+        <div style="margin-bottom: 10px">
+            <a class="btn btn-success" href="/user/add_multiple/">
+                <span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span> New User
+            </a>
+        </div>  
+    <h3>User List:</h3>
     <form method="get" id="filterForm" class="from_f">
         {{ filter.form.as_p }}
         <button type="submit" id="btnf1">Filter</button>
@@ -61,7 +62,7 @@
 
 {% block js %}
     <script>
-        document.getElementById('resetButton').addEventListener('click', function() {
+        $('#resetButton').click(function() {
         window.location.href = window.location.pathname; 
         });
 
@@ -105,7 +106,7 @@
 {% block css %}
 <style>
     #cont {
-        width: 700px;
+        width: 50%;
         margin: auto;
     }
     table {

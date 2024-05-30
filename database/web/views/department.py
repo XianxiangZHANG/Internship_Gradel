@@ -74,6 +74,25 @@ def department_add_multiple(request):
         'formset': formset,
     })
 
+def department_modify_multiple(request):
+    # Get filtered data
+    department_filter = DepartmentFilter(request.GET, queryset=models.Department.objects.all())
+    
+    # Define form set
+    DepartmentFormSet = modelformset_factory(models.Department, form=DepartmentModelForm, extra=0)
+    
+    if request.method == 'POST':
+        formset = DepartmentFormSet(request.POST)
+        if formset.is_valid():
+            formset.save()
+            return redirect('/department/list/')
+    else:
+        formset = DepartmentFormSet(queryset=department_filter.qs)
+
+    return render(request, 'department/department_modify_multiple.html', {
+        'filter': department_filter,
+        'formset': formset,
+    })
 
 
 class DepartmentEditModelForm(forms.ModelForm):

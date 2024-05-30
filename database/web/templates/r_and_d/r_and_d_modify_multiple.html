@@ -2,63 +2,142 @@
 
 {% block content %}
 <div>
-    <h3>Resin List:</h3>
+    <h3>R&D List:</h3>
     <form method="get" id="filterForm">
         {{ filter.form.as_p }}
         <button type="submit" id="btnf1">Filter</button>
         <button type="reset" id="resetButton" class="btnf2">Reset</button>
     </form>
 
-    <form method="post">
+    <form method="post" novalidate>
         {% csrf_token %}
         {{ formset.management_form }}
-        <table class="table table-bordered" id="resin-table">
+        <table class="table table-bordered" id="r_and_d-table" contenteditable="true">
             <thead>
                 <tr>
-                    <th>Manufacturer</th>
-                    <th>Resin system - Resin</th>
-                    <th>Resin system - Hardener</th>
-                    <th>Resin system - Accelerator</th>
-                    <th>Ratio(weight) R</th>
-                    <th>Ratio(weight) H</th>
-                    <th>Ratio(weight) A</th>
-                    <th>Ratio(volume) R</th>
-                    <th>Ratio(volume) H</th>
-                    <th>Ratio(volume) A</th>
-                    <th>Pot life (Process T°;h)</th>
-                    <th>Process T (°C)</th>
-                    <th>Curing cycle</th>
-                    <th>Tg (°C)</th>
-                    <th>Price resin</th>
-                    <th>Price hardener</th>
-                    <th>Density (g/cm³)</th>
-                    <th>Flexural strength (MPa)</th>
-                    <th>Flexural modulus (GPa)</th>
-                    <th>Modulus of elasticity (GPa) (tensile)</th>
-                    <th>Tensile strength (MPa)</th>
-                    <th>Elongation at break (%)</th>
-                    <th>Compression ult. strength (MPa)</th>
-                    <th>Compression modulus (GPa)</th>
-                    <th>Thermal expansion coefficient (ppm/K)</th>
-                    <th>Charpy impact at RT (mJ/mm²)</th>
-                    <th>Fracture toughness K1C (Mpa.m1/2)</th>
-                    <th>Fracture energy G1C (J/m²)</th>
-                    <th>Total shrinkage at RT (Vol%)</th>
-                    <th>Hardness at RT</th>
-                    <th>Water absorption (7d at 23°C)</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for form in formset %}
-                <tr class="resin-form">
-                    {% for field in form %}
-                    <td contenteditable="true">{{ field }}</td>
-                    <span style="color: red;">{{ field.errors.0 }}</span>
-                    {% endfor %}
-                    <td class="text-center"><button type="button" class="btn btn-danger remove-form">Delete</button></td>
-                </tr>
+                    
+                    {% for field in formset %}
+                    <tr><th colspan="2" style="background-color: #4CAF50;">Program :</th><td colspan="2"  contenteditable="true">{{ field.program }}</td></tr>
+                    <tr><th colspan="2" style="background-color: #4CAF50;">Project Nr. :</th><td colspan="2"  contenteditable="true">{{ field.projectNr }}</td></tr>
+
+                    <tr><th colspan="2" style="background-color: #4CAF50;">ERMDS Nr. :</th><td colspan="2"  contenteditable="true">{{ field.ERMDS }}</td></tr>
+                    <tr><th colspan="2" style="background-color: #4CAF50;">Last update :</th><td colspan="2"  contenteditable="true">{{ field.lastUpdate }}</td></tr>
+                    <tr><th colspan="2" style="background-color: #4CAF50;">Verified by :</th><td colspan="2"  contenteditable="true">{{ field.verifiedBy }}</td></tr>
+                    <tr><th colspan="2" style="background-color: #4CAF50;">Approved by :</th><td colspan="2"  contenteditable="true">{{ field.approvedBy }}</td></tr>
+            
+                    <tr style="background-color: #4CAF50;"><th colspan="2" style="background-color: #4CAF50; font-size: large; color: #000;">Materials references</th><td id="vc">Value</td><td id="vc">Comments</td></tr>
+                    <tr><th colspan="2">Fiber</th><td>
+                        <select id="id_fiber" name="fiber" onchange="fetchFiberDetails(this.value)">
+                            <option value=""> - - - - Please select one - - - - </option>
+                                {% for fiber in fibers %}
+                                    <option value="{{ fiber.id }}">{{ fiber }}</option>
+                                {% endfor %}
+                        </select>
+                        <span style="color: red;">{{ fiber_resin_from.fiber.errors.0 }}</span></td><td>{{ field.fiberC }}</td></tr>
+                    <tr><th colspan="2">Number of bobbins</th><td  contenteditable="true">{{ field.numberOfBobbins }}</td><td  contenteditable="true">{{ field.numberOfBobbinsC }}</td></tr>
+                    <tr><th colspan="2">Resin</th><td>
+                        <select id="id_resin_{{ field.instance.id }}" name="resin_{{ field.instance.id }}" onchange="fetchResinDetails(this.value)">
+                            <option value=""> - - - - Please select one - - - - </option>
+                            {% for resin in resins %}
+                                <option value="{{ resin.id }}" {% if resin.id == field.instance.resin.id %}selected{% endif %}>{{ resin }}</option>
+                            {% endfor %}
+                        </select>
+                        <span style="color: red;">{{ fiber_resin_from.resin.errors.0 }}</span></td><td>{{ field.resinC }}</td></tr>
+                    <tr><th colspan="2">Hardener</th><td><input type="text" id="resin_hardener" readonly></td><td  contenteditable="true">{{ field.hardenerC }}</td></tr>
+                    <tr><th colspan="2">Curing cycle (+ ramp) (°C) :</th><td><input type="text" id="resin_curingCycle" readonly></td><td  contenteditable="true">{{ field.curingCycleC }}</td></tr>
+                            
+
+                    <tr style="background-color: #4CAF50;"><th colspan="2" style="background-color: #4CAF50; font-size: large; color: #000;">Materials individual properties</th><td id="vc">Value</td><td id="vc">Comments</td></tr>
+                    <tr><th colspan="2">Fibre tow :</th><td><input type="text" id="fiber_towInThousands" readonly></td><td  contenteditable="true">{{ field.towC }}</td></tr>
+                    <tr><th colspan="2">Fibre tex (g/1000m) :</th><td><input type="text" id="fiber_tex" readonly></td><td  contenteditable="true">{{ field.texC }}</td></tr>
+                    <tr><th colspan="2">Fibre density (g/cm3) :</th><td><input type="text" id="fiber_density" readonly></td><td  contenteditable="true">{{ field.fiberDensityC }}</td></tr>
+                    <tr><th colspan="2">Matrix density (g/cm3) :</th><td><input type="text" id="resin_density" readonly></td><td  contenteditable="true">{{ field.resinDensityC }}</td></tr>
+
+
+
+                    <tr style="background-color: #4CAF50;"><th colspan="2" style="background-color: #4CAF50; font-size: large; color: #000;">Tools / Parts references</th><td id="vc">Value</td><td id="vc">Comments</td></tr>
+                    <tr><th colspan="2">End-effector N°</th><td  contenteditable="true">{{ field.endEffector }}</td><td  contenteditable="true">{{ field.endEffectorC }}</td></tr>
+                    <tr><th colspan="2">Impregnation bath</th><td  contenteditable="true">{{ field.impregnationBath }}</td><td  contenteditable="true"> {{ field.impregnationBathC }}</td></tr>
+                    <tr><th colspan="2">Entry nozzle diameter (mm)</th><td  contenteditable="true">{{ field.entryNozzleDiam }}</td><td  contenteditable="true">{{ field.entryNozzleDiamC }}</td></tr>
+                    <tr><th colspan="2">Exit nozzle diameter (mm)</th><td  contenteditable="true">{{ field.exitNozzleDiam }}</td><td  contenteditable="true">{{ field.exitNozzleDiamC }}</td></tr>
+
+                    <tr style="background-color: #4CAF50;"><th colspan="2" style="background-color: #4CAF50; font-size: large; color: #000;">Winding environment</th><td id="vc">Value</td><td id="vc">Comments</td></tr>
+                    <tr><th colspan="2">Room temperature (°C)</th><td  contenteditable="true">{{ field.roomTemperature }}</td><td  contenteditable="true">{{ field.roomTemperatureC }}</td></tr>
+                    <tr><th colspan="2">Room humidity (%)</th><td  contenteditable="true">{{ field.roomhumidity }}</td><td  contenteditable="true">{{ field.roomhumidityC }}</td></tr>
+
+                    <tr style="background-color: #4CAF50;"><th colspan="2" style="background-color: #4CAF50; font-size: large; color: #000;">Process parameters references</th><td id="vc">Value</td><td id="vc">Comments</td></tr>
+                    <tr><th colspan="2">Brake force/bobbin (N) (kg) (bar)</th><td  contenteditable="true">{{ field.brakeForcebobin }}</td><td  contenteditable="true">{{ field.brakeForcebobinC }}</td></tr>
+                    <tr><th colspan="2">Windng speed range (mm/s)</th><td  contenteditable="true">{{ field.windingSpeedRange }}</td><td  contenteditable="true">{{ field.windingSpeedRangeC }}</td></tr>
+
+                    <tr style="background-color: #4CAF50;"><th colspan="2" style="background-color: #4CAF50; font-size: large; color: #000;">Material physical properties / Testing conditions :</th><td id="vc">Value</td><td id="vc">Comments</td></tr>
+                    <tr><th colspan="2">FVR (%)</th><td  contenteditable="true">{{ field.FVR }}</td><td contenteditable="true">{{ field.FVRC }}</td></tr>
+                    <tr><th colspan="2">Composite density ρ (g/cm3)</th><td  contenteditable="true">{{ field.compositeDensity }}</td><td contenteditable="true">{{ field.compositeDensityC }}</td></tr>
+                    <tr><th colspan="2">Porosity (%)</th><td  contenteditable="true">{{ field.porosity }}</td><td contenteditable="true">{{ field.porosityC }}</td></tr>
+                    <tr><th colspan="2">Theoretical sample section (mm²)</th><td contenteditable="true">{{ field.theoreticalSampleSection }}</td><td contenteditable="true">{{ field.theoreticalSampleSectionC }}</td></tr>
+                    <tr><th colspan="2">Experimental sample section (mm²)</th><td contenteditable="true">{{ field.experimentalSampleSection }}</td><td contenteditable="true">{{ field.experimentalSampleSectionC }}</td></tr>
+                    <tr><th colspan="2">Aged / Non-aged</th><td contenteditable="true">{{ field.aged }}</td><td contenteditable="true">{{ field.agedC }}</td></tr>
+                    <tr><th colspan="2">Temperature of the tests</th><td contenteditable="true">{{ field.temperatureOfTests }}</td><td contenteditable="true">{{ field.temperatureOfTestsC }}</td></tr>
+
+                    <tr style="background-color: #4CAF50;"><th colspan="2" style="background-color: #4CAF50; font-size: large; color: #000;">Samples confiuguration</th><td id="vc">Value</td><td id="vc">Comments</td></tr>
+                    <tr><th colspan="2">Number of samples</th><td contenteditable="true">{{ field.numberOfSamples }}</td><td contenteditable="true">{{ field.numberOfSamplesC }}</td></tr>
+                    <tr><th colspan="2">Configuration</th><td contenteditable="true">{{ field.configurarion }}</td><td contenteditable="true">{{ field.configurarionC }}</td></tr>
+                    <tr><th colspan="2">Sample length</th><td contenteditable="true">{{ field.sampleLength }}</td><td contenteditable="true">{{ field.sampleLengthC }}</td></tr>
+                    <tr><th colspan="2">Number of cycles</th><td contenteditable="true">{{ field.numberOfCycles }}</td><td contenteditable="true">{{ field.numberOfCyclesC }}</td></tr>
+                    <tr><th colspan="2">Sleeve diameter / height (mm)</th><td contenteditable="true">{{ field.sleeve }}</td><td contenteditable="true">{{ field.sleeveC }}</td></tr>
+
+                    <tr style="background-color: #4CAF50;"><th colspan="2" style="background-color: #4CAF50; font-size: large; color: #000;">Material thermal properties</th><td id="vc">Value</td><td id="vc">Comments</td></tr>
+                    <tr><th colspan="2">Thermal expansion coefficient A (/K)</th><td contenteditable="true">{{ field.thermalExpansionCoefficient }}</td><td contenteditable="true">{{ field.thermalExpansionCoefficientC }}</td></tr>
+                    <tr><th colspan="2">Thermal conductivity K (W/(m.K))</th><td contenteditable="true">{{ field.thermalConductivity }}</td><td contenteditable="true">{{ field.thermalConductivityC }}</td></tr>
+
+                    <tr style="background-color: #4CAF50;"><th colspan="2" style="background-color: #4CAF50; font-size: large; color: #000;">Material mechanical properties</th><td id="vc">Value</td><td id="vc">Comments</td></tr>
+                    <th rowspan="10">Tensile</th>
+                    <tr><th>Tensile Young's modulus - Average (MPa)</th><td contenteditable="true">{{ field.tensileYoungModulus }}</td><td contenteditable="true">{{ field.tensileYoungModulusC }}</td></tr>
+                    <tr><th>Tensile Ultimate Stress - Average (MPa)</th><td contenteditable="true">{{ field.tensileUltimateStress }}</td><td contenteditable="true">{{ field.tensileUltimateStressC }}</td></tr>
+                    <tr><th>Tensile Ultimate Stress - Min A (MPa)</th><td contenteditable="true">{{ field.tensileUltimateStressMA }}</td><td contenteditable="true">{{ field.tensileUltimateStressMAC }}</td></tr>
+                    <tr><th>Tensile Ultimate Stress - Min B (MPa)</th><td contenteditable="true">{{ field.tensileUltimateStressMB }}</td><td contenteditable="true">{{ field.tensileUltimateStressMBC }}</td></tr>
+                    <tr><th>Tensile Ultimate Load - Average (kN)</th><td contenteditable="true">{{ field.tensileUltimateLoad }}</td><td contenteditable="true">{{ field.tensileUltimateLoadC }}</td></tr>
+                    <tr><th>Tensile Yield Stress - Average (MPa)</th><td contenteditable="true">{{ field.tensileYieldStress }}</td><td contenteditable="true">{{ field.tensileYieldStressC }}</td></tr>
+                    <tr><th>Tensile Yield Stress - Min A (MPa)</th><td contenteditable="true">{{ field.tensileYieldStressMA }}</td><td contenteditable="true">{{ field.tensileYieldStressMAC }}</td></tr>
+                    <tr><th>Tensile Yield Stress - Min B (MPa)</th><td contenteditable="true">{{ field.tensileYieldStressMB }}</td><td contenteditable="true">{{ field.tensileYieldStressMBC }}</td></tr>
+                    <tr><th>Tensile Yield Load - Average (kN)</th><td contenteditable="true">{{ field.tensileYieldLoad }}</td><td contenteditable="true">{{ field.tensileYieldLoadC }}</td></tr>
+
+                    
+                    <th rowspan="11">Compression</th>
+                    <tr><th>Compression Young's modulus - Average (MPa)</th><td contenteditable="true">{{ field.compressionYoungModulus }}</td><td contenteditable="true">{{ field.compressionYoungModulusC }}</td></tr>
+                    <tr><th>Compression Ultimate Stress - Average (MPa)</th><td contenteditable="true">{{ field.compressionUltimateStress }}</td><td contenteditable="true">{{ field.compressionUltimateStressC }}</td></tr>
+                    <tr><th>Compression Ultimate Stress - Min A (MPa)</th><td contenteditable="true">{{ field.compressionUltimateStressMA }}</td><td contenteditable="true">{{ field.compressionUltimateStressMAC }}</td></tr>
+                    <tr><th>Compression Ultimate Stress - Min B (MPa)</th><td contenteditable="true">{{ field.compressionUltimateStressMB }}</td><td contenteditable="true">{{ field.compressionUltimateStressMBC}}</td></tr>
+                    <tr><th>Compression Ultimate Load - Average (kN)</th><td contenteditable="true">{{ field.compressionUltimateLoad }}</td><td contenteditable="true">{{ field.compressionUltimateLoadC }}</td></tr>
+                    <tr><th>Compression Yield Stress- Average (MPa)</th><td contenteditable="true">{{ field.compressionYieldStress }}</td><td contenteditable="true">{{ field.compressionYieldStressC }}</td></tr>
+                    <tr><th>Compression Yield Stress - Min A (MPa)</th><td contenteditable="true">{{ field.compressionYieldStressMA }}</td><td contenteditable="true">{{ field.compressionYieldStressMAC }}</td></tr>
+                    <tr><th>Compression Yield Stress - Min B (MPa)</th><td contenteditable="true">{{ field.compressionYieldStressMB }}</td><td contenteditable="true">{{ field.compressionYieldStressMBC }}</td></tr>
+                    <tr><th>Compression Yield Load - Average (kN)</th><td contenteditable="true">{{ field.compressionYieldLoad }}</td><td contenteditable="true">{{ field.compressionYieldLoadC }}</td></tr>
+                    <tr><th>Poisson's ratio ν (-)</th><td contenteditable="true">{{ field.poissonRatio }}</td><td contenteditable="true">{{ field.poissonRatioC }}</td></tr>
+
+                    <th rowspan="6">ILSS</th>
+                    <tr><th>Flexural modulus - Average (MPa)</th><td contenteditable="true">{{ field.flexuralModulusILSS }}</td><td contenteditable="true">{{ field.flexuralModulusILSSC }}</td></tr>
+                    <tr><th>Ultimate Shear Force - Average (kN)</th><td contenteditable="true">{{ field.ultimateShearForce }}</td><td contenteditable="true">{{ field.ultimateShearForceC }}</td></tr>
+                    <tr><th>Ultimate Shear Stress - Average (MPa)</th><td contenteditable="true">{{ field.ultimateShearStress }}</td><td contenteditable="true">{{ field.ultimateShearStressC }}</td></tr>
+                    <tr><th>Ultimate Shear Stress - Min A (MPa)</th><td contenteditable="true">{{ field.ultimateShearStressMA }}</td><td contenteditable="true">{{ field.ultimateShearStressMAC }}</td></tr>
+                    <tr><th>Ultimate Shear Stress - Min B (MPa)</th><td contenteditable="true">{{ field.ultimateShearStressMB }}</td><td contenteditable="true">{{ field.ultimateShearStressMBC }}</td></tr>
+
+                    <th rowspan="7">Flexural</th>
+                    <tr><th>Flexural modulus - Average (MPa)</th><td contenteditable="true">{{ field.flexuralModulusF }}</td><td contenteditable="true">{{ field.flexuralModulusFC }}</td></tr>
+                    <tr><th>Flexural Ultimate strength - Average (MPa)</th><td contenteditable="true">{{ field.flexuralUltimateStrength }}</td><td contenteditable="true">{{ field.flexuralUltimateStrengthC }}</td></tr>
+                    <tr><th>Flexural Ultimate strength - Min A (MPa)</th><td contenteditable="true">{{ field.flexuralUltimateStrengthMA }}</td><td contenteditable="true">{{ field.flexuralUltimateStrengthMAC }}</td></tr>
+                    <tr><th>Flexural Ultimate strength - Min B (MPa)</th><td contenteditable="true">{{ field.flexuralUltimateStrengthMB }}</td><td contenteditable="true">{{ field.flexuralUltimateStrengthMBC }}</td></tr>
+                    <tr><th>Strain at ultimate strength (%)</th><td contenteditable="true">{{ field.strainUltimateStrength }}</td><td contenteditable="true">{{ field.strainUltimateStrengthC }}</td></tr>
+                    <tr><th>Flexural Ultimate Force (N)</th><td contenteditable="true">{{ field.flexuralUltimateForce }}</td><td contenteditable="true">{{ field.flexuralUltimateForceC }}</td></tr>
+
+                    <th rowspan="5" style="width: 10%;">Torsion</th>
+                    <tr><th style="width: 20%;">Yield Torque (Nm)</th><td style="width: 35%;" contenteditable="true">{{ field.yieldTorque }}</td><td style="width: 35%;" contenteditable="true">{{ field.yieldTorqueC }}</td></tr>
+                    <tr><th>Maxi Torque (Nm)</th><td contenteditable="true">{{ field.maxiTorque }}</td><td contenteditable="true">{{ field.maxiTorqueC }}</td></tr>
+                    <tr><th>Yield angle (°)</th><td contenteditable="true">{{ field.yieldAngle }}</td><td contenteditable="true">{{ field.yieldAngleC }}</td></tr>
+                    <tr><th>Maxi Twisted Angle (°)</th><td contenteditable="true">{{ field.maxiTwistedAngle }}</td><td contenteditable="true">{{ field.maxiTwistedAngleC }}</td></tr>
+                    
+                
                 {% endfor %}
-            </tbody>
+            </tr>
         </table>
         <button type="submit" class="btn btn-primary" id="btns">Save</button>
     </form>
@@ -120,7 +199,7 @@
         border-radius: 4px;
         cursor: pointer;
     }
-    #id_project, #id_part, input[type="text"] {
+    #id_fiber, #id_resin, input[type="text"] {
         width: 100%;
         padding: 8px;
         margin: 0px 0;
@@ -135,8 +214,24 @@
 {% block js %}
 <script>
 $(document).ready(function() {
-    document.getElementById('resetButton').addEventListener('click', function() {
+    $('#resetButton').click(function() {
         window.location.href = window.location.pathname; // 重定向到相同页面但无查询参数
+    });
+
+    // Fetch fiber details on page load if fiber is already selected
+    $('select[name^="fiber"]').each(function() {
+        var fiber_id = $(this).val();
+        if (fiber_id) {
+            fetchFiberDetails(fiber_id);
+        }
+    });
+
+    // Fetch resin details on page load if resin is already selected
+    $('select[name^="resin"]').each(function() {
+        var resin_id = $(this).val();
+        if (resin_id) {
+            fetchResinDetails(resin_id);
+        }
     });
 
     let DELETE_ID = 0;
@@ -150,7 +245,7 @@ $(document).ready(function() {
     // 确认删除操作
     function confirmDelete() {
         $.ajax({
-            url: "/resin/delete/",
+            url: "/r_and_d/delete/",
             type: "GET",
             data: { aid: DELETE_ID },
             dataType: "JSON",
@@ -173,9 +268,9 @@ $(document).ready(function() {
     // 绑定删除按钮点击事件
     $(document).on('click', '.remove-form', function() {
         let row = $(this).closest('tr');
-        let resinId = row.find('input[name$="-id"]').val();
-        if (resinId) {
-            deleteAction(resinId);
+        let r_and_dId = row.find('input[name$="-id"]').val();
+        if (r_and_dId) {
+            deleteAction(r_and_dId);
         } else {
             row.remove();
         }
@@ -190,29 +285,56 @@ $(document).ready(function() {
     });
     
     // Handle paste event to populate table cells
-    $('#resin-table tbody').on('paste', 'td', function(e) {
-        e.preventDefault();
-        var text = (e.originalEvent || e).clipboardData.getData('text/plain');
-        var rows = text.split('\n');
-        var $currentRow = $(this).closest('tr');
-        var startRowIndex = $currentRow.index();
-        var startColIndex = $(this).index();
+    $('#r_and_d-table tbody').on('paste', 'td', function(e) {
+            e.preventDefault();
+            var text = (e.originalEvent || e).clipboardData.getData('text/plain');
+            var rows = text.split('\n');
+            var $currentRow = $(this).closest('tr');
+            var startRowIndex = $currentRow.index();
+            var startColIndex = $(this).index()-1;
 
-        rows.forEach(function(row, rowIndex) {
-            if (row.trim() !== '') {
-                var cols = row.split('\t');
-                var $row = $('#resin-table tbody tr').eq(startRowIndex + rowIndex);
-                if ($row.length === 0) {
-                    $('#add-resin').click();
-                    $row = $('#resin-table tbody tr').last();
+            rows.forEach(function(row, rowIndex) {
+                if (row.trim() !== '') {
+                    var cols = row.split('\t');
+                    var $row = $('#r_and_d-table tbody tr').eq(startRowIndex + rowIndex);
+                    if ($row.length === 0) {
+                        $('#add-r_and_d').click();
+                        $row = $('#r_and_d-table tbody tr').last();
+                    }
+                    cols.forEach(function(col, colIndex) {
+                        var $cell = $row.find('td').eq(startColIndex + colIndex);
+                        $cell.find('input').val(col.trim() || '');
+                    });
                 }
-                cols.forEach(function(col, colIndex) {
-                    var $cell = $row.find('td').eq(startColIndex + colIndex);
-                    $cell.find('input').val(col.trim() || '');
+            });
+        });
+});
+    function fetchFiberDetails(fiber_id) {
+            if (fiber_id) {
+                $.ajax({
+                    url: '/get-fiber-details/' + fiber_id + '/',
+                    method: 'GET',
+                    success: function(data) {
+                        $('#fiber_towInThousands').val(data.towInThousands);
+                        $('#fiber_tex').val(data.tex);
+                        $('#fiber_density').val(data.density);
+                    }
                 });
             }
-        });
-    });
-});
+        }
+
+    function fetchResinDetails(resin_id) {
+        if (resin_id) {
+            $.ajax({
+                url: '/get-resin-details/' + resin_id + '/',
+                method: 'GET',
+                success: function(data) {
+                    $('#resin_hardener').val(data.hardener);
+                    $('#resin_curingCycle').val(data.curingCycle);
+                    $('#resin_density').val(data.densityR);
+                }
+            });
+        }
+    }
 </script>
 {% endblock %}

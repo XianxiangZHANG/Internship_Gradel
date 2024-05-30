@@ -49,15 +49,28 @@
                             <th>Fin. Arm Radius[m]</th>
                             <th>Mass[g]</th>
                             <th>*Angle*</th>
+                            <th style="width: 100px;">Operation</th>
                         </tr>
                     </thead>
                     <tbody contenteditable="true">
-                        {% for form in formset %}
+                        {% for field in formset %}
                         <tr class="link-form">
-                            {% for field in form %}
-                            <td contenteditable="true">{{ field }}</td>
-                            <span style="color: red;">{{ field.errors.0 }}</span>
-                            {% endfor %}
+                            
+                            <td contenteditable="true">{{ field.linkName }}<span style="color: red;">{{ field.errors.0 }}</span></td>
+                            <td contenteditable="true">{{ field.interface1 }}<span style="color: red;">{{ field.errors.0 }}</span></td>
+                            <td contenteditable="true">{{ field.interface2 }}<span style="color: red;">{{ field.errors.0 }}</span></td>
+                            <td contenteditable="true">{{ field.length }}<span style="color: red;">{{ field.errors.0 }}</span></td>
+                            <td contenteditable="true">{{ field.linkType }}<span style="color: red;">{{ field.errors.0 }}</span></td>
+                            <td contenteditable="true">{{ field.armDiam }}<span style="color: red;">{{ field.errors.0 }}</span></td>
+                            <td contenteditable="true">{{ field.armSection }}<span style="color: red;">{{ field.errors.0 }}</span></td>
+                            <td contenteditable="true">{{ field.cycle }}<span style="color: red;">{{ field.errors.0 }}</span></td>
+                            <td contenteditable="true">{{ field.sequence }}<span style="color: red;">{{ field.errors.0 }}</span></td>
+                            <td contenteditable="true">{{ field.finArmSection }}<span style="color: red;">{{ field.errors.0 }}</span></td>
+                            <td contenteditable="true">{{ field.finArmDiam }}<span style="color: red;">{{ field.errors.0 }}</span></td>
+                            <td contenteditable="true">{{ field.finArmRadius }}<span style="color: red;">{{ field.errors.0 }}</span></td>
+                            <td contenteditable="true">{{ field.mass }}<span style="color: red;">{{ field.errors.0 }}</span></td>
+                            <td contenteditable="true">{{ field.angle }}<span style="color: red;">{{ field.errors.0 }}</span></td>
+                         
                             <td class="text-center">{% if not forloop.first %}<button type="button" class="btn btn-danger remove-form">Remove</button>{% endif %}</td>
                         </tr>
                         {% endfor %}
@@ -204,7 +217,6 @@
         background-color: #f2f2f2;
     }
     th {
-        width: 6.5%;
         background-color: #4CAF50;
         color: white;
     }

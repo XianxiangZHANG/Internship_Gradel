@@ -6,7 +6,7 @@ from web import models
 def get_fiber_data(request, fiber_id):
     fiber = get_object_or_404(models.Fiber, id=fiber_id)
     data = {
-        'tow': fiber.tow,
+        'towInThousands': fiber.towInThousands,
         'tex': fiber.tex,
         'density': fiber.density,
     }
@@ -17,6 +17,6 @@ def get_resin_data(request, resin_id):
     data = {
         'hardener': resin.hardener,
         'curingCycle': resin.curingCycle,
-        'density': resin.density,
+        'densityR': resin.densityR,
     }
     return JsonResponse(data)

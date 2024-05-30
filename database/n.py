@@ -108,9 +108,19 @@
     # CONST jointtarget j7:=[[118,45.94,20.43,-151,69.18,-101],[reftrackv+3*offvmm,9E+09,9E+09,9E+09,3*turn+turnoff,9E+09]];
 
 
-for number in range(10, 71):
-    if number%2 == 0 :
-        print(f"CONST jointtarget j{number}:=[[118,45.94,20.43,-151,69.18,-101],[reftrackv+{number/2-1}*offvmm,9E+09,9E+09,9E+09,{number/2}*turn,9E+09]];")
-    else:
-        print(f"CONST jointtarget j{number}:=[[118,45.94,20.43,-151,69.18,-101],[reftrackv+{(number-1)/2}*offvmm,9E+09,9E+09,9E+09,{(number-1)/2}*turn+turnoff,9E+09]];")
-    
+# for number in range(10, 71):
+#     if number%2 == 0 :
+#         print(f"CONST jointtarget j{number}:=[[118,45.94,20.43,-151,69.18,-101],[reftrackv+{number/2-1}*offvmm,9E+09,9E+09,9E+09,{number/2}*turn,9E+09]];")
+#     else:
+#         print(f"CONST jointtarget j{number}:=[[118,45.94,20.43,-151,69.18,-101],[reftrackv+{(number-1)/2}*offvmm,9E+09,9E+09,9E+09,{(number-1)/2}*turn+turnoff,9E+09]];")
+
+
+# MoveAbsJ j1,vspeed,z10,tCarbonTube_03\WObj:=wobj0;
+# MoveAbsJ j2,vspeed,z10,tCarbonTube_03\WObj:=wobj0;
+# WaitTime timew;
+
+# for number in range(47, 61):
+#     print(f"MoveAbsJ j{number},vspeed,z10,tCarbonTube_03\WObj:=wobj0;")
+#     if number%3 == 0 :
+#         print(f"WaitTime timew;")
+       

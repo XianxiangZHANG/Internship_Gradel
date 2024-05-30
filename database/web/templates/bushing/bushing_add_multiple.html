@@ -35,21 +35,26 @@
                 <table class="table table-bordered" id="bushing-table">
                     <thead>
                         <tr>
-                            <th style="width: 15%;">Bushing Name</th>
-                            <th style="width: 15%;">Number Interface</th>
-                            <th style="width: 15%;">Bushing Draw. Nr.</th>
-                            <th style="width: 15%;">Acc. On Bushing[g]</th>
-                            <th style="width: 15%;">Bushing Mass[g]</th>
-                            <th style="width: 15%;">Total Bushing Mass[g]</th>
+                            <th >Bushing Name</th>
+                            <th >Number Interface</th>
+                            <th >Bushing Draw. Nr.</th>
+                            <th >Acc. On Bushing[g]</th>
+                            <th >Bushing Mass[g]</th>
+                            <th >Total Bushing Mass[g]</th>
+                            <th style="width: 100px;">Operation</th>
                         </tr>
                     </thead>
                     <tbody contenteditable="true">
-                        {% for form in formset %}
+                        {% for field in formset %}
                         <tr class="bushing-form">
-                            {% for field in form %}
-                            <td contenteditable="true">{{ field }}</td>
-                            <span style="color: red;">{{ field.errors.0 }}</span>
-                            {% endfor %}
+                            
+                            <td contenteditable="true">{{ field.bushingName }}<span style="color: red;">{{ field.errors.0 }}</span></td>
+                            <td contenteditable="true">{{ field.numberInterface }}<span style="color: red;">{{ field.errors.0 }}</span></td>
+                            <td contenteditable="true">{{ field.bushingDrawNb }}<span style="color: red;">{{ field.errors.0 }}</span></td>
+                            <td contenteditable="true">{{ field.AccOnBushing }}<span style="color: red;">{{ field.errors.0 }}</span></td>
+                            <td contenteditable="true">{{ field.bushingMass }}<span style="color: red;">{{ field.errors.0 }}</span></td>
+                            <td contenteditable="true">{{ field.totalBushingMass }}<span style="color: red;">{{ field.errors.0 }}</span></td>
+
                             <td class="text-center">{% if not forloop.first %}<button type="button" class="btn btn-danger remove-form">Remove</button>{% endif %}</td>
                         </tr>
                         {% endfor %}

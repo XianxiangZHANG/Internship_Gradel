@@ -1,0 +1,128 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+<div class="panel panel-default" id="cont">
+    <div class="panel-heading"><span class="glyphicon glyphicon-indent-right" aria-hidden="true"></span> Add Multiple Sequence Types</div>
+    <div class="panel-body">
+        <form class="form-horizontal" method="post" novalidate>
+            {% csrf_token %}
+            <div class="row">
+                {{ formset.management_form }}
+                <table class="table table-bordered" id="sequenceType-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 20%; text-align: center;">Sequence Type</th>
+                            <th style="text-align: center;">Description</th>
+                            <th style="width: 100px;">Operation</th>
+                        </tr>
+                    </thead>
+                    <tbody contenteditable="true">
+                        {% for field in formset %}
+                        <tr class="sequenceType-form">
+           
+                            <td contenteditable="true">{{ field.sequenceType }}<span style="color: red;">{{ field.errors.0 }}</span></td>
+                            <td contenteditable="true">{{ field.description }}<span style="color: red;">{{ field.errors.0 }}</span></td>
+         
+                            <td class="text-center">{% if not forloop.first %}<button type="button" class="btn btn-danger remove-form">Remove</button>{% endif %}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <div class="row">
+                <div class="form-group">
+                    <div class="col-xs-12">
+                        <div class="col-sm-offset-6 col-sm-10">
+                            <button type="button" id="add-sequenceType" class="btn btn-secondary" style="width: 30%;">Add Sequence</button>
+                            <button type="submit" class="btn btn-primary" style="width: 20%; margin-left: 8%;">Save</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function() {
+
+        $('#add-sequenceType').click(function() {
+            var formCount = $('#id_form-TOTAL_FORMS').val();
+            var newForm = $('.sequenceType-form:first').clone(true).removeClass('sequenceType-form');
+            newForm.find('input').each(function() {
+                var name = $(this).attr('name').replace('-0-', '-' + formCount + '-');
+                var id = 'id_' + name;
+                $(this).attr({'name': name, 'id': id}).val('');
+            });
+            newForm.find('td:last').html('<button type="button" class="btn btn-danger remove-form">Remove</button>');
+            $('#sequenceType-table tbody').append(newForm);
+            $('#id_form-TOTAL_FORMS').val(parseInt(formCount) + 1);
+        });
+
+        $(document).on('click', '.remove-form', function() {
+            if ($('#sequenceType-table tbody tr').length > 1) {
+                $(this).closest('tr').remove();
+                var formCount = $('#id_form-TOTAL_FORMS').val();
+                $('#id_form-TOTAL_FORMS').val(parseInt(formCount) - 1);
+                // 重新调整所有表单行的索引
+                $('#sequenceType-table tbody tr').each(function(index) {
+                    $(this).find('input').each(function() {
+                        var name = $(this).attr('name').replace(/-\d+-/, '-' + index + '-');
+                        var id = 'id_' + name;
+                        $(this).attr({'name': name, 'id': id});
+                    });
+                });
+            }
+        });
+
+    });
+</script>
+
+{% endblock %}
+
+{% block css %}
+<style>
+    #cont {
+        width: 80%;
+        margin: auto;
+    }
+    table {
+        border-collapse: collapse;
+        width: 100%;
+        margin-bottom: 100px;
+    }
+    th, td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: center;
+    }
+    tr:nth-child(even) {
+        background-color: #f2f2f2;
+    }
+    th {
+        background-color: #4CAF50;
+        color: white;
+    }
+    #btnf1, .btnf2{
+        width: 100px; 
+        background-color: #49b7be; 
+        color: white; 
+        padding: 5px 10px; 
+        margin: 8px;
+        margin-right: 0px;
+        border: none; 
+        border-radius: 4px;
+        cursor: pointer; 
+    }
+    #id_project, input[type="text"] {
+        width: 100%; 
+        padding: 8px; 
+        margin: 0px 0; 
+        display: inline-block;
+        border: 1px solid #ccc; 
+        border-radius: 4px; 
+        box-sizing: border-box; 
+    }
+</style>
+{% endblock %}

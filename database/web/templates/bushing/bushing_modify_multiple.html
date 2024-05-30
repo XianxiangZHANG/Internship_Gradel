@@ -110,7 +110,7 @@
 {% block js %}
 <script>
 $(document).ready(function() {
-    document.getElementById('resetButton').addEventListener('click', function() {
+    $('#resetButton').click(function() {
         window.location.href = window.location.pathname; // 重定向到相同页面但无查询参数
     });
 

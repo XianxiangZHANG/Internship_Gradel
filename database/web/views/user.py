@@ -65,6 +65,25 @@ def user_add_multiple(request):
 
     return render(request, 'user/user_add_multiple.html', {'formset': formset})
 
+def user_modify_multiple(request):
+    # Get filtered data
+    user_filter = UserFilter(request.GET, queryset=models.User.objects.all())
+    
+    # Define form set
+    UserFormSet = modelformset_factory(models.User, form=UserModelForm, extra=0)
+    
+    if request.method == 'POST':
+        formset = UserFormSet(request.POST)
+        if formset.is_valid():
+            formset.save()
+            return redirect('/user/list/')
+    else:
+        formset = UserFormSet(queryset=user_filter.qs)
+
+    return render(request, 'user/user_modify_multiple.html', {
+        'filter': user_filter,
+        'formset': formset,
+    })
 
 class UserEditModelForm(forms.ModelForm):
     class Meta:

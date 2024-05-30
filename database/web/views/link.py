@@ -85,7 +85,25 @@ def link_add_multiple(request):
         'project_part_form': project_part_form,
     })
 
+def link_modify_multiple(request):
+    # Get filtered data
+    link_filter = LinkFilter(request.GET, queryset=models.Link.objects.all())
+    
+    # Define form set
+    LinkFormSet = modelformset_factory(models.Link, form=LinkModelForm, extra=0)
+    
+    if request.method == 'POST':
+        formset = LinkFormSet(request.POST)
+        if formset.is_valid():
+            formset.save()
+            return redirect('/link/list/')
+    else:
+        formset = LinkFormSet(queryset=link_filter.qs)
 
+    return render(request, 'link/link_modify_multiple.html', {
+        'filter': link_filter,
+        'formset': formset,
+    })
 
 def link_add(request):
     if request.method == "GET":

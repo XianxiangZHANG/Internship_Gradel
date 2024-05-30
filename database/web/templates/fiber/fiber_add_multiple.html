@@ -27,15 +27,30 @@
                             <th>Price euros/kg (after 02/2022)</th>
                             <th>Price euros/kg (after 02/2023)</th>
                             <th>Price euros/kg (after 01/2024)</th>
+                            <th style="width: 100px;">Operation</th>
                         </tr>
                     </thead>
                     <tbody contenteditable="true">
-                        {% for form in formset %}
+                        {% for field in formset %}
                         <tr class="fiber-form">
-                            {% for field in form %}
-                            <td contenteditable="true">{{ field }}</td>
-                            <span style="color: red;">{{ field.errors.0 }}</span>
-                            {% endfor %}
+                           
+                            <td contenteditable="true">{{ field.material }}<span style="color: red;">{{ field.errors.0 }}</span></td>
+                            <td contenteditable="true">{{ field.manufacturer }}<span style="color: red;">{{ field.errors.0 }}</span></td>
+                            <td contenteditable="true">{{ field.distributor }}<span style="color: red;">{{ field.errors.0 }}</span></td>
+                            <td contenteditable="true">{{ field.grade }}<span style="color: red;">{{ field.errors.0 }}</span></td>
+                            <td contenteditable="true">{{ field.singleFilamentDiameter }}<span style="color: red;">{{ field.errors.0 }}</span></td>
+                            <td contenteditable="true">{{ field.tow }}<span style="color: red;">{{ field.errors.0 }}</span></td>
+                            <td contenteditable="true">{{ field.towInThousands }}<span style="color: red;">{{ field.errors.0 }}</span></td>
+                            <td contenteditable="true">{{ field.tex }}<span style="color: red;">{{ field.errors.0 }}</span></td>
+                            <td contenteditable="true">{{ field.density }}<span style="color: red;">{{ field.errors.0 }}</span></td>
+                            <td contenteditable="true">{{ field.theoreticalDrySection }}<span style="color: red;">{{ field.errors.0 }}</span></td>
+                            <td contenteditable="true">{{ field.tensileStrength }}<span style="color: red;">{{ field.errors.0 }}</span></td>
+                            <td contenteditable="true">{{ field.tensileModulus }}<span style="color: red;">{{ field.errors.0 }}</span></td>
+                            <td contenteditable="true">{{ field.price21 }}<span style="color: red;">{{ field.errors.0 }}</span></td>
+                            <td contenteditable="true">{{ field.price22 }}<span style="color: red;">{{ field.errors.0 }}</span></td>
+                            <td contenteditable="true">{{ field.price23 }}<span style="color: red;">{{ field.errors.0 }}</span></td>
+                            <td contenteditable="true">{{ field.price24 }}<span style="color: red;">{{ field.errors.0 }}</span></td>
+                
                             <td class="text-center">{% if not forloop.first %}<button type="button" class="btn btn-danger remove-form">Remove</button>{% endif %}</td>
                         </tr>
                         {% endfor %}

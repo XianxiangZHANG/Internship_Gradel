@@ -54,15 +54,33 @@
                             <th>Direction vector Y [mm]</th>
                             <th>Direction vector Z [mm]</th>
                             <th>*divisionStep*</th>
+                            <th style="width: 100px;">Operation</th>
                         </tr>
                     </thead>
                     <tbody contenteditable="true">
-                        {% for form in formset %}
+                        {% for field in formset %}
                         <tr class="interface-form">
-                            {% for field in form %}
-                            <td contenteditable="true">{{ field }}</td>
-                            <span style="color: red;">{{ field.errors.0 }}</span>
-                            {% endfor %}
+                           
+                            <td contenteditable="true">{{ field.interfaceName }}<span style="color: red;">{{ field.errors.0 }}</span></td>
+                            <td contenteditable="true">{{ field.height }}<span style="color: red;">{{ field.errors.0 }}</span></td>
+                            <td contenteditable="true">{{ field.intDiameter }}<span style="color: red;">{{ field.errors.0 }}</span></td>
+                            <td contenteditable="true">{{ field.totalLink }}<span style="color: red;">{{ field.errors.0 }}</span></td>
+                            <td contenteditable="true">{{ field.totalArm }}<span style="color: red;">{{ field.errors.0 }}</span></td>
+                            <td contenteditable="true">{{ field.totalSection }}<span style="color: red;">{{ field.errors.0 }}</span></td>
+                            <td contenteditable="true">{{ field.extDiameter }}<span style="color: red;">{{ field.errors.0 }}</span></td>
+                            <td contenteditable="true">{{ field.theoHeight }}<span style="color: red;">{{ field.errors.0 }}</span></td>
+                            <td contenteditable="true">{{ field.accMass }}<span style="color: red;">{{ field.errors.0 }}</span></td>
+                            <td contenteditable="true">{{ field.finODiam }}<span style="color: red;">{{ field.errors.0 }}</span></td>
+                            <td contenteditable="true">{{ field.finAccSection }}<span style="color: red;">{{ field.errors.0 }}</span></td>
+                            <td contenteditable="true">{{ field.safetyFactor }}<span style="color: red;">{{ field.errors.0 }}</span></td>
+                            <td contenteditable="true">{{ field.interfaceCenterX }}<span style="color: red;">{{ field.errors.0 }}</span></td>
+                            <td contenteditable="true">{{ field.interfaceCenterY }}<span style="color: red;">{{ field.errors.0 }}</span></td>
+                            <td contenteditable="true">{{ field.interfaceCenterZ }}<span style="color: red;">{{ field.errors.0 }}</span></td>
+                            <td contenteditable="true">{{ field.directionVectorX }}<span style="color: red;">{{ field.errors.0 }}</span></td>
+                            <td contenteditable="true">{{ field.directionVectorY }}<span style="color: red;">{{ field.errors.0 }}</span></td>
+                            <td contenteditable="true">{{ field.directionVectorZ }}<span style="color: red;">{{ field.errors.0 }}</span></td>
+                            <td contenteditable="true">{{ field.divisionStep }}<span style="color: red;">{{ field.errors.0 }}</span></td>
+                           
                             <td class="text-center">{% if not forloop.first %}<button type="button" class="btn btn-danger remove-form">Remove</button>{% endif %}</td>
                         </tr>
                         {% endfor %}
@@ -181,7 +199,6 @@
         background-color: #f2f2f2;
     }
     th {
-        width: 4.5%;
         background-color: #4CAF50;
         color: white;
     }

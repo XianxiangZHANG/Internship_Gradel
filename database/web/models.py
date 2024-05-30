@@ -60,9 +60,9 @@ class Resin(models.Model):
 
 class Fiber(models.Model):
     """ Fiber Table """
-    material = models.CharField(verbose_name="Material", max_length=255, null=True, blank=True)
+    material = models.CharField(verbose_name="Material", max_length=255)
     manufacturer = models.CharField(verbose_name="Manufacturer", max_length=255, null=True, blank=True)    
-    distributor = models.CharField(verbose_name="Distributor", max_length=255)
+    distributor = models.CharField(verbose_name="Distributor", max_length=255, null=True, blank=True)
     grade = models.CharField(verbose_name="Grade", max_length=255, null=True, blank=True)
     singleFilamentDiameter = models.CharField(verbose_name="Single filament diameter (mm)", max_length=255, null=True, blank=True)
     tow = models.CharField(verbose_name="Tow", max_length=255, null=True, blank=True)
@@ -85,10 +85,10 @@ class Fiber(models.Model):
 
 class R_and_D(models.Model):
     """ R&D Table """
-    program = models.CharField(verbose_name="Program :", max_length=255, null=True, blank=True)
-    projectNr = models.CharField(verbose_name="Project Nr. :", max_length=255, null=True, blank=True)
+    program = models.CharField(verbose_name="Program :", max_length=255)
+    projectNr = models.CharField(verbose_name="Project Nr. :", max_length=255)
 
-    ERMDS = models.CharField(verbose_name="ERMDS Nr. :", max_length=255, unique= True)
+    ERMDS = models.CharField(verbose_name="ERMDS Nr. :", max_length=255)
     lastUpdate = models.CharField(verbose_name="Last update :", max_length=255, null=True, blank=True)
     verifiedBy = models.CharField(verbose_name="Verified by:", max_length=255, null=True, blank=True)
     approvedBy = models.CharField(verbose_name="Approved by :", max_length=255, null=True, blank=True)
@@ -164,95 +164,174 @@ class R_and_D(models.Model):
     yieldAngle = models.FloatField(verbose_name="Yield angle (°)", null=True, blank=True)
     maxiTwistedAngle = models.FloatField(verbose_name="Maxi Twisted Angle (°)", null=True, blank=True)
 
+  
+    fiberC = models.CharField(max_length=255, null=True, blank=True)
+    numberOfBobbinsC = models.CharField(max_length=255, null=True, blank=True)
+    resinC = models.CharField(max_length=255, null=True, blank=True)
+    hardenerC = models.CharField(max_length=255, null=True, blank=True)
+    curingCycleC = models.CharField(max_length=255, null=True, blank=True)
+   
+    towC = models.CharField(max_length=255, null=True, blank=True)
+    texC = models.CharField(max_length=255, null=True, blank=True)
+    fiberDensityC = models.CharField(max_length=255, null=True, blank=True)
+    resinDensityC = models.CharField(max_length=255, null=True, blank=True)
+    
+    endEffectorC = models.CharField(max_length=255, null=True, blank=True)
+    impregnationBathC = models.CharField(max_length=255, null=True, blank=True)
+    entryNozzleDiamC = models.CharField(max_length=255, null=True, blank=True)
+    exitNozzleDiamC = models.CharField(max_length=255, null=True, blank=True)
 
-class RDComment(models.Model):
-    """ R&D comment Table """
-    program = models.CharField(max_length=255, null=True, blank=True)
-    projectNr = models.CharField(max_length=255, null=True, blank=True)
+    roomTemperatureC = models.CharField(max_length=255, null=True, blank=True)
+    roomhumidityC = models.CharField(max_length=255, null=True, blank=True)
 
-    ERMDS = models.CharField(max_length=255, unique= True)
-    lastUpdate = models.CharField(max_length=255, null=True, blank=True)
-    verifiedBy = models.CharField(max_length=255, null=True, blank=True)
-    approvedBy = models.CharField(max_length=255, null=True, blank=True)
-    fiber = models.CharField(max_length=255, null=True, blank=True)
-    numberOfBobbins = models.CharField(max_length=255, null=True, blank=True)
-    resin = models.CharField(max_length=255, null=True, blank=True)
-    handener = models.CharField(max_length=255, null=True, blank=True)
-    curingCycle = models.CharField(max_length=255, null=True, blank=True)
+    brakeForcebobinC = models.CharField(max_length=255, null=True, blank=True)
+    windingSpeedRangeC = models.CharField(max_length=255, null=True, blank=True)
 
-    fiberTow = models.CharField(max_length=255, null=True, blank=True)
-    fiberTex = models.CharField(max_length=255, null=True, blank=True)
-    fiberDensity = models.CharField(max_length=255, null=True, blank=True)
-    matrixDensity = models.CharField(max_length=255, null=True, blank=True)
+    FVRC = models.CharField(max_length=255, null=True, blank=True)
+    compositeDensityC = models.CharField(max_length=255, null=True, blank=True)
+    porosityC = models.CharField(max_length=255, null=True, blank=True)
+    theoreticalSampleSectionC = models.CharField(max_length=255, null=True, blank=True)
+    experimentalSampleSectionC = models.CharField(max_length=255, null=True, blank=True)
+    agedC = models.CharField(max_length=255, null=True, blank=True)
+    temperatureOfTestsC = models.CharField(max_length=255, null=True, blank=True)
 
-    endEffector = models.CharField(max_length=255, null=True, blank=True)
-    impregnationBath = models.CharField(max_length=255, null=True, blank=True)
-    entryNozzleDiam = models.CharField(max_length=255, null=True, blank=True)
-    exitNozzleDiam = models.CharField(max_length=255, null=True, blank=True)
+    numberOfSamplesC = models.CharField(max_length=255, null=True, blank=True)
+    configurarionC = models.CharField(max_length=255, null=True, blank=True)
+    sampleLengthC = models.CharField(max_length=255, null=True, blank=True)
+    numberOfCyclesC = models.CharField(max_length=255, null=True, blank=True)
+    sleeveC = models.CharField(max_length=255, null=True, blank=True)
 
-    roomTemperature = models.CharField(max_length=255, null=True, blank=True)
-    roomhumidity = models.CharField(max_length=255, null=True, blank=True)
+    thermalExpansionCoefficientC = models.CharField(max_length=255, null=True, blank=True)
+    thermalConductivityC = models.CharField(max_length=255, null=True, blank=True)
 
-    brakeForcebobin = models.CharField(max_length=255, null=True, blank=True)
-    windingSpeedRange = models.CharField(max_length=255, null=True, blank=True)
+    tensileYoungModulusC = models.CharField(default="Samples number: ", max_length=255, null=True, blank=True)
+    tensileUltimateStressC = models.CharField(default="Samples number: ", max_length=255, null=True, blank=True)
+    tensileUltimateStressMAC = models.CharField(default="Samples number: ", max_length=255, null=True, blank=True)
+    tensileUltimateStressMBC = models.CharField(default="Samples number: ", max_length=255, null=True, blank=True)
+    tensileUltimateLoadC = models.CharField(default="Samples number: ", max_length=255, null=True, blank=True)
+    tensileYieldStressC = models.CharField(default="Samples number: ", max_length=255, null=True, blank=True)
+    tensileYieldStressMAC = models.CharField(default="Samples number: ", max_length=255, null=True, blank=True)
+    tensileYieldStressMBC = models.CharField(default="Samples number: ", max_length=255, null=True, blank=True)
+    tensileYieldLoadC = models.CharField(default="Samples number: ", max_length=255, null=True, blank=True)
 
-    FVR = models.CharField(max_length=255, null=True, blank=True)
-    compositeDensity = models.CharField(max_length=255, null=True, blank=True)
-    porosity = models.CharField(max_length=255, null=True, blank=True)
-    theoreticalSampleSection = models.CharField(max_length=255, null=True, blank=True)
-    experimentalSampleSection = models.CharField(max_length=255, null=True, blank=True)
-    aged = models.CharField(max_length=255, null=True, blank=True)
-    temperatureOfTests = models.CharField(max_length=255, null=True, blank=True)
+    compressionYoungModulusC = models.CharField(default="Samples number: ", max_length=255, null=True, blank=True)
+    compressionUltimateStressC = models.CharField(default="Samples number: ", max_length=255, null=True, blank=True)
+    compressionUltimateStressMAC = models.CharField(default="Samples number: ", max_length=255, null=True, blank=True)
+    compressionUltimateStressMBC = models.CharField(default="Samples number: ", max_length=255, null=True, blank=True)
+    compressionUltimateLoadC = models.CharField(default="Samples number: ", max_length=255, null=True, blank=True)
+    compressionYieldStressC = models.CharField(default="Samples number: ", max_length=255, null=True, blank=True)
+    compressionYieldStressMAC = models.CharField(default="Samples number: ", max_length=255, null=True, blank=True)
+    compressionYieldStressMBC = models.CharField(default="Samples number: ", max_length=255, null=True, blank=True)
+    compressionYieldLoadC = models.CharField(default="Samples number: ", max_length=255, null=True, blank=True)
+    poissonRatioC = models.CharField(default="Samples number: ", max_length=255, null=True, blank=True)
 
-    numberOfSamples = models.CharField(max_length=255, null=True, blank=True)
-    configurarion = models.CharField(max_length=255, null=True, blank=True)
-    sampleLength = models.CharField(max_length=255, null=True, blank=True)
-    numberOfCycles = models.CharField(max_length=255, null=True, blank=True)
-    sleeve = models.CharField(max_length=255, null=True, blank=True)
+    flexuralModulusILSSC = models.CharField(default="Samples number: ", max_length=255, null=True, blank=True)
+    ultimateShearForceC = models.CharField(default="Samples number: ", max_length=255, null=True, blank=True)
+    ultimateShearStressC = models.CharField(default="Samples number: ", max_length=255, null=True, blank=True)
+    ultimateShearStressMAC = models.CharField(default="Samples number: ", max_length=255, null=True, blank=True)
+    ultimateShearStressMBC = models.CharField(default="Samples number: ", max_length=255, null=True, blank=True)
 
-    thermalExpansionCoefficient = models.CharField(max_length=255, null=True, blank=True)
-    thermalConductivity = models.CharField(max_length=255, null=True, blank=True)
+    flexuralModulusFC = models.CharField(default="Samples number: ", max_length=255, null=True, blank=True)
+    flexuralUltimateStrengthC = models.CharField(default="Samples number: ", max_length=255, null=True, blank=True)
+    flexuralUltimateStrengthMAC = models.CharField(default="Samples number: ", max_length=255, null=True, blank=True)
+    flexuralUltimateStrengthMBC = models.CharField(default="Samples number: ", max_length=255, null=True, blank=True)
+    strainUltimateStrengthC = models.CharField(default="Samples number: ", max_length=255, null=True, blank=True)
+    flexuralUltimateForceC = models.CharField(default="Samples number: ", max_length=255, null=True, blank=True)
 
-    tensileYoungModulus = models.CharField(default="Samples number: ", max_length=255, null=True, blank=True)
-    tensileUltimateStress = models.CharField(default="Samples number: ", max_length=255, null=True, blank=True)
-    tensileUltimateStressMA = models.CharField(default="Samples number: ", max_length=255, null=True, blank=True)
-    tensileUltimateStressMB = models.CharField(default="Samples number: ", max_length=255, null=True, blank=True)
-    tensileUltimateLoad = models.CharField(default="Samples number: ", max_length=255, null=True, blank=True)
-    tensileYieldStress = models.CharField(default="Samples number: ", max_length=255, null=True, blank=True)
-    tensileYieldStressMA = models.CharField(default="Samples number: ", max_length=255, null=True, blank=True)
-    tensileYieldStressMB = models.CharField(default="Samples number: ", max_length=255, null=True, blank=True)
-    tensileYieldLoad = models.CharField(default="Samples number: ", max_length=255, null=True, blank=True)
+    yieldTorqueC = models.CharField(default="Samples number: ", max_length=255, null=True, blank=True)
+    maxiTorqueC = models.CharField(default="Samples number: ", max_length=255, null=True, blank=True)
+    yieldAngleC = models.CharField(default="Samples number: ", max_length=255, null=True, blank=True)
+    maxiTwistedAngleC = models.CharField(default="Samples number: ", max_length=255, null=True, blank=True)
 
-    compressionYoungModulus = models.CharField(default="Samples number: ", max_length=255, null=True, blank=True)
-    compressionUltimateStress = models.CharField(default="Samples number: ", max_length=255, null=True, blank=True)
-    compressionUltimateStressMA = models.CharField(default="Samples number: ", max_length=255, null=True, blank=True)
-    compressionUltimateStressMB = models.CharField(default="Samples number: ", max_length=255, null=True, blank=True)
-    compressionUltimateLoad = models.CharField(default="Samples number: ", max_length=255, null=True, blank=True)
-    compressionYieldStress = models.CharField(default="Samples number: ", max_length=255, null=True, blank=True)
-    compressionYieldStressMA = models.CharField(default="Samples number: ", max_length=255, null=True, blank=True)
-    compressionYieldStressMB = models.CharField(default="Samples number: ", max_length=255, null=True, blank=True)
-    compressionYieldLoad = models.CharField(default="Samples number: ", max_length=255, null=True, blank=True)
-    poissonRatio = models.CharField(default="Samples number: ", max_length=255, null=True, blank=True)
 
-    flexuralModulusILSS = models.CharField(default="Samples number: ", max_length=255, null=True, blank=True)
-    ultimateShearForce = models.CharField(default="Samples number: ", max_length=255, null=True, blank=True)
-    ultimateShearStress = models.CharField(default="Samples number: ", max_length=255, null=True, blank=True)
-    ultimateShearStressMA = models.CharField(default="Samples number: ", max_length=255, null=True, blank=True)
-    ultimateShearStressMB = models.CharField(default="Samples number: ", max_length=255, null=True, blank=True)
+# class RDComment(models.Model):
+#     """ R&D comment Table """
+#     program = models.CharField(max_length=255, null=True, blank=True)
+#     projectNr = models.CharField(max_length=255, null=True, blank=True)
 
-    flexuralModulusF = models.CharField(default="Samples number: ", max_length=255, null=True, blank=True)
-    flexuralUltimateStrength = models.CharField(default="Samples number: ", max_length=255, null=True, blank=True)
-    flexuralUltimateStrengthMA = models.CharField(default="Samples number: ", max_length=255, null=True, blank=True)
-    flexuralUltimateStrengthMB = models.CharField(default="Samples number: ", max_length=255, null=True, blank=True)
-    strainUltimateStrength = models.CharField(default="Samples number: ", max_length=255, null=True, blank=True)
-    flexuralUltimateForce = models.CharField(default="Samples number: ", max_length=255, null=True, blank=True)
+#     ERMDS = models.CharField(max_length=255, unique= True)
+#     lastUpdate = models.CharField(max_length=255, null=True, blank=True)
+#     verifiedBy = models.CharField(max_length=255, null=True, blank=True)
+#     approvedBy = models.CharField(max_length=255, null=True, blank=True)
+#     fiber = models.CharField(max_length=255, null=True, blank=True)
+#     numberOfBobbins = models.CharField(max_length=255, null=True, blank=True)
+#     resin = models.CharField(max_length=255, null=True, blank=True)
+#     handener = models.CharField(max_length=255, null=True, blank=True)
+#     curingCycle = models.CharField(max_length=255, null=True, blank=True)
 
-    yieldTorque = models.CharField(default="Samples number: ", max_length=255, null=True, blank=True)
-    maxiTorque = models.CharField(default="Samples number: ", max_length=255, null=True, blank=True)
-    yieldAngle = models.CharField(default="Samples number: ", max_length=255, null=True, blank=True)
-    maxiTwistedAngle = models.CharField(default="Samples number: ", max_length=255, null=True, blank=True)
+#     fiberTow = models.CharField(max_length=255, null=True, blank=True)
+#     fiberTex = models.CharField(max_length=255, null=True, blank=True)
+#     fiberDensity = models.CharField(max_length=255, null=True, blank=True)
+#     matrixDensity = models.CharField(max_length=255, null=True, blank=True)
 
-    ERMDS = models.ForeignKey(verbose_name="ERMDS", to=R_and_D, on_delete=models.CASCADE, to_field='id')
+#     endEffector = models.CharField(max_length=255, null=True, blank=True)
+#     impregnationBath = models.CharField(max_length=255, null=True, blank=True)
+#     entryNozzleDiam = models.CharField(max_length=255, null=True, blank=True)
+#     exitNozzleDiam = models.CharField(max_length=255, null=True, blank=True)
+
+#     roomTemperature = models.CharField(max_length=255, null=True, blank=True)
+#     roomhumidity = models.CharField(max_length=255, null=True, blank=True)
+
+#     brakeForcebobin = models.CharField(max_length=255, null=True, blank=True)
+#     windingSpeedRange = models.CharField(max_length=255, null=True, blank=True)
+
+#     FVR = models.CharField(max_length=255, null=True, blank=True)
+#     compositeDensity = models.CharField(max_length=255, null=True, blank=True)
+#     porosity = models.CharField(max_length=255, null=True, blank=True)
+#     theoreticalSampleSection = models.CharField(max_length=255, null=True, blank=True)
+#     experimentalSampleSection = models.CharField(max_length=255, null=True, blank=True)
+#     aged = models.CharField(max_length=255, null=True, blank=True)
+#     temperatureOfTests = models.CharField(max_length=255, null=True, blank=True)
+
+#     numberOfSamples = models.CharField(max_length=255, null=True, blank=True)
+#     configurarion = models.CharField(max_length=255, null=True, blank=True)
+#     sampleLength = models.CharField(max_length=255, null=True, blank=True)
+#     numberOfCycles = models.CharField(max_length=255, null=True, blank=True)
+#     sleeve = models.CharField(max_length=255, null=True, blank=True)
+
+#     thermalExpansionCoefficient = models.CharField(max_length=255, null=True, blank=True)
+#     thermalConductivity = models.CharField(max_length=255, null=True, blank=True)
+
+#     tensileYoungModulus = models.CharField(default="Samples number: ", max_length=255, null=True, blank=True)
+#     tensileUltimateStress = models.CharField(default="Samples number: ", max_length=255, null=True, blank=True)
+#     tensileUltimateStressMA = models.CharField(default="Samples number: ", max_length=255, null=True, blank=True)
+#     tensileUltimateStressMB = models.CharField(default="Samples number: ", max_length=255, null=True, blank=True)
+#     tensileUltimateLoad = models.CharField(default="Samples number: ", max_length=255, null=True, blank=True)
+#     tensileYieldStress = models.CharField(default="Samples number: ", max_length=255, null=True, blank=True)
+#     tensileYieldStressMA = models.CharField(default="Samples number: ", max_length=255, null=True, blank=True)
+#     tensileYieldStressMB = models.CharField(default="Samples number: ", max_length=255, null=True, blank=True)
+#     tensileYieldLoad = models.CharField(default="Samples number: ", max_length=255, null=True, blank=True)
+
+#     compressionYoungModulus = models.CharField(default="Samples number: ", max_length=255, null=True, blank=True)
+#     compressionUltimateStress = models.CharField(default="Samples number: ", max_length=255, null=True, blank=True)
+#     compressionUltimateStressMA = models.CharField(default="Samples number: ", max_length=255, null=True, blank=True)
+#     compressionUltimateStressMB = models.CharField(default="Samples number: ", max_length=255, null=True, blank=True)
+#     compressionUltimateLoad = models.CharField(default="Samples number: ", max_length=255, null=True, blank=True)
+#     compressionYieldStress = models.CharField(default="Samples number: ", max_length=255, null=True, blank=True)
+#     compressionYieldStressMA = models.CharField(default="Samples number: ", max_length=255, null=True, blank=True)
+#     compressionYieldStressMB = models.CharField(default="Samples number: ", max_length=255, null=True, blank=True)
+#     compressionYieldLoad = models.CharField(default="Samples number: ", max_length=255, null=True, blank=True)
+#     poissonRatio = models.CharField(default="Samples number: ", max_length=255, null=True, blank=True)
+
+#     flexuralModulusILSS = models.CharField(default="Samples number: ", max_length=255, null=True, blank=True)
+#     ultimateShearForce = models.CharField(default="Samples number: ", max_length=255, null=True, blank=True)
+#     ultimateShearStress = models.CharField(default="Samples number: ", max_length=255, null=True, blank=True)
+#     ultimateShearStressMA = models.CharField(default="Samples number: ", max_length=255, null=True, blank=True)
+#     ultimateShearStressMB = models.CharField(default="Samples number: ", max_length=255, null=True, blank=True)
+
+#     flexuralModulusF = models.CharField(default="Samples number: ", max_length=255, null=True, blank=True)
+#     flexuralUltimateStrength = models.CharField(default="Samples number: ", max_length=255, null=True, blank=True)
+#     flexuralUltimateStrengthMA = models.CharField(default="Samples number: ", max_length=255, null=True, blank=True)
+#     flexuralUltimateStrengthMB = models.CharField(default="Samples number: ", max_length=255, null=True, blank=True)
+#     strainUltimateStrength = models.CharField(default="Samples number: ", max_length=255, null=True, blank=True)
+#     flexuralUltimateForce = models.CharField(default="Samples number: ", max_length=255, null=True, blank=True)
+
+#     yieldTorque = models.CharField(default="Samples number: ", max_length=255, null=True, blank=True)
+#     maxiTorque = models.CharField(default="Samples number: ", max_length=255, null=True, blank=True)
+#     yieldAngle = models.CharField(default="Samples number: ", max_length=255, null=True, blank=True)
+#     maxiTwistedAngle = models.CharField(default="Samples number: ", max_length=255, null=True, blank=True)
+
+#     ERMDS = models.ForeignKey(verbose_name="ERMDS", to=R_and_D, on_delete=models.CASCADE, to_field='id')
 
 
 
@@ -277,7 +356,7 @@ class Project(models.Model):
 class Part(models.Model):
     """ PartTable """
     ########   1   ########
-    partName = models.CharField(verbose_name="Part Name", max_length=255, unique=True)
+    partName = models.CharField(verbose_name="Part Name", max_length=255)
 
     # resinName = models.CharField(verbose_name="Resin Name", max_length=255, null=True, blank=True)
     # resinDensity = models.FloatField(verbose_name="", null=True, blank=True)
@@ -423,16 +502,20 @@ class Link(models.Model):
     def __str__(self):
         return self.linkName
                                      
-class Sequence(models.Model):
-    """ WindingTypeTable """
+class SequenceType(models.Model):
+    """ SequenceTypeTable """
     ########   3   ########
-    sequenceName = models.CharField(verbose_name="Sequence Name", max_length=255)
-    description = models.CharField(verbose_name="Description", max_length=255)
+    sequenceType = models.CharField(verbose_name="Sequence Type", max_length=255, unique= True)
+    description = models.CharField(verbose_name="Description", max_length=255, null=True, blank=True)
+
+    def __str__(self):
+        return self.sequenceType
 
 class Winding(models.Model):
     """ WindingTable """
     ########   3   ########
+    project = models.ForeignKey(verbose_name="Project Name", to=Project, on_delete=models.CASCADE, to_field='id')
     part = models.ForeignKey(verbose_name="Part Name", to=Part, on_delete=models.CASCADE, to_field='id')
     link = models.ForeignKey(verbose_name="Link Name", to=Link, on_delete=models.CASCADE, to_field='id')
     interface = models.ForeignKey(verbose_name="Interface Name", to=Interface, on_delete=models.CASCADE, to_field='id')
-    sequence = models.ForeignKey(verbose_name="WindingType Description", to=Sequence, on_delete=models.CASCADE, to_field='id')
+    sequence = models.ForeignKey(verbose_name="WindingType Description", to=SequenceType, on_delete=models.CASCADE, to_field='id')

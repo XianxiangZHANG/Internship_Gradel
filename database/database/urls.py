@@ -17,7 +17,7 @@ from django.contrib import admin
 from django.urls import path
 from django.conf import settings
 from django.conf.urls.static import static
-from web.views import account, project, part, bushing, interface, link, winding, user, department, fiber, resin, r_and_d
+from web.views import account, project, part, bushing, interface, link, winding, user, department, fiber, resin, r_and_d, sequenceType
 from web.views.load_parts import load_parts, load_interfaces
 from web.views.load_fiber_resin import get_fiber_data, get_resin_data
 
@@ -54,8 +54,10 @@ urlpatterns = [
     path('r_and_d/edit/<int:aid>/', r_and_d.r_and_d_edit),
     path('r_and_d/delete/', r_and_d.r_and_d_delete),
     path('r_and_d/modify-multiple/', r_and_d.r_and_d_modify_multiple),
-    path('r_and_d/load-parts/', get_fiber_data, name='get_fiber_data'),
-    path('r_and_d/load-interface/', get_resin_data, name='get_resin_data'),
+    path('r_and_d/load-fiber-resin/', get_fiber_data, name='get_fiber_data'),
+    path('r_and_d/load-fiber-resin/', get_resin_data, name='get_resin_data'),
+    path('get-fiber-details/<int:fiber_id>/', get_fiber_data, name='get_fiber_data'),
+    path('get-resin-details/<int:resin_id>/', get_resin_data, name='get_resin_data'),
 
     path('project/list/', project.project_list),
     # path('project/input/', project.project_input),
@@ -93,16 +95,34 @@ urlpatterns = [
     path('link/load-parts/', load_parts, name='load_parts'),
     path('link/load-interface/', load_interfaces, name='load_interfaces'),
     path('link/add-multiple/', link.link_add_multiple),
+    path('link/modify-multiple/', link.link_modify_multiple),
+
+    path('winding/list/', winding.winding_list),
+    path('winding/add/', winding.winding_add),
+    path('winding/edit/<int:aid>/', winding.winding_edit),
+    path('winding/delete/', winding.winding_delete),
+    path('winding/load-parts/', load_parts, name='load_parts'),
+    path('winding/load-interface/', load_interfaces, name='load_interfaces'),
+    path('winding/add-multiple/', winding.winding_add_multiple),
+    path('winding/modify-multiple/', winding.winding_modify_multiple),
 
     path('user/list/', user.user_list),
     path('user/edit/<int:aid>/', user.user_edit),
     path('user/delete/', user.user_delete),
     path('user/add-multiple/', user.user_add_multiple),
+    path('user/modify-multiple/', user.user_modify_multiple),
 
     path('department/list/', department.department_list),
     path('department/edit/<int:aid>/', department.department_edit),
     path('department/delete/', department.department_delete),
     path('department/add-multiple/', department.department_add_multiple),
+    path('department/modify-multiple/', department.department_modify_multiple),
+
+    path('sequenceType/list/', sequenceType.sequenceType_list),
+    path('sequenceType/edit/<int:aid>/', sequenceType.sequenceType_edit),
+    path('sequenceType/delete/', sequenceType.sequenceType_delete),
+    path('sequenceType/add-multiple/', sequenceType.sequenceType_add_multiple),
+    path('sequenceType/modify-multiple/', sequenceType.sequenceType_modify_multiple),
 
 ]
 if settings.DEBUG:

@@ -1,0 +1,226 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+<div class="panel panel-default">
+    <div class="panel-heading"><span class="glyphicon glyphicon-indent-right" aria-hidden="true"></span> Add Multiple WindingLins</div>
+    <div class="panel-body">
+        <form class="form-horizontal" method="post" novalidate>
+            {% csrf_token %}
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="form-group" style="margin-bottom: 25px;">
+                        <label class="col-sm-1 control-label">Project</label>
+                        <div class="col-sm-11" style="position: relative">
+                            <select id="id_project" name="project" class="form-control">
+                                <option value=""> - - - - Please select one - - - - </option>
+                                {% for project in projects %}
+                                    <option value="{{ project.id }}">{{ project.projectName }}</option>
+                                {% endfor %}
+                            </select>
+                            <span style="color: red;">{{ project_part_form.project.errors.0 }}</span>
+                        </div>
+                    </div>
+                    <div class="form-group" style="margin-bottom: 25px;">
+                        <label class="col-sm-1 control-label">Part</label>
+                        <div class="col-sm-11" style="position: relative">
+                            <select id="id_part" name="part" class="form-control">
+                                <option value=""> - - - - Please select one - - - - </option>
+                                <!-- Options will be loaded dynamically -->
+                            </select>
+                            <span style="color: red;">{{ project_part_form.part.errors.0 }}</span>
+                        </div>
+                    </div>
+                </div>
+                {{ formset.management_form }}
+                <table class="table table-bordered" id="winding-table">
+                    <thead>
+                        <tr>
+                            <th>Link</th>
+                            <th style="width: 20%;">Interface Start</th>
+                            <th style="width: 20%;">Interface Transition</th>
+                            <th style="width: 20%;">Interface End</th>
+                            <th style="width: 10%;">Winding Type</th>
+                            <th style="width: 100px;">Operation</th>
+                        </tr>
+                    </thead>
+                    <tbody contenteditable="true">
+                        {% for field in formset %}
+                        <tr class="winding-form">
+                            
+                            <td contenteditable="true">{{ field.link }}<span style="color: red;">{{ field.errors.0 }}</span></td>
+                            <td contenteditable="true">{{ field.interface }}<span style="color: red;">{{ field.errors.0 }}</span></td>
+                            <td contenteditable="true">{{ field.interface }}<span style="color: red;">{{ field.errors.0 }}</span></td>
+                            <td contenteditable="true">{{ field.interface }}<span style="color: red;">{{ field.errors.0 }}</span></td>
+                            <td contenteditable="true">{{ field.sequence }}<span style="color: red;">{{ field.errors.0 }}</span></td>
+                           
+                            <td class="text-center">{% if not forloop.first %}<button type="button" class="btn btn-danger remove-form">Remove</button>{% endif %}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <div class="row">
+                <div class="form-group">
+                    <div class="col-xs-12">
+                        <div class="col-sm-offset-9 col-sm-12">
+                            <button type="button" id="add-winding" class="btn btn-secondary" style="width: 14%;">Add Link</button>
+                            <button type="submit" class="btn btn-primary" style="width: 6%; margin-left: 3%;">Save</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function() {
+        function loadParts(projectId) {
+            var url = '{% url "load_parts" %}';
+            $.ajax({
+                url: url,
+                data: {
+                    'project_id': projectId
+                },
+                success: function(data) {
+                    $("#id_part").html('<option value=""> - - - - Please select one - - - - </option>');
+                    $.each(data, function(key, value) {
+                        $("#id_part").append('<option value="' + value.id + '">' + value.partName + '</option>');
+                    });
+                }
+            });
+        }
+
+        // function loadInterfaces(projectId) {
+        //     var url = '{% url "load_interfaces" %}';
+        //     $.ajax({
+        //         url: url,
+        //         data: {
+        //             'part_id': partId
+        //         },
+        //         success: function(data) {
+        //             $("#id_interface").html('<option value=""> - - - - </option>');
+        //             $.each(data, function(key, value) {
+        //                 $("#id_interface").append('<option value="' + value.id + '">' + value.interfaceName + '</option>');
+        //             });
+        //         }
+        //     });
+        // }
+
+        $('#id_project').change(function() {
+            var projectId = $(this).val();
+            loadParts(projectId);
+        });
+
+        // $('#id_part').change(function() {
+        //     var partId = $(this).val();
+        //     loadInterfaces(partId);
+        // });
+
+        $('#add-winding').click(function() {
+            var formCount = $('#id_form-TOTAL_FORMS').val();
+            var newForm = $('.winding-form:first').clone(true).removeClass('winding-form');
+            newForm.find('input').each(function() {
+                var name = $(this).attr('name').replace('-0-', '-' + formCount + '-');
+                var id = 'id_' + name;
+                $(this).attr({'name': name, 'id': id}).val('');
+                // $(this).next('.select2-container').remove();  // Remove the Select2 container to reinitialize it
+            });
+            newForm.find('td:last').html('<button type="button" class="btn btn-danger remove-form">Remove</button>');
+            $('#winding-table tbody').append(newForm);
+            $('#id_form-TOTAL_FORMS').val(parseInt(formCount) + 1);
+
+            // newForm.find('.select2').select2({
+            //     placeholder: 'Select or type to search',
+            //     allowClear: true,
+            //     tags: true
+            // });
+        });
+
+        $(document).on('click', '.remove-form', function() {
+            if ($('#winding-table tbody tr').length > 1) {
+                $(this).closest('tr').remove();
+                var formCount = $('#id_form-TOTAL_FORMS').val();
+                $('#id_form-TOTAL_FORMS').val(parseInt(formCount) - 1);
+                // 重新调整所有表单行的索引
+                $('#winding-table tbody tr').each(function(index) {
+                    $(this).find('input').each(function() {
+                        var name = $(this).attr('name').replace(/-\d+-/, '-' + index + '-');
+                        var id = 'id_' + name;
+                        $(this).attr({'name': name, 'id': id});
+                    });
+                });
+            }
+        });
+
+        // Handle paste event to populate table cells
+        $('#winding-table tbody').on('paste', 'td', function(e) {
+            e.preventDefault();
+            var text = (e.originalEvent || e).clipboardData.getData('text/plain');
+            var rows = text.split('\n');
+            var $currentRow = $(this).closest('tr');
+            var startRowIndex = $currentRow.index();
+            var startColIndex = $(this).index();
+
+            rows.forEach(function(row, rowIndex) {
+                if (row.trim() !== '') {
+                    var cols = row.split('\t');
+                    var $row = $('#winding-table tbody tr').eq(startRowIndex + rowIndex);
+                    if ($row.length === 0) {
+                        $('#add-winding').click();
+                        $row = $('#winding-table tbody tr').last();
+                    }
+                    cols.forEach(function(col, colIndex) {
+                        var $cell = $row.find('td').eq(startColIndex + colIndex);
+                        $cell.find('input').val(col.trim() || '');
+                    });
+                }
+            });
+        });
+    });
+</script>
+
+{% endblock %}
+{% block css %}
+<style>
+    table {
+        border-collapse: collapse;
+        width: 100%;
+        margin-bottom: 100px;
+    }
+    th, td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: center;
+    }
+    tr:nth-child(even) {
+        background-color: #f2f2f2;
+    }
+    th {
+        background-color: #4CAF50;
+        color: white;
+    }
+    #btnf1, .btnf2{
+        width: 100px; 
+        background-color: #49b7be; 
+        color: white; 
+        padding: 5px 10px; 
+        margin: 8px;
+        margin-right: 0px;
+        border: none; 
+        border-radius: 4px;
+        cursor: pointer; 
+    }
+    #id_project, input[type="text"] {
+        width: 100%; 
+        padding: 8px; 
+        margin: 0px 0; 
+        display: inline-block;
+        border: 1px solid #ccc; 
+        border-radius: 4px; 
+        box-sizing: border-box; 
+    }
+</style>
+{% endblock %}
