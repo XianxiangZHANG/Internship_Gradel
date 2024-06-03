@@ -60,6 +60,7 @@ urlpatterns = [
     path('get-resin-details/<int:resin_id>/', get_resin_data, name='get_resin_data'),
 
     path('project/list/', project.project_list),
+    path('project/valid/', project.project_valid),
     # path('project/input/', project.project_input),
     path('project/add/', project.project_add),
     # /project/edit/123/
@@ -68,11 +69,13 @@ urlpatterns = [
     path('project/delete/', project.project_delete),
 
     path('part/list/', part.part_list),
+    path('part/valid/', part.part_valid),
     path('part/add/', part.part_add),
     path('part/edit/<int:aid>/', part.part_edit),
     path('part/delete/', part.part_delete),
 
     path('bushing/list/', bushing.bushing_list),
+    path('bushing/valid/', bushing.bushing_valid),
     path('bushing/add/', bushing.bushing_add),
     path('bushing/edit/<int:aid>/', bushing.bushing_edit),
     path('bushing/delete/', bushing.bushing_delete),
@@ -81,6 +84,7 @@ urlpatterns = [
     path('bushing/modify-multiple/', bushing.bushing_modify_multiple),
 
     path('interface/list/', interface.interface_list),
+    path('interface/valid/', interface.interface_valid),
     path('interface/add/', interface.interface_add),
     path('interface/edit/<int:aid>/', interface.interface_edit),
     path('interface/delete/', interface.interface_delete),
@@ -89,6 +93,7 @@ urlpatterns = [
     path('interface/modify-multiple/', interface.interface_modify_multiple),
 
     path('link/list/', link.link_list),
+    path('link/valid/', link.link_valid),
     path('link/add/', link.link_add),
     path('link/edit/<int:aid>/', link.link_edit),
     path('link/delete/', link.link_delete),
@@ -98,6 +103,7 @@ urlpatterns = [
     path('link/modify-multiple/', link.link_modify_multiple),
 
     path('winding/list/', winding.winding_list),
+    path('winding/valid/', winding.winding_valid),
     path('winding/add/', winding.winding_add),
     path('winding/edit/<int:aid>/', winding.winding_edit),
     path('winding/delete/', winding.winding_delete),
@@ -120,6 +126,7 @@ urlpatterns = [
     path('department/modify-multiple/', department.department_modify_multiple),
 
     path('sequenceType/list/', sequenceType.sequenceType_list),
+    path('sequenceType/valid/', sequenceType.sequenceType_valid),
     path('sequenceType/edit/<int:aid>/', sequenceType.sequenceType_edit),
     path('sequenceType/delete/', sequenceType.sequenceType_delete),
     path('sequenceType/add-multiple/', sequenceType.sequenceType_add_multiple),

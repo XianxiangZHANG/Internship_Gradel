@@ -7,15 +7,23 @@ from web import models
 import django_filters
 
 class FiberFilter(django_filters.FilterSet):
+    material = django_filters.CharFilter(field_name='material', lookup_expr='icontains')
+    manufacturer = django_filters.CharFilter(field_name='manufacturer', lookup_expr='icontains')
+    distributor = django_filters.CharFilter(field_name='distributor', lookup_expr='icontains')
+    grade = django_filters.CharFilter(field_name='grade', lookup_expr='icontains')
+    valid = django_filters.BooleanFilter(field_name='valid')  
 
     class Meta:
         model = models.Fiber
-        fields = {
-            'material': ['icontains'], 
-            'manufacturer': ['icontains'],
-            'distributor': ['icontains'],
-            'grade': ['icontains'],
-        }
+        fields = ['material', 'manufacturer', 'distributor', 'grade', 'valid']
+    # class Meta:
+    #     model = models.Fiber
+    #     fields = {
+    #         'material': ['icontains'], 
+    #         'manufacturer': ['icontains'],
+    #         'distributor': ['icontains'],
+    #         'grade': ['icontains'],
+    #     }
 
 def fiber_list(request):
     """ list of fiber """
@@ -42,7 +50,7 @@ class FiberModelForm(forms.ModelForm):
         fields = ['material', 'manufacturer', 'distributor', 'grade',
                 'singleFilamentDiameter', 'tow', 'towInThousands', 
                 'tex', 'density', 'theoreticalDrySection', 'tensileStrength', 'tensileModulus',
-                'price21', 'price22', 'price23', 'price24']
+                'price21', 'price22', 'price23', 'price24', 'valid']
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -56,7 +64,7 @@ class FiberForm(forms.ModelForm):
         fields = ['material', 'manufacturer', 'distributor', 'grade',
                 'singleFilamentDiameter', 'tow', 'towInThousands', 
                 'tex', 'density', 'theoreticalDrySection', 'tensileStrength', 'tensileModulus',
-                'price21', 'price22', 'price23', 'price24']
+                'price21', 'price22', 'price23', 'price24', 'valid']
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -138,7 +146,7 @@ class FiberEditModelForm(forms.ModelForm):
         fields = ['material', 'manufacturer', 'distributor', 'grade',
                 'singleFilamentDiameter', 'tow', 'towInThousands', 
                 'tex', 'density', 'theoreticalDrySection', 'tensileStrength', 'tensileModulus',
-                'price21', 'price22', 'price23', 'price24']
+                'price21', 'price22', 'price23', 'price24', 'valid']
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

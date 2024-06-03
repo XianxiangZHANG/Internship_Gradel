@@ -7,19 +7,36 @@ from web import models
 import django_filters
 
 class BushingFilter(django_filters.FilterSet):
+    project = django_filters.ModelChoiceFilter(queryset=models.Project.objects.all())
+    part = django_filters.ModelChoiceFilter(queryset=models.Part.objects.all())
+    bushingName = django_filters.CharFilter(field_name='bushingName', lookup_expr='icontains')
+    
+    
+
     class Meta:
         model = models.Bushing
-        fields = {
-            'project': ['exact'], 
-            'part': ['exact'],
-            'bushingName': ['icontains'],
-        }
+        fields = ['project', 'part', 'bushingName']
+
+    # class Meta:
+    #     model = models.Bushing
+    #     fields = {
+    #         'project': ['exact'], 
+    #         'part': ['exact'],
+    #         'bushingName': ['icontains'],
+    #     }
 
 def bushing_list(request):
     """ list of bushing """
 
     bushing_filter = BushingFilter(request.GET, queryset=models.Bushing.objects.all())
     return render(request, 'bushing/bushing_list.html', {'filter': bushing_filter})
+
+def bushing_valid(request):
+    """ list of bushing """
+
+    bushing_filter = BushingFilter(request.GET, queryset=models.Bushing.objects.filter(part__valid=True))
+    return render(request, 'bushing/bushing_valid.html', {'filter': bushing_filter})
+
 
 def bushing_input(request):
     """ list of bushing """

@@ -47,11 +47,11 @@
                         {% for field in formset %}
                         <tr class="winding-form">
                             
-                            <td><select id="id_link" name="link" class="form-control">
+                            <!-- <td><select id="id_link" name="link" class="form-control">
                                 <option value=""> - - Please select one - -</option>
-                                <!-- Options will be loaded dynamically -->
-                            </select><span style="color: red;">{{ field.errors.0 }}</span>
-                            </td>
+                            </select><span style="color: red;">{{ project_part_form.part.errors.0 }}</span>
+                            </td> -->
+                            <td contenteditable="true">{{ field.link }}<span style="color: red;">{{ field.errors.0 }}</span></td>
                             <td contenteditable="true">{{ field.interface1 }}<span style="color: red;">{{ field.errors.0 }}</span></td>
                             <td contenteditable="true">{{ field.interface2 }}<span style="color: red;">{{ field.errors.0 }}</span></td>
                             <td contenteditable="true">{{ field.interface3 }}<span style="color: red;">{{ field.errors.0 }}</span></td>

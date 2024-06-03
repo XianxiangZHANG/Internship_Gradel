@@ -18,7 +18,7 @@
                         <tr><th colspan="2" style="background-color: #4CAF50;">Last update :</th><td colspan="2"  contenteditable="true">{{ form.lastUpdate }}</td></tr>
                         <tr><th colspan="2" style="background-color: #4CAF50;">Verified by :</th><td colspan="2"  contenteditable="true">{{ form.verifiedBy }}</td></tr>
                         <tr><th colspan="2" style="background-color: #4CAF50;">Approved by :</th><td colspan="2"  contenteditable="true">{{ form.approvedBy }}</td></tr>
-                
+                        <tr><th colspan="2" style="background-color: #4CAF50;">Validation</th><td colspan="2"  contenteditable="true">{{ form.valid }}</td></tr>
                         <tr style="background-color: #4CAF50;"><th colspan="2" style="background-color: #4CAF50; font-size: large; color: #000;">Materials references</th><td id="vc">Value</td><td id="vc">Comments</td></tr>
                         <tr><th colspan="2">Fiber</th><td>
                             <select id="id_fiber" id="id_fiber_{{ form.id }}" name="fiber" onchange="fetchFiberDetails(this.value)">

@@ -47,6 +47,7 @@
                 <th rowspan="2">Hardness at RT</th>
                 <th rowspan="2">Water absorption (7d at 23°C)</th>
                 <th rowspan="2">Operations</th>
+                
             </tr>
             <tr>
                 <th>Resin</th>
@@ -96,41 +97,89 @@
         </thead>
         <tbody>
         {% for row in filter.qs %}
+            {% if row.valid %} 
+            <tr style="background-color: #fff35281;">
+                <!-- <td>{{ row.id }}</td> -->
+                <td>{{ row.manufacturer|default_if_none:"" }}</td>
+                <td>{{ row.resin|default_if_none:"" }}</td>
+                <td>{{ row.hardener|default_if_none:"" }}</td>
+                <td>{{ row.accelerator|default_if_none:"" }}</td>
+
+                <td>{{ row.ratioWR|default_if_none:"" }}</td>
+                <td>{{ row.ratioWH|default_if_none:"" }}</td>
+                <td>{{ row.ratioWA|default_if_none:"" }}</td>
+                <td>{{ row.ratioVR|default_if_none:"" }}</td>
+                <td>{{ row.ratioVH|default_if_none:"" }}</td>
+                <td>{{ row.ratioVA|default_if_none:"" }}</td>
+
+                <td>{{ row.potLife|default_if_none:"" }}</td>
+                <td>{{ row.processT|default_if_none:"" }}</td>
+                <td>{{ row.curingCycle|default_if_none:"" }}</td>
+                <td>{{ row.tg|default_if_none:"" }}</td>
+                <td>{{ row.priceResin|default_if_none:"" }}</td>
+                <td>{{ row.priceHardener|default_if_none:"" }}</td>
+                <td>{{ row.densityR|default_if_none:"" }}</td>
+                <td>{{ row.flexuralStrength|default_if_none:"" }}</td>
+                <td>{{ row.flexuralmodulus|default_if_none:"" }}</td>
+                <td>{{ row.modulusElasticity|default_if_none:"" }}</td>
+                <td>{{ row.tensileStrength|default_if_none:"" }}</td>
+                <td>{{ row.elongationBreak|default_if_none:"" }}</td>
+                <td>{{ row.compressionUltStrength|default_if_none:"" }}</td>
+                <td>{{ row.compressionModulus|default_if_none:"" }}</td>
+                <td>{{ row.thermalExpansionCoefficient|default_if_none:"" }}</td>
+                <td>{{ row.charpyimpact|default_if_none:"" }}</td>
+                <td>{{ row.fractureToughness|default_if_none:"" }}</td>
+                <td>{{ row.fractureEnergy|default_if_none:"" }}</td>
+                <td>{{ row.totalShrinkage|default_if_none:"" }}</td>
+                <td>{{ row.hardness|default_if_none:"" }}</td>
+                <td>{{ row.waterAbsorption|default_if_none:"" }}</td>
+
+
+                <td>
+                    <a class="btn btn-primary btn-xs" href="/resin/edit/{{ row.id }}/" style="width: 70px; text-align: center; margin-bottom: 5px;"> Edit </a>
+                    <br>
+                    <!-- <a class="btn btn-info btn-xs" href="/part/list/{{ row.id }}" style="width: 70px; text-align: center; margin-bottom: 5px;"> Details </a>
+                    <br> -->
+                    <input type="button" value="Delete" class="btn btn-danger btn-xs" style="width: 70px; text-align: center;"
+                        onclick="deleteAction({{ row.id }});"/>
+                </td>
+            </tr>
+            {% else %}
             <tr>
                 <!-- <td>{{ row.id }}</td> -->
-                <td>{{ row.manufacturer }}</td>
-                <td>{{ row.resin }}</td>
-                <td>{{ row.hardener }}</td>
-                <td>{{ row.accelerator }}</td>
+                <td>{{ row.manufacturer|default_if_none:"" }}</td>
+                <td>{{ row.resin|default_if_none:"" }}</td>
+                <td>{{ row.hardener|default_if_none:"" }}</td>
+                <td>{{ row.accelerator|default_if_none:"" }}</td>
 
-                <td>{{ row.ratioWR }}</td>
-                <td>{{ row.ratioWH }}</td>
-                <td>{{ row.ratioWA }}</td>
-                <td>{{ row.ratioVR }}</td>
-                <td>{{ row.ratioVH }}</td>
-                <td>{{ row.ratioVA }}</td>
+                <td>{{ row.ratioWR|default_if_none:"" }}</td>
+                <td>{{ row.ratioWH|default_if_none:"" }}</td>
+                <td>{{ row.ratioWA|default_if_none:"" }}</td>
+                <td>{{ row.ratioVR|default_if_none:"" }}</td>
+                <td>{{ row.ratioVH|default_if_none:"" }}</td>
+                <td>{{ row.ratioVA|default_if_none:"" }}</td>
 
-                <td>{{ row.potLife }}</td>
-                <td>{{ row.processT }}</td>
-                <td>{{ row.curingCycle }}</td>
-                <td>{{ row.tg }}</td>
-                <td>{{ row.priceResin }}</td>
-                <td>{{ row.priceHardener }}</td>
-                <td>{{ row.densityR }}</td>
-                <td>{{ row.flexuralStrength }}</td>
-                <td>{{ row.flexuralmodulus }}</td>
-                <td>{{ row.modulusElasticity }}</td>
-                <td>{{ row.tensileStrength }}</td>
-                <td>{{ row.elongationBreak }}</td>
-                <td>{{ row.compressionUltStrength }}</td>
-                <td>{{ row.compressionModulus }}</td>
-                <td>{{ row.thermalExpansionCoefficient }}</td>
-                <td>{{ row.charpyimpact }}</td>
-                <td>{{ row.fractureToughness }}</td>
-                <td>{{ row.fractureEnergy }}</td>
-                <td>{{ row.totalShrinkage }}</td>
-                <td>{{ row.hardness }}</td>
-                <td>{{ row.waterAbsorption }}</td>
+                <td>{{ row.potLife|default_if_none:"" }}</td>
+                <td>{{ row.processT|default_if_none:"" }}</td>
+                <td>{{ row.curingCycle|default_if_none:"" }}</td>
+                <td>{{ row.tg|default_if_none:"" }}</td>
+                <td>{{ row.priceResin|default_if_none:"" }}</td>
+                <td>{{ row.priceHardener|default_if_none:"" }}</td>
+                <td>{{ row.densityR|default_if_none:"" }}</td>
+                <td>{{ row.flexuralStrength|default_if_none:"" }}</td>
+                <td>{{ row.flexuralmodulus|default_if_none:"" }}</td>
+                <td>{{ row.modulusElasticity|default_if_none:"" }}</td>
+                <td>{{ row.tensileStrength|default_if_none:"" }}</td>
+                <td>{{ row.elongationBreak|default_if_none:"" }}</td>
+                <td>{{ row.compressionUltStrength|default_if_none:"" }}</td>
+                <td>{{ row.compressionModulus|default_if_none:"" }}</td>
+                <td>{{ row.thermalExpansionCoefficient|default_if_none:"" }}</td>
+                <td>{{ row.charpyimpact|default_if_none:"" }}</td>
+                <td>{{ row.fractureToughness|default_if_none:"" }}</td>
+                <td>{{ row.fractureEnergy|default_if_none:"" }}</td>
+                <td>{{ row.totalShrinkage|default_if_none:"" }}</td>
+                <td>{{ row.hardness|default_if_none:"" }}</td>
+                <td>{{ row.waterAbsorption|default_if_none:"" }}</td>
 
 
                 <td>
@@ -142,6 +191,7 @@
                            onclick="deleteAction({{ row.id }});"/>
                 </td>
             </tr>
+            {% endif %}
         {% endfor %}
         </tbody>
     </table></div>

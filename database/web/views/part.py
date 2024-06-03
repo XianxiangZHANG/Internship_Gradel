@@ -7,18 +7,40 @@ from utils.encrypt import md5
 import django_filters
 
 class PartFilter(django_filters.FilterSet):
+    project = django_filters.ModelChoiceFilter(queryset=models.Project.objects.all())
+    partName = django_filters.CharFilter(field_name='partName', lookup_expr='icontains')
+    valid = django_filters.BooleanFilter(field_name='valid')  
 
     class Meta:
         model = models.Part
-        fields = {
-            'project': ['exact'], 
-            'partName': ['icontains'],
-        }
+        fields = ['project', 'partName', 'valid']
+    # class Meta:
+    #     model = models.Part
+    #     fields = {
+    #         'project': ['exact'], 
+    #         'partName': ['icontains'],
+    #     }
 def part_list(request):
     """ list of part """
 
     part_filter = PartFilter(request.GET, queryset=models.Part.objects.all())
     return render(request, 'part/part_list.html', {'filter': part_filter})
+
+class PartFilterValid(django_filters.FilterSet):
+    project = django_filters.ModelChoiceFilter(queryset=models.Project.objects.all())
+    partName = django_filters.CharFilter(field_name='partName', lookup_expr='icontains')
+    
+
+    class Meta:
+        model = models.Part
+        fields = ['project', 'partName',]
+   
+def part_valid(request):
+    """ list of part """
+
+    part_filter = PartFilterValid(request.GET, queryset=models.Part.objects.filter(valid=True))
+    return render(request, 'part/part_valid.html', {'filter': part_filter})
+
 
 def part_input(request):
     """ list of part """
@@ -62,7 +84,7 @@ class PartEditModelForm(forms.ModelForm):
         fields = ['project', 'partName',
                   'defaultInterfaceHeight', 'defaultInterfaceIntDiam', 'defaultLinkType', 'defaultLinkDefined', 
                   'totalMassBushing', 'additionalMass', 'totalMassStructure', 'totalFiberLength', 'totalFiberMass', 'totalResinMass', 'projectImage',
-                  'part_gh', 'part_mod', 'part_csv', 'part_rs', 'part_log', 'part_mp4', 'part_jpg'] 
+                  'part_gh', 'part_mod', 'part_csv', 'part_rs', 'part_log', 'part_mp4', 'part_jpg', 'valid'] 
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

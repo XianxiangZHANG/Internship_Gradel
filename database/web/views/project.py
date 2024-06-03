@@ -7,20 +7,45 @@ from utils.encrypt import md5
 import django_filters
 
 class ProjectFilter(django_filters.FilterSet):
+    projectName = django_filters.CharFilter(field_name='projectName', lookup_expr='icontains')
+    equipment = django_filters.CharFilter(field_name='equipment', lookup_expr='icontains')
+    customer = django_filters.CharFilter(field_name='customer', lookup_expr='icontains')
+    valid = django_filters.BooleanFilter(field_name='valid')  
 
     class Meta:
         model = models.Project
-        fields = {
-            'projectName': ['icontains'],
-            'equipment': ['icontains'],
-            'customer': ['icontains'],
-        }
+        fields = ['projectName', 'equipment', 'customer','valid']
+
+    # class Meta:
+    #     model = models.Project
+    #     fields = {
+    #         'projectName': ['icontains'],
+    #         'equipment': ['icontains'],
+    #         'customer': ['icontains'],
+    #     }
 
 def project_list(request):
     """ list of project """
 
     project_filter = ProjectFilter(request.GET, queryset=models.Project.objects.all())
     return render(request, 'project/project_list.html', {'filter': project_filter})
+
+class ProjectFilterValid(django_filters.FilterSet):
+    projectName = django_filters.CharFilter(field_name='projectName', lookup_expr='icontains')
+    equipment = django_filters.CharFilter(field_name='equipment', lookup_expr='icontains')
+    customer = django_filters.CharFilter(field_name='customer', lookup_expr='icontains')
+    
+    class Meta:
+        model = models.Project
+        fields = ['projectName', 'equipment', 'customer',]
+
+
+def project_valid(request):
+    """ list of project """
+
+    project_filter = ProjectFilterValid(request.GET, queryset=models.Project.objects.filter(valid=True))
+    return render(request, 'project/project_valid.html', {'filter': project_filter})
+
 
 class ProjectModelForm(forms.ModelForm):
     class Meta:
@@ -50,7 +75,7 @@ def project_add(request):
 class ProjectEditModelForm(forms.ModelForm):
     class Meta:
         model = models.Project
-        fields = ['projectName', 'equipment', 'customer', 'projectNo', 'partsNumber', 'relativeDesign', 'structureDrawingNb', 'documentNb', 'revision', 'lastUpdate']
+        fields = ['projectName', 'equipment', 'customer', 'projectNo', 'partsNumber', 'relativeDesign', 'structureDrawingNb', 'documentNb', 'revision', 'lastUpdate','valid']
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

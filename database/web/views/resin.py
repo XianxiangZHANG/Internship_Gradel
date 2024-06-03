@@ -7,15 +7,26 @@ from web import models
 import django_filters
 
 class ResinFilter(django_filters.FilterSet):
+    manufacturer = django_filters.CharFilter(field_name='manufacturer', lookup_expr='icontains')
+    resin = django_filters.CharFilter(field_name='resin', lookup_expr='icontains')
+    hardener = django_filters.CharFilter(field_name='hardener', lookup_expr='icontains')
+    accelerator = django_filters.CharFilter(field_name='accelerator', lookup_expr='icontains')
+    valid = django_filters.BooleanFilter(field_name='valid')  
 
     class Meta:
         model = models.Resin
-        fields = {
-            'manufacturer': ['icontains'], 
-            'resin': ['icontains'],
-            'hardener': ['icontains'],
-            'accelerator': ['icontains'],
-        }
+        fields = ['manufacturer', 'resin', 'hardener', 'accelerator', 'valid']
+
+    # class Meta:
+    #     model = models.Resin
+    #     valid = django_filters.BooleanFilter(field_name='valid')  
+    #     fields = {
+    #         'manufacturer': ['icontains'], 
+    #         'resin': ['icontains'],
+    #         'hardener': ['icontains'],
+    #         'accelerator': ['icontains'],
+    #         'valid':['']
+    #     }
 
 def resin_list(request):
     """ list of resin """
@@ -45,7 +56,7 @@ class ResinModelForm(forms.ModelForm):
                 'priceResin', 'priceHardener',
                 'densityR', 'flexuralStrength', 'flexuralmodulus', 'modulusElasticity', 'tensileStrength',
                 'elongationBreak', 'compressionUltStrength', 'compressionModulus','thermalExpansionCoefficient',
-                'charpyimpact', 'fractureToughness', 'fractureEnergy', 'totalShrinkage', 'hardness', 'waterAbsorption']
+                'charpyimpact', 'fractureToughness', 'fractureEnergy', 'totalShrinkage', 'hardness', 'waterAbsorption', 'valid']
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -62,7 +73,7 @@ class ResinForm(forms.ModelForm):
                 'priceResin', 'priceHardener',
                 'densityR', 'flexuralStrength', 'flexuralmodulus', 'modulusElasticity', 'tensileStrength',
                 'elongationBreak', 'compressionUltStrength', 'compressionModulus','thermalExpansionCoefficient',
-                'charpyimpact', 'fractureToughness', 'fractureEnergy', 'totalShrinkage', 'hardness', 'waterAbsorption']
+                'charpyimpact', 'fractureToughness', 'fractureEnergy', 'totalShrinkage', 'hardness', 'waterAbsorption', 'valid']
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -147,7 +158,7 @@ class ResinEditModelForm(forms.ModelForm):
                 'priceResin', 'priceHardener',
                 'densityR', 'flexuralStrength', 'flexuralmodulus', 'modulusElasticity', 'tensileStrength',
                 'elongationBreak', 'compressionUltStrength', 'compressionModulus','thermalExpansionCoefficient',
-                'charpyimpact', 'fractureToughness', 'fractureEnergy', 'totalShrinkage', 'hardness', 'waterAbsorption']
+                'charpyimpact', 'fractureToughness', 'fractureEnergy', 'totalShrinkage', 'hardness', 'waterAbsorption','valid']
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

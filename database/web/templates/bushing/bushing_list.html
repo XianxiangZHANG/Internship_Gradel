@@ -3,12 +3,13 @@
 
 {% block content %}
 
-    <!-- <div style="margin-bottom: 10px">
-        <a class="btn btn-success" href="/part/add/">
-            <span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span> New part
-        </a>
-    </div> -->
+    
     <div>
+        <div style="margin-bottom: 10px">
+            <a class="btn btn-success" href="/bushing/add-multiple/">
+                <span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span> New Bushings
+            </a>
+        </div>
         <h3>Bushing List:</h3>
         <form method="get" id="filterForm">
             {{ filter.form.as_p }}
@@ -34,16 +35,35 @@
         </thead>
         <tbody>
         {% for row in filter.qs %}
+            {% if row.part.valid %} 
+            <tr style="background-color: #67fafa70;">
+                <!-- <td>{{ row.id }}</td> -->
+                <td>{{ row.project.projectName|default_if_none:"" }}</td>
+                <td>{{ row.part.partName|default_if_none:"" }}</td>
+                <td>{{ row.bushingName|default_if_none:"" }}</td>
+                <td>{{ row.numberInterface|default_if_none:"" }}</td>
+                <td>{{ row.bushingDrawNb|default_if_none:"" }}</td>
+                <td>{{ row.AccOnBushing|default_if_none:"" }}</td>
+                <td>{{ row.bushingMass|default_if_none:"" }}</td>
+                <td>{{ row.totalBushingMass|default_if_none:"" }}</td>
+                <td>
+                    <a class="btn btn-primary btn-xs" href="/bushing/edit/{{ row.id }}/" style="width: 70px; text-align: center; margin-bottom: 5px;"> Edit </a>
+                    <br>
+                    <input type="button" value="Delete" class="btn btn-danger btn-xs" style="width: 70px; text-align: center;"
+                        onclick="deleteAction({{ row.id }});"/>
+                </td>
+            </tr>
+            {% else %}
             <tr>
                 <!-- <td>{{ row.id }}</td> -->
-                <td>{{ row.project.projectName }}</td>
-                <td>{{ row.part.partName }}</td>
-                <td>{{ row.bushingName }}</td>
-                <td>{{ row.numberInterface }}</td>
-                <td>{{ row.bushingDrawNb }}</td>
-                <td>{{ row.AccOnBushing }}</td>
-                <td>{{ row.bushingMass }}</td>
-                <td>{{ row.totalBushingMass }}</td>
+                <td>{{ row.project.projectName|default_if_none:"" }}</td>
+                <td>{{ row.part.partName|default_if_none:"" }}</td>
+                <td>{{ row.bushingName|default_if_none:"" }}</td>
+                <td>{{ row.numberInterface|default_if_none:"" }}</td>
+                <td>{{ row.bushingDrawNb|default_if_none:"" }}</td>
+                <td>{{ row.AccOnBushing|default_if_none:"" }}</td>
+                <td>{{ row.bushingMass|default_if_none:"" }}</td>
+                <td>{{ row.totalBushingMass|default_if_none:"" }}</td>
                 <td>
                     <a class="btn btn-primary btn-xs" href="/bushing/edit/{{ row.id }}/" style="width: 70px; text-align: center; margin-bottom: 5px;"> Edit </a>
                     <br>
@@ -51,6 +71,7 @@
                            onclick="deleteAction({{ row.id }});"/>
                 </td>
             </tr>
+            {% endif %}
         {% endfor %}
         </tbody>
     </table></div>

@@ -1,0 +1,140 @@
+{% extends 'layout.html' %}
+
+
+{% block content %}
+
+    <div>
+        <h3>Part List:</h3>
+        <form method="get" id="filterForm">
+            {{ filter.form.as_p }}
+            <button type="submit" id="btnf1">Filter</button>
+            <button type="reset" id="resetButton" class="btnf2">Reset</button>
+        </form>
+        <!-- <table id="transposedTable"></table> -->
+    <table class="table table-bordered" id="normalTable" >
+        <thead>
+        <tr>
+            <!-- <th>Part ID</th> -->
+            <th>Project Name</th>
+            <th>Part Name</th>
+            <th>Default Interface Height</th>
+            <th>Default Interface Int Diam</th>
+            <th>Default Link Type</th>
+            <th>Default Link Defined</th>
+            <th>Number Link</th>
+            <th>Number Bushing</th>
+            <th>Total Mass Link</th>
+            <th>Total Mass Accumulation</th>
+            <th>Total Mass Winding</th>
+            <th>Total Mass Bushing</th>
+            <th>Additional Mass</th>
+            <th>Total Mass Structure</th>
+            <th>Total Fiber Length</th>
+            <th>Total Fiber Mass</th>
+            <th>Total Resin Mass</th>
+            <th>Project Image</th>
+            <th>.gh</th>
+            <th>.mod</th>
+            <th>.csv</th>
+            <th>.rs</th>
+            <th>.log</th>
+            <th>.mp4</th>
+            <th>.jpg</th>
+            <th>Operations</th>
+
+
+        </tr>
+        </thead>
+        <tbody>
+        {% for row in filter.qs %}
+            
+            <tr>
+                <td>{{ row.project.projectName }}</td>
+                <td>{{ row.partName }}</td>
+                <td>{{ row.defaultInterfaceHeight|default_if_none:"" }}</td>
+                <td>{{ row.defaultInterfaceIntDiam|default_if_none:"" }}</td>
+                <td>{{ row.defaultLinkType|default_if_none:"" }}</td>
+                <td>{{ row.defaultLinkDefined|default_if_none:"" }}</td>
+                <td>{{ row.numberLink|default_if_none:"" }}</td>
+                <td>{{ row.numberBushing|default_if_none:"" }}</td>
+                <td>{{ row.totalMassLink|default_if_none:"" }}</td>
+                <td>{{ row.totalMassAccumulation|default_if_none:"" }}</td>
+                <td>{{ row.totalMassWinding|default_if_none:"" }}</td>
+                <td>{{ row.totalMassBushing|default_if_none:"" }}</td>
+                <td>{{ row.additionalMass|default_if_none:"" }}</td>
+                <td>{{ row.totalMassStructure|default_if_none:"" }}</td>
+                <td>{{ row.totalFiberLength|default_if_none:"" }}</td>
+                <td>{{ row.totalFiberMass|default_if_none:"" }}</td>
+                <td>{{ row.totalResinMass|default_if_none:"" }}</td>
+                <!-- <td><img src="{{ project.projectImage.url }}" alt="Project Image"></td> -->
+                <td>{{ row.projectImage|default_if_none:"" }}</td>
+                <td>{{ row.part_gh|default_if_none:"" }}</td>
+                <td>{{ row.part_mod|default_if_none:"" }}</td>
+                <td>{{ row.part_csv|default_if_none:"" }}</td>
+                <td>{{ row.part_rs|default_if_none:"" }}</td>
+                <td>{{ row.part_log|default_if_none:"" }}</td>
+                <td>{{ row.part_mp4|default_if_none:"" }}</td>
+                <td>{{ row.part_jpg|default_if_none:"" }}</td>
+                
+            </tr>
+         
+        {% endfor %}
+        </tbody>
+    </table></div>
+    
+
+{% endblock %}
+
+{% block js %}
+    <script>
+       
+
+        $('#resetButton').click(function() {
+        window.location.href = window.location.pathname; // 重定向到相同页面但无查询参数
+        });
+
+       
+    </script>
+{% endblock %}
+
+{% block css %}
+<style>
+    table {
+        border-collapse: collapse;
+        width: 100%;
+        margin-bottom: 100px;
+    }
+    th, td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: center;
+    }
+    tr:nth-child(even) {
+        background-color: #f2f2f2;
+    }
+    th {
+        background-color: #4CAF50;
+        color: white;
+    }
+    #btnf1, .btnf2{
+        width: 100px; 
+        background-color: #49b7be; 
+        color: white; 
+        padding: 5px 10px; 
+        margin: 8px;
+        margin-right: 0px;
+        border: none; 
+        border-radius: 4px;
+        cursor: pointer; 
+    }
+    #id_project, input[type="text"] {
+        width: 100%; 
+        padding: 8px; 
+        margin: 0px 0; 
+        display: inline-block;
+        border: 1px solid #ccc; 
+        border-radius: 4px; 
+        box-sizing: border-box; 
+    }
+</style>
+{% endblock %}

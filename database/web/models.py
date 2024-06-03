@@ -4,6 +4,7 @@ from django.db import models
 class Department(models.Model):
     """ DepartmentTable """
     title = models.CharField(verbose_name="Title", max_length=255)
+    # number = models.IntegerField(verbose_name="Number of members", null=True, blank=True)
 
     def __str__(self):
         return self.title
@@ -54,6 +55,7 @@ class Resin(models.Model):
     totalShrinkage = models.CharField(verbose_name="Total shrinkage at RT (Vol%)", max_length=255, null=True, blank=True)
     hardness = models.CharField(verbose_name="Hardness at RT", max_length=255, null=True, blank=True)
     waterAbsorption = models.CharField(verbose_name="Water absorption (7d at 23°C)", max_length=255, null=True, blank=True)
+    valid = models.BooleanField(verbose_name="Validation", default=False)
     
     def __str__(self):
         return f"{self.resin} / {self.hardener}"
@@ -78,6 +80,7 @@ class Fiber(models.Model):
     price22 = models.CharField(verbose_name="Price euros/kg (after 02/2022)", max_length=255, null=True, blank=True)
     price23 = models.CharField(verbose_name="Price euros/kg (after 02/2023)", max_length=255, null=True, blank=True)
     price24 = models.CharField(verbose_name="Price euros/kg (after 01/2024)", max_length=255, null=True, blank=True)
+    valid = models.BooleanField(verbose_name="Validation", default=False)
 
     
     def __str__(self):
@@ -85,13 +88,13 @@ class Fiber(models.Model):
 
 class R_and_D(models.Model):
     """ R&D Table """
-    program = models.CharField(verbose_name="Program :", max_length=255)
-    projectNr = models.CharField(verbose_name="Project Nr. :", max_length=255)
+    program = models.CharField(verbose_name="Program ", max_length=255)
+    projectNr = models.CharField(verbose_name="Project Nr. ", max_length=255)
 
-    ERMDS = models.CharField(verbose_name="ERMDS Nr. :", max_length=255)
-    lastUpdate = models.CharField(verbose_name="Last update :", max_length=255, null=True, blank=True)
-    verifiedBy = models.CharField(verbose_name="Verified by:", max_length=255, null=True, blank=True)
-    approvedBy = models.CharField(verbose_name="Approved by :", max_length=255, null=True, blank=True)
+    ERMDS = models.CharField(verbose_name="ERMDS Nr. ", max_length=255)
+    lastUpdate = models.CharField(verbose_name="Last update ", max_length=255, null=True, blank=True)
+    verifiedBy = models.CharField(verbose_name="Verified by", max_length=255, null=True, blank=True)
+    approvedBy = models.CharField(verbose_name="Approved by ", max_length=255, null=True, blank=True)
 
     fiber = models.ForeignKey(verbose_name="Fiber", to=Fiber, on_delete=models.CASCADE, to_field='id')
     numberOfBobbins = models.IntegerField(verbose_name="Number of bobbins", null=True, blank=True)
@@ -242,6 +245,7 @@ class R_and_D(models.Model):
     maxiTorqueC = models.CharField(default="Samples number: ", max_length=255, null=True, blank=True)
     yieldAngleC = models.CharField(default="Samples number: ", max_length=255, null=True, blank=True)
     maxiTwistedAngleC = models.CharField(default="Samples number: ", max_length=255, null=True, blank=True)
+    valid = models.BooleanField(verbose_name="Validation", default=False)
 
 
 # class RDComment(models.Model):
@@ -349,6 +353,7 @@ class Project(models.Model):
     documentNb = models.CharField(verbose_name="Document Nr", max_length=255, null=True, blank=True)
     revision = models.CharField(verbose_name="Revision", max_length=255, null=True, blank=True)
     lastUpdate = models.DateField(verbose_name="Last Update M/D/Y", null=True, blank=True)
+    valid = models.BooleanField(verbose_name="Validation", default=False)
 
     def __str__(self):
         return self.projectName
@@ -413,6 +418,7 @@ class Part(models.Model):
 
     project = models.ForeignKey(verbose_name="Project Name", to=Project, on_delete=models.CASCADE, to_field='id')
     # project = models.ForeignKey(verbose_name="Project Name", to=Project, on_delete=models.CASCADE)
+    valid = models.BooleanField(verbose_name="Validation", default=False)
 
     def __str__(self):
         return self.partName
@@ -431,6 +437,7 @@ class Bushing(models.Model):
 
     project = models.ForeignKey(verbose_name="Project Name", to=Project, on_delete=models.CASCADE, to_field='id')
     part = models.ForeignKey(verbose_name="Part Name", to=Part, on_delete=models.CASCADE,  to_field='id')
+    # valid = models.BooleanField(verbose_name="Validation", default=False)
 
     def __str__(self):
         return self.bushingName
@@ -464,6 +471,7 @@ class Interface(models.Model):
 
     ########   3   ########
     divisionStep = models.IntegerField(verbose_name="Division Step", null=True, blank=True)
+    # valid = models.BooleanField(verbose_name="Validation", default=False)
 
     project = models.ForeignKey(verbose_name="Project Name", to=Project, on_delete=models.CASCADE, to_field='id')
     part = models.ForeignKey(verbose_name="Part Name", to=Part, on_delete=models.CASCADE,  to_field='id')
@@ -491,6 +499,7 @@ class Link(models.Model):
     finArmRadius = models.FloatField(verbose_name="Fin. Arm Radius[m]", null=True, blank=True)
     mass = models.FloatField(verbose_name="Mass[g]", null=True, blank=True)
     angle = models.FloatField(verbose_name="Angle", null=True, blank=True)
+    # valid = models.BooleanField(verbose_name="Validation", default=False)
 
     project = models.ForeignKey(verbose_name="Project Name", to=Project, on_delete=models.CASCADE, to_field='id')
     part = models.ForeignKey(verbose_name="Part Name", to=Part, on_delete=models.CASCADE, to_field='id')
@@ -507,6 +516,7 @@ class SequenceType(models.Model):
     ########   3   ########
     sequenceType = models.CharField(verbose_name="Sequence Type", max_length=255, unique= True)
     description = models.CharField(verbose_name="Description", max_length=255, null=True, blank=True)
+    valid = models.BooleanField(verbose_name="Validation", default=False)
 
     def __str__(self):
         return self.sequenceType
@@ -517,6 +527,7 @@ class Winding(models.Model):
     project = models.ForeignKey(verbose_name="Project Name", to=Project, on_delete=models.CASCADE, to_field='id')
     part = models.ForeignKey(verbose_name="Part Name", to=Part, on_delete=models.CASCADE, to_field='id')
     link = models.ForeignKey(verbose_name="Link Name", to=Link, on_delete=models.CASCADE, to_field='id')
+    link = models.CharField(verbose_name="Link Name", max_length=255 )
     # interface = models.ForeignKey(verbose_name="Interface Name", to=Interface, on_delete=models.CASCADE, to_field='id')
     # interface1 = models.ForeignKey(Interface, related_name='interface1', on_delete=models.CASCADE, to_field='id')
     # interface2 = models.ForeignKey(Interface, related_name='interface2', on_delete=models.CASCADE, to_field='id')
@@ -524,3 +535,4 @@ class Winding(models.Model):
     interface2 = models.CharField(verbose_name="Interface Transition", max_length=255)
     interface3 = models.CharField(verbose_name="Interface End", max_length=255)
     sequence = models.ForeignKey(verbose_name="WindingType Description", to=SequenceType, on_delete=models.CASCADE, to_field='id')
+    # valid = models.BooleanField(verbose_name="Validation", default=False)

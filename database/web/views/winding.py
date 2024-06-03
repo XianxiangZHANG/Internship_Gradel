@@ -21,6 +21,12 @@ def winding_list(request):
     winding_filter = WindingFilter(request.GET, queryset=models.Winding.objects.all())
     return render(request, 'winding/winding_list.html', {'filter': winding_filter})
 
+def winding_valid(request):
+    """ list of winding """
+
+    winding_filter = WindingFilter(request.GET, queryset=models.Winding.objects.filter(part__valid=True))
+    return render(request, 'winding/winding_valid.html', {'filter': winding_filter})
+
 def winding_input(request):
     """ list of winding """
 
@@ -44,7 +50,7 @@ class WindingModelForm(forms.ModelForm):
 class ProjectPartForm(forms.Form):
     project = forms.ModelChoiceField(queryset=models.Project.objects.all(), required=True)
     part = forms.ModelChoiceField(queryset=models.Part.objects.all(), required=True)
-    link = forms.ModelChoiceField(queryset=models.Link.objects.all(), required=True)
+    # link = forms.ModelChoiceField(queryset=models.Link.objects.all(), required=True)
     
 
 WindingFormSet = modelformset_factory(
@@ -57,21 +63,22 @@ def winding_add_multiple(request):
     projects = models.Project.objects.all()
     formset = WindingFormSet(queryset=models.Winding.objects.none())
     project_part_form = ProjectPartForm()
-   
+
 
     if request.method == 'POST':
         formset = WindingFormSet(request.POST)
         project_part_form = ProjectPartForm(request.POST)
 
         if formset.is_valid() and project_part_form.is_valid(): 
+            print("valid")
             instances = formset.save(commit=False)
             project = project_part_form.cleaned_data['project']
             part = project_part_form.cleaned_data['part']
-            link = project_part_form.cleaned_data['link']
+            # link = project_part_form.cleaned_data['link']
             for instance in instances:
                 instance.project = project
                 instance.part = part
-                instance.link = link
+                # instance.link = link
                 instance.save()
             return redirect('/winding/list/')  # Replace with your redirect URL
         else:

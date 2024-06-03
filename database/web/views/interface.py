@@ -22,6 +22,11 @@ def interface_list(request):
     interface_filter = InterfaceFilter(request.GET, queryset=models.Interface.objects.all())
     return render(request, 'interface/interface_list.html', {'filter': interface_filter})
 
+def interface_valid(request):
+    """ list of interface """
+    interface_filter = InterfaceFilter(request.GET, queryset=models.Interface.objects.filter(part__valid=True))
+    return render(request, 'interface/interface_valid.html', {'filter': interface_filter})
+
 def interface_input(request):
     """ list of interface """
 

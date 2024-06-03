@@ -28,10 +28,23 @@
         </thead>
         <tbody>
         {% for row in filter.qs %}
+            {% if row.valid %}
+            <tr style="background-color: #67fafa70;">
+                <!-- <td>{{ row.id }}</td> -->
+                <td>{{ row.sequenceType }}</td>
+                <td>{{ row.description|default_if_none:"" }}</td>
+                <td>
+                    <a class="btn btn-primary btn-xs" href="/sequenceType/edit/{{ row.id }}/" style="width: 70px; text-align: center; margin-bottom: 5px;"> Edit </a>
+                
+                    <input type="button" value="Delete" class="btn btn-danger btn-xs" style="width: 70px; text-align: center; margin-bottom: 5px;"
+                        onclick="deleteAction({{ row.id }});"/>
+                </td>
+            </tr>
+            {% else %}
             <tr>
                 <!-- <td>{{ row.id }}</td> -->
                 <td>{{ row.sequenceType }}</td>
-                <td>{{ row.description }}</td>
+                <td>{{ row.description|default_if_none:"" }}</td>
                 <td>
                     <a class="btn btn-primary btn-xs" href="/sequenceType/edit/{{ row.id }}/" style="width: 70px; text-align: center; margin-bottom: 5px;"> Edit </a>
                 
@@ -39,6 +52,7 @@
                            onclick="deleteAction({{ row.id }});"/>
                 </td>
             </tr>
+            {% endif %}
         {% endfor %}
         </tbody>
     </table></div>

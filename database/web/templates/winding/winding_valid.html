@@ -1,0 +1,123 @@
+{% extends 'layout.html' %}
+
+
+{% block content %}
+
+    <div>
+        <h3>Link List:</h3>
+        <form method="get" id="filterForm">
+            {{ filter.form.as_p }}
+            <button type="submit" id="btnf1">Filter</button>
+            <button type="reset" id="resetButton" class="btnf2">Reset</button>
+        </form>
+        
+    <table class="table table-bordered" id="normalTable">
+        <thead>
+        <tr>
+            <th style="width: 20%;">Link</th>
+            <th style="width: 20%;">Interface Start</th>
+            <th style="width: 20%;">Interface Transition</th>
+            <th style="width: 20%;">Interface End</th>
+            <th style="width: 10%;">Winding Type</th>
+            
+        </tr>
+        </thead>
+        <tbody>
+        {% for row in filter.qs %}
+           
+            <tr>
+                <!-- <td>{{ row.id }}</td> -->
+                <td>{{ row.link }}</td>
+                <td>{{ row.interface1|default_if_none:"" }}</td>
+                <td>{{ row.interface2|default_if_none:"" }}</td>
+                <td>{{ row.interface3|default_if_none:"" }}</td>
+                <td>{{ row.sequence|default_if_none:"" }}</td>
+               
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table></div>
+    
+
+{% endblock %}
+
+{% block js %}
+        <script>
+        //     function transposeTable() {
+        //     const normalTable = document.getElementById('normalTable');
+        //     const transposedTable = document.getElementById('transposedTable');
+
+        //     // Get the maximum number of columns any row has
+        //     let maxCols = 0;
+        //     for (const row of normalTable.rows) {
+        //         if (row.cells.length > maxCols) {
+        //             maxCols = row.cells.length;
+        //         }
+        //     }
+
+        //     // Create new rows for each column in the original table
+        //     for (let i = 0; i < maxCols; i++) {
+        //         const newRow = transposedTable.insertRow();
+        //         for (const row of normalTable.rows) {
+        //             const newCell = newRow.insertCell();
+        //             if (i < row.cells.length) {
+        //                 newCell.innerHTML = row.cells[i].innerHTML;
+        //             } else {
+        //                 newCell.innerHTML = ''; // Fill in empty if no data exists for this transposed cell
+        //             }
+        //         }
+        //     }
+        // }
+
+        // transposeTable();
+
+        $('#resetButton').click(function() {
+        window.location.href = window.location.pathname; // 重定向到相同页面但无查询参数
+        });
+
+      
+    </script>
+    
+{% endblock %}
+
+{% block css %}
+<style>
+    table {
+        border-collapse: collapse;
+        width: 100%;
+        margin-bottom: 100px;
+    }
+    th, td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: center;
+    }
+    tr:nth-child(even) {
+        background-color: #f2f2f2;
+    }
+    th {
+        background-color: #4CAF50;
+        color: white;
+    }
+    #btnf1, .btnf2{
+        width: 100px; 
+        background-color: #49b7be; 
+        color: white; 
+        padding: 5px 10px; 
+        margin: 8px;
+        margin-right: 0px;
+        border: none; 
+        border-radius: 4px;
+        cursor: pointer; 
+    }
+    #id_project, #id_part, input[type="text"] {
+        width: 100%; 
+        padding: 8px; 
+        margin: 0px 0; 
+        display: inline-block;
+        border: 1px solid #ccc; 
+        border-radius: 4px; 
+        box-sizing: border-box; 
+    }
+</style>
+{% endblock %}

@@ -22,6 +22,12 @@ def link_list(request):
     link_filter = LinkFilter(request.GET, queryset=models.Link.objects.all())
     return render(request, 'link/link_list.html', {'filter': link_filter})
 
+def link_valid(request):
+    """ list of link """
+
+    link_filter = LinkFilter(request.GET, queryset=models.Link.objects.filter(part__valid=True))
+    return render(request, 'link/link_valid.html', {'filter': link_filter})
+
 def link_input(request):
     """ list of link """
 

@@ -1,0 +1,109 @@
+{% extends 'layout.html' %}
+
+
+{% block content %}
+
+    
+    
+    <div>
+        
+    <h3>Project List:</h3>
+    <form method="get" id="filterForm" class="from_f">
+        {{ filter.form.as_p }}
+        <button type="submit" id="btnf1">Filter</button>
+        <button type="reset" id="resetButton" class="btnf2">Reset</button>
+    </form>
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <!-- <th>Project ID</th> -->
+            <th>Project Name</th>
+            <th>Equipment</th>
+            <th>Customer</th>
+            <th>Project No.</th>
+            <th>Number Of Parts</th>
+            <th>Relative Design</th>
+            <th>Structure Drawing Nb</th>
+            <th>Document No.</th>
+            <th>Revision</th>
+            <th>Last Updata</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for row in filter.qs %}
+           
+            <tr>
+                <td>{{ row.projectName }}</td>
+                <td>{{ row.equipment|default_if_none:"" }}</td>
+                <td>{{ row.customer|default_if_none:"" }}</td>
+                <td>{{ row.projectNo|default_if_none:"" }}</td>
+                <td>{{ row.partsNumber }}</td>
+                <td>{{ row.relativeDesign|default_if_none:"" }}</td>
+                <td>{{ row.structureDrawingNb|default_if_none:"" }}</td>
+                <td>{{ row.documentNb|default_if_none:"" }}</td>
+                <td>{{ row.revision|default_if_none:"" }}</td>
+                <td>{{ row.lastUpdate|default_if_none:"" }}</td>
+               
+            </tr>
+       
+        {% endfor %}
+        </tbody>
+    </table></div>
+
+
+{% endblock %}
+
+{% block js %}
+    <script>
+        $('#resetButton').click(function() {
+        window.location.href = window.location.pathname; 
+        });
+
+    
+    </script>
+{% endblock %}
+
+{% block css %}
+<style>
+    table {
+        border-collapse: collapse;
+        width: 100%;
+        margin-bottom: 100px;
+    }
+    th, td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: center;
+    }
+    tr:nth-child(even) {
+        background-color: #f2f2f2;
+    }
+    th {
+        background-color: #4CAF50;
+        color: white;
+    }
+  
+    #btnf1, .btnf2{
+        width: 100px; 
+        background-color: #49b7be; 
+        color: white; 
+        padding: 5px 10px; 
+        margin: 8px;
+        margin-right: 0px;
+        border: none; 
+        border-radius: 4px;
+        cursor: pointer; 
+    }
+    input[type="text"] {
+        width: 100%; 
+        padding: 8px; 
+        margin: 0px 0; 
+        display: inline-block;
+        border: 1px solid #ccc; 
+        border-radius: 4px; 
+        box-sizing: border-box; 
+    }
+ 
+   
+</style>
+{% endblock %}

@@ -8,14 +8,20 @@ from utils.encrypt import md5
 import django_filters
 
 class SequenceTypeFilter(django_filters.FilterSet):
-    # sequenceTypeName = django_filters.CharFilter(lookup_expr='icontains')
+    sequenceType = django_filters.CharFilter(field_name='sequenceType', lookup_expr='icontains')
+    description = django_filters.CharFilter(field_name='description', lookup_expr='icontains')
+    valid = django_filters.BooleanFilter(field_name='valid')  
 
     class Meta:
-        model = models.SequenceType
-        fields = {
-            'sequenceType': ['icontains'],
-            'description': ['icontains'],
-        }
+        model = models.Resin
+        fields = ['sequenceType', 'description', 'valid']
+
+    # class Meta:
+    #     model = models.SequenceType
+    #     fields = {
+    #         'sequenceType': ['icontains'],
+    #         'description': ['icontains'],
+    #     }
 
 def sequenceType_list(request):
     """ list of sequenceType """
@@ -23,10 +29,26 @@ def sequenceType_list(request):
     sequenceType_filter = SequenceTypeFilter(request.GET, queryset=models.SequenceType.objects.all())
     return render(request, 'sequenceType/sequenceType_list.html', {'filter': sequenceType_filter})
 
+
+class SequenceTypeFilterValid(django_filters.FilterSet):
+    sequenceType = django_filters.CharFilter(field_name='sequenceType', lookup_expr='icontains')
+    description = django_filters.CharFilter(field_name='description', lookup_expr='icontains')
+   
+    class Meta:
+        model = models.Resin
+        fields = ['sequenceType', 'description', ]
+
+def sequenceType_valid(request):
+    """ list of sequenceType """
+
+    sequenceType_filter = SequenceTypeFilterValid(request.GET, queryset=models.SequenceType.objects.filter(valid=True))
+    return render(request, 'sequenceType/sequenceType_valid.html', {'filter': sequenceType_filter})
+
+
 class SequenceTypeModelForm(forms.ModelForm):
     class Meta:
         model = models.SequenceType
-        fields = ['sequenceType', 'description',]
+        fields = ['sequenceType', 'description', 'valid']
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -98,7 +120,7 @@ def sequenceType_modify_multiple(request):
 class SequenceTypeEditModelForm(forms.ModelForm):
     class Meta:
         model = models.SequenceType
-        fields = ['sequenceType', 'description',]
+        fields = ['sequenceType', 'description', 'valid']
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

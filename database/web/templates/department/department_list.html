@@ -12,24 +12,27 @@
             </a>
         </div>
     <h3>Department List:</h3>
-    <form method="get" id="filterForm" class="from_f">
+    <!-- <form method="get" id="filterForm" class="from_f">
         {{ filter.form.as_p }}
         <button type="submit" id="btnf1">Filter</button>
         <button type="reset" id="resetButton" class="btnf2">Reset</button>
-    </form>
+    </form> -->
     <table class="table table-bordered">
         <thead>
         <tr>
             <!-- <th>Project ID</th> -->
-            <th style="width: 60%;">Department</th>
-            <th style="width: 40%;">Operations</th>
+            <th style="width: 40%;">Department</th>
+            <th style="width: 30%;">Number of members</th>
+            <th style="width: 30%;">Operations</th>
         </tr>
         </thead>
         <tbody>
-        {% for row in filter.qs %}
+        
+        {% for row in departments %}
             <tr>
                 <!-- <td>{{ row.id }}</td> -->
-                <td>{{ row.title }}</td>
+                <td>{{ row.title|default_if_none:"" }}</td>
+                <td>{{ row.employee_count }}</td>
                 <td>
                     <a class="btn btn-primary btn-xs" href="/department/edit/{{ row.id }}/" style="width: 70px; text-align: center; margin-bottom: 5px;"> Edit </a>
                 

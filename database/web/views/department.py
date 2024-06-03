@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect, HttpResponse
 from django.http import JsonResponse
 from django import forms
 from django.forms import modelformset_factory
+from django.db.models import Count
 
 from web import models
 from utils.encrypt import md5
@@ -17,10 +18,15 @@ class DepartmentFilter(django_filters.FilterSet):
         }
 
 def department_list(request):
-    """ list of department """
+    departments = models.Department.objects.annotate(employee_count=Count('user'))
+    return render(request, 'department/department_list.html', {'departments': departments})
 
-    department_filter = DepartmentFilter(request.GET, queryset=models.Department.objects.all())
-    return render(request, 'department/department_list.html', {'filter': department_filter})
+
+# def department_list(request):
+#     """ list of department """
+
+#     department_filter = DepartmentFilter(request.GET, queryset=models.Department.objects.all())
+#     return render(request, 'department/department_list.html', {'filter': department_filter})
 
 class DepartmentModelForm(forms.ModelForm):
     class Meta:

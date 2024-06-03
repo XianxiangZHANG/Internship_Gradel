@@ -7,16 +7,25 @@ from web import models
 import django_filters
 
 class R_and_DFilter(django_filters.FilterSet):
+    program = django_filters.CharFilter(field_name='program', lookup_expr='icontains')
+    projectNr = django_filters.CharFilter(field_name='projectNr', lookup_expr='icontains')
+    ERMDS = django_filters.CharFilter(field_name='ERMDS', lookup_expr='icontains')
+    fiber = django_filters.ModelChoiceFilter(queryset=models.Fiber.objects.all())
+    resin = django_filters.ModelChoiceFilter(queryset=models.Resin.objects.all())
+    valid = django_filters.BooleanFilter(field_name='valid')  
 
     class Meta:
-        model = models.R_and_D
-        fields = {
-            'program': ['icontains'], 
-            'projectNr': ['icontains'],
-            'ERMDS': ['icontains'],
-            'fiber': ['exact'],
-            'resin': ['exact'],
-        }
+        model = models.Resin
+        fields = ['program', 'projectNr', 'ERMDS', 'fiber', 'resin', 'valid']
+    # class Meta:
+    #     model = models.R_and_D
+    #     fields = {
+    #         'program': ['icontains'], 
+    #         'projectNr': ['icontains'],
+    #         'ERMDS': ['icontains'],
+    #         'fiber': ['exact'],
+    #         'resin': ['exact'],
+    #     }
 
 
 class R_and_DFilterModify(django_filters.FilterSet):
@@ -318,7 +327,7 @@ class R_and_DEditModelForm(forms.ModelForm):
                 'compressionUltimateLoadC', 'compressionYieldStressC', 'compressionYieldStressMAC', 'compressionYieldStressMBC', 'compressionYieldLoadC', 'poissonRatioC',
                 'flexuralModulusILSSC', 'ultimateShearForceC', 'ultimateShearStressC', 'ultimateShearStressMAC', 'ultimateShearStressMBC',
                 'flexuralModulusFC', 'flexuralUltimateStrengthC', 'flexuralUltimateStrengthMAC', 'flexuralUltimateStrengthMBC', 'strainUltimateStrengthC', 'flexuralUltimateForceC',
-                'yieldTorqueC', 'maxiTorqueC', 'yieldAngleC', 'maxiTwistedAngleC',]
+                'yieldTorqueC', 'maxiTorqueC', 'yieldAngleC', 'maxiTwistedAngleC', 'valid']
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
