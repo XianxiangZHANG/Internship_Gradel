@@ -3,11 +3,7 @@
 {% block content %}
 <div>
     <h3>Resin List:</h3>
-    <form method="get" id="filterForm">
-        {{ filter.form.as_p }}
-        <button type="submit" id="btnf1">Filter</button>
-        <button type="reset" id="resetButton" class="btnf2">Reset</button>
-    </form>
+   
 
     <form method="post">
         {% csrf_token %}
@@ -15,35 +11,24 @@
         <table class="table table-bordered" id="resin-table">
             <thead>
                 <tr>
-                    <tr>
-                        <th rowspan="2">Manufacturer</th>
-                        <th colspan="3">Resin system</th>
-                        <th colspan="3">Ratio(weight)</th>
-                        <th colspan="3">Ratio(volume)</th>
-                        <th rowspan="2">Pot life (Process T°;h)</th>
-                        <th rowspan="2">Process T (°C)</th>
-                        <th rowspan="2">Curing cycle</th>
-                        <th rowspan="2">Tg (°C)</th>
-                        <th rowspan="2">Price resin</th>
-                        <th rowspan="2">Price hardener</th>
-                        <th rowspan="2">Density (g/cm³)</th>
-                        <th rowspan="2">Validation</th>
-
-
-                        <th colspan="2" rowspan="2" style="width: 100px;">Operation</th>
-                    </tr>
-                    <tr>
-                        <th>Resin</th>
-                        <th>Hardener</th>
-                        <th>Accelerator</th>
-                        <th id="RHA">R</th>
-                        <th id="RHA">H</th>
-                        <th id="RHA">A</th>
-                        <th id="RHA">R</th>
-                        <th id="RHA">H</th>
-                        <th id="RHA">A</th>
-                        
-                    </tr>
+                    <th rowspan="2">Manufacturer</th>
+                    <th colspan="3">Resin system</th>
+                    
+                    <th rowspan="2">Flexural strength (MPa)</th>
+                    <th rowspan="2">Flexural modulus (GPa)</th>
+                    <th rowspan="2">Modulus of elasticity (GPa) (tensile)</th>
+                    <th rowspan="2">Tensile strength (MPa)</th>
+                    <th rowspan="2">Elongation at break (%)</th>
+                    <th rowspan="2">Compression ult. strength (MPa)</th>
+                    <th rowspan="2">Compression modulus (GPa)</th>
+                    
+                    
+                </tr>
+                <tr>
+                    <th>Resin</th>
+                    <th>Hardener</th>
+                    <th>Accelerator</th>
+                    
                 </tr>
             </thead>
             <tbody>
@@ -53,9 +38,9 @@
                     <td contenteditable="true">{{ field }}</td>
                     <span style="color: red;">{{ field.errors.0 }}</span>
                     {% endfor %}
-                    <td class="text-center"><button type="button" class="btn btn-danger remove-form">Delete</button></td>
                 </tr>
                 {% endfor %}
+                
             </tbody>
         </table>
         <button type="submit" class="btn btn-primary" id="btns">Save</button>
@@ -85,6 +70,7 @@
         margin-bottom: 200px;
     }
     th, td {
+        width: 10%;
         border: 1px solid #ddd;
         padding: 8px;
         text-align: center;
@@ -125,9 +111,6 @@
         border: 1px solid #ccc;
         border-radius: 4px;
         box-sizing: border-box;
-    }
-    #RHA {
-        width: 60px;
     }
 </style>
 {% endblock %}

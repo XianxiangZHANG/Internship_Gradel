@@ -34,6 +34,20 @@ def resin_list(request):
     resin_filter = ResinFilter(request.GET, queryset=models.Resin.objects.all())
     return render(request, 'resin/resin_list.html', {'filter': resin_filter})
 
+def resin_list_mechanical_properties(request):
+    """ list of resin """
+
+    resin_filter = ResinFilter(request.GET, queryset=models.Resin.objects.all())
+    return render(request, 'resin/resin_list_mechanical_properties.html', {'filter': resin_filter})
+   
+
+def resin_list_thermophysical_toughness_properties(request):
+    """ list of resin """
+
+    resin_filter = ResinFilter(request.GET, queryset=models.Resin.objects.all())
+    return render(request, 'resin/resin_list_thermophysical_toughness_properties.html', {'filter': resin_filter})
+  
+
 
 class ResinFilterValid(django_filters.FilterSet):
     manufacturer = django_filters.CharFilter(field_name='manufacturer', lookup_expr='icontains')
@@ -51,6 +65,19 @@ def resin_valid(request):
 
     resin_filter = ResinFilterValid(request.GET, queryset=models.Resin.objects.filter(valid=True))
     return render(request, 'resin/resin_valid.html', {'filter': resin_filter})
+
+def resin_valid_mechanical_properties(request):
+    """ list of resin """
+
+    resin_filter = ResinFilterValid(request.GET, queryset=models.Resin.objects.filter(valid=True))
+    return render(request, 'resin/resin_valid_mechanical_properties.html', {'filter': resin_filter})
+
+def resin_valid_thermophysical_toughness_properties(request):
+    """ list of resin """
+
+    resin_filter = ResinFilterValid(request.GET, queryset=models.Resin.objects.filter(valid=True))
+    return render(request, 'resin/resin_valid_thermophysical_toughness_properties.html', {'filter': resin_filter})
+
 
 def resin_input(request):
     """ list of resin """
@@ -130,13 +157,96 @@ def resin_add_multiple(request):
         'formset': formset,
     })
 
+class ResinModelFormInit(forms.ModelForm):
+    class Meta:
+        model = models.Resin
+        fields = ['manufacturer', 'resin', 'hardener', 'accelerator',
+                'ratioWR', 'ratioWH', 'ratioWA', 'ratioVR', 'ratioVH', 'ratioVA',
+                'potLife', 'processT', 'curingCycle', 'tg',
+                'priceResin', 'priceHardener',
+                'densityR', 'valid']
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for name, field_object in self.fields.items():
+            field_object.widget.attrs = {"class": "form-control"}
+
+class ResinModelFormM(forms.ModelForm):
+    class Meta:
+        model = models.Resin
+        fields = ['manufacturer', 'resin', 'hardener', 'accelerator',
+                'flexuralStrength', 'flexuralmodulus', 'modulusElasticity', 'tensileStrength',
+                'elongationBreak', 'compressionUltStrength', 'compressionModulus',]
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for name, field_object in self.fields.items():
+            field_object.widget.attrs = {"class": "form-control"}
+
+class ResinModelFormTT(forms.ModelForm):
+    class Meta:
+        model = models.Resin
+        fields = ['manufacturer', 'resin', 'hardener', 'accelerator',
+                'thermalExpansionCoefficient', 'charpyimpact', 'fractureToughness', 
+                'fractureEnergy', 'totalShrinkage', 'hardness', 'waterAbsorption',]
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for name, field_object in self.fields.items():
+            field_object.widget.attrs = {"class": "form-control"}
+
+def resin_add_mechanical_properties(request):
+    # Get filtered data
+    resin_filter = ResinFilter(request.GET, queryset=models.Resin.objects.all())
+    
+    # Define form set
+    ResinFormSet = modelformset_factory(models.Resin, form=ResinModelFormM, extra=0)
+    
+    if request.method == 'POST':
+        print("post")
+        formset = ResinFormSet(request.POST)
+        print(formset)
+        if formset.is_valid():
+            print("valid")
+            formset.save()
+            return redirect('/resin/list-mechanical-properties/')
+    else:
+        formset = ResinFormSet(queryset=resin_filter.qs)
+
+    return render(request, 'resin/resin_add_mechanical_properties.html', {
+        'filter': resin_filter,
+        'formset': formset,
+    })
+  
+
+def resin_add_thermophysical_toughness_properties(request):
+    # Get filtered data
+    resin_filter = ResinFilter(request.GET, queryset=models.Resin.objects.all())
+    
+    # Define form set
+    ResinFormSet = modelformset_factory(models.Resin, form=ResinModelFormTT, extra=0)
+    
+    if request.method == 'POST':
+        formset = ResinFormSet(request.POST)
+        print(formset)
+        if formset.is_valid():
+            formset.save()
+            return redirect('/resin/list-thermophysical-toughness-properties/')
+    else:
+        formset = ResinFormSet(queryset=resin_filter.qs)
+
+    return render(request, 'resin/resin_add_thermophysical_toughness_properties.html', {
+        'filter': resin_filter,
+        'formset': formset,
+    })
+
 
 def resin_modify_multiple(request):
     # Get filtered data
     resin_filter = ResinFilter(request.GET, queryset=models.Resin.objects.all())
     
     # Define form set
-    ResinFormSet = modelformset_factory(models.Resin, form=ResinModelForm, extra=0)
+    ResinFormSet = modelformset_factory(models.Resin, form=ResinModelFormInit, extra=0)
     
     if request.method == 'POST':
         formset = ResinFormSet(request.POST)
@@ -151,6 +261,50 @@ def resin_modify_multiple(request):
         'formset': formset,
     })
 
+def resin_modify_mechanical_properties(request):
+    # Get filtered data
+    resin_filter = ResinFilter(request.GET, queryset=models.Resin.objects.all())
+    
+    # Define form set
+    ResinFormSet = modelformset_factory(models.Resin, form=ResinModelFormM, extra=0)
+    
+    if request.method == 'POST':
+        print("post")
+        formset = ResinFormSet(request.POST)
+        print(formset)
+        if formset.is_valid():
+            print("valid")
+            formset.save()
+            return redirect('/resin/list-mechanical-properties/')
+    else:
+        formset = ResinFormSet(queryset=resin_filter.qs)
+
+    return render(request, 'resin/resin_modify_mechanical_properties.html', {
+        'filter': resin_filter,
+        'formset': formset,
+    })
+  
+
+def resin_modify_thermophysical_toughness_properties(request):
+    # Get filtered data
+    resin_filter = ResinFilter(request.GET, queryset=models.Resin.objects.all())
+    
+    # Define form set
+    ResinFormSet = modelformset_factory(models.Resin, form=ResinModelFormTT, extra=0)
+    
+    if request.method == 'POST':
+        formset = ResinFormSet(request.POST)
+        print(formset)
+        if formset.is_valid():
+            formset.save()
+            return redirect('/resin/list-thermophysical-toughness-properties/')
+    else:
+        formset = ResinFormSet(queryset=resin_filter.qs)
+
+    return render(request, 'resin/resin_modify_thermophysical_toughness_properties.html', {
+        'filter': resin_filter,
+        'formset': formset,
+    })
 
 def resin_add(request):
     if request.method == "GET":
