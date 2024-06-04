@@ -35,6 +35,7 @@ urlpatterns = [
     path('changePassword/<int:aid>/', account.changePassword),
 
     path('fiber/list/', fiber.fiber_list),
+    path('fiber/valid/', fiber.fiber_valid),
     path('fiber/add/', fiber.fiber_add),
     path('fiber/add-multiple/', fiber.fiber_add_multiple),
     path('fiber/edit/<int:aid>/', fiber.fiber_edit),
@@ -42,6 +43,7 @@ urlpatterns = [
     path('fiber/modify-multiple/', fiber.fiber_modify_multiple),
 
     path('resin/list/', resin.resin_list),
+    path('resin/valid/', resin.resin_valid),
     path('resin/add/', resin.resin_add),
     path('resin/add-multiple/', resin.resin_add_multiple),
     path('resin/edit/<int:aid>/', resin.resin_edit),
@@ -49,6 +51,7 @@ urlpatterns = [
     path('resin/modify-multiple/', resin.resin_modify_multiple),
 
     path('r_and_d/list/', r_and_d.r_and_d_list),
+    path('r_and_d/valid/', r_and_d.r_and_d_valid),
     path('r_and_d/add/', r_and_d.r_and_d_add),
     path('r_and_d/add-multiple/', r_and_d.r_and_d_add_multiple),
     path('r_and_d/edit/<int:aid>/', r_and_d.r_and_d_edit),

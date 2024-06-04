@@ -25,13 +25,27 @@ class FiberFilter(django_filters.FilterSet):
     #         'grade': ['icontains'],
     #     }
 
+class FiberFilterValid(django_filters.FilterSet):
+    material = django_filters.CharFilter(field_name='material', lookup_expr='icontains')
+    manufacturer = django_filters.CharFilter(field_name='manufacturer', lookup_expr='icontains')
+    distributor = django_filters.CharFilter(field_name='distributor', lookup_expr='icontains')
+    grade = django_filters.CharFilter(field_name='grade', lookup_expr='icontains')
+
+    class Meta:
+        model = models.Fiber
+        fields = ['material', 'manufacturer', 'distributor', 'grade', ]
+
 def fiber_list(request):
     """ list of fiber """
 
     fiber_filter = FiberFilter(request.GET, queryset=models.Fiber.objects.all())
     return render(request, 'fiber/fiber_list.html', {'filter': fiber_filter})
 
+def fiber_valid(request):
+    """ list of fiber """
 
+    fiber_filter = FiberFilterValid(request.GET, queryset=models.Fiber.objects.filter(valid=True))
+    return render(request, 'fiber/fiber_valid.html', {'filter': fiber_filter})
 
 def fiber_input(request):
     """ list of fiber """

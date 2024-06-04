@@ -3,13 +3,14 @@
 
 {% block content %}
 
-    <div style="margin-bottom: 10px">
-        <a class="btn btn-success" href="/resin/add/">
-            <span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span> New Resin
-        </a>
-    </div>
+    
     
     <div>
+        <div style="margin-bottom: 10px">
+            <a class="btn btn-success" href="/resin/add/">
+                <span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span> New Resin
+            </a>
+        </div>
     <h3>Resin List:</h3>
     <form method="get" id="filterForm" class="from_f">
         {{ filter.form.as_p }}

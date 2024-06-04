@@ -35,6 +35,22 @@ def resin_list(request):
     return render(request, 'resin/resin_list.html', {'filter': resin_filter})
 
 
+class ResinFilterValid(django_filters.FilterSet):
+    manufacturer = django_filters.CharFilter(field_name='manufacturer', lookup_expr='icontains')
+    resin = django_filters.CharFilter(field_name='resin', lookup_expr='icontains')
+    hardener = django_filters.CharFilter(field_name='hardener', lookup_expr='icontains')
+    accelerator = django_filters.CharFilter(field_name='accelerator', lookup_expr='icontains')
+
+    class Meta:
+        model = models.Resin
+        fields = ['manufacturer', 'resin', 'hardener', 'accelerator', ]
+
+
+def resin_valid(request):
+    """ list of resin """
+
+    resin_filter = ResinFilterValid(request.GET, queryset=models.Resin.objects.filter(valid=True))
+    return render(request, 'resin/resin_valid.html', {'filter': resin_filter})
 
 def resin_input(request):
     """ list of resin """

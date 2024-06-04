@@ -3,13 +3,14 @@
 
 {% block content %}
 
-    <div style="margin-bottom: 10px">
-        <a class="btn btn-success" href="/r_and_d/add-multiple/">
-            <span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span> New R&D
-        </a>
-    </div>
+    
     
     <div>
+        <div style="margin-bottom: 10px">
+            <a class="btn btn-success" href="/r_and_d/add-multiple/">
+                <span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span> New R&D
+            </a>
+        </div>
         <h3>R&D List:</h3>
         <form method="get" id="filterForm">
             {{ filter.form.as_p }}
@@ -360,7 +361,7 @@
         border-radius: 4px;
         cursor: pointer; 
     }
-    #id_fiber, #id_resin, input[type="text"] {
+    #id_fiber, #id_resin, #id_ERMDS, input[type="text"] {
         width: 100%; 
         padding: 8px; 
         margin: 0px 0; 

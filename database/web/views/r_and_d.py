@@ -9,7 +9,8 @@ import django_filters
 class R_and_DFilter(django_filters.FilterSet):
     program = django_filters.CharFilter(field_name='program', lookup_expr='icontains')
     projectNr = django_filters.CharFilter(field_name='projectNr', lookup_expr='icontains')
-    ERMDS = django_filters.CharFilter(field_name='ERMDS', lookup_expr='icontains')
+    # ERMDS = django_filters.CharFilter(field_name='ERMDS', lookup_expr='icontains')
+    ERMDS = django_filters.ModelChoiceFilter(queryset=models.R_and_D.objects.all())
     fiber = django_filters.ModelChoiceFilter(queryset=models.Fiber.objects.all())
     resin = django_filters.ModelChoiceFilter(queryset=models.Resin.objects.all())
     valid = django_filters.BooleanFilter(field_name='valid')  
@@ -43,6 +44,24 @@ def r_and_d_list(request):
 
     r_and_d_filter = R_and_DFilter(request.GET, queryset=models.R_and_D.objects.all())
     return render(request, 'r_and_d/r_and_d_list.html', {'filter': r_and_d_filter})
+
+
+class R_and_DFilterValid(django_filters.FilterSet):
+    program = django_filters.CharFilter(field_name='program', lookup_expr='icontains')
+    projectNr = django_filters.CharFilter(field_name='projectNr', lookup_expr='icontains')
+    ERMDS = django_filters.ModelChoiceFilter(queryset=models.R_and_D.objects.all())
+    fiber = django_filters.ModelChoiceFilter(queryset=models.Fiber.objects.all())
+    resin = django_filters.ModelChoiceFilter(queryset=models.Resin.objects.all())
+
+    class Meta:
+        model = models.Resin
+        fields = ['program', 'projectNr', 'ERMDS', 'fiber', 'resin',]
+
+def r_and_d_valid(request):
+    """ list of r_and_d """
+
+    r_and_d_filter = R_and_DFilterValid(request.GET, queryset=models.R_and_D.objects.filter(valid=True))
+    return render(request, 'r_and_d/r_and_d_valid.html', {'filter': r_and_d_filter})
 
 # def r_and_d_detail(request, ermds_id):
 #     randd = get_object_or_404(models.R_and_D, ERMDS=ermds_id)
@@ -93,7 +112,7 @@ class R_and_DModelForm(forms.ModelForm):
                 'compressionUltimateLoadC', 'compressionYieldStressC', 'compressionYieldStressMAC', 'compressionYieldStressMBC', 'compressionYieldLoadC', 'poissonRatioC',
                 'flexuralModulusILSSC', 'ultimateShearForceC', 'ultimateShearStressC', 'ultimateShearStressMAC', 'ultimateShearStressMBC',
                 'flexuralModulusFC', 'flexuralUltimateStrengthC', 'flexuralUltimateStrengthMAC', 'flexuralUltimateStrengthMBC', 'strainUltimateStrengthC', 'flexuralUltimateForceC',
-                'yieldTorqueC', 'maxiTorqueC', 'yieldAngleC', 'maxiTwistedAngleC',]
+                'yieldTorqueC', 'maxiTorqueC', 'yieldAngleC', 'maxiTwistedAngleC', 'valid',]
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -161,7 +180,7 @@ class R_and_DForm(forms.ModelForm):
                 'compressionUltimateLoadC', 'compressionYieldStressC', 'compressionYieldStressMAC', 'compressionYieldStressMBC', 'compressionYieldLoadC', 'poissonRatioC',
                 'flexuralModulusILSSC', 'ultimateShearForceC', 'ultimateShearStressC', 'ultimateShearStressMAC', 'ultimateShearStressMBC',
                 'flexuralModulusFC', 'flexuralUltimateStrengthC', 'flexuralUltimateStrengthMAC', 'flexuralUltimateStrengthMBC', 'strainUltimateStrengthC', 'flexuralUltimateForceC',
-                'yieldTorqueC', 'maxiTorqueC', 'yieldAngleC', 'maxiTwistedAngleC',]
+                'yieldTorqueC', 'maxiTorqueC', 'yieldAngleC', 'maxiTwistedAngleC', 'valid',]
         
 
     def __init__(self, *args, **kwargs):

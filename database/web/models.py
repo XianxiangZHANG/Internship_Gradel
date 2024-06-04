@@ -246,6 +246,12 @@ class R_and_D(models.Model):
     yieldAngleC = models.CharField(default="Samples number: ", max_length=255, null=True, blank=True)
     maxiTwistedAngleC = models.CharField(default="Samples number: ", max_length=255, null=True, blank=True)
     valid = models.BooleanField(verbose_name="Validation", default=False)
+    # def __str__(self):
+    #     return f"{self.program} / {self.projectNr} / {self.ERMDS}" 
+    def __str__(self):
+        return self.ERMDS 
+
+    
 
 
 # class RDComment(models.Model):

@@ -1,0 +1,123 @@
+{% extends 'layout.html' %}
+
+
+{% block content %}
+
+  
+    
+    <div>
+    <h3>Fiber List:</h3>
+    <form method="get" id="filterForm" class="from_f">
+        {{ filter.form.as_p }}
+        <button type="submit" id="btnf1">Filter</button>
+        <button type="reset" id="resetButton" class="btnf2">Reset</button>
+    </form>
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <!-- <th>Fiber ID</th> -->
+            <th>Material</th>
+            <th>Manufacturer</th>
+            <th>Distributor</th>
+            <th>Grade</th>
+            <th>Single filament diameter (mm)</th>
+            <th>Tow</th>
+            <th>Tow (in thousands)</th>
+            <th>Tex (g/km)</th>
+            <th>Density (g/cm3)</th>
+            <th>Theoretical dry section (mm2)</th>
+            <th>Tensile strength (MPa)</th>
+            <th>Tensile modulus (GPa)</th>
+            <th>Price euros/kg (2021 to febrary 2022)</th>
+            <th>Price euros/kg (after 02/2022)</th>
+            <th>Price euros/kg (after 02/2023)</th>
+            <th>Price euros/kg (after 01/2024)</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for row in filter.qs %}
+            
+
+            
+            <tr>
+                <!-- <td>{{ row.id }}</td> -->
+                <td>{{ row.material|default_if_none:"" }}</td>
+                <td>{{ row.manufacturer|default_if_none:"" }}</td>
+                <td>{{ row.distributor|default_if_none:"" }}</td>
+                <td>{{ row.grade|default_if_none:"" }}</td>
+                <td>{{ row.singleFilamentDiameter|default_if_none:"" }}</td>
+
+
+                <td>{{ row.tow|default_if_none:"" }}</td>
+                <td>{{ row.towInThousands|default_if_none:"" }}</td>
+                <td>{{ row.tex|default_if_none:"" }}</td>
+                <td>{{ row.density|default_if_none:"" }}</td>
+                <td>{{ row.theoreticalDrySection|default_if_none:"" }}</td>
+                <td>{{ row.tensileStrength|default_if_none:"" }}</td>
+                <td>{{ row.tensileModulus|default_if_none:"" }}</td>
+                <td>{{ row.price21|default_if_none:"" }}</td>
+                <td>{{ row.price22|default_if_none:"" }}</td>
+                <td>{{ row.price23|default_if_none:"" }}</td>
+                <td>{{ row.price24|default_if_none:"" }}</td>
+              
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table></div>
+
+
+{% endblock %}
+
+{% block js %}
+    <script>
+        $('#resetButton').click(function() {
+        window.location.href = window.location.pathname; 
+        });
+
+    </script>
+{% endblock %}
+
+{% block css %}
+<style>
+    table {
+        border-collapse: collapse;
+        width: 100%;
+        margin-bottom: 100px;
+    }
+    th, td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: center;
+    }
+    tr:nth-child(even) {
+        background-color: #f2f2f2;
+    }
+    th {
+        background-color: #4CAF50;
+        color: white;
+    }
+  
+    #btnf1, .btnf2{
+        width: 100px; 
+        background-color: #49b7be; 
+        color: white; 
+        padding: 5px 10px; 
+        margin: 8px;
+        margin-right: 0px;
+        border: none; 
+        border-radius: 4px;
+        cursor: pointer; 
+    }
+    input[type="text"] {
+        width: 100%; 
+        padding: 8px; 
+        margin: 0px 0; 
+        display: inline-block;
+        border: 1px solid #ccc; 
+        border-radius: 4px; 
+        box-sizing: border-box; 
+    }
+ 
+   
+</style>
+{% endblock %}
