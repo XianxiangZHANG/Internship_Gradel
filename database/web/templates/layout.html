@@ -7,6 +7,48 @@
     <link rel="icon" type="image/x-icon" href="{% static 'favicon.ico' %}">
     <link rel="stylesheet" href="{% static 'plugins/bootstrap-3.4.1/css/bootstrap.min.css' %}">
     {% block css %}{% endblock %}
+    <style>
+        #topBtn {
+            display: none;
+            position: fixed;
+            bottom: 20px;
+            right: 30px; 
+            z-index: 99;
+            font-size: 18px;
+            border: none; 
+            outline: none; 
+            background-color: #555; 
+            color: white; 
+            cursor: pointer; 
+            padding: 15px;
+            border-radius: 30px;
+        }
+
+        #topBtn:hover {
+            background-color: #333; 
+        }
+
+        #backBtn {
+            position: absolute;
+            width: 100px;
+            height: 33px;
+            margin-top: 5px; 
+            margin-bottom: 10px; 
+            margin-left: 80%;
+            z-index: 99;
+            font-size: 18px; 
+            border: none;
+            outline: none; 
+            background-color: #4CAF50; 
+            color: white;
+            cursor: pointer;
+            border-radius: 4px; 
+        }
+
+        #backBtn:hover {
+            background-color: #2f7a30; 
+        }
+    </style>
 </head>
 <body>
 <nav class="navbar navbar-default" style="border-radius: 0;">
@@ -62,13 +104,45 @@
     </div><!-- /.container-fluid -->
 </nav>
 
+<!-- Add the back button -->
+<button onclick="goBack()" id="backBtn" title="Go back"><span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span>Back</button>
+
 <div class="container" style="width: 98%;">
     {% block content %}{% endblock %}
-
 </div>
+<!-- Add the back to top button -->
+<button onclick="topFunction()" id="topBtn" title="Go to top"><span class="glyphicon glyphicon-arrow-up" aria-hidden="true" id="goTop"></span>Top</button>
+
 
 <script src="{% static 'js/jquery-3.6.0.min.js' %}"></script>
 <script src="{% static 'plugins/bootstrap-3.4.1/js/bootstrap.min.js' %}"></script>
 {% block js %}{% endblock %}
+<script>
+    // 获取按钮
+    var mybutton = document.getElementById("topBtn");
+
+    // 当用户向下滚动20px时，显示按钮
+    window.onscroll = function() {
+        scrollFunction();
+    };
+
+    function scrollFunction() {
+        if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+            mybutton.style.display = "block";
+        } else {
+            mybutton.style.display = "none";
+        }
+    }
+
+    // 当用户点击按钮时，滚动到页面顶部
+    function topFunction() {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // 当用户点击返回按钮时，返回上一级
+    function goBack() {
+        window.history.back();
+    }
+</script>
 </body>
 </html>
