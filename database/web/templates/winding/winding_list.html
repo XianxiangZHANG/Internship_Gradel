@@ -32,7 +32,7 @@
         <tbody>
         {% for row in filter.qs %}
             {% if row.part.valid %} 
-            <tr style="background-color: #67fafa70;">
+            <tr style="background-color: #67fa6770;">
                 <td>{{ row.link }}</td>
                 <td>{{ row.interface1|default_if_none:"" }}</td>
                 <td>{{ row.interface2|default_if_none:"" }}</td>

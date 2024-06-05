@@ -21,6 +21,12 @@ def user_list(request):
     user_filter = UserFilter(request.GET, queryset=models.User.objects.all())
     return render(request, 'user/user_list.html', {'filter': user_filter})
 
+def user_list_read(request):
+    """ list of user """
+
+    user_filter = UserFilter(request.GET, queryset=models.User.objects.all())
+    return render(request, 'user/user_list_read.html', {'filter': user_filter})
+
 class UserModelForm(forms.ModelForm):
     class Meta:
         model = models.User

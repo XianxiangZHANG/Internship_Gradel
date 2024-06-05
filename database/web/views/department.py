@@ -18,9 +18,16 @@ class DepartmentFilter(django_filters.FilterSet):
         }
 
 def department_list(request):
+    """ list of department """
+
     departments = models.Department.objects.annotate(employee_count=Count('user'))
     return render(request, 'department/department_list.html', {'departments': departments})
 
+def department_list_read(request):
+    """ list of department """
+
+    departments = models.Department.objects.annotate(employee_count=Count('user'))
+    return render(request, 'department/department_list_read.html', {'departments': departments})
 
 # def department_list(request):
 #     """ list of department """

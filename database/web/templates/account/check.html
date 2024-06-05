@@ -2,146 +2,551 @@
 
 
 {% block content %}
+{% if user.depart.title == "Material" %}
+    <h2>Department: {{ user.depart.title }}</h2>
+<div style="margin-top: 50px; margin-bottom: 100px; text-align: center;">
+    <a class="btn btn-success" href="/fiber/valid/" id="btn">
+        <span class="glyphicon glyphicon-pencil" aria-hidden="true" id="pic"></span> Read Fiber List
+    </a>
+    <a class="btn btn-success" href="/fiber/list/" id="btn">
+        <span class="glyphicon glyphicon-pencil" aria-hidden="true" id="pic"></span> Check Fiber List
+    </a>
+    
+    <a class="btn btn-success" href="/fiber/modify-multiple/" id="btn">
+        <span class="glyphicon glyphicon-pencil" aria-hidden="true" id="pic"></span> Modify Fiber List
+    </a>
+    <br><br>
+    <a class="btn btn-success" href="/resin/valid/" id="btn">
+        <span class="glyphicon glyphicon-pencil" aria-hidden="true" id="pic"></span> Read Resin List
+    </a>
+    <br>
+    <a class="btn btn-success" href="/resin/valid-mechanical-properties/" id="btnl">
+        <span class="glyphicon glyphicon-pencil" aria-hidden="true" id="pic"></span> Read Mechanical Properties of Resin List
+    </a>
+    <br>
+    <a class="btn btn-success" href="/resin/valid-thermophysical-toughness-properties/" id="btnl">
+        <span class="glyphicon glyphicon-pencil" aria-hidden="true" id="pic"></span> Read Thermophysical Toughness Properties of Resin List
+    </a>
+    <br>
+    <a class="btn btn-success" href="/resin/list/" id="btn">
+        <span class="glyphicon glyphicon-pencil" aria-hidden="true" id="pic"></span> Check Basic Resin List
+    </a>
+    <br>
+    <a class="btn btn-success" href="/resin/list-mechanical-properties/" id="btnl">
+        <span class="glyphicon glyphicon-pencil" aria-hidden="true" id="pic"></span> Check Mechanical Properties of Resin List
+    </a>
+    <br>
+    <a class="btn btn-success" href="/resin/list-thermophysical-toughness-properties/" id="btnl">
+        <span class="glyphicon glyphicon-pencil" aria-hidden="true" id="pic"></span> Check Thermophysical Toughness Properties of Resin List
+    </a>
+    <br>
+    <a class="btn btn-success" href="/resin/modify-multiple/" id="btn">
+        <span class="glyphicon glyphicon-pencil" aria-hidden="true" id="pic"></span> Modify Basic Resin List
+    </a>
+    <br>
+    <a class="btn btn-success" href="/resin/modify-mechanical-properties/" id="btnl">
+        <span class="glyphicon glyphicon-pencil" aria-hidden="true" id="pic"></span> Modify Mechanical Properties of Resin List
+    </a>
+    <br>
+    <a class="btn btn-success" href="/resin/modify-thermophysical-toughness-properties/" id="btnl">
+        <span class="glyphicon glyphicon-pencil" aria-hidden="true" id="pic"></span> Modify Thermophysical Toughness Properties of Resin List
+    </a>
+    
+    
+    <br><br>
+    <a class="btn btn-success" href="/r_and_d/list/" id="btn">
+        <span class="glyphicon glyphicon-pencil" aria-hidden="true" id="pic"></span> Check R&D List
+    </a>
+    <a class="btn btn-success" href="/r_and_d/valid/" id="btn">
+        <span class="glyphicon glyphicon-pencil" aria-hidden="true" id="pic"></span> Read R&D List
+    </a>
+    <br><br>
+    <a class="btn btn-success" href="/project/valid/" id="btn">
+        <span class="glyphicon glyphicon-pencil" aria-hidden="true" id="pic"></span> Read Project List
+    </a>
+    <br><br> 
+    <a class="btn btn-success" href="/part/valid/" id="btn">
+        <span class="glyphicon glyphicon-pencil" aria-hidden="true" id="pic"></span> Read Part List
+    </a> 
+    <br><br>
+    <a class="btn btn-success" href="/bushing/valid/" id="btn">
+        <span class="glyphicon glyphicon-pencil" aria-hidden="true" id="pic"></span> Read Bushing List
+    </a>
+    <br><br>
+    <a class="btn btn-success" href="/interface/valid/" id="btn">
+        <span class="glyphicon glyphicon-pencil" aria-hidden="true" id="pic"></span> Read Interface List
+    </a>
+    <br><br>
+    <a class="btn btn-success" href="/link/valid/" id="btn">
+        <span class="glyphicon glyphicon-pencil" aria-hidden="true" id="pic"></span> Read Link List
+    </a>
+    <br><br>
+    <a class="btn btn-success" href="/winding/valid/" id="btn">
+        <span class="glyphicon glyphicon-pencil" aria-hidden="true" id="pic"></span> Read Winding List
+    </a>
+    <br><br>
+    <a class="btn btn-success" href="/sequenceType/valid/" id="btn">
+        <span class="glyphicon glyphicon-pencil" aria-hidden="true" id="pic"></span> Read Sequence Types List
+    </a>
+    <br><br>
+    <a class="btn btn-success" href="/user/list-read/" id="btn">
+        <span class="glyphicon glyphicon-pencil" aria-hidden="true" id="pic"></span> Read User List
+    </a>
+    
+    <br><br>
+    <a class="btn btn-success" href="/department/list-read/" id="btn">
+        <span class="glyphicon glyphicon-pencil" aria-hidden="true" id="pic"></span> Read Department List
+    </a>
+    
+</div>
+{% elif user.depart.title == "Robotics" %}
+    <h2>Department: {{ user.depart.title }}</h2>
+<div style="margin-top: 50px; margin-bottom: 100px; text-align: center;">
+   
+    <a class="btn btn-success" href="/fiber/valid/" id="btn">
+        <span class="glyphicon glyphicon-pencil" aria-hidden="true" id="pic"></span> Read Fiber List
+    </a>
+    <br><br>
+    <a class="btn btn-success" href="/resin/valid/" id="btn">
+        <span class="glyphicon glyphicon-pencil" aria-hidden="true" id="pic"></span> Read Resin List
+    </a>
+    <br>
+    <a class="btn btn-success" href="/resin/valid-mechanical-properties/" id="btnl">
+        <span class="glyphicon glyphicon-pencil" aria-hidden="true" id="pic"></span> Read Mechanical Properties of Resin List
+    </a>
+    <br>
+    <a class="btn btn-success" href="/resin/valid-thermophysical-toughness-properties/" id="btnl">
+        <span class="glyphicon glyphicon-pencil" aria-hidden="true" id="pic"></span> Read Thermophysical Toughness Properties of Resin List
+    </a>
+    <br><br>
+    <a class="btn btn-success" href="/r_and_d/valid/" id="btn">
+        <span class="glyphicon glyphicon-pencil" aria-hidden="true" id="pic"></span> Read R&D List
+    </a>
+    <br><br>
+    <a class="btn btn-success" href="/project/valid/" id="btn">
+        <span class="glyphicon glyphicon-pencil" aria-hidden="true" id="pic"></span> Read Project List
+    </a>
+    <br><br> 
+    <a class="btn btn-success" href="/part/valid/" id="btn">
+        <span class="glyphicon glyphicon-pencil" aria-hidden="true" id="pic"></span> Read Part List
+    </a> 
+    <a class="btn btn-success" href="/part/list/" id="btn">
+        <span class="glyphicon glyphicon-pencil" aria-hidden="true" id="pic"></span> Check Part List
+    </a>  
+    
+    <br><br>
+    <a class="btn btn-success" href="/bushing/valid/" id="btn">
+        <span class="glyphicon glyphicon-pencil" aria-hidden="true" id="pic"></span> Read Bushing List
+    </a>
+    <br><br>
+    <a class="btn btn-success" href="/interface/valid/" id="btn">
+        <span class="glyphicon glyphicon-pencil" aria-hidden="true" id="pic"></span> Read Interface List
+    </a>
+    <a class="btn btn-success" href="/interface/list/" id="btn">
+        <span class="glyphicon glyphicon-pencil" aria-hidden="true" id="pic"></span> Check Interface List
+    </a>
+    
+    <a class="btn btn-success" href="/interface/modify-multiple/" id="btn">
+        <span class="glyphicon glyphicon-pencil" aria-hidden="true" id="pic"></span> Modify Interface List
+    </a>
+    <br><br>
+    <a class="btn btn-success" href="/link/valid/" id="btn">
+        <span class="glyphicon glyphicon-pencil" aria-hidden="true" id="pic"></span> Read Link List
+    </a>
+    <br><br>
+    <a class="btn btn-success" href="/winding/valid/" id="btn">
+        <span class="glyphicon glyphicon-pencil" aria-hidden="true" id="pic"></span> Read Winding List
+    </a>
+    <a class="btn btn-success" href="/winding/list/" id="btn">
+        <span class="glyphicon glyphicon-pencil" aria-hidden="true" id="pic"></span> Check Winding List
+    </a>
+    
+    <a class="btn btn-success" href="/winding/modify-multiple/" id="btn">
+        <span class="glyphicon glyphicon-pencil" aria-hidden="true" id="pic"></span> Modify Winding List
+    </a>
+    <br><br>
+    <a class="btn btn-success" href="/sequenceType/valid/" id="btn">
+        <span class="glyphicon glyphicon-pencil" aria-hidden="true" id="pic"></span> Read Sequence Types List
+    </a>
+    <br><br>
+    <a class="btn btn-success" href="/user/list-read/" id="btn">
+        <span class="glyphicon glyphicon-pencil" aria-hidden="true" id="pic"></span> Read User List
+    </a>
+    
+    <br><br>
+    <a class="btn btn-success" href="/department/list-read/" id="btn">
+        <span class="glyphicon glyphicon-pencil" aria-hidden="true" id="pic"></span> Read Department List
+    </a>
+    <a class="btn btn-success" href="/user/list/" id="btn">
+        <span class="glyphicon glyphicon-pencil" aria-hidden="true" id="pic"></span> Check User List
+    </a>
+    
+    <a class="btn btn-success" href="/user/modify-multiple/" id="btn">
+        <span class="glyphicon glyphicon-pencil" aria-hidden="true" id="pic"></span> Modify User List
+    </a>
 
-    <div style="margin-top: 50px; margin-bottom: 100px; text-align: center;">
-        <a class="btn btn-success" href="/fiber/list/" id="btn">
-            <span class="glyphicon glyphicon-pencil" aria-hidden="true" id="pic"></span> Check Fiber List
-        </a>
-        <a class="btn btn-success" href="/fiber/valid/" id="btn">
-            <span class="glyphicon glyphicon-pencil" aria-hidden="true" id="pic"></span> Read Fiber List
-        </a>
-        <a class="btn btn-success" href="/fiber/modify-multiple/" id="btn">
-            <span class="glyphicon glyphicon-pencil" aria-hidden="true" id="pic"></span> Modify Fiber List
-        </a>
-        <br><br>
-        <a class="btn btn-success" href="/resin/list/" id="btn">
-            <span class="glyphicon glyphicon-pencil" aria-hidden="true" id="pic"></span> Check Basic Resin List
-        </a>
-        <br>
-        <a class="btn btn-success" href="/resin/list-mechanical-properties/" id="btnl">
-            <span class="glyphicon glyphicon-pencil" aria-hidden="true" id="pic"></span> Check Mechanical Properties of Resin List
-        </a>
-        <br>
-        <a class="btn btn-success" href="/resin/list-thermophysical-toughness-properties/" id="btnl">
-            <span class="glyphicon glyphicon-pencil" aria-hidden="true" id="pic"></span> Check Thermophysical Toughness Properties of Resin List
-        </a>
-        <br>
-        <a class="btn btn-success" href="/resin/modify-multiple/" id="btn">
-            <span class="glyphicon glyphicon-pencil" aria-hidden="true" id="pic"></span> Modify Basic Resin List
-        </a>
-        <br>
-        <a class="btn btn-success" href="/resin/modify-mechanical-properties/" id="btnl">
-            <span class="glyphicon glyphicon-pencil" aria-hidden="true" id="pic"></span> Modify Mechanical Properties of Resin List
-        </a>
-        <br>
-        <a class="btn btn-success" href="/resin/modify-thermophysical-toughness-properties/" id="btnl">
-            <span class="glyphicon glyphicon-pencil" aria-hidden="true" id="pic"></span> Modify Thermophysical Toughness Properties of Resin List
-        </a>
-        <br>
-        <a class="btn btn-success" href="/resin/valid/" id="btn">
-            <span class="glyphicon glyphicon-pencil" aria-hidden="true" id="pic"></span> Read Resin List
-        </a>
-        <br>
-        <a class="btn btn-success" href="/resin/valid-mechanical-properties/" id="btnl">
-            <span class="glyphicon glyphicon-pencil" aria-hidden="true" id="pic"></span> Read Mechanical Properties of Resin List
-        </a>
-        <br>
-        <a class="btn btn-success" href="/resin/valid-thermophysical-toughness-properties/" id="btnl">
-            <span class="glyphicon glyphicon-pencil" aria-hidden="true" id="pic"></span> Read Thermophysical Toughness Properties of Resin List
-        </a>
-        <br><br>
-        <a class="btn btn-success" href="/r_and_d/list/" id="btn">
-            <span class="glyphicon glyphicon-pencil" aria-hidden="true" id="pic"></span> Check R&D List
-        </a>
-        <a class="btn btn-success" href="/r_and_d/valid/" id="btn">
-            <span class="glyphicon glyphicon-pencil" aria-hidden="true" id="pic"></span> Read R&D List
-        </a>
-        <br><br>
-        <!-- <a class="btn btn-success" href="/r_and_d/modify-multiple/" id="btn">
-            <span class="glyphicon glyphicon-pencil" aria-hidden="true" id="pic"></span> Modify R&D List
-        </a>
-        <br><br> -->
-        <a class="btn btn-success" href="/project/list/" id="btn">
-            <span class="glyphicon glyphicon-pencil" aria-hidden="true" id="pic"></span> Check Project List
-        </a>
-        
-        <a class="btn btn-success" href="/project/valid/" id="btn">
-            <span class="glyphicon glyphicon-pencil" aria-hidden="true" id="pic"></span> Read Project List
-        </a>
-        <br><br> 
-        <a class="btn btn-success" href="/part/list/" id="btn">
-            <span class="glyphicon glyphicon-pencil" aria-hidden="true" id="pic"></span> Check Part List
-        </a>    
-        <a class="btn btn-success" href="/part/valid/" id="btn">
-            <span class="glyphicon glyphicon-pencil" aria-hidden="true" id="pic"></span> Read Part List
-        </a> 
-        <br><br>
-        <a class="btn btn-success" href="/bushing/list/" id="btn">
-            <span class="glyphicon glyphicon-pencil" aria-hidden="true" id="pic"></span> Check Bushing List
-        </a>
-        <a class="btn btn-success" href="/bushing/valid/" id="btn">
-            <span class="glyphicon glyphicon-pencil" aria-hidden="true" id="pic"></span> Read Bushing List
-        </a>
-        <a class="btn btn-success" href="/bushing/modify-multiple/" id="btn">
-            <span class="glyphicon glyphicon-pencil" aria-hidden="true" id="pic"></span> Modify Bushing List
-        </a>
-        <br><br>
-        <a class="btn btn-success" href="/interface/list/" id="btn">
-            <span class="glyphicon glyphicon-pencil" aria-hidden="true" id="pic"></span> Check Interface List
-        </a>
-        <a class="btn btn-success" href="/interface/valid/" id="btn">
-            <span class="glyphicon glyphicon-pencil" aria-hidden="true" id="pic"></span> Read Interface List
-        </a>
-        <a class="btn btn-success" href="/interface/modify-multiple/" id="btn">
-            <span class="glyphicon glyphicon-pencil" aria-hidden="true" id="pic"></span> Modify Interface List
-        </a>
-        <br><br>
-        <a class="btn btn-success" href="/link/list/" id="btn">
-            <span class="glyphicon glyphicon-pencil" aria-hidden="true" id="pic"></span> Check Link List
-        </a>
-        <a class="btn btn-success" href="/link/valid/" id="btn">
-            <span class="glyphicon glyphicon-pencil" aria-hidden="true" id="pic"></span> Read Link List
-        </a>
-        <a class="btn btn-success" href="/link/modify-multiple/" id="btn">
-            <span class="glyphicon glyphicon-pencil" aria-hidden="true" id="pic"></span> Modify Link List
-        </a>
-        <br><br>
-        <a class="btn btn-success" href="/winding/list/" id="btn">
-            <span class="glyphicon glyphicon-pencil" aria-hidden="true" id="pic"></span> Check Winding List
-        </a>
-        <a class="btn btn-success" href="/winding/valid/" id="btn">
-            <span class="glyphicon glyphicon-pencil" aria-hidden="true" id="pic"></span> Read Winding List
-        </a>
-        <a class="btn btn-success" href="/winding/modify-multiple/" id="btn">
-            <span class="glyphicon glyphicon-pencil" aria-hidden="true" id="pic"></span> Modify Winding List
-        </a>
-        <br><br>
-        <a class="btn btn-success" href="/sequenceType/list/" id="btn">
-            <span class="glyphicon glyphicon-pencil" aria-hidden="true" id="pic"></span> Check Sequence Types List
-        </a>
-        <a class="btn btn-success" href="/sequenceType/valid/" id="btn">
-            <span class="glyphicon glyphicon-pencil" aria-hidden="true" id="pic"></span> Read Sequence Types List
-        </a>
-        <a class="btn btn-success" href="/sequenceType/modify-multiple/" id="btn">
-            <span class="glyphicon glyphicon-pencil" aria-hidden="true" id="pic"></span> Modify Sequence Types List
-        </a>
-        <br><br>
-        <a class="btn btn-success" href="/user/list/" id="btn">
-            <span class="glyphicon glyphicon-pencil" aria-hidden="true" id="pic"></span> Check User List
-        </a>
-        
-        <a class="btn btn-success" href="/user/modify-multiple/" id="btn">
-            <span class="glyphicon glyphicon-pencil" aria-hidden="true" id="pic"></span> Modify User List
-        </a>
-        <br><br>
-        <a class="btn btn-success" href="/department/list/" id="btn">
-            <span class="glyphicon glyphicon-pencil" aria-hidden="true" id="pic"></span> Check Department List
-        </a>
-        
-        <a class="btn btn-success" href="/department/modify-multiple/" id="btn">
-            <span class="glyphicon glyphicon-pencil" aria-hidden="true" id="pic"></span> Modify Department List
-        </a>
-    </div>
+    <a class="btn btn-success" href="/user/list-read/" id="btn">
+        <span class="glyphicon glyphicon-pencil" aria-hidden="true" id="pic"></span> Read User List
+    </a>
+    
+    <br><br>
+    <a class="btn btn-success" href="/department/list-read/" id="btn">
+        <span class="glyphicon glyphicon-pencil" aria-hidden="true" id="pic"></span> Read Department List
+    </a>
+    
+    <a class="btn btn-success" href="/department/list/" id="btn">
+        <span class="glyphicon glyphicon-pencil" aria-hidden="true" id="pic"></span> Check Department List
+    </a>
+    
+    <a class="btn btn-success" href="/department/modify-multiple/" id="btn">
+        <span class="glyphicon glyphicon-pencil" aria-hidden="true" id="pic"></span> Modify Department List
+    </a>
+</div>
+{% elif user.depart.title == "Engineering" %}
+    <h2>Department: {{ user.depart.title }}</h2>
+<div style="margin-top: 50px; margin-bottom: 100px; text-align: center;">
+    <a class="btn btn-success" href="/fiber/valid/" id="btn">
+        <span class="glyphicon glyphicon-pencil" aria-hidden="true" id="pic"></span> Read Fiber List
+    </a>
+    <br><br>
+    <a class="btn btn-success" href="/resin/valid/" id="btn">
+        <span class="glyphicon glyphicon-pencil" aria-hidden="true" id="pic"></span> Read Resin List
+    </a>
+    <br>
+    <a class="btn btn-success" href="/resin/valid-mechanical-properties/" id="btnl">
+        <span class="glyphicon glyphicon-pencil" aria-hidden="true" id="pic"></span> Read Mechanical Properties of Resin List
+    </a>
+    <br>
+    <a class="btn btn-success" href="/resin/valid-thermophysical-toughness-properties/" id="btnl">
+        <span class="glyphicon glyphicon-pencil" aria-hidden="true" id="pic"></span> Read Thermophysical Toughness Properties of Resin List
+    </a>
+    <br><br>
+    <a class="btn btn-success" href="/r_and_d/valid/" id="btn">
+        <span class="glyphicon glyphicon-pencil" aria-hidden="true" id="pic"></span> Read R&D List
+    </a>
+    <br><br>
+    <a class="btn btn-success" href="/project/valid/" id="btn">
+        <span class="glyphicon glyphicon-pencil" aria-hidden="true" id="pic"></span> Read Project List
+    </a>
+    <a class="btn btn-success" href="/project/list/" id="btn">
+        <span class="glyphicon glyphicon-pencil" aria-hidden="true" id="pic"></span> Check Project List
+    </a>
+    
+    
+    <br><br> 
+    <a class="btn btn-success" href="/part/valid/" id="btn">
+        <span class="glyphicon glyphicon-pencil" aria-hidden="true" id="pic"></span> Read Part List
+    </a> 
+    <a class="btn btn-success" href="/part/list/" id="btn">
+        <span class="glyphicon glyphicon-pencil" aria-hidden="true" id="pic"></span> Check Part List
+    </a>    
+    
+    <br><br>
+    <a class="btn btn-success" href="/bushing/valid/" id="btn">
+        <span class="glyphicon glyphicon-pencil" aria-hidden="true" id="pic"></span> Read Bushing List
+    </a>
+    <a class="btn btn-success" href="/bushing/list/" id="btn">
+        <span class="glyphicon glyphicon-pencil" aria-hidden="true" id="pic"></span> Check Bushing List
+    </a>
+   
+    <a class="btn btn-success" href="/bushing/modify-multiple/" id="btn">
+        <span class="glyphicon glyphicon-pencil" aria-hidden="true" id="pic"></span> Modify Bushing List
+    </a>
+    <br><br>
+    <a class="btn btn-success" href="/interface/valid/" id="btn">
+        <span class="glyphicon glyphicon-pencil" aria-hidden="true" id="pic"></span> Read Interface List
+    </a>
+    <a class="btn btn-success" href="/interface/list/" id="btn">
+        <span class="glyphicon glyphicon-pencil" aria-hidden="true" id="pic"></span> Check Interface List
+    </a>
+    
+    <a class="btn btn-success" href="/interface/modify-multiple/" id="btn">
+        <span class="glyphicon glyphicon-pencil" aria-hidden="true" id="pic"></span> Modify Interface List
+    </a>
+    <br><br>
+    <a class="btn btn-success" href="/link/valid/" id="btn">
+        <span class="glyphicon glyphicon-pencil" aria-hidden="true" id="pic"></span> Read Link List
+    </a>
+    <a class="btn btn-success" href="/link/list/" id="btn">
+        <span class="glyphicon glyphicon-pencil" aria-hidden="true" id="pic"></span> Check Link List
+    </a>
+    
+    <a class="btn btn-success" href="/link/modify-multiple/" id="btn">
+        <span class="glyphicon glyphicon-pencil" aria-hidden="true" id="pic"></span> Modify Link List
+    </a>
+    <br><br>
+    <a class="btn btn-success" href="/winding/valid/" id="btn">
+        <span class="glyphicon glyphicon-pencil" aria-hidden="true" id="pic"></span> Read Winding List
+    </a>
+    <br><br>
+    <a class="btn btn-success" href="/sequenceType/valid/" id="btn">
+        <span class="glyphicon glyphicon-pencil" aria-hidden="true" id="pic"></span> Read Sequence Types List
+    </a>
+    <a class="btn btn-success" href="/sequenceType/list/" id="btn">
+        <span class="glyphicon glyphicon-pencil" aria-hidden="true" id="pic"></span> Check Sequence Types List
+    </a>
+    
+    <a class="btn btn-success" href="/sequenceType/modify-multiple/" id="btn">
+        <span class="glyphicon glyphicon-pencil" aria-hidden="true" id="pic"></span> Modify Sequence Types List
+    </a>
+    <br><br>
+    <a class="btn btn-success" href="/user/list-read/" id="btn">
+        <span class="glyphicon glyphicon-pencil" aria-hidden="true" id="pic"></span> Read User List
+    </a>
+    
+    <br><br>
+    <a class="btn btn-success" href="/department/list-read/" id="btn">
+        <span class="glyphicon glyphicon-pencil" aria-hidden="true" id="pic"></span> Read Department List
+    </a>
+</div>
+{% elif user.depart.title == "Manager" %}
+    <h2>Department: {{ user.depart.title }}</h2>
+<div style="margin-top: 50px; margin-bottom: 100px; text-align: center;">
+    
+    <a class="btn btn-success" href="/fiber/valid/" id="btn">
+        <span class="glyphicon glyphicon-pencil" aria-hidden="true" id="pic"></span> Read Fiber List
+    </a>
+    <br><br>
+   
+    <a class="btn btn-success" href="/resin/valid/" id="btn">
+        <span class="glyphicon glyphicon-pencil" aria-hidden="true" id="pic"></span> Read Resin List
+    </a>
+    <br>
+    <a class="btn btn-success" href="/resin/valid-mechanical-properties/" id="btnl">
+        <span class="glyphicon glyphicon-pencil" aria-hidden="true" id="pic"></span> Read Mechanical Properties of Resin List
+    </a>
+    <br>
+    <a class="btn btn-success" href="/resin/valid-thermophysical-toughness-properties/" id="btnl">
+        <span class="glyphicon glyphicon-pencil" aria-hidden="true" id="pic"></span> Read Thermophysical Toughness Properties of Resin List
+    </a>
+    <br><br>
+   
+    <a class="btn btn-success" href="/r_and_d/valid/" id="btn">
+        <span class="glyphicon glyphicon-pencil" aria-hidden="true" id="pic"></span> Read R&D List
+    </a>
+    <br><br>
+    
+    <a class="btn btn-success" href="/project/valid/" id="btn">
+        <span class="glyphicon glyphicon-pencil" aria-hidden="true" id="pic"></span> Read Project List
+    </a>
+    <br><br> 
+     
+    <a class="btn btn-success" href="/part/valid/" id="btn">
+        <span class="glyphicon glyphicon-pencil" aria-hidden="true" id="pic"></span> Read Part List
+    </a> 
+    <br><br>
+    
+    <a class="btn btn-success" href="/bushing/valid/" id="btn">
+        <span class="glyphicon glyphicon-pencil" aria-hidden="true" id="pic"></span> Read Bushing List
+    </a>
+    
+    <br><br>
+    
+    <a class="btn btn-success" href="/interface/valid/" id="btn">
+        <span class="glyphicon glyphicon-pencil" aria-hidden="true" id="pic"></span> Read Interface List
+    </a>
+    
+    <br><br>
+    
+    <a class="btn btn-success" href="/link/valid/" id="btn">
+        <span class="glyphicon glyphicon-pencil" aria-hidden="true" id="pic"></span> Read Link List
+    </a>
+    
+    <br><br>
+    
+    <a class="btn btn-success" href="/winding/valid/" id="btn">
+        <span class="glyphicon glyphicon-pencil" aria-hidden="true" id="pic"></span> Read Winding List
+    </a>
+    
+    <br><br>
+   
+    <a class="btn btn-success" href="/sequenceType/valid/" id="btn">
+        <span class="glyphicon glyphicon-pencil" aria-hidden="true" id="pic"></span> Read Sequence Types List
+    </a>
+   
+    <br><br>
+    <a class="btn btn-success" href="/user/list-read/" id="btn">
+        <span class="glyphicon glyphicon-pencil" aria-hidden="true" id="pic"></span> Read User List
+    </a>
+    <a class="btn btn-success" href="/user/list/" id="btn">
+        <span class="glyphicon glyphicon-pencil" aria-hidden="true" id="pic"></span> Check User List
+    </a>
+    
+    <a class="btn btn-success" href="/user/modify-multiple/" id="btn">
+        <span class="glyphicon glyphicon-pencil" aria-hidden="true" id="pic"></span> Modify User List
+    </a>
+    
+    
+    
+    <br><br>
+    <a class="btn btn-success" href="/department/list-read/" id="btn">
+        <span class="glyphicon glyphicon-pencil" aria-hidden="true" id="pic"></span> Read Department List
+    </a>
+    <a class="btn btn-success" href="/department/list/" id="btn">
+        <span class="glyphicon glyphicon-pencil" aria-hidden="true" id="pic"></span> Check Department List
+    </a>
+    
+    <a class="btn btn-success" href="/department/modify-multiple/" id="btn">
+        <span class="glyphicon glyphicon-pencil" aria-hidden="true" id="pic"></span> Modify Department List
+    </a>
+</div>
+{% elif user.depart.title == "Admin" %}
+    <h2>Department: {{ user.depart.title }}</h2>
+<div style="margin-top: 50px; margin-bottom: 100px; text-align: center;">
+    <a class="btn btn-success" href="/resin/valid/" id="btn">
+        <span class="glyphicon glyphicon-pencil" aria-hidden="true" id="pic"></span> Read Resin List
+    </a>
+    <br>
+    <a class="btn btn-success" href="/resin/valid-mechanical-properties/" id="btnl">
+        <span class="glyphicon glyphicon-pencil" aria-hidden="true" id="pic"></span> Read Mechanical Properties of Resin List
+    </a>
+    <br>
+    <a class="btn btn-success" href="/resin/valid-thermophysical-toughness-properties/" id="btnl">
+        <span class="glyphicon glyphicon-pencil" aria-hidden="true" id="pic"></span> Read Thermophysical Toughness Properties of Resin List
+    </a>
+    <br>
+    <a class="btn btn-success" href="/fiber/valid/" id="btn">
+        <span class="glyphicon glyphicon-pencil" aria-hidden="true" id="pic"></span> Read Fiber List
+    </a>
+    <a class="btn btn-success" href="/fiber/list/" id="btn">
+        <span class="glyphicon glyphicon-pencil" aria-hidden="true" id="pic"></span> Check Fiber List
+    </a>
+    
+    <a class="btn btn-success" href="/fiber/modify-multiple/" id="btn">
+        <span class="glyphicon glyphicon-pencil" aria-hidden="true" id="pic"></span> Modify Fiber List
+    </a>
+    <br><br>
+    <a class="btn btn-success" href="/resin/list/" id="btn">
+        <span class="glyphicon glyphicon-pencil" aria-hidden="true" id="pic"></span> Check Basic Resin List
+    </a>
+    <br>
+    <a class="btn btn-success" href="/resin/list-mechanical-properties/" id="btnl">
+        <span class="glyphicon glyphicon-pencil" aria-hidden="true" id="pic"></span> Check Mechanical Properties of Resin List
+    </a>
+    <br>
+    <a class="btn btn-success" href="/resin/list-thermophysical-toughness-properties/" id="btnl">
+        <span class="glyphicon glyphicon-pencil" aria-hidden="true" id="pic"></span> Check Thermophysical Toughness Properties of Resin List
+    </a>
+    <br>
+    <a class="btn btn-success" href="/resin/modify-multiple/" id="btn">
+        <span class="glyphicon glyphicon-pencil" aria-hidden="true" id="pic"></span> Modify Basic Resin List
+    </a>
+    <br>
+    <a class="btn btn-success" href="/resin/modify-mechanical-properties/" id="btnl">
+        <span class="glyphicon glyphicon-pencil" aria-hidden="true" id="pic"></span> Modify Mechanical Properties of Resin List
+    </a>
+    <br>
+    <a class="btn btn-success" href="/resin/modify-thermophysical-toughness-properties/" id="btnl">
+        <span class="glyphicon glyphicon-pencil" aria-hidden="true" id="pic"></span> Modify Thermophysical Toughness Properties of Resin List
+    </a>
+    
+    <br><br>
+    <a class="btn btn-success" href="/r_and_d/valid/" id="btn">
+        <span class="glyphicon glyphicon-pencil" aria-hidden="true" id="pic"></span> Read R&D List
+    </a>
+    <a class="btn btn-success" href="/r_and_d/list/" id="btn">
+        <span class="glyphicon glyphicon-pencil" aria-hidden="true" id="pic"></span> Check R&D List
+    </a>
+    
+    <br><br>
+    <a class="btn btn-success" href="/project/valid/" id="btn">
+        <span class="glyphicon glyphicon-pencil" aria-hidden="true" id="pic"></span> Read Project List
+    </a>
+    <a class="btn btn-success" href="/project/list/" id="btn">
+        <span class="glyphicon glyphicon-pencil" aria-hidden="true" id="pic"></span> Check Project List
+    </a>
+    
+    
+    <br><br> 
+    <a class="btn btn-success" href="/part/valid/" id="btn">
+        <span class="glyphicon glyphicon-pencil" aria-hidden="true" id="pic"></span> Read Part List
+    </a> 
+    <a class="btn btn-success" href="/part/list/" id="btn">
+        <span class="glyphicon glyphicon-pencil" aria-hidden="true" id="pic"></span> Check Part List
+    </a>    
+    
+    <br><br>
+    <a class="btn btn-success" href="/bushing/valid/" id="btn">
+        <span class="glyphicon glyphicon-pencil" aria-hidden="true" id="pic"></span> Read Bushing List
+    </a>
+    <a class="btn btn-success" href="/bushing/list/" id="btn">
+        <span class="glyphicon glyphicon-pencil" aria-hidden="true" id="pic"></span> Check Bushing List
+    </a>
+    
+    <a class="btn btn-success" href="/bushing/modify-multiple/" id="btn">
+        <span class="glyphicon glyphicon-pencil" aria-hidden="true" id="pic"></span> Modify Bushing List
+    </a>
+    <br><br>
+    <a class="btn btn-success" href="/interface/valid/" id="btn">
+        <span class="glyphicon glyphicon-pencil" aria-hidden="true" id="pic"></span> Read Interface List
+    </a>
+    <a class="btn btn-success" href="/interface/list/" id="btn">
+        <span class="glyphicon glyphicon-pencil" aria-hidden="true" id="pic"></span> Check Interface List
+    </a>
+    
+    <a class="btn btn-success" href="/interface/modify-multiple/" id="btn">
+        <span class="glyphicon glyphicon-pencil" aria-hidden="true" id="pic"></span> Modify Interface List
+    </a>
+    <br><br>
+    <a class="btn btn-success" href="/link/valid/" id="btn">
+        <span class="glyphicon glyphicon-pencil" aria-hidden="true" id="pic"></span> Read Link List
+    </a>
+    <a class="btn btn-success" href="/link/list/" id="btn">
+        <span class="glyphicon glyphicon-pencil" aria-hidden="true" id="pic"></span> Check Link List
+    </a>
+    
+    <a class="btn btn-success" href="/link/modify-multiple/" id="btn">
+        <span class="glyphicon glyphicon-pencil" aria-hidden="true" id="pic"></span> Modify Link List
+    </a>
+    <br><br>
+    <a class="btn btn-success" href="/winding/valid/" id="btn">
+        <span class="glyphicon glyphicon-pencil" aria-hidden="true" id="pic"></span> Read Winding List
+    </a>
+    <a class="btn btn-success" href="/winding/list/" id="btn">
+        <span class="glyphicon glyphicon-pencil" aria-hidden="true" id="pic"></span> Check Winding List
+    </a>
+    
+    <a class="btn btn-success" href="/winding/modify-multiple/" id="btn">
+        <span class="glyphicon glyphicon-pencil" aria-hidden="true" id="pic"></span> Modify Winding List
+    </a>
+    <br><br>
+    <a class="btn btn-success" href="/sequenceType/valid/" id="btn">
+        <span class="glyphicon glyphicon-pencil" aria-hidden="true" id="pic"></span> Read Sequence Types List
+    </a>
+    <a class="btn btn-success" href="/sequenceType/list/" id="btn">
+        <span class="glyphicon glyphicon-pencil" aria-hidden="true" id="pic"></span> Check Sequence Types List
+    </a>
+    
+    <a class="btn btn-success" href="/sequenceType/modify-multiple/" id="btn">
+        <span class="glyphicon glyphicon-pencil" aria-hidden="true" id="pic"></span> Modify Sequence Types List
+    </a>
+    <br><br>
+    <a class="btn btn-success" href="/user/list-read/" id="btn">
+        <span class="glyphicon glyphicon-pencil" aria-hidden="true" id="pic"></span> Read User List
+    </a>
+    <a class="btn btn-success" href="/user/list/" id="btn">
+        <span class="glyphicon glyphicon-pencil" aria-hidden="true" id="pic"></span> Check User List
+    </a>
+    
+    <a class="btn btn-success" href="/user/modify-multiple/" id="btn">
+        <span class="glyphicon glyphicon-pencil" aria-hidden="true" id="pic"></span> Modify User List
+    </a>
+
+    
+    <br><br>
+    <a class="btn btn-success" href="/department/list-read/" id="btn">
+        <span class="glyphicon glyphicon-pencil" aria-hidden="true" id="pic"></span> Read Department List
+    </a>
+    
+    <a class="btn btn-success" href="/department/list/" id="btn">
+        <span class="glyphicon glyphicon-pencil" aria-hidden="true" id="pic"></span> Check Department List
+    </a>
+    
+    <a class="btn btn-success" href="/department/modify-multiple/" id="btn">
+        <span class="glyphicon glyphicon-pencil" aria-hidden="true" id="pic"></span> Modify Department List
+    </a>
+</div>
+{% endif %}
 
 {% endblock %}
 
@@ -155,6 +560,7 @@
         padding: 5px;
     }
     #btn{
+        margin: 10px;
         width: 500px; 
         font-size: 30px; 
         text-align: left;
@@ -166,6 +572,9 @@
         font-size: 30px; 
         text-align: left;
         padding-left: 20px;
+    }
+    h2{
+        margin-left: 10%;
     }
 </style>
 {% endblock %}

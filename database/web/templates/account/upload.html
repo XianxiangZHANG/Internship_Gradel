@@ -2,7 +2,83 @@
 
 
 {% block content %}
-
+    {% if user.depart.title == "Material" %}
+    <h2>Department: {{ user.depart.title }}</h2>
+    <div style="margin-top: 50px; margin-bottom: 100px; text-align: center;">
+        <a class="btn btn-success" href="/fiber/add-multiple/" id="btn">
+            <span class="glyphicon glyphicon-plus-sign" aria-hidden="true" id="pic"></span> Create New Fiber
+        </a>
+        <a class="btn btn-success" href="/resin/add-multiple/" id="btn">
+            <span class="glyphicon glyphicon-plus-sign" aria-hidden="true" id="pic"></span> Create New Resin
+        </a>
+        <br><br>
+        <a class="btn btn-success" href="/resin/add-mechanical_properties/" id="btnl">
+            <span class="glyphicon glyphicon-plus-sign" aria-hidden="true" id="pic"></span> Add Mechanical Properties for Resin
+        </a>
+        <br><br>
+        <a class="btn btn-success" href="/resin/add-thermophysical_toughness_properties/" id="btnl">
+            <span class="glyphicon glyphicon-plus-sign" aria-hidden="true" id="pic"></span> Add Thermophysical and Toughness Properties for Resin
+        </a>
+        <br><br>
+        <a class="btn btn-success" href="/r_and_d/add-multiple/" id="btn">
+            <span class="glyphicon glyphicon-plus-sign" aria-hidden="true" id="pic"></span> Create New R&D Table
+        </a>
+        <br><br>
+        
+    </div>
+    {% elif user.depart.title == "Engineering" %}
+    <h2>Department: {{ user.depart.title }}</h2>
+    <div style="margin-top: 50px; margin-bottom: 100px; text-align: center;">
+        
+        <a class="btn btn-success" href="/project/add/" id="btn">
+            <span class="glyphicon glyphicon-plus-sign" aria-hidden="true" id="pic"></span> Create New Project Table
+        </a>
+        <a class="btn btn-success" href="/part/add/" id="btn">
+            <span class="glyphicon glyphicon-plus-sign" aria-hidden="true" id="pic"></span> Create New Part Table
+        </a>
+        <br><br>
+        <a class="btn btn-success" href="/bushing/add-multiple/" id="btn">
+            <span class="glyphicon glyphicon-plus-sign" aria-hidden="true" id="pic"></span> Create New Bushing Table
+        </a>
+        <a class="btn btn-success" href="/interface/add-multiple/" id="btn">
+            <span class="glyphicon glyphicon-plus-sign" aria-hidden="true" id="pic"></span> Create New Interface Table
+        </a>
+        <br><br>
+        <a class="btn btn-success" href="/link/add-multiple/" id="btn">
+            <span class="glyphicon glyphicon-plus-sign" aria-hidden="true" id="pic"></span> Create New Link Table
+        </a>
+       
+        <br><br>
+        <a class="btn btn-success" href="/sequenceType/add-multiple/" id="btn">
+            <span class="glyphicon glyphicon-plus-sign" aria-hidden="true" id="pic"></span> Create New Sequence Type
+        </a>
+        <br><br>
+        
+    </div>
+    {% elif user.depart.title == "Robotics" %}
+    <h2>Department: {{ user.depart.title }}</h2>
+    <div style="margin-top: 50px; margin-bottom: 100px; text-align: center;">
+        <a class="btn btn-success" href="/winding/add-multiple/" id="btn">
+            <span class="glyphicon glyphicon-plus-sign" aria-hidden="true" id="pic"></span> Create New Winding Table
+        </a>
+        <br><br>
+        
+    </div>
+    {% elif user.depart.title == "Manager" %}
+    <h2>Department: {{ user.depart.title }}</h2>
+    <div style="margin-top: 50px; margin-bottom: 100px; text-align: center;">
+        
+        
+        <a class="btn btn-success" href="/user/add-multiple/" id="btn">
+            <span class="glyphicon glyphicon-plus-sign" aria-hidden="true" id="pic"></span> Create New User
+        </a>
+        <br><br>
+        <a class="btn btn-success" href="/department/add-multiple/" id="btn">
+            <span class="glyphicon glyphicon-plus-sign" aria-hidden="true" id="pic"></span> Create New Department
+        </a>
+    </div>
+    {% elif user.depart.title == "Admin" %}
+    <h2>Department: {{ user.depart.title }}</h2>
     <div style="margin-top: 50px; margin-bottom: 100px; text-align: center;">
         <a class="btn btn-success" href="/fiber/add-multiple/" id="btn">
             <span class="glyphicon glyphicon-plus-sign" aria-hidden="true" id="pic"></span> Create New Fiber
@@ -55,7 +131,8 @@
             <span class="glyphicon glyphicon-plus-sign" aria-hidden="true" id="pic"></span> Create New Department
         </a>
     </div>
-
+   
+{% endif %}
 {% endblock %}
 
 {% block js %}
@@ -78,6 +155,9 @@
         font-size: 30px; 
         text-align: left;
         padding-left: 20px;
+    }
+    h2{
+        margin-left: 10%;
     }
 </style>
 {% endblock %}

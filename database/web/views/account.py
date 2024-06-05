@@ -15,7 +15,6 @@ from web import models
 from utils.encrypt import md5
 from utils.helper import check_code
 
-
 class LoginForm(forms.Form):
     username = forms.CharField(
         label="Username",
@@ -140,14 +139,43 @@ def logout(request):
 
 
 def home(request):
-    print(request.info_dict)
+    # print(request.info_dict)
     # request.info_dict['name']
     return render(request, 'account/home.html')
 
+
+
+class UserForm(forms.ModelForm):
+    class Meta:
+        model = models.User
+        fields = ['username', 'depart']
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for name, field_object in self.fields.items():
+            field_object.widget.attrs = {"class": "form-control"}
+
+
+
 def upload(request):
-    return render(request, 'account/upload.html')
+    user = models.User.objects.filter(id=request.info_dict['id']).first()
+
+    
+    print(user)
+    return render(request, 'account/upload.html', {'user': user})
+    # return render(request, 'account/upload.html')
+
+
 
 def check(request):
-    return render(request, 'account/check.html')
+    user = models.User.objects.filter(id=request.info_dict['id']).first()
+
+    
+    # print(user)
+    return render(request, 'account/check.html', {'user': user})
+
+    # print(user.username, user.depart)
+    # return render(request, 'account/check.html', {'depart': user.depart})
+    # return render(request, 'account/check.html')
 
 

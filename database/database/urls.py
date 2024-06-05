@@ -125,12 +125,14 @@ urlpatterns = [
     path('winding/modify-multiple/', winding.winding_modify_multiple),
 
     path('user/list/', user.user_list),
+    path('user/list-read/', user.user_list_read),
     path('user/edit/<int:aid>/', user.user_edit),
     path('user/delete/', user.user_delete),
     path('user/add-multiple/', user.user_add_multiple),
     path('user/modify-multiple/', user.user_modify_multiple),
 
     path('department/list/', department.department_list),
+    path('department/list-read/', department.department_list_read),
     path('department/edit/<int:aid>/', department.department_edit),
     path('department/delete/', department.department_delete),
     path('department/add-multiple/', department.department_add_multiple),
