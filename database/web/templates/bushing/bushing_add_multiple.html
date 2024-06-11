@@ -4,6 +4,26 @@
 <div class="panel panel-default">
     <div class="panel-heading"><span class="glyphicon glyphicon-indent-right" aria-hidden="true"></span> Add Multiple Bushings</div>
     <div class="panel-body">
+        <form id="upload-form" method="post" enctype="multipart/form-data" class="form-horizontal"  novalidate>
+            {% csrf_token %}
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="form-group" style="margin-bottom: 10px;">
+                        <label for="file"  class="col-sm-1 control-label">Upload Excel File</label>
+                        <div class="col-sm-11">
+                            <div class="file-upload-container">
+                                <input type="file" id="file" name="file" class="form-control">
+                                <button type="submit" id="uploadbtn" class="btn btn-primary">Upload</button>
+                            </div>
+                        </div>
+                    
+                    </div>
+                </div>
+            </div>
+            
+        </form>
+    </div>
+    <div class="panel-body">
         <form class="form-horizontal" method="post" novalidate>
             {% csrf_token %}
             <div class="row">
@@ -152,6 +172,42 @@
                 }
             });
         });
+
+        $('#upload-form').on('submit', function(e) {
+            e.preventDefault();
+            var formData = new FormData(this);
+            $.ajax({
+                url: "{% url 'upload_file_bushing' %}",
+                type: "POST",
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function(data) {
+                    if(data.error) {
+                        console.log(data.error);
+                        return;
+                    }
+                    $('#id_project').val(data.bushing_data.project_id);
+
+                    loadParts(data.bushing_data.project_id);
+                    // Populate form fields with returned data
+                    for(var i=0; i<data.numberBushing; i++) {
+                        
+                        var $row = $('#bushing-table tbody tr').last();
+                        $row.find('td').eq(0).find('input').val(data.bushing_data_position[i]);  
+                        $row.find('td').eq(1).find('input').val(data.bushing_data_numberInterface[i]);
+                        $row.find('td').eq(2).find('input').val(data.bushing_data_draw[i]);
+                        $row.find('td').eq(3).find('input').val(data.bushing_data_acc[i]);
+                        $row.find('td').eq(4).find('input').val(data.bushing_data_mass[i]);
+                        $row.find('td').eq(5).find('input').val(data.bushing_data_totalMass[i]);
+                        $('#add-bushing').click();
+                    }
+                },
+                error: function(data) {
+                    console.log("An error occurred.");
+                }
+            });
+        });
     });
 </script>
 
@@ -194,6 +250,30 @@
         border: 1px solid #ccc; 
         border-radius: 4px; 
         box-sizing: border-box; 
+    }
+    #uploadbtn {
+        width: 100px;
+        height: 33px;
+        font-size: 18px; 
+        border: none;
+        outline: none; 
+        background-color: #4CAF50; 
+        color: white;
+        cursor: pointer;
+        border-radius: 4px; 
+    }
+    #uploadbtn:hover {
+        background-color: #2f7a30; 
+    }
+    .file-upload-container {
+        display: flex;
+        align-items: center;
+    }
+    .file-upload-container input[type="file"] {
+        margin-right: 10px;  
+    }
+    .file-upload-container button {
+        white-space: nowrap;
     }
 </style>
 {% endblock %}

@@ -18,10 +18,11 @@
         <tr>
             <!-- <th>Project ID</th> -->
             <th>Project Name</th>
+            <th>Program</th>
             <th>Equipment</th>
             <th>Customer</th>
             <th>Project No.</th>
-            <th>Number Of Parts</th>
+            <!-- <th>Number Of Parts</th> -->
             <th>Relative Design</th>
             <th>Structure Drawing Nb</th>
             <th>Document No.</th>
@@ -34,10 +35,11 @@
            
             <tr>
                 <td>{{ row.projectName }}</td>
+                <td>{{ row.program|default_if_none:""  }}</td>
                 <td>{{ row.equipment|default_if_none:"" }}</td>
                 <td>{{ row.customer|default_if_none:"" }}</td>
                 <td>{{ row.projectNo|default_if_none:"" }}</td>
-                <td>{{ row.partsNumber }}</td>
+                <!-- <td>{{ row.partsNumber }}</td> -->
                 <td>{{ row.relativeDesign|default_if_none:"" }}</td>
                 <td>{{ row.structureDrawingNb|default_if_none:"" }}</td>
                 <td>{{ row.documentNb|default_if_none:"" }}</td>

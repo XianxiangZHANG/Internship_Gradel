@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect, HttpResponse
 from django.http import JsonResponse
 from django import forms
 from django.forms import modelformset_factory
+from openpyxl import load_workbook
 
 from web import models
 from utils.encrypt import md5
@@ -40,7 +41,7 @@ class InterfaceModelForm(forms.ModelForm):
     class Meta:
         model = models.Interface
         fields = ['interfaceName', 'height', 'intDiameter', 'totalLink', 'totalArm', 'totalSection',
-                'extDiameter', 'theoHeight', 'accMass', 'finODiam', 'finAccSection', 'safetyFactor',
+                'extDiameter', 'accMass', 'finODiam', 'finAccSection', 'safetyFactor',
                 'interfaceCenterX', 'interfaceCenterY', 'interfaceCenterZ',
                 'directionVectorX', 'directionVectorY', 'directionVectorZ',
                 'divisionStep',]
@@ -133,7 +134,7 @@ class InterfaceEditModelForm(forms.ModelForm):
     class Meta:
         model = models.Interface
         fields = ['project', 'part', 'interfaceName', 'height', 'intDiameter', 'totalLink', 'totalArm', 'totalSection',
-                'extDiameter', 'theoHeight', 'accMass', 'finODiam', 'finAccSection', 'safetyFactor',
+                'extDiameter', 'accMass', 'finODiam', 'finAccSection', 'safetyFactor',
                 'interfaceCenterX', 'interfaceCenterY', 'interfaceCenterZ',
                 'directionVectorX', 'directionVectorY', 'directionVectorZ',
                 'divisionStep',]
@@ -169,3 +170,180 @@ def interface_delete(request):
 
     return JsonResponse({"status": True})
 
+def handle_uploaded_file_interface(f):
+    # 加载Excel文件
+    wb = load_workbook(filename=f, data_only=True)
+    if 'CoverPage' not in wb.sheetnames:
+        return {'error': 'CoverPage sheet not found'}
+    if 'Input' not in wb.sheetnames:
+        return {'error': 'Input sheet not found'}
+    if 'Output' not in wb.sheetnames:
+        return {'error': 'Output sheet not found'}
+    if 'Bushing Table' not in wb.sheetnames:
+        return {'error': 'Bushing Table sheet not found'}
+    
+    sheetCP = wb['CoverPage']
+    sheetIn = wb['Input']
+    sheetOut = wb['Output']
+    sheetBT = wb['Bushing Table']
+
+    # 获取项目数据
+    interface_data = {}
+    interfaceName = {}
+    height = {}
+    intDiameter = {}
+    totalLink = {}
+    totalArm = {}
+    totalSection = {}
+    extDiameter = {}
+    accMass = {}
+    finODiam = {}
+    finAccSection = {}
+
+    safetyFactor = {}
+
+    interfaceCenterX = {}
+    interfaceCenterY = {}
+    interfaceCenterZ = {}
+    # directionVectorX = {}
+    # directionVectorY = {}
+    # directionVectorZ = {}
+
+    # divisionStep = {}
+    
+    project_data = {}
+    for row in sheetCP.iter_rows():
+        for cell in row:
+            if cell.value == "Program : ":
+                project_data['program'] = sheetCP.cell(row=cell.row, column=cell.column + 2).value
+            elif cell.value == "Customer : ":
+                project_data['customer'] = sheetCP.cell(row=cell.row, column=cell.column + 2).value
+            elif cell.value == "Project No:":
+                project_data['projectNo'] = sheetCP.cell(row=cell.row, column=cell.column + 2).value
+    project_data['projectName'] = project_data['projectNo'] +' - '+ project_data['customer'] +' - '+ project_data['program']
+
+    
+    interface_data['project_id'] = models.Project.objects.filter(projectName=project_data['projectName']).first().id
+
+
+    # for row in sheetCP.iter_rows():
+    #     for cell in row:
+    #         if cell.value == "Program : ":
+    #             # interface_data['project_projectName'] = sheetCP.cell(row=cell.row, column=cell.column + 2).value
+    #             interface_data['project_id'] = models.Project.objects.filter(projectName=sheetCP.cell(row=cell.row, column=cell.column + 2).value).first().id
+               
+
+    for row in sheetOut.iter_rows():
+        for cell in row:
+            if cell.value == "Number of bushings":
+                numberBushing = int(sheetOut.cell(row=cell.row, column=cell.column + 1).value)
+                # print(type(numberBushing))
+    
+    numberInterface = 0
+    for row in sheetIn.iter_rows():
+        for cell in row:
+            if cell.value == "# of int.":
+                for i in range(0, numberBushing):
+                    numberInterface += int(sheetIn.cell(row=cell.row+1+i, column=cell.column ).value)
+                    # print(numberInterface)
+
+    for row in sheetBT.iter_rows():
+        for cell in row:
+            if cell.value == "Interface" and cell.row > 3:
+                for i in range(0, numberInterface):
+                    # print(cell.row, cell.column)
+                    interfaceName[i] = sheetBT.cell(row=cell.row, column=cell.column + 1 + i ).value
+                    print(interfaceName[i])
+            elif cell.value == "Height [mm]":
+                for i in range(0, numberInterface):
+                    height[i] = int(sheetBT.cell(row=cell.row, column=cell.column+1+i ).value)
+                    # print(height[i])
+            elif cell.value == "Int. Diameter [mm]":
+                for i in range(0, numberInterface):
+                    intDiameter[i] = int(sheetBT.cell(row=cell.row, column=cell.column+1+i ).value)
+                    # print(intDiameter[i])
+            elif cell.value == "Total Link":
+                for i in range(0, numberInterface):
+                    totalLink[i] = int(sheetBT.cell(row=cell.row, column=cell.column+1+i ).value)
+                    # print(totalLink[i])
+            elif cell.value == "Total Arm":
+                for i in range(0, numberInterface):
+                    totalArm[i] = int(sheetBT.cell(row=cell.row, column=cell.column+1+i ).value)
+                    # print(totalArm[i])
+            elif cell.value == "Total Section [mm²]":
+                for i in range(0, numberInterface):
+                    totalSection[i] = round(sheetBT.cell(row=cell.row, column=cell.column+1+i ).value, 2)
+                    # print(totalSection[i])
+            elif cell.value == "Ext. Diameter [mm]":
+                for i in range(0, numberInterface):
+                    extDiameter[i] = round(sheetBT.cell(row=cell.row, column=cell.column+1+i ).value, 2)
+                    # print(extDiameter[i])
+            elif cell.value == "Acc. Mass [g]":
+                for i in range(0, numberInterface):
+                    accMass[i] = round(sheetBT.cell(row=cell.row, column=cell.column+1+i ).value, 2)
+                    # print(accMass[i])
+            elif cell.value == "Fin. O. Diam. [mm]":
+                for i in range(0, numberInterface):
+                    finODiam[i] = sheetBT.cell(row=cell.row, column=cell.column+1+i ).value
+                    # print(finODiam[i])
+            elif cell.value == "Fin. Acc. section [mm²]":
+                for i in range(0, numberInterface):
+                    finAccSection[i] = sheetBT.cell(row=cell.row, column=cell.column+1+i ).value
+                    # print(finAccSection[i])
+            elif cell.value == "Safety Factor [%]":
+                for i in range(0, numberInterface):
+                    safetyFactor[i] = int(sheetBT.cell(row=cell.row, column=cell.column+1+i ).value * 100)
+                    # print(safetyFactor[i])
+            elif cell.value == "X":
+                for i in range(0, numberInterface):
+                    interfaceCenterX[i] = sheetBT.cell(row=cell.row+1+i, column=cell.column ).value
+                    # print(interfaceCenterX[i])
+            elif cell.value == "Y":
+                for i in range(0, numberInterface):
+                    interfaceCenterY[i] = sheetBT.cell(row=cell.row+1+i, column=cell.column ).value
+                    # print(interfaceCenterY[i])
+            elif cell.value == "Z":
+                for i in range(0, numberInterface):
+                    interfaceCenterZ[i] = sheetBT.cell(row=cell.row+1+i, column=cell.column ).value
+                    # print(interfaceCenterZ[i])
+            # elif cell.value == "":
+            #     for i in range(0, numberInterface):
+            #         directionVectorX[i] = sheetBT.cell(row=cell.row+1+i, column=cell.column ).value
+            #         # print(directionVectorX[i])
+            # elif cell.value == "":
+            #     for i in range(0, numberInterface):
+            #         directionVectorY[i] = sheetBT.cell(row=cell.row+1+i, column=cell.column ).value
+            #         # print(directionVectorY[i])
+            # elif cell.value == "":
+            #     for i in range(0, numberInterface):
+            #         directionVectorZ[i] = sheetBT.cell(row=cell.row+1+i, column=cell.column ).value
+            #         # print(directionVectorZ[i])
+    
+    interface =  {
+        'numberInterface':numberInterface,
+        'interface_data':interface_data,
+        'interfaceName':interfaceName,
+        'height':height,
+        'intDiameter':intDiameter,
+        'totalLink':totalLink,
+        'totalArm':totalArm,
+        'totalSection':totalSection,
+        'extDiameter':extDiameter,
+        'accMass':accMass,
+        'finODiam':finODiam,
+        'finAccSection':finAccSection,
+        'safetyFactor':safetyFactor,
+        'interfaceCenterX':interfaceCenterX,
+        'interfaceCenterY':interfaceCenterY,
+        'interfaceCenterZ':interfaceCenterZ,
+    }
+    return interface
+
+def upload_file_interface(request):
+    if request.method == 'POST' and 'file' in request.FILES:
+        interface = handle_uploaded_file_interface(request.FILES['file'])
+        print(interface)
+        if 'error' in interface:
+            return JsonResponse(interface, status=400)
+        return JsonResponse(interface)
+    return JsonResponse({'error': 'Invalid request'}, status=400)

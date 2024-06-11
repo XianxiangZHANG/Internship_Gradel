@@ -1,7 +1,9 @@
+from typing import Type
 from django.shortcuts import render, redirect, HttpResponse
 from django.http import JsonResponse
 from django import forms
 from django.forms import modelformset_factory
+from openpyxl import load_workbook
 
 from web import models
 import django_filters
@@ -107,7 +109,11 @@ def bushing_add_multiple(request):
                 instance.part = part
                 instance.save()
             return redirect('/bushing/list/')  # Replace with your redirect URL
-
+        else:
+            # Handle formset or project_part_form validation errors here
+            print(formset.errors)
+            print(project_part_form.errors)
+            
     return render(request, 'bushing/bushing_add_multiple.html', {
         'projects': projects,
         'formset': formset,
@@ -202,3 +208,107 @@ def bushing_delete_mult(request):
         return JsonResponse({"status": True})
     except models.Bushing.DoesNotExist:
         return JsonResponse({"status": False, "error": "Bushing not found"})
+    
+
+def handle_uploaded_file_bushing(f):
+    # 加载Excel文件
+    wb = load_workbook(filename=f, data_only=True)
+    if 'CoverPage' not in wb.sheetnames:
+        return {'error': 'CoverPage sheet not found'}
+    if 'Input' not in wb.sheetnames:
+        return {'error': 'Input sheet not found'}
+    if 'Output' not in wb.sheetnames:
+        return {'error': 'Output sheet not found'}
+    
+    sheetCP = wb['CoverPage']
+    sheetIn = wb['Input']
+    sheetOut = wb['Output']
+
+    # 获取项目数据
+    bushing_data = {}
+    
+    bushing_data_numberInterface = {}
+    bushing_data_position = {}
+    bushing_data_draw = {}
+    bushing_data_acc = {}
+    bushing_data_mass = {}
+    bushing_data_totalMass = {}
+
+    project_data = {}
+    for row in sheetCP.iter_rows():
+        for cell in row:
+            if cell.value == "Program : ":
+                project_data['program'] = sheetCP.cell(row=cell.row, column=cell.column + 2).value
+            elif cell.value == "Customer : ":
+                project_data['customer'] = sheetCP.cell(row=cell.row, column=cell.column + 2).value
+            elif cell.value == "Project No:":
+                project_data['projectNo'] = sheetCP.cell(row=cell.row, column=cell.column + 2).value
+    project_data['projectName'] = project_data['projectNo'] +' - '+ project_data['customer'] +' - '+ project_data['program']
+
+    
+    bushing_data['project_id'] = models.Project.objects.filter(projectName=project_data['projectName']).first().id
+
+    # for row in sheetCP.iter_rows():
+    #     for cell in row:
+    #         if cell.value == "Program : ":
+    #             # bushing_data['project_projectName'] = sheetCP.cell(row=cell.row, column=cell.column + 2).value
+    #             bushing_data['project_id'] = models.Project.objects.filter(projectName=sheetCP.cell(row=cell.row, column=cell.column + 2).value).first().id
+    #             # bushing_data['part_id'] = models.Part.objects.filter(partName=sheetCP.cell(row=cell.row+1, column=cell.column + 2).value).first().id
+    #             # print(bushing_data['project_id'])
+
+    for row in sheetOut.iter_rows():
+        for cell in row:
+            if cell.value == "Number of bushings":
+                numberBushing = int(sheetOut.cell(row=cell.row, column=cell.column + 1).value)
+                # print(type(numberBushing))
+            
+    for row in sheetIn.iter_rows():
+        for cell in row:
+            if cell.value == "# of int.":
+                for i in range(0, numberBushing):
+                    bushing_data_numberInterface[i] = int(sheetIn.cell(row=cell.row+1+i, column=cell.column ).value)
+                    # print(bushing_data_numberInterface[i])
+
+    for row in sheetOut.iter_rows():
+        for cell in row:
+            if cell.value == "Bush. Position":
+                for i in range(0, numberBushing):
+                    bushing_data_position[i] = sheetOut.cell(row=cell.row+1+i, column=cell.column ).value
+                    # print(bushing_data_position[i])
+            elif cell.value == "Bush. Draw. nb.":
+                for i in range(0, numberBushing):
+                    bushing_data_draw[i] = sheetOut.cell(row=cell.row+1+i, column=cell.column ).value
+                    # print(bushing_data_draw[i])
+            elif cell.value == "Acc. on bush. [g]":
+                for i in range(0, numberBushing):
+                    bushing_data_acc[i] = sheetOut.cell(row=cell.row+1+i, column=cell.column ).value
+                    # print(bushing_data_acc[i])
+            elif cell.value == "Bushing mass [g]":
+                for i in range(0, numberBushing):
+                    bushing_data_mass[i] = sheetOut.cell(row=cell.row+1+i, column=cell.column ).value
+                    # print(bushing_data_mass[i])
+            elif cell.value == "Total bush. mass [g]":
+                for i in range(0, numberBushing):
+                    bushing_data_totalMass[i] = sheetOut.cell(row=cell.row+1+i, column=cell.column ).value
+                    # print(bushing_data_totalMass[i])
+    
+    bushing =  {
+        'bushing_data': bushing_data,
+        'numberBushing': numberBushing,
+        'bushing_data_draw': bushing_data_draw,
+        'bushing_data_numberInterface': bushing_data_numberInterface,
+        'bushing_data_position': bushing_data_position,
+        'bushing_data_acc': bushing_data_acc,
+        'bushing_data_mass': bushing_data_mass,
+        'bushing_data_totalMass': bushing_data_totalMass,
+    }
+    return bushing
+
+def upload_file_bushing(request):
+    if request.method == 'POST' and 'file' in request.FILES:
+        bushing = handle_uploaded_file_bushing(request.FILES['file'])
+        print(bushing)
+        if 'error' in bushing:
+            return JsonResponse(bushing, status=400)
+        return JsonResponse(bushing)
+    return JsonResponse({'error': 'Invalid request'}, status=400)

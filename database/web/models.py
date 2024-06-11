@@ -348,10 +348,11 @@ class R_and_D(models.Model):
 class Project(models.Model):
     """ ProjectTable """
     projectName = models.CharField(verbose_name="Project Name", max_length=255, unique= True)
+    program = models.CharField(verbose_name="Program", max_length=255, null=True, blank=True)
     equipment = models.CharField(verbose_name="Equipment", max_length=255, null=True, blank=True)
     customer = models.CharField(verbose_name="Customer", max_length=255, null=True, blank=True)
     projectNo = models.CharField(verbose_name="Project No", max_length=255, null=True, blank=True)
-    partsNumber = models.PositiveIntegerField(verbose_name="Number of Parts", default=0, null=True, blank=True)
+    # partsNumber = models.PositiveIntegerField(verbose_name="Number of Parts", default=0, null=True, blank=True)
 
 
     relativeDesign = models.CharField(verbose_name="Relative Design", max_length=255, null=True, blank=True)
@@ -409,7 +410,7 @@ class Part(models.Model):
     totalFiberMass = models.FloatField(verbose_name="Total Fiber Mass[kg]", null=True, blank=True)
     totalResinMass = models.FloatField(verbose_name="Total Resin Mass[g]", null=True, blank=True)
 
-    projectImage = models.FileField(upload_to='uploads/', verbose_name="Project Image", null=True, blank=True)
+    projectImage = models.FileField(upload_to='images/', verbose_name="Project Image", null=True, blank=True)
 
 
     ########   3   ########
@@ -461,7 +462,7 @@ class Interface(models.Model):
 
     totalSection = models.FloatField(verbose_name="Total Section[mm²]", null=True, blank=True)
     extDiameter = models.FloatField(verbose_name="Ext. Diameter[mm]", null=True, blank=True)
-    theoHeight = models.FloatField(verbose_name="Theo. Height[mm]", null=True, blank=True)
+    # theoHeight = models.FloatField(verbose_name="Theo. Height[mm]", null=True, blank=True)
     accMass = models.FloatField(verbose_name="Acc. Mass[g]", null=True, blank=True)
     finODiam = models.FloatField(verbose_name="Fin. O. Diam.[mm]", null=True, blank=True)
     finAccSection = models.FloatField(verbose_name="Fin. Acc. Section[mm²]", null=True, blank=True)
@@ -494,7 +495,7 @@ class Link(models.Model):
     interface2 = models.CharField(verbose_name="Interface2 Name", max_length=255)
 
     length = models.FloatField(verbose_name="Length[mm]", null=True, blank=True)
-    linkType = models.CharField(verbose_name="Link Type", max_length=255, null=True, blank=True)
+    # linkType = models.CharField(verbose_name="Link Type", max_length=255, null=True, blank=True)
     armDiam = models.FloatField(verbose_name="Arm Diam.[mm]", null=True, blank=True)
     armSection = models.FloatField(verbose_name="Arm Section[mm²]", max_length=255, null=True, blank=True)
 

@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/3.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
-
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -141,8 +141,8 @@ STATIC_URL = '/static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# # 媒体文件目录路径，用于存储上传的文件
-# MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+# 媒体文件目录路径，用于存储上传的文件
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-# # 访问媒体文件的 URL
-# MEDIA_URL = '/media/'
+# 访问媒体文件的 URL
+MEDIA_URL = '/media/'

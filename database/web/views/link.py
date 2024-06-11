@@ -1,7 +1,9 @@
+import warnings
 from django.shortcuts import render, redirect, HttpResponse
 from django.http import JsonResponse
 from django import forms
 from django.forms import modelformset_factory
+from openpyxl import load_workbook
 
 from web import models
 from utils.encrypt import md5
@@ -40,8 +42,8 @@ def link_input(request):
 class LinkModelForm(forms.ModelForm):
     class Meta:
         model = models.Link
-        fields = ['linkName', 'interface1', 'interface2', 'length', 'linkType', 'armDiam', 'armSection', 
-                  'cycle', 'sequence', 'finArmSection', 'finArmDiam', 'finArmRadius',
+        fields = ['linkName', 'interface1', 'interface2', 'length',  'sequence', 'armDiam', 'armSection', 
+                  'cycle', 'finArmSection', 'finArmDiam', 'finArmRadius',
                 'mass', 'angle']
 
     def __init__(self, *args, **kwargs):
@@ -129,8 +131,8 @@ def link_add(request):
 class LinkEditModelForm(forms.ModelForm):
     class Meta:
         model = models.Link
-        fields = ['project', 'part', 'linkName', 'interface1', 'interface2', 'length', 'linkType', 'armDiam', 'armSection', 
-                  'cycle', 'sequence', 'finArmSection', 'finArmDiam', 'finArmRadius',
+        fields = ['project', 'part', 'linkName', 'interface1', 'interface2', 'length', 'sequence', 'armDiam', 'armSection', 
+                  'cycle',  'finArmSection', 'finArmDiam', 'finArmRadius',
                 'mass', 'angle',]
 
     def __init__(self, *args, **kwargs):
@@ -164,3 +166,161 @@ def link_delete(request):
     
     return JsonResponse({"status": True})
 
+
+
+def custom_warning_filter(message, category, filename, lineno, file=None, line=None):
+    if "Unknown extension is not supported and will be removed" in str(message) or \
+       "Conditional Formatting extension is not supported and will be removed" in str(message):
+        return
+    else:
+        warnings.showwarning(message, category, filename, lineno, file, line)
+
+# Apply custom warning filter
+warnings.showwarning = custom_warning_filter
+
+
+def handle_uploaded_file_link(f):
+    # 加载Excel文件
+    wb = load_workbook(filename=f, data_only=True)
+    if 'CoverPage' not in wb.sheetnames:
+        return {'error': 'CoverPage sheet not found'}
+    if 'Link Table' not in wb.sheetnames:
+        return {'error': 'Link Table sheet not found'}
+    
+    sheetCP = wb['CoverPage']
+    sheetLT = wb['Link Table']
+
+    numberLink = 0
+
+    link_data = {}
+    linkName = {}
+    interface1 = {}
+    interface2 = {}
+
+    lengthLink = {}
+    # linkType = {}
+    armDiam = {}
+    armSection = {}
+
+    cycle = {}
+    sequence = {}
+    finArmSection = {}
+    finArmDiam = {}
+    finArmRadius = {}
+    mass = {}
+    angle = {}
+    
+    project_data = {}
+    for row in sheetCP.iter_rows():
+        for cell in row:
+            if cell.value == "Program : ":
+                project_data['program'] = sheetCP.cell(row=cell.row, column=cell.column + 2).value
+            elif cell.value == "Customer : ":
+                project_data['customer'] = sheetCP.cell(row=cell.row, column=cell.column + 2).value
+            elif cell.value == "Project No:":
+                project_data['projectNo'] = sheetCP.cell(row=cell.row, column=cell.column + 2).value
+    project_data['projectName'] = project_data['projectNo'] +' - '+ project_data['customer'] +' - '+ project_data['program']
+
+    
+    link_data['project_id'] = models.Project.objects.filter(projectName=project_data['projectName']).first().id
+
+
+    # for row in sheetCP.iter_rows():
+    #     for cell in row:
+    #         if cell.value == "Program : ":
+    #             # link_data['project_projectName'] = sheetCP.cell(row=cell.row, column=cell.column + 2).value
+    #             link_data['project_id'] = models.Project.objects.filter(projectName=sheetCP.cell(row=cell.row, column=cell.column + 2).value).first().id
+               
+    for row in sheetLT.iter_rows():
+        for cell in row:
+            if cell.value == "Link":
+                i = 1
+                while sheetLT.cell(row=cell.row+i, column=cell.column ).value != None:
+                    numberLink += 1
+                    print(numberLink)
+                    i +=1
+                print(numberLink)
+
+    for row in sheetLT.iter_rows():
+        for cell in row:
+            if cell.value == "Link":
+                for i in range(0, numberLink):
+                    # print(cell.row, cell.column)
+                    linkName[i] = sheetLT.cell(row=cell.row+ 1 + i, column=cell.column ).value
+                    print(linkName[i])
+            elif cell.value == "Bushing Bi":
+                for i in range(0, numberLink):
+                    interface1[i] = sheetLT.cell(row=cell.row+ 1 + i, column=cell.column).value
+                    # print(interface1[i])
+            elif cell.value == "Bushing Bj":
+                for i in range(0, numberLink):
+                    interface2[i] = sheetLT.cell(row=cell.row+ 1 + i, column=cell.column ).value
+                    # print(interface2[i])
+            elif cell.value == "Sequence":
+                for i in range(0, numberLink):
+                    sequence[i] = sheetLT.cell(row=cell.row+ 1 + i, column=cell.column).value
+                    # print(sequence[i])
+            elif cell.value == "Length [mm]":
+                for i in range(0, numberLink):
+                    lengthLink[i] = round(sheetLT.cell(row=cell.row+ 1 + i, column=cell.column ).value,2)
+                    # print(lengthLink[i])
+            elif cell.value == "Arm diam. [mm]":
+                for i in range(0, numberLink):
+                    armDiam[i] = sheetLT.cell(row=cell.row+ 1 + i, column=cell.column ).value
+                    # print(armDiam[i])
+            elif cell.value == "Arm Sec. [mm²]":
+                for i in range(0, numberLink):
+                    armSection[i] = sheetLT.cell(row=cell.row+ 1 + i, column=cell.column ).value
+                    # print(armSection[i])
+            elif cell.value == "Cycle #":
+                for i in range(0, numberLink):
+                    cycle[i] = sheetLT.cell(row=cell.row+ 1 + i, column=cell.column ).value
+                    # print(cycle[i])
+            elif cell.value == "Fin. Arm Sec. [mm²]":
+                for i in range(0, numberLink):
+                    finArmSection[i] = round(sheetLT.cell(row=cell.row+ 1 + i, column=cell.column ).value,2)
+                    # print(finArmSection[i])
+            elif cell.value == "Fin. Arm diam. [mm]":
+                for i in range(0, numberLink):
+                    finArmDiam[i] = round(sheetLT.cell(row=cell.row+ 1 + i, column=cell.column ).value,2)
+                    # print(finArmDiam[i])
+            elif cell.value == "Fin. Arm radius [m]":
+                for i in range(0, numberLink):
+                    finArmRadius[i] = sheetLT.cell(row=cell.row+ 1 + i, column=cell.column ).value 
+                    # print(finArmRadius[i])
+            elif cell.value == "Mass [g]":
+                for i in range(0, numberLink):
+                    mass[i] = round(sheetLT.cell(row=cell.row+1 + i, column=cell.column ).value,2)
+                    # print(mass[i])
+            # elif cell.value == "Angle":
+            #     for i in range(0, numberLink):
+            #         angle[i] = sheetLT.cell(row=cell.row+1+i, column=cell.column ).value
+            #         # print(angle[i])
+
+    link =  {
+        'numberLink':numberLink,
+        'link_data':link_data,
+        'linkName':linkName,
+        'interface1':interface1,
+        'interface2':interface2,
+        'lengthLink' :lengthLink,
+        'armDiam':armDiam,
+        'armSection':armSection,
+        'cycle':cycle,
+        'sequence':sequence,
+        'finArmSection':finArmSection,
+        'finArmDiam':finArmDiam,
+        'finArmRadius':finArmRadius,
+        'mass':mass,
+        'angle':angle,
+    }
+    return link
+
+def upload_file_link(request):
+    if request.method == 'POST' and 'file' in request.FILES:
+        link = handle_uploaded_file_link(request.FILES['file'])
+        print(link)
+        if 'error' in link:
+            return JsonResponse(link, status=400)
+        return JsonResponse(link)
+    return JsonResponse({'error': 'Invalid request'}, status=400)

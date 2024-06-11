@@ -1,8 +1,28 @@
 {% extends 'layout.html' %}
 
 {% block content %}
-<div class="panel panel-default">
+<div class="panel panel-default" style="margin-bottom: 200px;">
     <div class="panel-heading"><span class="glyphicon glyphicon-indent-right" aria-hidden="true"></span> Add Multiple Interfaces</div>
+    <div class="panel-body">
+        <form id="upload-form" method="post" enctype="multipart/form-data" class="form-horizontal"  novalidate>
+            {% csrf_token %}
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="form-group" style="margin-bottom: 10px;">
+                        <label for="file"  class="col-sm-1 control-label">Upload Excel File</label>
+                        <div class="col-sm-11">
+                            <div class="file-upload-container">
+                                <input type="file" id="file" name="file" class="form-control">
+                                <button type="submit" id="uploadbtn" class="btn btn-primary">Upload</button>
+                            </div>
+                        </div>
+                    
+                    </div>
+                </div>
+            </div>
+            
+        </form>
+    </div>
     <div class="panel-body">
         <form class="form-horizontal" method="post" novalidate>
             {% csrf_token %}
@@ -42,7 +62,6 @@
                             <th>Total Arm</th>
                             <th>Total Section [mm²]</th>
                             <th>Ext. Diameter [mm]</th>
-                            <th>Theo. height [mm]</th>
                             <th>Acc. Mass [g]</th>
                             <th>Fin. O. Diam. [mm]</th>
                             <th>Fin. Acc. section [mm²]</th>
@@ -68,7 +87,6 @@
                             <td contenteditable="true">{{ field.totalArm }}<span style="color: red;">{{ field.errors.0 }}</span></td>
                             <td contenteditable="true">{{ field.totalSection }}<span style="color: red;">{{ field.errors.0 }}</span></td>
                             <td contenteditable="true">{{ field.extDiameter }}<span style="color: red;">{{ field.errors.0 }}</span></td>
-                            <td contenteditable="true">{{ field.theoHeight }}<span style="color: red;">{{ field.errors.0 }}</span></td>
                             <td contenteditable="true">{{ field.accMass }}<span style="color: red;">{{ field.errors.0 }}</span></td>
                             <td contenteditable="true">{{ field.finODiam }}<span style="color: red;">{{ field.errors.0 }}</span></td>
                             <td contenteditable="true">{{ field.finAccSection }}<span style="color: red;">{{ field.errors.0 }}</span></td>
@@ -103,6 +121,7 @@
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script type="text/javascript">
+    
     $(document).ready(function() {
         function loadParts(projectId) {
             var url = '{% url "load_parts" %}';
@@ -178,6 +197,50 @@
                 }
             });
         });
+        
+        $('#upload-form').on('submit', function(e) {
+            e.preventDefault();
+            var formData = new FormData(this);
+            $.ajax({
+                url: "{% url 'upload_file_interface' %}",
+                type: "POST",
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function(data) {
+                    if(data.error) {
+                        console.log(data.error);
+                        return;
+                    }
+                    $('#id_project').val(data.interface_data.project_id);
+                    loadParts(data.interface_data.project_id);
+                    // Populate form fields with returned data
+                    for(var i=0; i<data.numberInterface; i++) {
+                        var $row = $('#interface-table tbody tr').last();
+                        $row.find('td').eq(0).find('input').val(data.interfaceName[i]); 
+                        $row.find('td').eq(1).find('input').val(data.height[i]);
+                        $row.find('td').eq(2).find('input').val(data.intDiameter[i]);
+                        $row.find('td').eq(3).find('input').val(data.totalLink[i]);
+                        $row.find('td').eq(4).find('input').val(data.totalArm[i]);
+                        $row.find('td').eq(5).find('input').val(data.totalSection[i]);
+                        $row.find('td').eq(6).find('input').val(data.extDiameter[i]); 
+                        $row.find('td').eq(7).find('input').val(data.accMass[i]);
+                        $row.find('td').eq(8).find('input').val(data.finODiam[i]);
+                        $row.find('td').eq(9).find('input').val(data.finAccSection[i]);
+                        $row.find('td').eq(10).find('input').val(data.safetyFactor[i]);
+                        $row.find('td').eq(11).find('input').val(data.interfaceCenterX[i]);
+                        $row.find('td').eq(12).find('input').val(data.interfaceCenterY[i]); 
+                        $row.find('td').eq(13).find('input').val(data.interfaceCenterZ[i]);
+                        // $row.find('td').eq(14).find('input').val(data.bushing_data_draw[i]);
+                        
+                        $('#add-interface').click();
+                    }
+                },
+                error: function(data) {
+                    console.log("An error occurred.");
+                }
+            });
+        });
     });
 </script>
 
@@ -222,5 +285,29 @@
         border-radius: 4px; 
         box-sizing: border-box; 
     }
+    #uploadbtn {
+        width: 100px;
+        height: 33px;
+        font-size: 18px; 
+        border: none;
+        outline: none; 
+        background-color: #4CAF50; 
+        color: white;
+        cursor: pointer;
+        border-radius: 4px; 
+    }
+    #uploadbtn:hover {
+        background-color: #2f7a30; 
+    }
+    .file-upload-container {
+        display: flex;
+        align-items: center;
+    }
+    .file-upload-container input[type="file"] {
+        margin-right: 10px;  
+    }
+    .file-upload-container button {
+        white-space: nowrap;
+    }
 </style>
-{% endblock %}
+{% endblock %} 

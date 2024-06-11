@@ -1,8 +1,29 @@
 {% extends 'layout.html' %}
 
 {% block content %}
-<div class="panel panel-default">
+<div class="panel panel-default" style="margin-bottom: 200px;">
     <div class="panel-heading"><span class="glyphicon glyphicon-indent-right" aria-hidden="true"></span> Add Multiple Links</div>
+    <div class="panel-body">
+        <form id="upload-form" method="post" enctype="multipart/form-data" class="form-horizontal"  novalidate>
+            {% csrf_token %}
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="form-group" style="margin-bottom: 10px;">
+                        <label for="file"  class="col-sm-1 control-label">Upload Excel File</label>
+                        <div class="col-sm-11">
+                            <div class="file-upload-container">
+                                <input type="file" id="file" name="file" class="form-control">
+                                <button type="submit" id="uploadbtn" class="btn btn-primary">Upload</button>
+                            </div>
+                        </div>
+                    
+                    </div>
+                </div>
+            </div>
+            
+        </form>
+    </div>
+
     <div class="panel-body">
         <form class="form-horizontal" method="post" novalidate>
             {% csrf_token %}
@@ -39,11 +60,12 @@
                             <th>Interface1 Name</th>
                             <th>Interface2 Name</th>
                             <th>Length[mm]</th>
-                            <th>Link Type</th>
+                            <th>Sequence</th>
+                            <!-- <th>Link Type</th> -->
                             <th>Arm Diam.[mm]</th>
                             <th>Arm Section[mm²]</th>
                             <th>Cycle #</th>
-                            <th>Sequence</th>
+                            
                             <th>Fin. Arm Section[mm²]</th>
                             <th>Fin. Arm Diam.[mm]</th>
                             <th>Fin. Arm Radius[m]</th>
@@ -60,11 +82,12 @@
                             <td contenteditable="true">{{ field.interface1 }}<span style="color: red;">{{ field.errors.0 }}</span></td>
                             <td contenteditable="true">{{ field.interface2 }}<span style="color: red;">{{ field.errors.0 }}</span></td>
                             <td contenteditable="true">{{ field.length }}<span style="color: red;">{{ field.errors.0 }}</span></td>
-                            <td contenteditable="true">{{ field.linkType }}<span style="color: red;">{{ field.errors.0 }}</span></td>
+                            <td contenteditable="true">{{ field.sequence }}<span style="color: red;">{{ field.errors.0 }}</span></td>
+                            <!-- <td contenteditable="true">{{ field.linkType }}<span style="color: red;">{{ field.errors.0 }}</span></td> -->
                             <td contenteditable="true">{{ field.armDiam }}<span style="color: red;">{{ field.errors.0 }}</span></td>
                             <td contenteditable="true">{{ field.armSection }}<span style="color: red;">{{ field.errors.0 }}</span></td>
                             <td contenteditable="true">{{ field.cycle }}<span style="color: red;">{{ field.errors.0 }}</span></td>
-                            <td contenteditable="true">{{ field.sequence }}<span style="color: red;">{{ field.errors.0 }}</span></td>
+                            
                             <td contenteditable="true">{{ field.finArmSection }}<span style="color: red;">{{ field.errors.0 }}</span></td>
                             <td contenteditable="true">{{ field.finArmDiam }}<span style="color: red;">{{ field.errors.0 }}</span></td>
                             <td contenteditable="true">{{ field.finArmRadius }}<span style="color: red;">{{ field.errors.0 }}</span></td>
@@ -197,6 +220,49 @@
                 }
             });
         });
+        $('#upload-form').on('submit', function(e) {
+            e.preventDefault();
+            var formData = new FormData(this);
+            $.ajax({
+                url: "{% url 'upload_file_link' %}",
+                type: "POST",
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function(data) {
+                    if(data.error) {
+                        console.log(data.error);
+                        return;
+                    }
+                    $('#id_project').val(data.link_data.project_id);
+                    loadParts(data.link_data.project_id);
+                    // Populate form fields with returned data
+                    
+                    for(var i=0; i<data.numberLink; i++) {
+                        var $row = $('#link-table tbody tr').last();
+                        $row.find('td').eq(0).find('input').val(data.linkName[i]); 
+                        $row.find('td').eq(1).find('input').val(data.interface1[i]);
+                        $row.find('td').eq(2).find('input').val(data.interface2[i]);
+                        $row.find('td').eq(3).find('input').val(data.lengthLink[i]);
+                        $row.find('td').eq(4).find('input').val(data.sequence[i]);
+                        $row.find('td').eq(5).find('input').val(data.armDiam[i]);
+                        $row.find('td').eq(6).find('input').val(data.armSection[i]); 
+                        $row.find('td').eq(7).find('input').val(data.cycle[i]);
+                        $row.find('td').eq(8).find('input').val(data.finArmSection[i]);
+                        $row.find('td').eq(9).find('input').val(data.finArmDiam[i]);
+                        $row.find('td').eq(10).find('input').val(data.finArmRadius[i]);
+                        $row.find('td').eq(11).find('input').val(data.mass[i]); 
+                        $row.find('td').eq(12).find('input').val(data.angle[i]);
+                        // $row.find('td').eq(14).find('input').val(data.bushing_data_draw[i]);
+                        
+                        $('#add-link').click();
+                    }
+                },
+                error: function(data) {
+                    console.log("An error occurred.");
+                }
+            });
+        });
     });
 </script>
 
@@ -239,6 +305,30 @@
         border: 1px solid #ccc; 
         border-radius: 4px; 
         box-sizing: border-box; 
+    }
+    #uploadbtn {
+        width: 100px;
+        height: 33px;
+        font-size: 18px; 
+        border: none;
+        outline: none; 
+        background-color: #4CAF50; 
+        color: white;
+        cursor: pointer;
+        border-radius: 4px; 
+    }
+    #uploadbtn:hover {
+        background-color: #2f7a30; 
+    }
+    .file-upload-container {
+        display: flex;
+        align-items: center;
+    }
+    .file-upload-container input[type="file"] {
+        margin-right: 10px;  
+    }
+    .file-upload-container button {
+        white-space: nowrap;
     }
 </style>
 {% endblock %}

@@ -72,18 +72,17 @@ urlpatterns = [
 
     path('project/list/', project.project_list),
     path('project/valid/', project.project_valid),
-    # path('project/input/', project.project_input),
     path('project/add/', project.project_add),
-    # /project/edit/123/
     path('project/edit/<int:aid>/', project.project_edit),
-    # /project/delete/?aid=123
     path('project/delete/', project.project_delete),
+    path('project/upload/', project.upload_file_project, name='upload_file_project'),
 
     path('part/list/', part.part_list),
     path('part/valid/', part.part_valid),
     path('part/add/', part.part_add),
     path('part/edit/<int:aid>/', part.part_edit),
     path('part/delete/', part.part_delete),
+    path('part/upload/', part.upload_file_part, name='upload_file_part'),
 
     path('bushing/list/', bushing.bushing_list),
     path('bushing/valid/', bushing.bushing_valid),
@@ -93,6 +92,7 @@ urlpatterns = [
     path('bushing/load-parts/', load_parts, name='load_parts'),
     path('bushing/add-multiple/', bushing.bushing_add_multiple),
     path('bushing/modify-multiple/', bushing.bushing_modify_multiple),
+    path('bushing/upload/', bushing.upload_file_bushing, name='upload_file_bushing'),
 
     path('interface/list/', interface.interface_list),
     path('interface/valid/', interface.interface_valid),
@@ -102,6 +102,7 @@ urlpatterns = [
     path('interface/load-parts/', load_parts, name='load_parts'),
     path('interface/add-multiple/', interface.interface_add_multiple),
     path('interface/modify-multiple/', interface.interface_modify_multiple),
+    path('interface/upload/', interface.upload_file_interface, name='upload_file_interface'),
 
     path('link/list/', link.link_list),
     path('link/valid/', link.link_valid),
@@ -112,6 +113,8 @@ urlpatterns = [
     path('link/load-interface/', load_interfaces, name='load_interfaces'),
     path('link/add-multiple/', link.link_add_multiple),
     path('link/modify-multiple/', link.link_modify_multiple),
+    path('link/upload/', link.upload_file_link, name='upload_file_link'),
+
 
     path('winding/list/', winding.winding_list),
     path('winding/valid/', winding.winding_valid),

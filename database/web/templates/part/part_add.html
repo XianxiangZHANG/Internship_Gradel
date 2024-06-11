@@ -1,0 +1,178 @@
+{% extends 'layout.html' %}
+
+
+{% block content %}
+<div class="panel panel-default">
+    <div class="panel-heading"><span class="glyphicon glyphicon-indent-right" aria-hidden="true"></span> Edit Part Information</div>
+        <div class="panel-body">
+            <form id="upload-form" method="post" enctype="multipart/form-data" class="form-horizontal"  novalidate>
+                {% csrf_token %}
+                <div class="col-xs-12">
+                    <div class="form-group" style="margin-bottom: 25px;">
+                        <label for="file"  class="col-sm-2 control-label">Upload Excel File</label>
+                        <div class="col-sm-10">
+                            <div class="file-upload-container">
+                                <input type="file" id="file" name="file" class="form-control">
+                                <button type="submit" id="uploadbtn" class="btn btn-primary">Upload</button>
+                            </div>
+                        </div>
+                       
+                    </div>
+                </div>
+               
+            </form>
+        </div>
+        <div class="panel-body">
+        <form id="part-form" method="post"  class="form-horizontal" novalidate>
+            {% csrf_token %}
+            {% for field in form %}
+                <div class="col-xs-12">
+                    <div class="form-group" style="margin-bottom: 25px;">
+                        <label class="col-sm-2 control-label">{{ field.label }}</label>
+                        <div class="col-sm-10" style="position: relative">
+                            {{ field }}
+                            <br>
+                            <span style="color: red;position: absolute;">{{ field.errors.0 }}</span>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+            <div class="row">
+                <div class="form-group">
+                    <div class="col-xs-12">
+                        <div class="col-sm-offset-6 col-sm-10">
+                            <button type="submit" class="btn btn-primary" style="width: 200px;">Save</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block js %}
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('#upload-form').on('submit', function(e) {
+            e.preventDefault();
+            var formData = new FormData(this);
+            $.ajax({
+                url: "{% url 'upload_file_part' %}",
+                type: "POST",
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function(data) {
+                    $('#id_project').val(data.project_id);
+                    $('#id_defaultInterfaceHeight').val(data.defaultInterfaceHeight);
+                    $('#id_defaultInterfaceIntDiam').val(data.defaultInterfaceIntDiam);
+                    $('#id_defaultLinkType').val(data.defaultLinkType);
+                    $('#id_defaultLinkDefined').val(data.defaultLinkDefined);
+                    $('#id_numberLink').val(data.numberLink);
+                    $('#id_numberBushing').val(data.numberBushing);
+                    $('#id_totalMassLink').val(data.totalMassLink);
+                    $('#id_totalMassAccumulation').val(data.totalMassAccumulation);
+                    $('#id_totalMassWinding').val(data.totalMassWinding);
+                    $('#id_totalMassBushing').val(data.totalMassBushing);
+                    $('#id_additionalMass').val(data.additionalMass);
+                    $('#id_totalMassStructure').val(data.totalMassStructure);
+                    $('#id_totalFiberLength').val(data.totalFiberLength);
+                    $('#id_totalFiberMass').val(data.totalFiberMass);
+                    $('#id_totalResinMass').val(data.totalResinMass);
+
+                    // console.log(data.project_id);
+                    // console.log(data.defaultInterfaceHeight);
+                    // console.log(data.defaultInterfaceIntDiam);
+                    console.log(data.defaultLinkType);
+                    // console.log(data.defaultLinkDefined);
+                    // console.log(data.numberLink);
+                    // console.log(data.numberBushing);
+                    // console.log(data.totalMassLink);
+                    // console.log(data.totalMassWinding);
+                    // console.log(data.totalMassBushing);
+                    // console.log(data.additionalMass);
+                    // console.log(data.totalMassStructure);
+                    // console.log(data.totalFiberLength);
+                    // console.log(data.totalFiberMass);
+                    // console.log(data.totalResinMass);
+                    
+                },
+                error: function(data) {
+                    console.log("An error occurred.");
+                }
+            });
+        });
+    });
+</script>
+{% endblock %}
+
+{% block css %}
+<style>
+    table {
+        border-collapse: collapse;
+        width: 100%;
+        margin-bottom: 100px;
+    }
+    th, td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: center;
+    }
+    tr:nth-child(even) {
+        background-color: #f2f2f2;
+    }
+    th {
+        background-color: #4CAF50;
+        color: white;
+    }
+  
+    #btnf1, .btnf2{
+        width: 100px; 
+        background-color: #49b7be; 
+        color: white; 
+        padding: 5px 10px; 
+        margin: 8px;
+        margin-right: 0px;
+        border: none; 
+        border-radius: 4px;
+        cursor: pointer; 
+    }
+    input[type="text"], input[type="number"], #id_valid {
+        width: 100%; 
+        padding: 8px; 
+        margin: 0px 0; 
+        display: inline-block;
+        border: 1px solid #ccc; 
+        border-radius: 4px; 
+        box-sizing: border-box; 
+    }
+    #uploadbtn {
+        width: 100px;
+        height: 33px;
+        font-size: 18px; 
+        border: none;
+        outline: none; 
+        background-color: #4CAF50; 
+        color: white;
+        cursor: pointer;
+        border-radius: 4px; 
+    }
+    #uploadbtn:hover {
+        background-color: #2f7a30; 
+    }
+    .file-upload-container {
+        display: flex;
+        align-items: center;
+    }
+    .file-upload-container input[type="file"] {
+        margin-right: 10px;  
+    }
+    .file-upload-container button {
+        white-space: nowrap;
+    }
+   
+</style>
+{% endblock %}

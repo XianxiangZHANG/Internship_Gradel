@@ -1,6 +1,8 @@
 from django.shortcuts import render, redirect, HttpResponse
 from django.http import JsonResponse
+from django.urls import path
 from django import forms
+from openpyxl import load_workbook
 
 from web import models
 from utils.encrypt import md5
@@ -53,8 +55,9 @@ class PartModelForm(forms.ModelForm):
     class Meta:
         model = models.Part
         fields = ['project', 'partName',
-                  'defaultInterfaceHeight', 'defaultInterfaceIntDiam', 'defaultLinkType', 'defaultLinkDefined', 
-                  'totalMassBushing', 'additionalMass', 'totalMassStructure', 'totalFiberLength', 'totalFiberMass', 'totalResinMass', 'projectImage',
+                  'defaultInterfaceHeight', 'defaultInterfaceIntDiam', 'defaultLinkType', 'defaultLinkDefined', 'numberLink', 'numberBushing', 
+                  'totalMassLink', 'totalMassAccumulation', 'totalMassWinding', 'totalMassBushing', 'additionalMass', 
+                  'totalMassStructure', 'totalFiberLength', 'totalFiberMass', 'totalResinMass', 'projectImage',
                   'part_gh', 'part_mod', 'part_csv', 'part_rs', 'part_log', 'part_mp4', 'part_jpg']
 
     def __init__(self, *args, **kwargs):
@@ -63,15 +66,29 @@ class PartModelForm(forms.ModelForm):
         for name, filed_object in self.fields.items():
             filed_object.widget.attrs = {"class": "form-control"}
 
+class PartModelAddForm(forms.ModelForm):
+    class Meta:
+        model = models.Part
+        fields = ['project', 'partName',
+                  'defaultInterfaceHeight', 'defaultInterfaceIntDiam', 'defaultLinkType', 'defaultLinkDefined', 'numberLink', 'numberBushing', 
+                  'totalMassLink', 'totalMassAccumulation', 'totalMassWinding', 'totalMassBushing', 'additionalMass', 
+                  'totalMassStructure', 'totalFiberLength', 'totalFiberMass', 'totalResinMass', 'projectImage',
+                 ]
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        for name, filed_object in self.fields.items():
+            filed_object.widget.attrs = {"class": "form-control"}
 
 def part_add(request):
     if request.method == "GET":
         form = PartModelForm()
-        return render(request, 'part/part_form.html', {"form": form})
+        return render(request, 'part/part_add.html', {"form": form})
 
     form = PartModelForm(data=request.POST)
     if not form.is_valid():
-        return render(request, 'part/part_form.html', {"form": form})
+        return render(request, 'part/part_add.html', {"form": form})
 
 
     form.save()
@@ -82,9 +99,10 @@ class PartEditModelForm(forms.ModelForm):
     class Meta:
         model = models.Part
         fields = ['project', 'partName',
-                  'defaultInterfaceHeight', 'defaultInterfaceIntDiam', 'defaultLinkType', 'defaultLinkDefined', 
-                  'totalMassBushing', 'additionalMass', 'totalMassStructure', 'totalFiberLength', 'totalFiberMass', 'totalResinMass', 'projectImage',
-                  'part_gh', 'part_mod', 'part_csv', 'part_rs', 'part_log', 'part_mp4', 'part_jpg', 'valid'] 
+                  'defaultInterfaceHeight', 'defaultInterfaceIntDiam', 'defaultLinkType', 'defaultLinkDefined', 'numberLink', 'numberBushing', 
+                  'totalMassLink', 'totalMassAccumulation', 'totalMassWinding', 'totalMassBushing', 'additionalMass', 
+                  'totalMassStructure', 'totalFiberLength', 'totalFiberMass', 'totalResinMass', 'projectImage',
+                  'part_gh', 'part_mod', 'part_csv', 'part_rs', 'part_log', 'part_mp4', 'part_jpg']
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -115,3 +133,82 @@ def part_delete(request):
 
     return JsonResponse({"status": True})
 
+def handle_uploaded_file_part(f):
+    # 加载Excel文件
+    wb = load_workbook(filename=f, data_only=True)
+    if 'CoverPage' not in wb.sheetnames:
+        return {'error': 'CoverPage sheet not found'}
+    if 'Input' not in wb.sheetnames:
+        return {'error': 'Input sheet not found'}
+    if 'Output' not in wb.sheetnames:
+        return {'error': 'Output sheet not found'}
+    
+    sheetCP = wb['CoverPage']
+    sheetIn = wb['Input']
+    sheetOut = wb['Output']
+
+    project_data = {}
+    for row in sheetCP.iter_rows():
+        for cell in row:
+            if cell.value == "Program : ":
+                project_data['program'] = sheetCP.cell(row=cell.row, column=cell.column + 2).value
+            elif cell.value == "Customer : ":
+                project_data['customer'] = sheetCP.cell(row=cell.row, column=cell.column + 2).value
+            elif cell.value == "Project No:":
+                project_data['projectNo'] = sheetCP.cell(row=cell.row, column=cell.column + 2).value
+    project_data['projectName'] = project_data['projectNo'] +' - '+ project_data['customer'] +' - '+ project_data['program']
+
+    part_data = {}
+    
+    part_data['project_id'] = models.Project.objects.filter(projectName=project_data['projectName']).first().id
+    # print(part_data['project_id'])
+
+
+    for row in sheetIn.iter_rows():
+        for cell in row:
+            if cell.value == "Interface Height [mm]":
+                part_data['defaultInterfaceHeight'] = int(sheetIn.cell(row=cell.row, column=cell.column + 1).value)
+            elif cell.value == "Interface Int. Diam [mm]":
+                part_data['defaultInterfaceIntDiam'] = int(sheetIn.cell(row=cell.row, column=cell.column + 1).value)
+            elif cell.value == "Link (Element) Type":
+                part_data['defaultLinkType'] = sheetIn.cell(row=cell.row, column=cell.column + 1).value
+            elif cell.value == "Link defined by":
+                part_data['defaultLinkDefined'] = sheetIn.cell(row=cell.row, column=cell.column + 1).value
+
+
+    for row in sheetOut.iter_rows():
+        for cell in row:
+            if cell.value == "Number of links":
+                part_data['numberLink'] = int(sheetOut.cell(row=cell.row, column=cell.column + 1).value)
+            elif cell.value == "Number of bushings":
+                part_data['numberBushing'] = int(sheetOut.cell(row=cell.row, column=cell.column + 1).value)
+            elif cell.value == "Total mass of links [g]":
+                part_data['totalMassLink'] = round(sheetOut.cell(row=cell.row, column=cell.column + 1).value, 2)
+            elif cell.value == "Total mass of accumulation [g]":
+                part_data['totalMassAccumulation'] = round(sheetOut.cell(row=cell.row, column=cell.column + 1).value, 2)
+            elif cell.value == "Total mass of winding [g]":
+                part_data['totalMassWinding'] = round(sheetOut.cell(row=cell.row, column=cell.column + 1).value, 2)
+            elif cell.value == "Total mass of bushings [g]":
+                part_data['totalMassBushing'] = round(sheetOut.cell(row=cell.row, column=cell.column + 1).value, 2)
+            elif cell.value == "Additional masses [g]":
+                part_data['additionalMass'] =  sheetOut.cell(row=cell.row, column=cell.column + 1).value 
+            elif cell.value == "Total mass of structure [g]":
+                part_data['totalMassStructure'] = round(sheetOut.cell(row=cell.row, column=cell.column + 1).value, 2)
+            elif cell.value == "Total fiber length [m]":
+                part_data['totalFiberLength'] = round(sheetOut.cell(row=cell.row, column=cell.column + 1).value, 2)
+            elif cell.value == "Total fiber mass [kg]":
+                part_data['totalFiberMass'] = round(sheetOut.cell(row=cell.row, column=cell.column + 1).value, 2)
+            elif cell.value == "Total resin mass [g]":
+                part_data['totalResinMass'] = round(sheetOut.cell(row=cell.row, column=cell.column + 1).value, 2)
+            
+            
+
+    return part_data
+
+def upload_file_part(request):
+    if request.method == 'POST' and 'file' in request.FILES:
+        part_data = handle_uploaded_file_part(request.FILES['file'])
+        if 'error' in part_data:
+            return JsonResponse(part_data, status=400)
+        return JsonResponse(part_data)
+    return JsonResponse({'error': 'Invalid request'}, status=400)

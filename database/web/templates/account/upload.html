@@ -3,7 +3,7 @@
 
 {% block content %}
     {% if user.depart.title == "Material" %}
-    <h2>Department: {{ user.depart.title }}</h2>
+    <h2>Your Department: {{ user.depart.title }}</h2>
     <div style="margin-top: 50px; margin-bottom: 100px; text-align: center;">
         <a class="btn btn-success" href="/fiber/add-multiple/" id="btn">
             <span class="glyphicon glyphicon-plus-sign" aria-hidden="true" id="pic"></span> Create New Fiber
@@ -27,7 +27,7 @@
         
     </div>
     {% elif user.depart.title == "Engineering" %}
-    <h2>Department: {{ user.depart.title }}</h2>
+    <h2>Your Department: {{ user.depart.title }}</h2>
     <div style="margin-top: 50px; margin-bottom: 100px; text-align: center;">
         
         <a class="btn btn-success" href="/project/add/" id="btn">
@@ -56,7 +56,7 @@
         
     </div>
     {% elif user.depart.title == "Robotics" %}
-    <h2>Department: {{ user.depart.title }}</h2>
+    <h2>Your Department: {{ user.depart.title }}</h2>
     <div style="margin-top: 50px; margin-bottom: 100px; text-align: center;">
         <a class="btn btn-success" href="/winding/add-multiple/" id="btn">
             <span class="glyphicon glyphicon-plus-sign" aria-hidden="true" id="pic"></span> Create New Winding Table
@@ -65,7 +65,7 @@
         
     </div>
     {% elif user.depart.title == "Manager" %}
-    <h2>Department: {{ user.depart.title }}</h2>
+    <h2>Your Department: {{ user.depart.title }}</h2>
     <div style="margin-top: 50px; margin-bottom: 100px; text-align: center;">
         
         
@@ -78,7 +78,7 @@
         </a>
     </div>
     {% elif user.depart.title == "Admin" %}
-    <h2>Department: {{ user.depart.title }}</h2>
+    <h2>Your Department: {{ user.depart.title }}</h2>
     <div style="margin-top: 50px; margin-bottom: 100px; text-align: center;">
         <a class="btn btn-success" href="/fiber/add-multiple/" id="btn">
             <span class="glyphicon glyphicon-plus-sign" aria-hidden="true" id="pic"></span> Create New Fiber
