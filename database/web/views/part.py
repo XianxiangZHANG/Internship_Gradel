@@ -28,6 +28,12 @@ def part_list(request):
     part_filter = PartFilter(request.GET, queryset=models.Part.objects.all())
     return render(request, 'part/part_list.html', {'filter': part_filter})
 
+def part_list_doc(request):
+    """ list of part """
+
+    part_filter = PartFilter(request.GET, queryset=models.Part.objects.all())
+    return render(request, 'part/part_list_doc.html', {'filter': part_filter})
+
 class PartFilterValid(django_filters.FilterSet):
     project = django_filters.ModelChoiceFilter(queryset=models.Project.objects.all())
     partName = django_filters.CharFilter(field_name='partName', lookup_expr='icontains')
@@ -43,6 +49,11 @@ def part_valid(request):
     part_filter = PartFilterValid(request.GET, queryset=models.Part.objects.filter(valid=True))
     return render(request, 'part/part_valid.html', {'filter': part_filter})
 
+def part_valid_doc(request):
+    """ list of part """
+
+    part_filter = PartFilterValid(request.GET, queryset=models.Part.objects.filter(valid=True))
+    return render(request, 'part/part_valid_doc.html', {'filter': part_filter})
 
 def part_input(request):
     """ list of part """
@@ -57,8 +68,9 @@ class PartModelForm(forms.ModelForm):
         fields = ['project', 'partName',
                   'defaultInterfaceHeight', 'defaultInterfaceIntDiam', 'defaultLinkType', 'defaultLinkDefined', 'numberLink', 'numberBushing', 
                   'totalMassLink', 'totalMassAccumulation', 'totalMassWinding', 'totalMassBushing', 'additionalMass', 
-                  'totalMassStructure', 'totalFiberLength', 'totalFiberMass', 'totalResinMass', 'projectImage',
-                  'part_gh', 'part_mod', 'part_csv', 'part_rs', 'part_log', 'part_mp4', 'part_jpg']
+                  'totalMassStructure', 'totalFiberLength', 'totalFiberMass', 'totalResinMass', 'projectImage','valid'
+                #   'part_gh', 'part_mod', 'part_csv', 'part_rs', 'part_log', 'part_mp4', 'part_jpg'
+                  ]
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -81,12 +93,26 @@ class PartModelAddForm(forms.ModelForm):
         for name, filed_object in self.fields.items():
             filed_object.widget.attrs = {"class": "form-control"}
 
+class PartModelDocForm(forms.ModelForm):
+    class Meta:
+        model = models.Part
+        fields = ['project', 'partName',
+                  'part_gh', 'part_mod', 'part_csv', 'part_rs', 'part_log', 'part_mp4', 'part_jpg',
+                 ]
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        for name, filed_object in self.fields.items():
+            filed_object.widget.attrs = {"class": "form-control"}
+
+
 def part_add(request):
     if request.method == "GET":
-        form = PartModelForm()
+        form = PartModelAddForm()
         return render(request, 'part/part_add.html', {"form": form})
 
-    form = PartModelForm(data=request.POST)
+    form = PartModelAddForm(data=request.POST)
     if not form.is_valid():
         return render(request, 'part/part_add.html', {"form": form})
 
@@ -101,8 +127,9 @@ class PartEditModelForm(forms.ModelForm):
         fields = ['project', 'partName',
                   'defaultInterfaceHeight', 'defaultInterfaceIntDiam', 'defaultLinkType', 'defaultLinkDefined', 'numberLink', 'numberBushing', 
                   'totalMassLink', 'totalMassAccumulation', 'totalMassWinding', 'totalMassBushing', 'additionalMass', 
-                  'totalMassStructure', 'totalFiberLength', 'totalFiberMass', 'totalResinMass', 'projectImage',
-                  'part_gh', 'part_mod', 'part_csv', 'part_rs', 'part_log', 'part_mp4', 'part_jpg']
+                  'totalMassStructure', 'totalFiberLength', 'totalFiberMass', 'totalResinMass', 'projectImage','valid'
+                #   'part_gh', 'part_mod', 'part_csv', 'part_rs', 'part_log', 'part_mp4', 'part_jpg'
+                  ]
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -110,6 +137,18 @@ class PartEditModelForm(forms.ModelForm):
         for name, filed_object in self.fields.items():
             filed_object.widget.attrs = {"class": "form-control"}
 
+class PartEditModelDocForm(forms.ModelForm):
+    class Meta:
+        model = models.Part
+        fields = ['project', 'partName',
+                  'part_gh', 'part_mod', 'part_csv', 'part_rs', 'part_log', 'part_mp4', 'part_jpg',
+                 ]
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        for name, filed_object in self.fields.items():
+            filed_object.widget.attrs = {"class": "form-control"}
 
 def part_edit(request, aid):
     part_object = models.Part.objects.filter(id=aid).first()
@@ -126,6 +165,22 @@ def part_edit(request, aid):
 
     return redirect('/part/list/')
 
+
+
+def part_edit_doc(request, aid):
+    part_object = models.Part.objects.filter(id=aid).first()
+
+    if request.method == "GET":
+        form = PartEditModelDocForm(instance=part_object)
+        return render(request, 'part/part_form.html', {"form": form})
+
+    form = PartEditModelDocForm(instance=part_object, data=request.POST)
+    if not form.is_valid():
+        return render(request, 'part/part_form.html', {"form": form})
+
+    form.save()
+
+    return redirect('/part/list-doc/')
 
 def part_delete(request):
     aid = request.GET.get("aid")

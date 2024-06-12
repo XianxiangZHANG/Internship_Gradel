@@ -78,9 +78,12 @@ urlpatterns = [
     path('project/upload/', project.upload_file_project, name='upload_file_project'),
 
     path('part/list/', part.part_list),
+    path('part/list-doc/', part.part_list_doc),
     path('part/valid/', part.part_valid),
+    path('part/valid-doc/', part.part_valid_doc),
     path('part/add/', part.part_add),
     path('part/edit/<int:aid>/', part.part_edit),
+    path('part/edit-doc/<int:aid>/', part.part_edit_doc),
     path('part/delete/', part.part_delete),
     path('part/upload/', part.upload_file_part, name='upload_file_part'),
 

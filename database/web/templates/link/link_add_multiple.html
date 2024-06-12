@@ -230,8 +230,8 @@
                 processData: false,
                 contentType: false,
                 success: function(data) {
-                    if(data.error) {
-                        console.log(data.error);
+                    if (data.error) {
+                        alert(data.error);
                         return;
                     }
                     $('#id_project').val(data.link_data.project_id);
@@ -259,7 +259,7 @@
                     }
                 },
                 error: function(data) {
-                    console.log("An error occurred.");
+                    alert("Please upload a correct file.");
                 }
             });
         });

@@ -15,6 +15,7 @@
             {{ filter.form.as_p }}
             <button type="submit" id="btnf1">Filter</button>
             <button type="reset" id="resetButton" class="btnf2">Reset</button>
+            
         </form>
         <!-- <table id="transposedTable"></table> -->
     <table class="table table-bordered" id="normalTable" >
@@ -39,13 +40,13 @@
             <th>Total Fiber Mass [kg]</th>
             <th>Total Resin Mass [g]</th>
             <th>Project Image</th>
-            <th>.gh</th>
+            <!-- <th>.gh</th>
             <th>.mod</th>
             <th>.csv</th>
             <th>.rs</th>
             <th>.log</th>
             <th>.mp4</th>
-            <th>.jpg</th>
+            <th>.jpg</th> -->
             <th>Operations</th>
 
 
@@ -72,15 +73,15 @@
                 <td>{{ row.totalFiberLength|default_if_none:"" }}</td>
                 <td>{{ row.totalFiberMass|default_if_none:"" }}</td>
                 <td>{{ row.totalResinMass|default_if_none:"" }}</td>
-                <td><img src="{{ row.projectImage.url }}" alt="Project Image"></td>
-                <!-- <td>{{ row.projectImage|default_if_none:"" }}</td> -->
-                <td>{{ row.part_gh|default_if_none:"" }}</td>
+                <!-- <td><img src="{{ row.projectImage }}" alt="Project Image"></td> -->
+                <td>{{ row.projectImage|default_if_none:"" }}</td>
+                <!-- <td>{{ row.part_gh|default_if_none:"" }}</td>
                 <td>{{ row.part_mod|default_if_none:"" }}</td>
                 <td>{{ row.part_csv|default_if_none:"" }}</td>
                 <td>{{ row.part_rs|default_if_none:"" }}</td>
                 <td>{{ row.part_log|default_if_none:"" }}</td>
                 <td>{{ row.part_mp4|default_if_none:"" }}</td>
-                <td>{{ row.part_jpg|default_if_none:"" }}</td>
+                <td>{{ row.part_jpg|default_if_none:"" }}</td> -->
                 <td>
                     <a class="btn btn-primary btn-xs" href="/part/edit/{{ row.id }}/" style="width: 70px; text-align: center; margin-bottom: 5px;"> Edit </a>
                     <br>
@@ -107,15 +108,15 @@
                 <td>{{ row.totalFiberLength|default_if_none:"" }}</td>
                 <td>{{ row.totalFiberMass|default_if_none:"" }}</td>
                 <td>{{ row.totalResinMass|default_if_none:"" }}</td>
-                <!-- <td><img src="{{ project.projectImage.url }}" alt="Project Image"></td> -->
+                <!-- <td><img src="{{ row.projectImage }}" alt="Project Image"></td> -->
                 <td>{{ row.projectImage|default_if_none:"" }}</td>
-                <td>{{ row.part_gh|default_if_none:"" }}</td>
+                <!-- <td>{{ row.part_gh|default_if_none:"" }}</td>
                 <td>{{ row.part_mod|default_if_none:"" }}</td>
                 <td>{{ row.part_csv|default_if_none:"" }}</td>
                 <td>{{ row.part_rs|default_if_none:"" }}</td>
                 <td>{{ row.part_log|default_if_none:"" }}</td>
                 <td>{{ row.part_mp4|default_if_none:"" }}</td>
-                <td>{{ row.part_jpg|default_if_none:"" }}</td>
+                <td>{{ row.part_jpg|default_if_none:"" }}</td> -->
                 <td>
                     <a class="btn btn-primary btn-xs" href="/part/edit/{{ row.id }}/" style="width: 70px; text-align: center; margin-bottom: 5px;"> Edit </a>
                     <br>
@@ -267,5 +268,6 @@
         border-radius: 4px; 
         box-sizing: border-box; 
     }
+    
 </style>
 {% endblock %}

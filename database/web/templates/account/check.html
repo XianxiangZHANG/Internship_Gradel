@@ -4,7 +4,7 @@
 {% block content %}
 <h3>Your Department: {{ user.depart.title }}</h2>
 <div id="wholePage">
-    <div id="part" style="background-color: lightyellow;">
+    <div id="part" style="background-color: rgb(247, 247, 111);">
         <a class="btn btn-success" href="/fiber/valid/" id="btn"  data-department="all">
             <span class="glyphicon glyphicon-search" aria-hidden="true" id="pic"></span> Read Fiber List
         </a>
@@ -30,8 +30,8 @@
             <span class="glyphicon glyphicon-pencil" aria-hidden="true" id="pic"></span> Check R&D List
         </a>
     </div>
-    <div id="part" style="background-color: lightblue;" data-department="all">
-        <a class="btn btn-success" href="/project/valid/" id="btn">
+    <div id="part" style="background-color: lightblue;">
+        <a class="btn btn-success" href="/project/valid/" id="btn" data-department="all">
             <span class="glyphicon glyphicon-search" aria-hidden="true" id="pic"></span> Read Project List
         </a>
         <a class="btn btn-success" href="/project/list/" id="btn" data-department="Engineering,Admin">
@@ -40,7 +40,7 @@
         <a class="btn btn-success" href="/part/valid/" id="btn" data-department="all">
             <span class="glyphicon glyphicon-search" aria-hidden="true" id="pic"></span> Read Part List
         </a> 
-        <a class="btn btn-success" href="/part/list/" id="btn" data-department="Engineering,Robotics,Admin">
+        <a class="btn btn-success" href="/part/list/" id="btn" data-department="Engineering,Admin">
             <span class="glyphicon glyphicon-pencil" aria-hidden="true" id="pic"></span> Check Part List
         </a>   
         <a class="btn btn-success" href="/bushing/valid/" id="btn" data-department="all">
@@ -82,6 +82,12 @@
     </div>
 
     <div id="part" style="background-color: lightgreen;">
+        <a class="btn btn-success" href="/part/valid-doc/" id="btn" data-department="all">
+            <span class="glyphicon glyphicon-search" aria-hidden="true" id="pic"></span> Read Part Documents
+        </a>
+        <a class="btn btn-success" href="/part/list-doc/" id="btn" data-department="Robotics,Admin">
+            <span class="glyphicon glyphicon-pencil" aria-hidden="true" id="pic"></span> Check Part Documents
+        </a>
         <a class="btn btn-success" href="/winding/valid/" id="btn" data-department="all">
             <span class="glyphicon glyphicon-search" aria-hidden="true" id="pic"></span> Read Winding List
         </a>
@@ -146,6 +152,9 @@
 
 {% block css %}
 <style>
+    #wholePage {
+        margin-bottom: 100px;
+    }
     #pic{
         padding: 5px;
     }
@@ -171,13 +180,12 @@
     }
    
     #wholePage {
-        height: 120%;
         display: flex;
         flex: 1;
     }
     #part {
         width: 25%;
-        border: 1px solid black;
+        border: 5px solid rgb(255, 255, 255);
     }
 </style>
 {% endblock %}

@@ -4,7 +4,7 @@
 <div>
     <h3>Resin List:</h3>
    
-
+    {% if formset.total_form_count > 0 %}
     <form method="post">
         {% csrf_token %}
         {{ formset.management_form }}
@@ -45,6 +45,9 @@
         </table>
         <button type="submit" class="btn btn-primary" id="btns">Save</button>
     </form>
+    {% else %}
+        <h2>This table is empty. You need to add the basic information of Resin first.</h2>
+    {% endif %}
 </div>
 
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">

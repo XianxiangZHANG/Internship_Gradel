@@ -9,9 +9,6 @@
             {{ filter.form.as_p }}
             <button type="submit" id="btnf1">Filter</button>
             <button type="reset" id="resetButton" class="btnf2">Reset</button>
-            <a class="btn btn-success" href="/part/valid-doc/" id="btnmore">
-                <span class="glyphicon glyphicon-search" aria-hidden="true" id="pic"></span> Read Part Documents
-            </a>
         </form>
         <!-- <table id="transposedTable"></table> -->
     <table class="table table-bordered" id="normalTable" >
@@ -20,7 +17,7 @@
             <!-- <th>Part ID</th> -->
             <th>Project Name</th>
             <th>Part Name</th>
-            <th>Default Interface Height</th>
+            <!-- <th>Default Interface Height</th>
             <th>Default Interface Int Diam</th>
             <th>Default Link Type</th>
             <th>Default Link Defined</th>
@@ -35,14 +32,14 @@
             <th>Total Fiber Length</th>
             <th>Total Fiber Mass</th>
             <th>Total Resin Mass</th>
-            <th>Project Image</th>
-            <!-- <th>.gh</th>
+            <th>Project Image</th> -->
+            <th>.gh</th>
             <th>.mod</th>
             <th>.csv</th>
             <th>.rs</th>
             <th>.log</th>
             <th>.mp4</th>
-            <th>.jpg</th> -->
+            <th>.jpg</th>
             <!-- <th>Operations</th> -->
 
 
@@ -54,7 +51,7 @@
             <tr>
                 <td>{{ row.project.projectName }}</td>
                 <td>{{ row.partName }}</td>
-                <td>{{ row.defaultInterfaceHeight|default_if_none:"" }}</td>
+                <!-- <td>{{ row.defaultInterfaceHeight|default_if_none:"" }}</td>
                 <td>{{ row.defaultInterfaceIntDiam|default_if_none:"" }}</td>
                 <td>{{ row.defaultLinkType|default_if_none:"" }}</td>
                 <td>{{ row.defaultLinkDefined|default_if_none:"" }}</td>
@@ -69,15 +66,15 @@
                 <td>{{ row.totalFiberLength|default_if_none:"" }}</td>
                 <td>{{ row.totalFiberMass|default_if_none:"" }}</td>
                 <td>{{ row.totalResinMass|default_if_none:"" }}</td>
-                <!-- <td><img src="{{ project.projectImage.url }}" alt="Project Image"></td> -->
-                <td>{{ row.projectImage|default_if_none:"" }}</td>
-                <!-- <td>{{ row.part_gh|default_if_none:"" }}</td>
+                <td><img src="{{ project.projectImage.url }}" alt="Project Image"></td>
+                <td>{{ row.projectImage|default_if_none:"" }}</td> -->
+                <td>{{ row.part_gh|default_if_none:"" }}</td>
                 <td>{{ row.part_mod|default_if_none:"" }}</td>
                 <td>{{ row.part_csv|default_if_none:"" }}</td>
                 <td>{{ row.part_rs|default_if_none:"" }}</td>
                 <td>{{ row.part_log|default_if_none:"" }}</td>
                 <td>{{ row.part_mp4|default_if_none:"" }}</td>
-                <td>{{ row.part_jpg|default_if_none:"" }}</td> -->
+                <td>{{ row.part_jpg|default_if_none:"" }}</td>
                 
             </tr>
          
@@ -138,17 +135,6 @@
         border: 1px solid #ccc; 
         border-radius: 4px; 
         box-sizing: border-box; 
-    }
-    #btnmore {
-        width: 500px; 
-        background-color: #49b7be; 
-        color: white; 
-        padding: 5px 10px; 
-
-        margin-left: 100px;
-        border: none; 
-        border-radius: 4px;
-        cursor: pointer; 
     }
 </style>
 {% endblock %}

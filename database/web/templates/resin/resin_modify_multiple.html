@@ -15,7 +15,7 @@
             <span class="glyphicon glyphicon-pencil" aria-hidden="true" id="pic"></span> Modify Thermophysical Toughness Properties of Resin List
         </a>
     </form>
-
+    {% if formset.total_form_count > 0 %}
     <form method="post">
         {% csrf_token %}
         {{ formset.management_form }}
@@ -67,6 +67,9 @@
         </table>
         <button type="submit" class="btn btn-primary" id="btns">Save</button>
     </form>
+    {% else %}
+        <h2>This table is empty. You need to add the basic information of Resin first.</h2>
+    {% endif %}
 </div>
 
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
