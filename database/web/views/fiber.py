@@ -111,7 +111,9 @@ def fiber_add_multiple(request):
         #     fiberError = "Required"
         if formset.is_valid() :
             instances = formset.save(commit=False)
+            
             for instance in instances:
+                instance.user = models.User.objects.filter(id=request.info_dict['id']).first()  
                 instance.save()
             return redirect('/fiber/list/')  # Replace with your redirect URL
 
@@ -130,7 +132,11 @@ def fiber_modify_multiple(request):
     if request.method == 'POST':
         formset = FiberFormSet(request.POST)
         if formset.is_valid():
-            formset.save()
+            instances = formset.save(commit=False)
+            
+            for instance in instances:
+                instance.user = models.User.objects.filter(id=request.info_dict['id']).first()  
+                instance.save()
             return redirect('/fiber/list/')
     else:
         formset = FiberFormSet(queryset=fiber_filter.qs)
@@ -150,7 +156,10 @@ def fiber_add(request):
     if not form.is_valid():
         return render(request, 'fiber/fiber_form.html', {"form": form})
 
-    form.save()
+    # form.save()
+    fiber = form.save(commit=False)
+    fiber.user = models.User.objects.filter(id=request.info_dict['id']).first()  
+    fiber.save()
     return redirect('/fiber/list/')
 
 
@@ -180,14 +189,21 @@ def fiber_edit(request, aid):
     if not form.is_valid():
         return render(request, 'fiber/fiber_form.html', {"form": form})
 
-    form.save()
+    # form.save()
+    fiber = form.save(commit=False)
+    fiber.user = models.User.objects.filter(id=request.info_dict['id']).first()  
+    fiber.save()
 
     return redirect('/fiber/list/')
 
 
 def fiber_delete(request):
     aid = request.GET.get("aid")
-    models.Fiber.objects.filter(id=aid).delete()
+    # models.Fiber.objects.filter(id=aid).delete()
+    fiber = models.Fiber.objects.filter(id=aid).first()
+    if fiber:
+        fiber.user = models.User.objects.filter(id=request.info_dict['id']).first()  
+        fiber.delete()
 
     return JsonResponse({"status": True})
 
@@ -198,7 +214,11 @@ def fiber_delete_mult(request):
 
     try:
         fiber = models.Fiber.objects.get(id=aid)
-        fiber.delete()
+        # fiber.delete()
+        if fiber:
+            fiber.user = models.User.objects.filter(id=request.info_dict['id']).first()  
+            fiber.delete()
+
         return JsonResponse({"status": True})
     except models.Fiber.DoesNotExist:
         return JsonResponse({"status": False, "error": "Fiber not found"})

@@ -3,7 +3,7 @@
 
 {% block content %}
 
-    <div>
+    <div  style="margin-bottom: 100px;">
         <h3>Part List:</h3>
         <form method="get" id="filterForm">
             {{ filter.form.as_p }}
@@ -17,7 +17,7 @@
     <table class="table table-bordered" id="normalTable" >
         <thead>
         <tr>
-            <!-- <th>Part ID</th> -->
+            <th>ID</th>
             <th>Project Name</th>
             <th>Part Name</th>
             <th>Default Interface Height</th>
@@ -52,6 +52,7 @@
         {% for row in filter.qs %}
             
             <tr>
+                <td>{{ row.id }}</td>
                 <td>{{ row.project.projectName }}</td>
                 <td>{{ row.partName }}</td>
                 <td>{{ row.defaultInterfaceHeight|default_if_none:"" }}</td>
@@ -81,7 +82,11 @@
                 
             </tr>
          
-        {% endfor %}
+            {% empty %}
+            <tr>
+                <td colspan="19" class="text-center" style="font-size: large;">No data found.</td>
+            </tr>
+            {% endfor %}
         </tbody>
     </table></div>
     

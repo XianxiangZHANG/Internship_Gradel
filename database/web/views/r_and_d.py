@@ -227,6 +227,7 @@ def r_and_d_add_multiple(request):
             print(fiber)
             resin = fiber_resin_form.cleaned_data['resin']
             for instance in instances:
+                instance.user = models.User.objects.filter(id=request.info_dict['id']).first()  
                 instance.fiber = fiber
                 instance.resin = resin
                 instance.save()
@@ -257,11 +258,12 @@ def r_and_d_modify_multiple(request):
     R_and_DMultFormSet = modelformset_factory(models.R_and_D, form=R_and_DModelForm, extra=0)
     
     if request.method == 'POST':
-        print("try")
+        # print("try")
         formset = R_and_DMultFormSet(request.POST)
         if formset.is_valid():
             instances = formset.save(commit=False)
             for instance in instances:
+                instance.user = models.User.objects.filter(id=request.info_dict['id']).first()  
                 # Get fiber and resin from POST data
                 fiber_id = request.POST.get(f'fiber_{instance.id}')
                 resin_id = request.POST.get(f'resin_{instance.id}')
@@ -287,7 +289,7 @@ def r_and_d_modify_multiple(request):
         #         instance.save()
         #     return redirect('/r_and_d/list/')
     else:
-        print("try else")
+        # print("try else")
         formset = R_and_DMultFormSet(queryset=r_and_d_filter.qs)
         # fiber_resin_form = FiberResinForm()
 
@@ -309,7 +311,10 @@ def r_and_d_add(request):
     if not form.is_valid():
         return render(request, 'r_and_d/r_and_d_add.html', {"form": form})
 
-    form.save()
+    # form.save()
+    r_and_d = form.save(commit=False)
+    r_and_d.user = models.User.objects.filter(id=request.info_dict['id']).first()  
+    r_and_d.save()
     return redirect('/r_and_d/list/')
 
 
@@ -375,14 +380,21 @@ def r_and_d_edit(request, aid):
     if not form.is_valid():
         return render(request, 'r_and_d/r_and_d_form.html', {"form": form})
 
-    form.save()
+    # form.save()
+    r_and_d = form.save(commit=False)
+    r_and_d.user = models.User.objects.filter(id=request.info_dict['id']).first()  
+    r_and_d.save()
 
     return redirect('/r_and_d/list/')
 
 
 def r_and_d_delete(request):
     aid = request.GET.get("aid")
-    models.R_and_D.objects.filter(id=aid).delete()
+    # models.R_and_D.objects.filter(id=aid).delete()
+    r_and_d = models.R_and_D.objects.filter(id=aid).first()
+    if r_and_d:
+        r_and_d.user = models.User.objects.filter(id=request.info_dict['id']).first()  
+        r_and_d.delete()
 
     return JsonResponse({"status": True})
 
@@ -393,7 +405,10 @@ def r_and_d_delete_mult(request):
 
     try:
         r_and_d = models.R_and_D.objects.get(id=aid)
-        r_and_d.delete()
+        # r_and_d.delete()
+        if r_and_d:
+            r_and_d.user = models.User.objects.filter(id=request.info_dict['id']).first()  
+            r_and_d.delete()
         return JsonResponse({"status": True})
     except models.R_and_D.DoesNotExist:
         return JsonResponse({"status": False, "error": "R_and_D not found"})

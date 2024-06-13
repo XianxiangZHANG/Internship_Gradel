@@ -4,7 +4,7 @@
 {% block content %}
 
 
-    <div>
+    <div style="margin-bottom: 100px;">
         <div style="margin-bottom: 10px">
             <a class="btn btn-success" href="/winding/add-multiple/">
                 <span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span> New Winding Links
@@ -20,11 +20,12 @@
     <table class="table table-bordered" id="normalTable">
         <thead>
         <tr>
+            <th>ID</th>
             <th style="width: 20%;">Link</th>
             <th style="width: 20%;">Interface Start</th>
             <th style="width: 20%;">Interface Transition</th>
             <th style="width: 20%;">Interface End</th>
-            <th style="width: 10%;">Winding Type</th>
+            <!-- <th style="width: 10%;">Winding Type</th> -->
             <th style="width: 10%;">Operations</th>
             
         </tr>
@@ -33,11 +34,12 @@
         {% for row in filter.qs %}
             {% if row.part.valid %} 
             <tr style="background-color: #67fa6770;">
+                <td>{{ row.id }}</td>
                 <td>{{ row.link }}</td>
                 <td>{{ row.interface1|default_if_none:"" }}</td>
                 <td>{{ row.interface2|default_if_none:"" }}</td>
                 <td>{{ row.interface3|default_if_none:"" }}</td>
-                <td>{{ row.sequence|default_if_none:"" }}</td>
+                <!-- <td>{{ row.sequence|default_if_none:"" }}</td> -->
                 <td>
                     <a class="btn btn-primary btn-xs" href="/winding/edit/{{ row.id }}/" style="width: 70px; text-align: center; margin-bottom: 5px;"> Edit </a>
                    
@@ -48,12 +50,12 @@
 
             {% else %}
             <tr>
-                <!-- <td>{{ row.id }}</td> -->
+                <td>{{ row.id }}</td>
                 <td>{{ row.link }}</td>
                 <td>{{ row.interface1|default_if_none:"" }}</td>
                 <td>{{ row.interface2|default_if_none:"" }}</td>
                 <td>{{ row.interface3|default_if_none:"" }}</td>
-                <td>{{ row.sequence|default_if_none:"" }}</td>
+                <!-- <td>{{ row.sequence|default_if_none:"" }}</td> -->
                 <td>
                     <a class="btn btn-primary btn-xs" href="/winding/edit/{{ row.id }}/" style="width: 70px; text-align: center; margin-bottom: 5px;"> Edit </a>
                    
@@ -62,7 +64,11 @@
                 </td>
             </tr>
             {% endif %}
-        {% endfor %}
+            {% empty %}
+            <tr>
+                <td colspan="6" class="text-center" style="font-size: large;">No data found.</td>
+            </tr>
+            {% endfor %}
         </tbody>
     </table></div>
     

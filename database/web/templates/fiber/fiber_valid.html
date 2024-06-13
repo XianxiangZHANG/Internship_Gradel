@@ -5,7 +5,7 @@
 
   
     
-    <div>
+    <div  style="margin-bottom: 100px;">
     <h3>Fiber List:</h3>
     <form method="get" id="filterForm" class="from_f">
         {{ filter.form.as_p }}
@@ -15,7 +15,7 @@
     <table class="table table-bordered">
         <thead>
         <tr>
-            <!-- <th>Fiber ID</th> -->
+            <th>ID</th>
             <th>Material</th>
             <th>Manufacturer</th>
             <th>Distributor</th>
@@ -36,18 +36,13 @@
         </thead>
         <tbody>
         {% for row in filter.qs %}
-            
-
-            
             <tr>
-                <!-- <td>{{ row.id }}</td> -->
+                <td>{{ row.id }}</td>
                 <td>{{ row.material|default_if_none:"" }}</td>
                 <td>{{ row.manufacturer|default_if_none:"" }}</td>
                 <td>{{ row.distributor|default_if_none:"" }}</td>
                 <td>{{ row.grade|default_if_none:"" }}</td>
                 <td>{{ row.singleFilamentDiameter|default_if_none:"" }}</td>
-
-
                 <td>{{ row.tow|default_if_none:"" }}</td>
                 <td>{{ row.towInThousands|default_if_none:"" }}</td>
                 <td>{{ row.tex|default_if_none:"" }}</td>

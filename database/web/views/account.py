@@ -1,6 +1,6 @@
 import hashlib
 from io import BytesIO
-
+from django.core.paginator import Paginator
 from django import forms
 from django.core.validators import RegexValidator
 from django.shortcuts import render, HttpResponse, redirect
@@ -139,11 +139,24 @@ def logout(request):
 
 
 def home(request):
+    logs = models.Log.objects.all().order_by('-timestamp')
+    paginator = Paginator(logs, 10)  # 每页显示10条日志
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    return render(request, 'account/home.html', {'page_obj': page_obj})
+
     # print(request.info_dict)
     # request.info_dict['name']
-    return render(request, 'account/home.html')
+    # return render(request, 'account/home.html')
 
 
+def user_log(request):
+    user = models.User.objects.filter(id=request.info_dict['id']).first()
+    user_logs = models.Log.objects.filter(user=user).order_by('-timestamp')
+    paginator = Paginator(user_logs, 10)  # 每页显示10条日志
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    return render(request, 'account/log.html', {'page_obj': page_obj})
 
 class UserForm(forms.ModelForm):
     class Meta:
@@ -161,7 +174,7 @@ def upload(request):
     user = models.User.objects.filter(id=request.info_dict['id']).first()
 
     
-    print(user)
+    # print(user)
     return render(request, 'account/upload.html', {'user': user})
     # return render(request, 'account/upload.html')
 

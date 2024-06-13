@@ -1,7 +1,7 @@
 {% extends 'layout.html' %}
 
 {% block content %}
-<div>
+<div style="margin-bottom: 100px;">
     <h3>Winding List:</h3>
     <form method="get" id="filterForm">
         {{ filter.form.as_p }}
@@ -20,7 +20,7 @@
                         <th style="width: 20%;">Interface Start</th>
                         <th style="width: 20%;">Interface Transition</th>
                         <th style="width: 20%;">Interface End</th>
-                        <th style="width: 10%;">Winding Type</th>
+                        <!-- <th style="width: 10%;">Winding Type</th> -->
                         <th colspan="2" style="width: 100px;">Operation</th>
                     </tr>
                 </thead>

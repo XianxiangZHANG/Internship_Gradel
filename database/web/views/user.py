@@ -55,7 +55,10 @@ def user_add(request):
     if not form.is_valid():
         return render(request, 'user/user_form.html', {"form": form})
 
-    form.save()
+    # form.save()
+    user = form.save(commit=False)
+    user.user = models.User.objects.filter(id=request.info_dict['id']).first()  
+    user.save()
     return redirect('/user/list/')
 
 def user_add_multiple(request):
@@ -64,7 +67,10 @@ def user_add_multiple(request):
     if request.method == 'POST':
         formset = UserFormSet(request.POST, queryset=models.User.objects.none())
         if formset.is_valid():
-            formset.save()
+            instances = formset.save(commit=False)
+            for instance in instances:
+                instance.user = models.User.objects.filter(id=request.info_dict['id']).first()  
+                instance.save()
             return redirect('/user/list/')  
     else:
         formset = UserFormSet(queryset=models.User.objects.none())
@@ -81,7 +87,10 @@ def user_modify_multiple(request):
     if request.method == 'POST':
         formset = UserFormSet(request.POST)
         if formset.is_valid():
-            formset.save()
+            instances = formset.save(commit=False)
+            for instance in instances:
+                instance.user = models.User.objects.filter(id=request.info_dict['id']).first()  
+                instance.save()
             return redirect('/user/list/')
     else:
         formset = UserFormSet(queryset=user_filter.qs)
@@ -115,14 +124,37 @@ def user_edit(request, aid):
     if not form.is_valid():
         return render(request, 'user/user_form.html', {"form": form})
 
-    form.save()
+    # form.save()
+    user = form.save(commit=False)
+    user.user = models.User.objects.filter(id=request.info_dict['id']).first()  
+    user.save()
 
     return redirect('/user/list/')
 
 
 def user_delete(request):
     aid = request.GET.get("aid")
-    models.User.objects.filter(id=aid).delete()
+    # models.User.objects.filter(id=aid).delete()
+    user = models.User.objects.filter(id=aid).first()
+    if user:
+        user.user = models.User.objects.filter(id=request.info_dict['id']).first()  
+        user.delete()
 
     return JsonResponse({"status": True})
 
+
+def user_delete_mult(request):
+    aid = request.GET.get("aid")
+    if not aid:
+        return JsonResponse({"status": False, "error": "ID cannot be empty"})
+
+    try:
+        user = models.User.objects.get(id=aid)
+        # user.delete()
+        if user:
+            user.user = models.User.objects.filter(id=request.info_dict['id']).first()  
+            user.delete()
+
+        return JsonResponse({"status": True})
+    except models.User.DoesNotExist:
+        return JsonResponse({"status": False, "error": "User not found"})

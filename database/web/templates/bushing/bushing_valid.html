@@ -4,7 +4,7 @@
 {% block content %}
 
    
-    <div>
+    <div  style="margin-bottom: 100px;">
         <h3>Bushing List:</h3>
         <form method="get" id="filterForm">
             {{ filter.form.as_p }}
@@ -15,7 +15,7 @@
     <table class="table table-bordered" id="normalTable">
         <thead>
         <tr>
-            <!-- <th>Part ID</th> -->
+            <th>ID</th>
             <th>Project Name</th>
             <th>Part Name</th>
             <th>Bushing Name</th>
@@ -31,7 +31,7 @@
         {% for row in filter.qs %}
             
             <tr>
-                <!-- <td>{{ row.id }}</td> -->
+                <td>{{ row.id }}</td>
                 <td>{{ row.project.projectName|default_if_none:"" }}</td>
                 <td>{{ row.part.partName|default_if_none:"" }}</td>
                 <td>{{ row.bushingName|default_if_none:"" }}</td>
@@ -43,7 +43,11 @@
                
             </tr>
            
-        {% endfor %}
+            {% empty %}
+            <tr>
+                <td colspan="9" class="text-center" style="font-size: large;">No data found.</td>
+            </tr>
+            {% endfor %}
         </tbody>
     </table></div>
     

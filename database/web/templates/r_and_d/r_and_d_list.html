@@ -5,7 +5,7 @@
 
     
     
-    <div>
+    <div  style="margin-bottom: 100px;">
         <div style="margin-bottom: 10px">
             <a class="btn btn-success" href="/r_and_d/add-multiple/">
                 <span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span> New R&D
@@ -253,7 +253,10 @@
         </tr>
         {% endif %}
         
-            
+        {% empty %}
+        <tr>
+            <td colspan="3" class="text-center" style="font-size: large;">No data found.</td>
+        </tr>
         {% endfor %}
         
         

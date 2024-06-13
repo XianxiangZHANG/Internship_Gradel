@@ -3,7 +3,7 @@
 
 {% block content %}
 
-    <div>
+    <div style="margin-bottom: 100px;">
         <h3>Link List:</h3>
         <form method="get" id="filterForm">
             {{ filter.form.as_p }}
@@ -14,11 +14,12 @@
     <table class="table table-bordered" id="normalTable">
         <thead>
         <tr>
+            <th>ID</th>
             <th style="width: 20%;">Link</th>
             <th style="width: 20%;">Interface Start</th>
             <th style="width: 20%;">Interface Transition</th>
             <th style="width: 20%;">Interface End</th>
-            <th style="width: 10%;">Winding Type</th>
+            <!-- <th style="width: 10%;">Winding Type</th> -->
             
         </tr>
         </thead>
@@ -26,15 +27,19 @@
         {% for row in filter.qs %}
            
             <tr>
-                <!-- <td>{{ row.id }}</td> -->
+                <td>{{ row.id }}</td>
                 <td>{{ row.link }}</td>
                 <td>{{ row.interface1|default_if_none:"" }}</td>
                 <td>{{ row.interface2|default_if_none:"" }}</td>
                 <td>{{ row.interface3|default_if_none:"" }}</td>
-                <td>{{ row.sequence|default_if_none:"" }}</td>
+                <!-- <td>{{ row.sequence|default_if_none:"" }}</td> -->
                
             </tr>
-        {% endfor %}
+            {% empty %}
+            <tr>
+                <td colspan="5" class="text-center" style="font-size: large;">No data found.</td>
+            </tr>
+            {% endfor %}
         </tbody>
     </table>
     </div>

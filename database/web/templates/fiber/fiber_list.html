@@ -5,7 +5,7 @@
 
     
     
-    <div>
+    <div  style="margin-bottom: 100px;"> 
         <div style="margin-bottom: 10px">
             <a class="btn btn-success" href="/fiber/add/">
                 <span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span> New Fiber
@@ -20,7 +20,7 @@
     <table class="table table-bordered">
         <thead>
         <tr>
-            <!-- <th>Fiber ID</th> -->
+            <th>ID</th>
             <th>Material</th>
             <th>Manufacturer</th>
             <th>Distributor</th>
@@ -44,7 +44,7 @@
         {% for row in filter.qs %}
             {% if row.valid %}
             <tr style="background-color: #fff35281;">
-                <!-- <td>{{ row.id }}</td> -->
+                <td>{{ row.id }}</td>
                 <td>{{ row.material|default_if_none:"" }}</td>
                 <td>{{ row.manufacturer|default_if_none:"" }}</td>
                 <td>{{ row.distributor|default_if_none:"" }}</td>
@@ -77,7 +77,7 @@
 
             
             <tr>
-                <!-- <td>{{ row.id }}</td> -->
+                <td>{{ row.id }}</td>
                 <td>{{ row.material|default_if_none:"" }}</td>
                 <td>{{ row.manufacturer|default_if_none:"" }}</td>
                 <td>{{ row.distributor|default_if_none:"" }}</td>

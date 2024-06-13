@@ -63,7 +63,10 @@ def department_add(request):
     if not form.is_valid():
         return render(request, 'department/department_form.html', {"form": form})
 
-    form.save()
+    # form.save()
+    department = form.save(commit=False)
+    department.user = models.User.objects.filter(id=request.info_dict['id']).first()  
+    department.save()
     return redirect('/department/list/')
 
 
@@ -77,6 +80,7 @@ def department_add_multiple(request):
         if formset.is_valid() : 
             instances = formset.save(commit=False)
             for instance in instances:
+                instance.user = models.User.objects.filter(id=request.info_dict['id']).first()  
                 instance.save()
             return redirect('/department/list/')  # Replace with your redirect URL
         else:
@@ -97,7 +101,11 @@ def department_modify_multiple(request):
     if request.method == 'POST':
         formset = DepartmentFormSet(request.POST)
         if formset.is_valid():
-            formset.save()
+            instances = formset.save(commit=False)
+            
+            for instance in instances:
+                instance.user = models.User.objects.filter(id=request.info_dict['id']).first()  
+                instance.save()
             return redirect('/department/list/')
     else:
         formset = DepartmentFormSet(queryset=department_filter.qs)
@@ -131,14 +139,37 @@ def department_edit(request, aid):
     if not form.is_valid():
         return render(request, 'department/department_form.html', {"form": form})
 
-    form.save()
+    # form.save()
+    department = form.save(commit=False)
+    department.user = models.User.objects.filter(id=request.info_dict['id']).first()  
+    department.save()
 
     return redirect('/department/list/')
 
 
 def department_delete(request):
     aid = request.GET.get("aid")
-    models.Department.objects.filter(id=aid).delete()
+    # models.Department.objects.filter(id=aid).delete()
+    department = models.Department.objects.filter(id=aid).first()
+    if department:
+        department.user = models.User.objects.filter(id=request.info_dict['id']).first()  
+        department.delete()
 
     return JsonResponse({"status": True})
 
+
+def department_delete_mult(request):
+    aid = request.GET.get("aid")
+    if not aid:
+        return JsonResponse({"status": False, "error": "ID cannot be empty"})
+
+    try:
+        department = models.Department.objects.get(id=aid)
+        # department.delete()
+        if department:
+            department.user = models.User.objects.filter(id=request.info_dict['id']).first()  
+            department.delete()
+
+        return JsonResponse({"status": True})
+    except models.Department.DoesNotExist:
+        return JsonResponse({"status": False, "error": "Department not found"})

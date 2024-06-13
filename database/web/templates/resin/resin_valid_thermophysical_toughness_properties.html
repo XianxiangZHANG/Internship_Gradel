@@ -2,7 +2,7 @@
 
 
 {% block content %}
-
+<div style="margin-bottom: 100px;">
     <h3>Resin List:</h3>
     <form method="get" id="filterForm" class="from_f">
         {{ filter.form.as_p }}
@@ -14,6 +14,7 @@
         <tr>
             <!--  -->
             <tr>
+                <th rowspan="2">ID</th>
                 <th rowspan="2">Manufacturer</th>
                 <th colspan="3">Resin system</th>
                 
@@ -39,7 +40,7 @@
         {% for row in filter.qs %}
            
             <tr>
-                <!-- <td>{{ row.id }}</td> -->
+                <td>{{ row.id }}</td>
                 <td>{{ row.manufacturer|default_if_none:"" }}</td>
                 <td>{{ row.resin|default_if_none:"" }}</td>
                 <td>{{ row.hardener|default_if_none:"" }}</td>
@@ -55,9 +56,14 @@
 
 
             </tr>
-        {% endfor %}
+            {% empty %}
+            <tr>
+                <td colspan="12" class="text-center" style="font-size: large;">No data found.</td>
+            </tr>
+            {% endfor %}
         </tbody>
-    </table></div>
+    </table>
+</div>
 
 
 {% endblock %}

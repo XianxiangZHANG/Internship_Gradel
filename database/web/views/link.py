@@ -78,6 +78,7 @@ def link_add_multiple(request):
             project = project_part_form.cleaned_data['project']
             part = project_part_form.cleaned_data['part']
             for instance in instances:
+                instance.user = models.User.objects.filter(id=request.info_dict['id']).first()  
                 instance.project = project
                 instance.part = part
                 instance.save()
@@ -103,7 +104,12 @@ def link_modify_multiple(request):
     if request.method == 'POST':
         formset = LinkFormSet(request.POST)
         if formset.is_valid():
-            formset.save()
+            # formset.save()
+            instances = formset.save(commit=False)
+            
+            for instance in instances:
+                instance.user = models.User.objects.filter(id=request.info_dict['id']).first()  
+                instance.save()
             return redirect('/link/list/')
     else:
         formset = LinkFormSet(queryset=link_filter.qs)
@@ -116,15 +122,17 @@ def link_modify_multiple(request):
 def link_add(request):
     if request.method == "GET":
         form = LinkModelForm()
-        return render(request, 'link_form.html', {"form": form})
+        return render(request, 'link/link_form.html', {"form": form})
 
     form = LinkModelForm(data=request.POST)
     if not form.is_valid():
-        return render(request, 'link_form.html', {"form": form})
+        return render(request, 'link/link_form.html', {"form": form})
 
 
-    # save -> DB
-    form.save()
+    # form.save()
+    link = form.save(commit=False)
+    link.user = models.User.objects.filter(id=request.info_dict['id']).first()  
+    link.save()
     return redirect('/link/list/')
 
 
@@ -155,18 +163,39 @@ def link_edit(request, aid):
     if not form.is_valid():
         return render(request, 'link/link_form.html', {"form": form})
 
-    form.save()
+    # form.save()
+    link = form.save(commit=False)
+    link.user = models.User.objects.filter(id=request.info_dict['id']).first()  
+    link.save()
 
     return redirect('/link/list/')
 
 
 def link_delete(request):
     aid = request.GET.get("aid")
-    models.Link.objects.filter(id=aid).delete()
+    # models.Link.objects.filter(id=aid).delete()
+    link = models.Link.objects.filter(id=aid).first()
+    if link:
+        link.user = models.User.objects.filter(id=request.info_dict['id']).first()  
+        link.delete()
     
     return JsonResponse({"status": True})
 
+def link_delete_mult(request):
+    aid = request.GET.get("aid")
+    if not aid:
+        return JsonResponse({"status": False, "error": "ID cannot be empty"})
 
+    try:
+        link = models.Fiber.objects.get(id=aid)
+        # link.delete()
+        if link:
+            link.user = models.User.objects.filter(id=request.info_dict['id']).first()  
+            link.delete()
+
+        return JsonResponse({"status": True})
+    except models.Fiber.DoesNotExist:
+        return JsonResponse({"status": False, "error": "Fiber not found"})
 
 def custom_warning_filter(message, category, filename, lineno, file=None, line=None):
     if "Unknown extension is not supported and will be removed" in str(message) or \

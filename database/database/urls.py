@@ -30,9 +30,11 @@ urlpatterns = [
     path('logout/', account.logout),
     path('img/code/', account.img_code),
     path('home/', account.home),
+    # path('home/', log.log_list),
     path('upload/', account.upload),
     path('check/', account.check),
     path('changePassword/<int:aid>/', account.changePassword),
+    path('myLog/', account.user_log),
 
     path('fiber/list/', fiber.fiber_list),
     path('fiber/valid/', fiber.fiber_valid),

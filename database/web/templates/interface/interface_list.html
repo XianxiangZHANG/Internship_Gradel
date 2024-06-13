@@ -4,7 +4,7 @@
 {% block content %}
 
     
-    <div>
+    <div  style="margin-bottom: 100px;">
         <div style="margin-bottom: 10px">
             <a class="btn btn-success" href="/interface/add-multiple/">
                 <span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span> New Interfaces
@@ -20,7 +20,7 @@
     <table class="table table-bordered" id="normalTable">
         <thead>
         <tr>
-            <!-- <th>Part ID</th> -->
+            <th>ID</th>
             <th>Project Name</th>
             <th>Part Name</th>
             <th>Interface Name</th>
@@ -50,7 +50,7 @@
         {% for row in filter.qs %}
             {% if row.part.valid %} 
             <tr style="background-color: #67fafa70;">
-                <!-- <td>{{ row.id }}</td> -->
+                <td>{{ row.id }}</td>
                 <td>{{ row.project.projectName }}</td>
                 <td>{{ row.part.partName }}</td>
                 <td>{{ row.interfaceName }}</td>
@@ -81,6 +81,7 @@
             </tr>
             {% else %}
             <tr>
+                <td>{{ row.id }}</td>
                 <td>{{ row.project.projectName }}</td>
                 <td>{{ row.part.partName }}</td>
 
@@ -111,7 +112,11 @@
                 </td>
             </tr>
             {% endif %}
-        {% endfor %}
+            {% empty %}
+            <tr>
+                <td colspan="22" class="text-center" style="font-size: large;">No data found.</td>
+            </tr>
+            {% endfor %}
         </tbody>
     </table></div>
     

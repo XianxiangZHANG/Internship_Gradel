@@ -4,7 +4,7 @@
 {% block content %}
 
     
-    <div>
+    <div  style="margin-bottom: 100px;">
         <div style="margin-bottom: 10px">
             <a class="btn btn-success" href="/part/add/">
                 <span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span> New part
@@ -21,7 +21,7 @@
     <table class="table table-bordered" id="normalTable" >
         <thead>
         <tr>
-            <!-- <th>Part ID</th> -->
+            <th>ID</th>
             <th>Project Name</th>
             <th>Part Name</th>
             <th>Default Interface Height [mm]</th>
@@ -56,6 +56,7 @@
         {% for row in filter.qs %}
             {% if row.valid %} 
             <tr style="background-color: #67fafa70;">
+                <td>{{ row.id }}</td>
                 <td>{{ row.project.projectName }}</td>
                 <td>{{ row.partName }}</td>
                 <td>{{ row.defaultInterfaceHeight|default_if_none:"" }}</td>
@@ -91,6 +92,7 @@
             </tr>
             {% else %}
             <tr>
+                <td>{{ row.id }}</td>
                 <td>{{ row.project.projectName }}</td>
                 <td>{{ row.partName }}</td>
                 <td>{{ row.defaultInterfaceHeight|default_if_none:"" }}</td>
@@ -125,7 +127,11 @@
                 </td>
             </tr>
             {% endif %}
-        {% endfor %}
+            {% empty %}
+            <tr>
+                <td colspan="20" class="text-center" style="font-size: large;">No data found.</td>
+            </tr>
+            {% endfor %}
         </tbody>
     </table></div>
     

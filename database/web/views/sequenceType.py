@@ -73,7 +73,10 @@ def sequenceType_add(request):
     if not form.is_valid():
         return render(request, 'sequenceType/sequenceType_form.html', {"form": form})
 
-    form.save()
+    # form.save()
+    sequenceType = form.save(commit=False)
+    sequenceType.user = models.User.objects.filter(id=request.info_dict['id']).first()  
+    sequenceType.save()
     return redirect('/sequenceType/list/')
 
 
@@ -87,6 +90,7 @@ def sequenceType_add_multiple(request):
         if formset.is_valid() : 
             instances = formset.save(commit=False)
             for instance in instances:
+                instance.user = models.User.objects.filter(id=request.info_dict['id']).first()  
                 instance.save()
             return redirect('/sequenceType/list/')  # Replace with your redirect URL
         else:
@@ -107,7 +111,11 @@ def sequenceType_modify_multiple(request):
     if request.method == 'POST':
         formset = SequenceTypeFormSet(request.POST)
         if formset.is_valid():
-            formset.save()
+            instances = formset.save(commit=False)
+            
+            for instance in instances:
+                instance.user = models.User.objects.filter(id=request.info_dict['id']).first()  
+                instance.save()
             return redirect('/sequenceType/list/')
     else:
         formset = SequenceTypeFormSet(queryset=sequenceType_filter.qs)
@@ -140,14 +148,37 @@ def sequenceType_edit(request, aid):
     if not form.is_valid():
         return render(request, 'sequenceType/sequenceType_form.html', {"form": form})
 
-    form.save()
+    # form.save()
+    sequenceType = form.save(commit=False)
+    sequenceType.user = models.User.objects.filter(id=request.info_dict['id']).first()  
+    sequenceType.save()
 
     return redirect('/sequenceType/list/')
 
 
 def sequenceType_delete(request):
     aid = request.GET.get("aid")
-    models.SequenceType.objects.filter(id=aid).delete()
+    # models.SequenceType.objects.filter(id=aid).delete()
+    sequenceType = models.SequenceType.objects.filter(id=aid).first()
+    if sequenceType:
+        sequenceType.user = models.User.objects.filter(id=request.info_dict['id']).first()  
+        sequenceType.delete()
 
     return JsonResponse({"status": True})
 
+
+def sequenceType_delete_mult(request):
+    aid = request.GET.get("aid")
+    if not aid:
+        return JsonResponse({"status": False, "error": "ID cannot be empty"})
+
+    try:
+        sequenceType = models.SequenceType.objects.get(id=aid)
+        # sequenceType.delete()
+        if sequenceType:
+            sequenceType.user = models.User.objects.filter(id=request.info_dict['id']).first()  
+            sequenceType.delete()
+
+        return JsonResponse({"status": True})
+    except models.SequenceType.DoesNotExist:
+        return JsonResponse({"status": False, "error": "sequenceType not found"})

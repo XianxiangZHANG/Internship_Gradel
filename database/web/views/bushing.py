@@ -105,6 +105,7 @@ def bushing_add_multiple(request):
             project = project_part_form.cleaned_data['project']
             part = project_part_form.cleaned_data['part']
             for instance in instances:
+                instance.user = models.User.objects.filter(id=request.info_dict['id']).first()  
                 instance.project = project
                 instance.part = part
                 instance.save()
@@ -132,7 +133,11 @@ def bushing_modify_multiple(request):
     if request.method == 'POST':
         formset = BushingFormSet(request.POST)
         if formset.is_valid():
-            formset.save()
+            instances = formset.save(commit=False)
+            
+            for instance in instances:
+                instance.user = models.User.objects.filter(id=request.info_dict['id']).first()  
+                instance.save()
             return redirect('/bushing/list/')
     else:
         formset = BushingFormSet(queryset=bushing_filter.qs)
@@ -155,7 +160,10 @@ def bushing_add(request):
 
 
     # save -> DB
-    form.save()
+    # form.save()
+    bushing = form.save(commit=False)
+    bushing.user = models.User.objects.filter(id=request.info_dict['id']).first()  
+    bushing.save()
     return redirect('/bushing/list/')
 
 
@@ -185,15 +193,21 @@ def bushing_edit(request, aid):
     if not form.is_valid():
         return render(request, 'bushing/bushing_form.html', {"form": form})
 
-    # 更新
-    form.save()
+    # form.save()
+    bushing = form.save(commit=False)
+    bushing.user = models.User.objects.filter(id=request.info_dict['id']).first()  
+    bushing.save()
 
     return redirect('/bushing/list/')
 
 
 def bushing_delete(request):
     aid = request.GET.get("aid")
-    models.Bushing.objects.filter(id=aid).delete()
+    # models.Bushing.objects.filter(id=aid).delete()
+    bushing = models.Bushing.objects.filter(id=aid).first()
+    if bushing:
+        bushing.user = models.User.objects.filter(id=request.info_dict['id']).first()  
+        bushing.delete()
 
     return JsonResponse({"status": True})
 
@@ -204,7 +218,10 @@ def bushing_delete_mult(request):
 
     try:
         bushing = models.Bushing.objects.get(id=aid)
-        bushing.delete()
+        # bushing.delete()
+        if bushing:
+            bushing.user = models.User.objects.filter(id=request.info_dict['id']).first()  
+            bushing.delete()
         return JsonResponse({"status": True})
     except models.Bushing.DoesNotExist:
         return JsonResponse({"status": False, "error": "Bushing not found"})

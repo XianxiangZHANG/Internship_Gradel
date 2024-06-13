@@ -2,37 +2,120 @@
 
 {% block content %}
 <div id="cont">
-    <h3>Welcome to the Database of Gradel Light Weight, {{ request.info_dict.name }}.</h3>
-    <h4>Log Messages:<a>( Will be implemented later)</a></h4>
+    <h2>Welcome to the Database of Gradel Light Weight, {{ request.info_dict.name }}.</h3>
+    <h4>Log Messages:</h4>
     <div id="log">
-        Log 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 
-        <br>
-        Log 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
-        <br>
-        Log 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3
-        <br>
-        Log 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4
-        <br>
-        Log 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5
-        <br>
-        and so on.
+       
+        <table class="table table-bordered" id="normalTable">
+            <thead>
+                <tr>
+                    <th>User</th>
+                    <th>Action</th>
+                    <th>Model</th>
+                    <th>ObjectID</th>
+                    <th>Timestamp</th>
+                    <th>Changes (Field: 'old value' -> 'new value')</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for log in page_obj %}
+                <tr>
+                    <td>{{ log.user.username }}</td>
+                    <td>{{ log.action }}</td>
+                    <td>{{ log.model }}</td>
+                    <td>{{ log.object_id }}</td>
+                    <td>{{ log.timestamp|date:"m/d/Y H:i:s" }}</td>
+                    <td class="log-entry">{{ log.changes }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="6" class="text-center">No logs found.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <div>
+            <ul class="pagination">
+                {% if page_obj.has_previous %}
+                    <li><a href="?page=1">&laquo; first</a></li>
+                    <li><a href="?page={{ page_obj.previous_page_number }}">previous</a></li>
+                {% else %}
+                    <li class="disabled"><a>&laquo; first</a></li>
+                    <li class="disabled"><a>previous</a></li>
+                {% endif %}
+    
+                {% for num in page_obj.paginator.page_range %}
+                    {% if page_obj.number == num %}
+                        <li class="active"><a>{{ num }}</a></li>
+                    {% elif num > page_obj.number|add:'-5' and num < page_obj.number|add:'5' %}
+                        <li><a href="?page={{ num }}">{{ num }}</a></li>
+                    {% endif %}
+                {% endfor %}
+    
+                {% if page_obj.has_next %}
+                    <li><a href="?page={{ page_obj.next_page_number }}">next</a></li>
+                    <li><a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a></li>
+                {% else %}
+                    <li class="disabled"><a>next</a></li>
+                    <li class="disabled"><a>last &raquo;</a></li>
+                {% endif %}
+            </ul>
+        </div>
     </div>
 </div>
 {% endblock %}
 
 {% block css %}
  <style>
+    h2 {
+        margin-left: 20%;
+        margin-bottom: 50px;
+    }
     #cont {
-        width: 60%;
+        width: 90%;
         margin: auto;
         margin-bottom: 100px;
     }
     #log {
         font-size: large;
-        margin-left: 10%;
     }
     #backBtn {
            display: none;
+    }
+    th {
+        background-color: rgb(203, 231, 255);
+    }
+    #normalTable {
+        border: solid 2px black;
+    }
+    .log-entry {
+        white-space: pre-wrap;
+    }
+    .pagination {
+        display: flex;
+        justify-content: center;
+        list-style: none;
+        padding: 0;
+    }
+    .pagination li {
+        margin: 0 5px;
+    }
+    .pagination a {
+        text-decoration: none;
+        padding: 5px 10px;
+        border: 1px solid #ddd;
+        color: #007bff;
+    }
+    .pagination a:hover {
+        background-color: #f1f1f1;
+    }
+    .pagination .active a {
+        background-color: #007bff;
+        color: white;
+        border: 1px solid #007bff;
+    }
+    .pagination .disabled a {
+        color: #ccc;
     }
 </style>
 {% endblock %}

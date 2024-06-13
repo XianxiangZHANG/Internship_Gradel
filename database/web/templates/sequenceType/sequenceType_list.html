@@ -20,7 +20,7 @@
     <table class="table table-bordered">
         <thead>
         <tr>
-            <!-- <th>Project ID</th> -->
+            <th>ID</th>
             <th style="width: 20%;">Sequence</th>
             <th style="width: 70%;">Description</th>
             <th style="width: 10%;">Operations</th>
@@ -30,7 +30,7 @@
         {% for row in filter.qs %}
             {% if row.valid %}
             <tr style="background-color: #67fafa70;">
-                <!-- <td>{{ row.id }}</td> -->
+                <td>{{ row.id }}</td>
                 <td>{{ row.sequenceType }}</td>
                 <td>{{ row.description|default_if_none:"" }}</td>
                 <td>
@@ -42,7 +42,7 @@
             </tr>
             {% else %}
             <tr>
-                <!-- <td>{{ row.id }}</td> -->
+                <td>{{ row.id }}</td>
                 <td>{{ row.sequenceType }}</td>
                 <td>{{ row.description|default_if_none:"" }}</td>
                 <td>
@@ -53,7 +53,11 @@
                 </td>
             </tr>
             {% endif %}
-        {% endfor %}
+            {% empty %}
+            <tr>
+                <td colspan="4" class="text-center" style="font-size: large;">No data found.</td>
+            </tr>
+            {% endfor %}
         </tbody>
     </table></div>
 
@@ -122,6 +126,7 @@
     #cont {
         width: 80%;
         margin: auto;
+        margin-bottom: 100px;
     }
 
     .table.table-bordered {

@@ -5,7 +5,7 @@
 
     
     
-    <div>
+    <div  style="margin-bottom: 100px;">
       
         <h3>R&D List:</h3>
         <form method="get" id="filterForm">
@@ -125,6 +125,10 @@
         </tr>
         
             
+        {% empty %}
+        <tr>
+            <td colspan="3" class="text-center" style="font-size: large;">No data found.</td>
+        </tr>
         {% endfor %}
         
         

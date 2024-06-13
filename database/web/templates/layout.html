@@ -48,6 +48,13 @@
         #backBtn:hover {
             background-color: #2f7a30; 
         }
+        .active-button a {
+        background-color: #e0e0e0; /* You can change this color to whatever you prefer */
+        /* color: white !important; */
+        }
+        #jump:hover {
+            background-color: #e0e0e0; 
+        }
     </style>
 </head>
 <body>
@@ -70,19 +77,22 @@
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav">
-                <li><a href="/home/" style="margin-top: 10px;">
-                    <img src="{% static 'images/home.svg' %}" alt="Home Icon" width="50" height="50" style="margin-top: -10px;">
-                    <span style="font-weight: bold; font-size: 20px; margin-top: 10px;">Home</span>
+                <li class="{% if request.path == '/home/' %}active-button{% endif %}">
+                    <a href="/home/" style="margin-top: 10px;" id="jump">
+                        <img src="{% static 'images/home.svg' %}" alt="Home Icon" width="50" height="50" style="margin-top: -10px;">
+                        <span style="font-weight: bold; font-size: 20px; margin-top: 10px;">Home</span>
                     </a>
                 </li>
-                <li><a href="/upload/" style="margin-top: 10px;">
-                    <img src="{% static 'images/upload.png' %}" alt="Input Icon" width="50" height="50" style="margin-top: -10px;">
-                    <span style="font-weight: bold; font-size: 20px;">Upload</span>
+                <li class="{% if request.path == '/upload/' %}active-button{% endif %}">
+                    <a href="/upload/" style="margin-top: 10px;" id="jump">
+                        <img src="{% static 'images/upload.png' %}" alt="Input Icon" width="50" height="50" style="margin-top: -10px;">
+                        <span style="font-weight: bold; font-size: 20px;">Upload</span>
                     </a>
                 </li>
-                <li><a href="/check/" style="margin-top: 10px;">
-                    <img src="{% static 'images/edit.svg' %}" alt="Check Icon" width="50" height="50" style="margin-top: -10px;">
-                    <span style="font-weight: bold; font-size: 20px;">Check</span>
+                <li class="{% if request.path == '/check/' %}active-button{% endif %}">
+                    <a href="/check/" style="margin-top: 10px;" id="jump">
+                        <img src="{% static 'images/edit.svg' %}" alt="Check Icon" width="50" height="50" style="margin-top: -10px;">
+                        <span style="font-weight: bold; font-size: 20px;">Check</span>
                     </a>
                 </li>
             </ul>
@@ -93,7 +103,7 @@
                        style="margin-top: 20px; font-weight: bold; font-size: 18px;"
                        aria-expanded="false">{{ request.info_dict.name }} <span class="caret"></span></a>
                     <ul class="dropdown-menu">
-                        <li><a href="#">Check my log</a></li>
+                        <li><a href="/myLog/">Check my log</a></li>
                         <li><a href="/changePassword/{{ request.info_dict.id }}/">Change my password</a></li>
                         <li role="separator" class="divider"></li>
                         <li><a href="/logout/">Logout</a></li>

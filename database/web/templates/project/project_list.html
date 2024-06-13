@@ -5,7 +5,7 @@
 
     
     
-    <div>
+    <div  style="margin-bottom: 100px;">
         <div style="margin-bottom: 10px">
             <a class="btn btn-success" href="/project/add/">
                 <span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span> New project
@@ -20,7 +20,7 @@
     <table class="table table-bordered">
         <thead>
         <tr>
-            <!-- <th>Project ID</th> -->
+            <th>ID</th>
             <th>Project Name</th>
             <th>Program</th>
             <th>Equipment</th>
@@ -31,7 +31,7 @@
             <th>Structure Drawing Nb</th>
             <th>Document No.</th>
             <th>Revision</th>
-            <th>Last Updata</th>
+            <th>Last Update</th>
             <th>Operations</th>
         </tr>
         </thead>
@@ -39,6 +39,7 @@
         {% for row in filter.qs %}
             {% if row.valid %} 
             <tr style="background-color: #67fafa70;">
+                <td>{{ row.id }}</td>
                 <td>{{ row.projectName }}</td>
                 <td>{{ row.program|default_if_none:""  }}</td>
                 <td>{{ row.equipment|default_if_none:"" }}</td>
@@ -61,6 +62,7 @@
             </tr>
             {% else %}
             <tr>
+                <td>{{ row.id }}</td>
                 <td>{{ row.projectName }}</td>
                 <td>{{ row.program|default_if_none:""  }}</td>
                 <td>{{ row.equipment|default_if_none:"" }}</td>
@@ -83,6 +85,10 @@
             </tr>
             {% endif %}
            
+        {% empty %}
+        <tr>
+            <td colspan="12" class="text-center" style="font-size: large;">No data found.</td>
+        </tr>
         {% endfor %}
         </tbody>
     </table></div>

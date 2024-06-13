@@ -4,7 +4,7 @@
 {% block content %}
 
     
-    <div>
+    <div  style="margin-bottom: 100px;">
         <div style="margin-bottom: 10px">
             <a class="btn btn-success" href="/bushing/add-multiple/">
                 <span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span> New Bushings
@@ -20,7 +20,7 @@
     <table class="table table-bordered" id="normalTable">
         <thead>
         <tr>
-            <!-- <th>Part ID</th> -->
+            <th>ID</th>
             <th>Project Name</th>
             <th>Part Name</th>
             <th>Bushing Name</th>
@@ -37,7 +37,7 @@
         {% for row in filter.qs %}
             {% if row.part.valid %} 
             <tr style="background-color: #67fafa70;">
-                <!-- <td>{{ row.id }}</td> -->
+                <td>{{ row.id }}</td>
                 <td>{{ row.project.projectName|default_if_none:"" }}</td>
                 <td>{{ row.part.partName|default_if_none:"" }}</td>
                 <td>{{ row.bushingName|default_if_none:"" }}</td>
@@ -55,7 +55,7 @@
             </tr>
             {% else %}
             <tr>
-                <!-- <td>{{ row.id }}</td> -->
+                <td>{{ row.id }}</td>
                 <td>{{ row.project.projectName|default_if_none:"" }}</td>
                 <td>{{ row.part.partName|default_if_none:"" }}</td>
                 <td>{{ row.bushingName|default_if_none:"" }}</td>
@@ -72,7 +72,11 @@
                 </td>
             </tr>
             {% endif %}
-        {% endfor %}
+            {% empty %}
+            <tr>
+                <td colspan="10" class="text-center" style="font-size: large;">No data found.</td>
+            </tr>
+            {% endfor %}
         </tbody>
     </table></div>
     

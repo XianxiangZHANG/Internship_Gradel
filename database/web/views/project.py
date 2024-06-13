@@ -74,7 +74,10 @@ def project_add(request):
         return render(request, 'project/project_add.html', {"form": form})
 
 
-    form.save()
+    # form.save()
+    project = form.save(commit=False)
+    project.user = models.User.objects.filter(id=request.info_dict['id']).first()  
+    project.save()
     return redirect('/project/list/')
     
 
@@ -102,14 +105,20 @@ def project_edit(request, aid):
     if not form.is_valid():
         return render(request, 'project/project_form.html', {"form": form})
 
-    form.save()
-
+    # form.save()
+    project = form.save(commit=False)
+    project.user = models.User.objects.filter(id=request.info_dict['id']).first()
+    project.save()
     return redirect('/project/list/')
 
 
 def project_delete(request):
     aid = request.GET.get("aid")
-    models.Project.objects.filter(id=aid).delete()
+    # models.Project.objects.filter(id=aid).delete()
+    project = models.Project.objects.filter(id=aid).first()
+    if project:
+        project.user = models.User.objects.filter(id=request.info_dict['id']).first()  
+        project.delete()
 
     return JsonResponse({"status": True})
 
@@ -161,5 +170,6 @@ def upload_file_project(request):
         project_data = handle_uploaded_file_project(request.FILES['file'])
         if 'error' in project_data:
             return JsonResponse(project_data, status=400)
+        
         return JsonResponse(project_data)
     return JsonResponse({'error': 'Invalid request'}, status=400)

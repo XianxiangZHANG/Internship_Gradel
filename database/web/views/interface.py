@@ -78,6 +78,7 @@ def interface_add_multiple(request):
             project = project_part_form.cleaned_data['project']
             part = project_part_form.cleaned_data['part']
             for instance in instances:
+                instance.user = models.User.objects.filter(id=request.info_dict['id']).first()  
                 instance.project = project
                 instance.part = part
                 instance.save()
@@ -106,8 +107,10 @@ def interface_add(request):
         return render(request, 'interface/interface_form.html', {"form": form})
 
 
-    # save -> DB
-    form.save()
+    # form.save()
+    interface = form.save(commit=False)
+    interface.user = models.User.objects.filter(id=request.info_dict['id']).first()  
+    interface.save()
     return redirect('/interface/list/')
 
 def interface_modify_multiple(request):
@@ -120,7 +123,12 @@ def interface_modify_multiple(request):
     if request.method == 'POST':
         formset = InterfaceFormSet(request.POST)
         if formset.is_valid():
-            formset.save()
+            # formset.save()
+            instances = formset.save(commit=False)
+            
+            for instance in instances:
+                instance.user = models.User.objects.filter(id=request.info_dict['id']).first()  
+                instance.save()
             return redirect('/interface/list/')
     else:
         formset = InterfaceFormSet(queryset=interface_filter.qs)
@@ -159,14 +167,21 @@ def interface_edit(request, aid):
     if not form.is_valid():
         return render(request, 'interface/interface_form.html', {"form": form})
 
-    form.save()
+    # form.save()
+    interface = form.save(commit=False)
+    interface.user = models.User.objects.filter(id=request.info_dict['id']).first()  
+    interface.save()
 
     return redirect('/interface/list/')
 
 
 def interface_delete(request):
     aid = request.GET.get("aid")
-    models.Interface.objects.filter(id=aid).delete()
+    # models.Interface.objects.filter(id=aid).delete()
+    interface = models.Interface.objects.filter(id=aid).first()
+    if interface:
+        interface.user = models.User.objects.filter(id=request.info_dict['id']).first()  
+        interface.delete()
 
     return JsonResponse({"status": True})
 

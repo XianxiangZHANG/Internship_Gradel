@@ -16,6 +16,22 @@ class User(models.Model):
     password = models.CharField(verbose_name="Password", max_length=255, default="1a7928232fd865f75808759d0ab8d24f") #default password : 123
     depart = models.ForeignKey(verbose_name="Department", to=Department, on_delete=models.CASCADE, to_field='id')
 
+    def __str__(self):
+        return self.username
+
+class Log(models.Model):
+    user = models.ForeignKey(to=User, on_delete=models.CASCADE, to_field='id')
+    action = models.CharField(max_length=50)
+    model = models.CharField(max_length=255)
+    object_id = models.CharField(max_length=50)
+    timestamp = models.DateTimeField(max_length=50)
+    # timestamp = models.CharField(max_length=50)
+    changes = models.TextField(null=True, blank=True)
+
+    def __str__(self):
+        return f"{self.user} {self.action} {self.model} {self.object_id} on {self.timestamp}"
+
+
 
 class Resin(models.Model):
     """ Resin Table """
@@ -533,7 +549,7 @@ class Winding(models.Model):
     ########   3   ########
     project = models.ForeignKey(verbose_name="Project Name", to=Project, on_delete=models.CASCADE, to_field='id')
     part = models.ForeignKey(verbose_name="Part Name", to=Part, on_delete=models.CASCADE, to_field='id')
-    link = models.ForeignKey(verbose_name="Link Name", to=Link, on_delete=models.CASCADE, to_field='id')
+    # link = models.ForeignKey(verbose_name="Link Name", to=Link, on_delete=models.CASCADE, to_field='id')
     link = models.CharField(verbose_name="Link Name", max_length=255 )
     # interface = models.ForeignKey(verbose_name="Interface Name", to=Interface, on_delete=models.CASCADE, to_field='id')
     # interface1 = models.ForeignKey(Interface, related_name='interface1', on_delete=models.CASCADE, to_field='id')
@@ -541,5 +557,7 @@ class Winding(models.Model):
     interface1 = models.CharField(verbose_name="Interface Start", max_length=255)
     interface2 = models.CharField(verbose_name="Interface Transition", max_length=255)
     interface3 = models.CharField(verbose_name="Interface End", max_length=255)
-    sequence = models.ForeignKey(verbose_name="WindingType Description", to=SequenceType, on_delete=models.CASCADE, to_field='id')
+    # sequence = models.ForeignKey(verbose_name="WindingType Description", to=SequenceType, on_delete=models.CASCADE, to_field='id')
     # valid = models.BooleanField(verbose_name="Validation", default=False)
+    def __str__(self):
+        return self.link

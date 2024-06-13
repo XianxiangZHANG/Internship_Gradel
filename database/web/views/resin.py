@@ -150,6 +150,7 @@ def resin_add_multiple(request):
         if formset.is_valid() :
             instances = formset.save(commit=False)
             for instance in instances:
+                instance.user = models.User.objects.filter(id=request.info_dict['id']).first()  
                 instance.save()
             return redirect('/resin/list/')  # Replace with your redirect URL
 
@@ -203,12 +204,17 @@ def resin_add_mechanical_properties(request):
     ResinFormSet = modelformset_factory(models.Resin, form=ResinModelFormM, extra=0)
     
     if request.method == 'POST':
-        print("post")
+        # print("post")
         formset = ResinFormSet(request.POST)
-        print(formset)
+        # print(formset)
         if formset.is_valid():
-            print("valid")
-            formset.save()
+            # print("valid")
+            # formset.save()
+            instances = formset.save(commit=False)
+            
+            for instance in instances:
+                instance.user = models.User.objects.filter(id=request.info_dict['id']).first()  
+                instance.save()
             return redirect('/resin/list-mechanical-properties/')
     else:
         formset = ResinFormSet(queryset=resin_filter.qs)
@@ -228,9 +234,14 @@ def resin_add_thermophysical_toughness_properties(request):
     
     if request.method == 'POST':
         formset = ResinFormSet(request.POST)
-        print(formset)
+        # print(formset)
         if formset.is_valid():
-            formset.save()
+            # formset.save()
+            instances = formset.save(commit=False)
+            
+            for instance in instances:
+                instance.user = models.User.objects.filter(id=request.info_dict['id']).first()  
+                instance.save()
             return redirect('/resin/list-thermophysical-toughness-properties/')
     else:
         formset = ResinFormSet(queryset=resin_filter.qs)
@@ -251,7 +262,12 @@ def resin_modify_multiple(request):
     if request.method == 'POST':
         formset = ResinFormSet(request.POST)
         if formset.is_valid():
-            formset.save()
+            # formset.save()
+            instances = formset.save(commit=False)
+            
+            for instance in instances:
+                instance.user = models.User.objects.filter(id=request.info_dict['id']).first()  
+                instance.save()
             return redirect('/resin/list/')
     else:
         formset = ResinFormSet(queryset=resin_filter.qs)
@@ -269,12 +285,17 @@ def resin_modify_mechanical_properties(request):
     ResinFormSet = modelformset_factory(models.Resin, form=ResinModelFormM, extra=0)
     
     if request.method == 'POST':
-        print("post")
+        # print("post")
         formset = ResinFormSet(request.POST)
-        print(formset)
+        # print(formset)
         if formset.is_valid():
-            print("valid")
-            formset.save()
+            # print("valid")
+            # formset.save()
+            instances = formset.save(commit=False)
+            
+            for instance in instances:
+                instance.user = models.User.objects.filter(id=request.info_dict['id']).first()  
+                instance.save()
             return redirect('/resin/list-mechanical-properties/')
     else:
         formset = ResinFormSet(queryset=resin_filter.qs)
@@ -294,9 +315,14 @@ def resin_modify_thermophysical_toughness_properties(request):
     
     if request.method == 'POST':
         formset = ResinFormSet(request.POST)
-        print(formset)
+        # print(formset)
         if formset.is_valid():
-            formset.save()
+            # formset.save()
+            instances = formset.save(commit=False)
+            
+            for instance in instances:
+                instance.user = models.User.objects.filter(id=request.info_dict['id']).first()  
+                instance.save()
             return redirect('/resin/list-thermophysical-toughness-properties/')
     else:
         formset = ResinFormSet(queryset=resin_filter.qs)
@@ -315,7 +341,10 @@ def resin_add(request):
     if not form.is_valid():
         return render(request, 'resin/resin_form.html', {"form": form})
 
-    form.save()
+    # form.save()
+    resin = form.save(commit=False)
+    resin.user = models.User.objects.filter(id=request.info_dict['id']).first()  
+    resin.save()
     return redirect('/resin/list/')
 
 
@@ -348,14 +377,21 @@ def resin_edit(request, aid):
     if not form.is_valid():
         return render(request, 'resin/resin_form.html', {"form": form})
 
-    form.save()
+    # form.save()
+    resin = form.save(commit=False)
+    resin.user = models.User.objects.filter(id=request.info_dict['id']).first()  
+    resin.save()
 
     return redirect('/resin/list/')
 
 
 def resin_delete(request):
     aid = request.GET.get("aid")
-    models.Resin.objects.filter(id=aid).delete()
+    # models.Resin.objects.filter(id=aid).delete()
+    resin = models.Resin.objects.filter(id=aid).first()
+    if resin:
+        resin.user = models.User.objects.filter(id=request.info_dict['id']).first()  
+        resin.delete()
 
     return JsonResponse({"status": True})
 
@@ -366,7 +402,10 @@ def resin_delete_mult(request):
 
     try:
         resin = models.Resin.objects.get(id=aid)
-        resin.delete()
+        # resin.delete()
+        if resin:
+            resin.user = models.User.objects.filter(id=request.info_dict['id']).first()  
+            resin.delete()
         return JsonResponse({"status": True})
     except models.Resin.DoesNotExist:
         return JsonResponse({"status": False, "error": "Resin not found"})

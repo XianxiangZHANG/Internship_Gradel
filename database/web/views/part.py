@@ -117,7 +117,10 @@ def part_add(request):
         return render(request, 'part/part_add.html', {"form": form})
 
 
-    form.save()
+    # form.save()
+    part = form.save(commit=False)
+    part.user = models.User.objects.filter(id=request.info_dict['id']).first() 
+    part.save()
     return redirect('/part/list/')
 
 
@@ -161,7 +164,10 @@ def part_edit(request, aid):
     if not form.is_valid():
         return render(request, 'part/part_form.html', {"form": form})
 
-    form.save()
+    # form.save()
+    part = form.save(commit=False)
+    part.user = models.User.objects.filter(id=request.info_dict['id']).first() 
+    part.save()
 
     return redirect('/part/list/')
 
@@ -178,13 +184,20 @@ def part_edit_doc(request, aid):
     if not form.is_valid():
         return render(request, 'part/part_form.html', {"form": form})
 
-    form.save()
+    # form.save()
+    part = form.save(commit=False)
+    part.user = models.User.objects.filter(id=request.info_dict['id']).first() 
+    part.save()
 
     return redirect('/part/list-doc/')
 
 def part_delete(request):
     aid = request.GET.get("aid")
-    models.Part.objects.filter(id=aid).delete()
+    # models.Part.objects.filter(id=aid).delete()
+    part = models.Part.objects.filter(id=aid).first()
+    if part:
+        part.user = models.User.objects.filter(id=request.info_dict['id']).first()  
+        part.delete()
 
     return JsonResponse({"status": True})
 

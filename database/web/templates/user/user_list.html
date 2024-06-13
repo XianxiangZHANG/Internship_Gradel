@@ -39,7 +39,11 @@
                            onclick="deleteAction({{ row.id }});"/>
                 </td>
             </tr>
-        {% endfor %}
+            {% empty %}
+            <tr>
+                <td colspan="3" class="text-center" style="font-size: large;">No data found.</td>
+            </tr>
+            {% endfor %}
         </tbody>
     </table></div>
 
@@ -108,6 +112,7 @@
     #cont {
         width: 50%;
         margin: auto;
+        margin-bottom: 100px;
     }
     table {
         border-collapse: collapse;

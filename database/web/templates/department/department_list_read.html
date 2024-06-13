@@ -12,7 +12,7 @@
     <table class="table table-bordered">
         <thead>
         <tr>
-            <!-- <th>Project ID</th> -->
+            <th>ID</th>
             <th style="width: 40%;">Department</th>
             <th style="width: 30%;">Number of members</th>
             
@@ -22,12 +22,16 @@
         
         {% for row in departments %}
             <tr>
-                <!-- <td>{{ row.id }}</td> -->
+                <td>{{ row.id }}</td>
                 <td>{{ row.title|default_if_none:"" }}</td>
                 <td>{{ row.employee_count }}</td>
                 
             </tr>
-        {% endfor %}
+            {% empty %}
+            <tr>
+                <td colspan="3" class="text-center" style="font-size: large;">No data found.</td>
+            </tr>
+            {% endfor %}
         </tbody>
     </table></div>
 
@@ -49,6 +53,7 @@
     #cont {
         width: 600px;
         margin: auto;
+        margin-bottom: 100px;
     }
 
     .table.table-bordered {
