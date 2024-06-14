@@ -93,6 +93,20 @@ class PartModelAddForm(forms.ModelForm):
         for name, filed_object in self.fields.items():
             filed_object.widget.attrs = {"class": "form-control"}
 
+class PartModelImageForm(forms.ModelForm):
+    class Meta:
+        model = models.Part
+        fields = ['project', 'partName',
+                  'projectImage',
+                 ]
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        for name, filed_object in self.fields.items():
+            filed_object.widget.attrs = {"class": "form-control"}
+
+
 class PartModelDocForm(forms.ModelForm):
     class Meta:
         model = models.Part
@@ -112,7 +126,7 @@ def part_add(request):
         form = PartModelAddForm()
         return render(request, 'part/part_add.html', {"form": form})
 
-    form = PartModelAddForm(data=request.POST)
+    form = PartModelAddForm(request.POST, request.FILES)
     if not form.is_valid():
         return render(request, 'part/part_add.html', {"form": form})
 

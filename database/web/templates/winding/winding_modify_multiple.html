@@ -26,12 +26,39 @@
                 </thead>
             </thead>
             <tbody>
-                {% for form in formset %}
+                {% for field in formset %}
                 <tr class="winding-form">
-                    {% for field in form %}
-                    <td contenteditable="true">{{ field }}</td>
-                    <span style="color: red;">{{ field.errors.0 }}</span>
-                    {% endfor %}
+                            
+                    <!-- <td><select id="id_link" name="link" class="form-control">
+                        <option value=""> - - Please select one - -</option>
+                    </select><span style="color: red;">{{ project_part_form.part.errors.0 }}</span>
+                    </td> -->
+                    <td contenteditable="true">{{ field.link }}
+                        {% if field.interface1.value or field.interface2.value or field.interface3.value %}
+                        {% if not field.link.value %}
+                            <span style="color: red;">{{ linkError }}</span>
+                        {% endif %}{% endif %}</td>
+                    <!-- <td contenteditable="true">{{ field.link }}<span style="color: red;">{{ field.errors.0 }}</span></td> -->
+                    <td contenteditable="true">{{ field.interface1 }}<span style="color: red;">{{ field.errors.0 }}</span></td>
+                    <td contenteditable="true">{{ field.interface2 }}<span style="color: red;">{{ field.errors.0 }}</span></td>
+                    <td contenteditable="true">{{ field.interface3 }}<span style="color: red;">{{ field.errors.0 }}</span></td>
+                    <!-- <td><select id="id_interface1" name="interface" class="form-control">
+                        <option value=""> - - Please select one - -</option>
+                        
+                    </select><span style="color: red;">{{ field.errors.0 }}</span>
+                    </td>
+                    <td><select id="id_interface2" name="interface" class="form-control">
+                        <option value=""> - - Please select one - -</option>
+                        
+                    </select><span style="color: red;">{{ field.errors.0 }}</span>
+                    </td>
+                    <td><select id="id_interface3" name="interface" class="form-control">
+                        <option value=""> - - Please select one - -</option>
+                        
+                    </select><span style="color: red;">{{ field.errors.0 }}</span>
+                    </td> -->
+                    <!-- <td>{{ field.sequence }}<span style="color: red;">{{ field.errors.0 }}</span></td> -->
+                   
                     <td class="text-center"><button type="button" class="btn btn-danger remove-form">Delete</button></td>
                 </tr>
                 {% endfor %}

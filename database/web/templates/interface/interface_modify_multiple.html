@@ -16,10 +16,10 @@
             <thead>
                 <thead>
                     <tr>
-                        <th>Interface Name</th>
-                        <th style="width: 1%;">Height [mm]</th>
-                        <th style="width: 1%;">Int. Diameter [mm]</th>
-                        <th style="width: 1%;"> Total Link</th>
+                        <th style="width: 80px;">Interface Name</th>
+                        <th style="width: 70px;">Height [mm]</th>
+                        <th style="width: 70px;">Int. Diameter [mm]</th>
+                        <th style="width: 70px"> Total Link</th>
                         <th>Total Arm</th>
                         <th>Total Section [mm²]</th>
                         <th>Ext. Diameter [mm]</th>
@@ -34,18 +34,43 @@
                         <th>Direction vector X [mm]</th>
                         <th>Direction vector Y [mm]</th>
                         <th>Direction vector Z [mm]</th>
-                        <th>*divisionStep*</th>
+                        <th>Division Step</th>
                         <th colspan="2">Operation</th>
                     </tr>
                 </thead>
             </thead>
             <tbody>
-                {% for form in formset %}
+                {% for field in formset %}
                 <tr class="interface-form">
-                    {% for field in form %}
-                    <td contenteditable="true">{{ field }}</td>
-                    <span style="color: red;">{{ field.errors.0 }}</span>
-                    {% endfor %}
+                    
+                    <tr class="interface-form">
+                        <td contenteditable="true">{{ field.interfaceName }}
+                            {% if field.height.value or field.intDiameter.value or field.totalLink.value or field.totalArm.value or field.totalSection.value or field.extDiameter.value or field.accMass.value or field.finODiam.value or field.finAccSection.value or field.safetyFactor.value or field.interfaceCenterX.value or field.interfaceCenterY.value or field.interfaceCenterZ.value or field.directionVectorX.value or field.directionVectorY.value or field.directionVectorZ.value or field.divisionStep.value %}
+                            {% if not field.interfaceName.value %}
+                                <span style="color: red;">{{ interfaceError }}</span>
+                            {% endif %}{% endif %}</td>
+
+                        <td contenteditable="true">{{ field.height }}</td>
+                        <td contenteditable="true">{{ field.intDiameter }}</td>
+                        <td contenteditable="true">{{ field.totalLink }}</td>
+                        <td contenteditable="true">{{ field.totalArm }}</td>
+
+                        <td contenteditable="true">{{ field.totalSection }}</td>
+                        <td contenteditable="true">{{ field.extDiameter }}</td>
+                        <td contenteditable="true">{{ field.accMass }}</td>
+                        <td contenteditable="true">{{ field.finODiam }}</td>
+
+                        <td contenteditable="true">{{ field.finAccSection }}</td>
+                        <td contenteditable="true">{{ field.safetyFactor }}</td>
+                        <td contenteditable="true">{{ field.interfaceCenterX }}</td>
+                        <td contenteditable="true">{{ field.interfaceCenterY }}</td>
+
+                        <td contenteditable="true">{{ field.interfaceCenterZ }}</td>
+                        <td contenteditable="true">{{ field.directionVectorX }}</td>
+                        <td contenteditable="true">{{ field.directionVectorY }}</td>
+                        <td contenteditable="true">{{ field.directionVectorZ }}</td>
+                        <td contenteditable="true">{{ field.divisionStep }}</td>
+                       
                     <td class="text-center">
                         <input type="hidden" name="{{ form.id.name }}" value="{{ form.id.value }}">
                         <button type="button" class="btn btn-danger remove-form">Delete</button>
@@ -84,7 +109,6 @@
         margin-bottom: 200px;
     }
     th, td {
-        width: 17%;
         border: 1px solid #ddd;
         padding: 0px;
         text-align: center;

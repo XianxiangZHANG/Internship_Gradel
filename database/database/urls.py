@@ -153,6 +153,6 @@ urlpatterns = [
     path('sequenceType/add-multiple/', sequenceType.sequenceType_add_multiple),
     path('sequenceType/modify-multiple/', sequenceType.sequenceType_modify_multiple),
 
-]
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

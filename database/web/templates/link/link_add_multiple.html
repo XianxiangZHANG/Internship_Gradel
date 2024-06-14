@@ -56,14 +56,14 @@
                 <table class="table table-bordered" id="link-table">
                     <thead>
                         <tr>
-                            <th>Link Name</th>
-                            <th>Interface1 Name</th>
-                            <th>Interface2 Name</th>
-                            <th>Length[mm]</th>
-                            <th>Sequence</th>
+                            <th style="width: 90px;">Link Name</th> 
+                            <th style="width: 80px;">Interface1 Name</th>
+                            <th style="width: 80px;">Interface2 Name</th>
+                            <th style="width: 100px;">Length[mm]</th>
+                            <th style="width: 400px;">Sequence</th>
                             <!-- <th>Link Type</th> -->
-                            <th>Arm Diam.[mm]</th>
-                            <th>Arm Section[mm²]</th>
+                            <th style="width: 100px;">Arm Diam.[mm]</th>
+                            <th style="width: 100px;">Arm Section[mm²]</th>
                             <th>Cycle #</th>
                             
                             <th>Fin. Arm Section[mm²]</th>
@@ -77,26 +77,31 @@
                     <tbody contenteditable="true">
                         {% for field in formset %}
                         <tr class="link-form">
+                            <td contenteditable="true">{{ field.linkName }}
+                                {% if field.interface1.value or field.interface2.value or field.length.value or field.sequence.value or field.armDiam.value or field.armSection.value or field.cycle.value or field.finArmSection.value or field.finArmDiam.value or field.finArmRadius.value or field..value or field.mass.value or field.angle.value %}
+                                {% if not field.linkName.value %}
+                                    <span style="color: red;">{{ linkError }}</span>
+                                {% endif %}{% endif %}</td>
+
+                            <td contenteditable="true">{{ field.interface1 }}</td>
+                            <td contenteditable="true">{{ field.interface2 }}</td>
+                            <td contenteditable="true">{{ field.length }}</td>
+                            <td contenteditable="true">{{ field.sequence }}</td>
+                            <!-- <td contenteditable="true">{{ field.linkType }}</td> -->
+                            <td contenteditable="true">{{ field.armDiam }}</td>
+                            <td contenteditable="true">{{ field.armSection }}</td>
+                            <td contenteditable="true">{{ field.cycle }}</td>
                             
-                            <td contenteditable="true">{{ field.linkName }}<span style="color: red;">{{ field.errors.0 }}</span></td>
-                            <td contenteditable="true">{{ field.interface1 }}<span style="color: red;">{{ field.errors.0 }}</span></td>
-                            <td contenteditable="true">{{ field.interface2 }}<span style="color: red;">{{ field.errors.0 }}</span></td>
-                            <td contenteditable="true">{{ field.length }}<span style="color: red;">{{ field.errors.0 }}</span></td>
-                            <td contenteditable="true">{{ field.sequence }}<span style="color: red;">{{ field.errors.0 }}</span></td>
-                            <!-- <td contenteditable="true">{{ field.linkType }}<span style="color: red;">{{ field.errors.0 }}</span></td> -->
-                            <td contenteditable="true">{{ field.armDiam }}<span style="color: red;">{{ field.errors.0 }}</span></td>
-                            <td contenteditable="true">{{ field.armSection }}<span style="color: red;">{{ field.errors.0 }}</span></td>
-                            <td contenteditable="true">{{ field.cycle }}<span style="color: red;">{{ field.errors.0 }}</span></td>
-                            
-                            <td contenteditable="true">{{ field.finArmSection }}<span style="color: red;">{{ field.errors.0 }}</span></td>
-                            <td contenteditable="true">{{ field.finArmDiam }}<span style="color: red;">{{ field.errors.0 }}</span></td>
-                            <td contenteditable="true">{{ field.finArmRadius }}<span style="color: red;">{{ field.errors.0 }}</span></td>
-                            <td contenteditable="true">{{ field.mass }}<span style="color: red;">{{ field.errors.0 }}</span></td>
-                            <td contenteditable="true">{{ field.angle }}<span style="color: red;">{{ field.errors.0 }}</span></td>
+                            <td contenteditable="true">{{ field.finArmSection }}</td>
+                            <td contenteditable="true">{{ field.finArmDiam }}</td>
+                            <td contenteditable="true">{{ field.finArmRadius }}</td>
+                            <td contenteditable="true">{{ field.mass }}</td>
+                            <td contenteditable="true">{{ field.angle }}</td>
                          
                             <td class="text-center">{% if not forloop.first %}<button type="button" class="btn btn-danger remove-form">Remove</button>{% endif %}</td>
                         </tr>
                         {% endfor %}
+                       
                     </tbody>
                 </table>
             </div>
@@ -240,26 +245,60 @@
                     
                     for(var i=0; i<data.numberLink; i++) {
                         var $row = $('#link-table tbody tr').last();
-                        $row.find('td').eq(0).find('input').val(data.linkName[i]); 
-                        $row.find('td').eq(1).find('input').val(data.interface1[i]);
-                        $row.find('td').eq(2).find('input').val(data.interface2[i]);
-                        $row.find('td').eq(3).find('input').val(data.lengthLink[i]);
-                        $row.find('td').eq(4).find('input').val(data.sequence[i]);
-                        $row.find('td').eq(5).find('input').val(data.armDiam[i]);
-                        $row.find('td').eq(6).find('input').val(data.armSection[i]); 
-                        $row.find('td').eq(7).find('input').val(data.cycle[i]);
-                        $row.find('td').eq(8).find('input').val(data.finArmSection[i]);
-                        $row.find('td').eq(9).find('input').val(data.finArmDiam[i]);
-                        $row.find('td').eq(10).find('input').val(data.finArmRadius[i]);
-                        $row.find('td').eq(11).find('input').val(data.mass[i]); 
-                        $row.find('td').eq(12).find('input').val(data.angle[i]);
-                        // $row.find('td').eq(14).find('input').val(data.bushing_data_draw[i]);
-                        
-                        $('#add-link').click();
+                        // Check if the last row is empty
+                        var isEmptyRow = !$row.find('td').eq(0).find('input').val() &&
+                                        !$row.find('td').eq(1).find('input').val() &&
+                                        !$row.find('td').eq(2).find('input').val() &&
+                                        !$row.find('td').eq(3).find('input').val() &&
+                                        !$row.find('td').eq(4).find('input').val() &&
+                                        !$row.find('td').eq(5).find('input').val() &&
+                                        !$row.find('td').eq(6).find('input').val() &&
+                                        !$row.find('td').eq(7).find('input').val() &&
+                                        !$row.find('td').eq(8).find('input').val() &&
+                                        !$row.find('td').eq(9).find('input').val() &&
+                                        !$row.find('td').eq(10).find('input').val() &&
+                                        !$row.find('td').eq(11).find('input').val() &&
+                                        !$row.find('td').eq(12).find('input').val();
+
+                        if (isEmptyRow) {
+                            $row.find('td').eq(0).find('input').val(data.linkName[i]); 
+                            $row.find('td').eq(1).find('input').val(data.interface1[i]);
+                            $row.find('td').eq(2).find('input').val(data.interface2[i]);
+                            $row.find('td').eq(3).find('input').val(data.lengthLink[i]);
+                            $row.find('td').eq(4).find('input').val(data.sequence[i]);
+                            $row.find('td').eq(5).find('input').val(data.armDiam[i]);
+                            $row.find('td').eq(6).find('input').val(data.armSection[i]); 
+                            $row.find('td').eq(7).find('input').val(data.cycle[i]);
+                            $row.find('td').eq(8).find('input').val(data.finArmSection[i]);
+                            $row.find('td').eq(9).find('input').val(data.finArmDiam[i]);
+                            $row.find('td').eq(10).find('input').val(data.finArmRadius[i]);
+                            $row.find('td').eq(11).find('input').val(data.mass[i]); 
+                            $row.find('td').eq(12).find('input').val(data.angle[i]);
+                            // $row.find('td').eq(14).find('input').val(data.bushing_data_draw[i]);
+                        } else {
+                            $('#add-link').click();
+                            $row = $('#link-table tbody tr').last();
+                            $row.find('td').eq(0).find('input').val(data.linkName[i]); 
+                            $row.find('td').eq(1).find('input').val(data.interface1[i]);
+                            $row.find('td').eq(2).find('input').val(data.interface2[i]);
+                            $row.find('td').eq(3).find('input').val(data.lengthLink[i]);
+                            $row.find('td').eq(4).find('input').val(data.sequence[i]);
+                            $row.find('td').eq(5).find('input').val(data.armDiam[i]);
+                            $row.find('td').eq(6).find('input').val(data.armSection[i]); 
+                            $row.find('td').eq(7).find('input').val(data.cycle[i]);
+                            $row.find('td').eq(8).find('input').val(data.finArmSection[i]);
+                            $row.find('td').eq(9).find('input').val(data.finArmDiam[i]);
+                            $row.find('td').eq(10).find('input').val(data.finArmRadius[i]);
+                            $row.find('td').eq(11).find('input').val(data.mass[i]); 
+                            $row.find('td').eq(12).find('input').val(data.angle[i]);
+                            // $row.find('td').eq(14).find('input').val(data.bushing_data_draw[i]);
+                        }
+
+
                     }
                 },
                 error: function(data) {
-                    alert("Please upload a correct file.");
+                    alert("Please upload a correct file or create the Project first.");
                 }
             });
         });

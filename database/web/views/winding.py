@@ -92,6 +92,7 @@ def winding_add_multiple(request):
         'projects': projects,
         'formset': formset,
         'project_part_form': project_part_form,
+        'linkError': "Link name is Required",
     })
 
 def winding_modify_multiple(request):
@@ -116,6 +117,7 @@ def winding_modify_multiple(request):
     return render(request, 'winding/winding_modify_multiple.html', {
         'filter': winding_filter,
         'formset': formset,
+        'linkError': "Link name is Required",
     })
 
 def winding_add(request):

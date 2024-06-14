@@ -140,7 +140,7 @@ def logout(request):
 
 def home(request):
     logs = models.Log.objects.all().order_by('-timestamp')
-    paginator = Paginator(logs, 10)  # 每页显示10条日志
+    paginator = Paginator(logs, 20)  # 每页显示10条日志
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
     return render(request, 'account/home.html', {'page_obj': page_obj})

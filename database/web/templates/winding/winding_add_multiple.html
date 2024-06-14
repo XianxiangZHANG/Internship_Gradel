@@ -51,7 +51,12 @@
                                 <option value=""> - - Please select one - -</option>
                             </select><span style="color: red;">{{ project_part_form.part.errors.0 }}</span>
                             </td> -->
-                            <td contenteditable="true">{{ field.link }}<span style="color: red;">{{ field.errors.0 }}</span></td>
+                            <td contenteditable="true">{{ field.link }}
+                                {% if field.interface1.value or field.interface2.value or field.interface3.value %}
+                                {% if not field.link.value %}
+                                    <span style="color: red;">{{ linkError }}</span>
+                                {% endif %}{% endif %}</td>
+                            <!-- <td contenteditable="true">{{ field.link }}<span style="color: red;">{{ field.errors.0 }}</span></td> -->
                             <td contenteditable="true">{{ field.interface1 }}<span style="color: red;">{{ field.errors.0 }}</span></td>
                             <td contenteditable="true">{{ field.interface2 }}<span style="color: red;">{{ field.errors.0 }}</span></td>
                             <td contenteditable="true">{{ field.interface3 }}<span style="color: red;">{{ field.errors.0 }}</span></td>

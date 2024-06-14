@@ -92,6 +92,7 @@ def link_add_multiple(request):
         'projects': projects,
         'formset': formset,
         'project_part_form': project_part_form,
+        'linkError': "Link name is Required",
     })
 
 def link_modify_multiple(request):
@@ -117,6 +118,7 @@ def link_modify_multiple(request):
     return render(request, 'link/link_modify_multiple.html', {
         'filter': link_filter,
         'formset': formset,
+        'linkError': "Link name is Required",
     })
 
 def link_add(request):
@@ -266,17 +268,16 @@ def handle_uploaded_file_link(f):
                 i = 1
                 while sheetLT.cell(row=cell.row+i, column=cell.column ).value != None:
                     numberLink += 1
-                    print(numberLink)
+                    # print(numberLink)
                     i +=1
-                print(numberLink)
+                # print(numberLink)
 
-    for row in sheetLT.iter_rows():
         for cell in row:
             if cell.value == "Link":
                 for i in range(0, numberLink):
                     # print(cell.row, cell.column)
                     linkName[i] = sheetLT.cell(row=cell.row+ 1 + i, column=cell.column ).value
-                    print(linkName[i])
+                    # print(str(i) + linkName[i])
             elif cell.value == "Bushing Bi":
                 for i in range(0, numberLink):
                     interface1[i] = sheetLT.cell(row=cell.row+ 1 + i, column=cell.column).value
@@ -348,7 +349,7 @@ def handle_uploaded_file_link(f):
 def upload_file_link(request):
     if request.method == 'POST' and 'file' in request.FILES:
         link = handle_uploaded_file_link(request.FILES['file'])
-        print(link)
+        # print(link)
         if 'error' in link:
             return JsonResponse(link, status=400)
         return JsonResponse(link)

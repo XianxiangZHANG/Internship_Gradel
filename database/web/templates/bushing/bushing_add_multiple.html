@@ -56,6 +56,7 @@
                     <thead>
                         <tr>
                             <th >Bushing Name</th>
+                            
                             <th >Number Interface</th>
                             <th >Bushing Draw. Nr.</th>
                             <th >Acc. On Bushing[g]</th>
@@ -68,16 +69,21 @@
                         {% for field in formset %}
                         <tr class="bushing-form">
                             
-                            <td contenteditable="true">{{ field.bushingName }}<span style="color: red;">{{ field.errors.0 }}</span></td>
-                            <td contenteditable="true">{{ field.numberInterface }}<span style="color: red;">{{ field.errors.0 }}</span></td>
-                            <td contenteditable="true">{{ field.bushingDrawNb }}<span style="color: red;">{{ field.errors.0 }}</span></td>
-                            <td contenteditable="true">{{ field.AccOnBushing }}<span style="color: red;">{{ field.errors.0 }}</span></td>
-                            <td contenteditable="true">{{ field.bushingMass }}<span style="color: red;">{{ field.errors.0 }}</span></td>
-                            <td contenteditable="true">{{ field.totalBushingMass }}<span style="color: red;">{{ field.errors.0 }}</span></td>
+                            <td contenteditable="true">{{ field.bushingName }}
+                                {% if field.numberInterface.value or field.bushingDrawNb.value or field.AccOnBushing.value or field.bushingMass.value or field.totalBushingMass.value %}
+                                {% if not field.bushingName.value %}
+                                    <span style="color: red;">{{ bushingError }}</span>
+                                {% endif %}{% endif %}</td>
+                            <td contenteditable="true">{{ field.numberInterface }}</td>
+                            <td contenteditable="true">{{ field.bushingDrawNb }}</td>
+                            <td contenteditable="true">{{ field.AccOnBushing }}</td>
+                            <td contenteditable="true">{{ field.bushingMass }}</td>
+                            <td contenteditable="true">{{ field.totalBushingMass }}</td>
 
                             <td class="text-center">{% if not forloop.first %}<button type="button" class="btn btn-danger remove-form">Remove</button>{% endif %}</td>
                         </tr>
                         {% endfor %}
+                        
                     </tbody>
                 </table>
             </div>
@@ -191,20 +197,38 @@
 
                     loadParts(data.bushing_data.project_id);
                     // Populate form fields with returned data
-                    for(var i=0; i<data.numberBushing; i++) {
-                        
+                    for (var i = 0; i < data.numberBushing; i++) {
                         var $row = $('#bushing-table tbody tr').last();
-                        $row.find('td').eq(0).find('input').val(data.bushing_data_position[i]);  
-                        $row.find('td').eq(1).find('input').val(data.bushing_data_numberInterface[i]);
-                        $row.find('td').eq(2).find('input').val(data.bushing_data_draw[i]);
-                        $row.find('td').eq(3).find('input').val(data.bushing_data_acc[i]);
-                        $row.find('td').eq(4).find('input').val(data.bushing_data_mass[i]);
-                        $row.find('td').eq(5).find('input').val(data.bushing_data_totalMass[i]);
-                        $('#add-bushing').click();
+
+                        // Check if the last row is empty
+                        var isEmptyRow = !$row.find('td').eq(0).find('input').val() &&
+                                        !$row.find('td').eq(1).find('input').val() &&
+                                        !$row.find('td').eq(2).find('input').val() &&
+                                        !$row.find('td').eq(3).find('input').val() &&
+                                        !$row.find('td').eq(4).find('input').val() &&
+                                        !$row.find('td').eq(5).find('input').val();
+
+                        if (isEmptyRow) {
+                            $row.find('td').eq(0).find('input').val(data.bushing_data_position[i]);
+                            $row.find('td').eq(1).find('input').val(data.bushing_data_numberInterface[i]);
+                            $row.find('td').eq(2).find('input').val(data.bushing_data_draw[i]);
+                            $row.find('td').eq(3).find('input').val(data.bushing_data_acc[i]);
+                            $row.find('td').eq(4).find('input').val(data.bushing_data_mass[i]);
+                            $row.find('td').eq(5).find('input').val(data.bushing_data_totalMass[i]);
+                        } else {
+                            $('#add-bushing').click();
+                            $row = $('#bushing-table tbody tr').last();
+                            $row.find('td').eq(0).find('input').val(data.bushing_data_position[i]);
+                            $row.find('td').eq(1).find('input').val(data.bushing_data_numberInterface[i]);
+                            $row.find('td').eq(2).find('input').val(data.bushing_data_draw[i]);
+                            $row.find('td').eq(3).find('input').val(data.bushing_data_acc[i]);
+                            $row.find('td').eq(4).find('input').val(data.bushing_data_mass[i]);
+                            $row.find('td').eq(5).find('input').val(data.bushing_data_totalMass[i]);
+                        }
                     }
                 },
                 error: function(data) {
-                    alert("Please upload a correct file.");
+                    alert("Please upload a correct file or create the Project first.");
                 }
             });
         });

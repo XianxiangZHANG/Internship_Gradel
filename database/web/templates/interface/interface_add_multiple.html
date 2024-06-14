@@ -72,36 +72,44 @@
                             <th>Direction vector X [mm]</th>
                             <th>Direction vector Y [mm]</th>
                             <th>Direction vector Z [mm]</th>
-                            <th>*divisionStep*</th>
+                            <th>Division Step</th>
                             <th style="width: 100px;">Operation</th>
                         </tr>
                     </thead>
                     <tbody contenteditable="true">
                         {% for field in formset %}
                         <tr class="interface-form">
-                           
-                            <td contenteditable="true">{{ field.interfaceName }}<span style="color: red;">{{ field.errors.0 }}</span></td>
-                            <td contenteditable="true">{{ field.height }}<span style="color: red;">{{ field.errors.0 }}</span></td>
-                            <td contenteditable="true">{{ field.intDiameter }}<span style="color: red;">{{ field.errors.0 }}</span></td>
-                            <td contenteditable="true">{{ field.totalLink }}<span style="color: red;">{{ field.errors.0 }}</span></td>
-                            <td contenteditable="true">{{ field.totalArm }}<span style="color: red;">{{ field.errors.0 }}</span></td>
-                            <td contenteditable="true">{{ field.totalSection }}<span style="color: red;">{{ field.errors.0 }}</span></td>
-                            <td contenteditable="true">{{ field.extDiameter }}<span style="color: red;">{{ field.errors.0 }}</span></td>
-                            <td contenteditable="true">{{ field.accMass }}<span style="color: red;">{{ field.errors.0 }}</span></td>
-                            <td contenteditable="true">{{ field.finODiam }}<span style="color: red;">{{ field.errors.0 }}</span></td>
-                            <td contenteditable="true">{{ field.finAccSection }}<span style="color: red;">{{ field.errors.0 }}</span></td>
-                            <td contenteditable="true">{{ field.safetyFactor }}<span style="color: red;">{{ field.errors.0 }}</span></td>
-                            <td contenteditable="true">{{ field.interfaceCenterX }}<span style="color: red;">{{ field.errors.0 }}</span></td>
-                            <td contenteditable="true">{{ field.interfaceCenterY }}<span style="color: red;">{{ field.errors.0 }}</span></td>
-                            <td contenteditable="true">{{ field.interfaceCenterZ }}<span style="color: red;">{{ field.errors.0 }}</span></td>
-                            <td contenteditable="true">{{ field.directionVectorX }}<span style="color: red;">{{ field.errors.0 }}</span></td>
-                            <td contenteditable="true">{{ field.directionVectorY }}<span style="color: red;">{{ field.errors.0 }}</span></td>
-                            <td contenteditable="true">{{ field.directionVectorZ }}<span style="color: red;">{{ field.errors.0 }}</span></td>
-                            <td contenteditable="true">{{ field.divisionStep }}<span style="color: red;">{{ field.errors.0 }}</span></td>
+                            <td contenteditable="true">{{ field.interfaceName }}
+                                {% if field.height.value or field.intDiameter.value or field.totalLink.value or field.totalArm.value or field.totalSection.value or field.extDiameter.value or field.accMass.value or field.finODiam.value or field.finAccSection.value or field.safetyFactor.value or field.interfaceCenterX.value or field.interfaceCenterY.value or field.interfaceCenterZ.value or field.directionVectorX.value or field.directionVectorY.value or field.directionVectorZ.value or field.divisionStep.value %}
+                                {% if not field.interfaceName.value %}
+                                    <span style="color: red;">{{ interfaceError }}</span>
+                                {% endif %}{% endif %}</td>
+
+                            <td contenteditable="true">{{ field.height }}</td>
+                            <td contenteditable="true">{{ field.intDiameter }}</td>
+                            <td contenteditable="true">{{ field.totalLink }}</td>
+                            <td contenteditable="true">{{ field.totalArm }}</td>
+
+                            <td contenteditable="true">{{ field.totalSection }}</td>
+                            <td contenteditable="true">{{ field.extDiameter }}</td>
+                            <td contenteditable="true">{{ field.accMass }}</td>
+                            <td contenteditable="true">{{ field.finODiam }}</td>
+
+                            <td contenteditable="true">{{ field.finAccSection }}</td>
+                            <td contenteditable="true">{{ field.safetyFactor }}</td>
+                            <td contenteditable="true">{{ field.interfaceCenterX }}</td>
+                            <td contenteditable="true">{{ field.interfaceCenterY }}</td>
+
+                            <td contenteditable="true">{{ field.interfaceCenterZ }}</td>
+                            <td contenteditable="true">{{ field.directionVectorX }}</td>
+                            <td contenteditable="true">{{ field.directionVectorY }}</td>
+                            <td contenteditable="true">{{ field.directionVectorZ }}</td>
+                            <td contenteditable="true">{{ field.divisionStep }}</td>
                            
                             <td class="text-center">{% if not forloop.first %}<button type="button" class="btn btn-danger remove-form">Remove</button>{% endif %}</td>
                         </tr>
                         {% endfor %}
+                        
                     </tbody>
                 </table>
             </div>
@@ -217,27 +225,64 @@
                     // Populate form fields with returned data
                     for(var i=0; i<data.numberInterface; i++) {
                         var $row = $('#interface-table tbody tr').last();
-                        $row.find('td').eq(0).find('input').val(data.interfaceName[i]); 
-                        $row.find('td').eq(1).find('input').val(data.height[i]);
-                        $row.find('td').eq(2).find('input').val(data.intDiameter[i]);
-                        $row.find('td').eq(3).find('input').val(data.totalLink[i]);
-                        $row.find('td').eq(4).find('input').val(data.totalArm[i]);
-                        $row.find('td').eq(5).find('input').val(data.totalSection[i]);
-                        $row.find('td').eq(6).find('input').val(data.extDiameter[i]); 
-                        $row.find('td').eq(7).find('input').val(data.accMass[i]);
-                        $row.find('td').eq(8).find('input').val(data.finODiam[i]);
-                        $row.find('td').eq(9).find('input').val(data.finAccSection[i]);
-                        $row.find('td').eq(10).find('input').val(data.safetyFactor[i]);
-                        $row.find('td').eq(11).find('input').val(data.interfaceCenterX[i]);
-                        $row.find('td').eq(12).find('input').val(data.interfaceCenterY[i]); 
-                        $row.find('td').eq(13).find('input').val(data.interfaceCenterZ[i]);
-                        // $row.find('td').eq(14).find('input').val(data.bushing_data_draw[i]);
-                        
-                        $('#add-interface').click();
+
+                        // Check if the last row is empty
+                        var isEmptyRow = !$row.find('td').eq(0).find('input').val() &&
+                                        !$row.find('td').eq(1).find('input').val() &&
+                                        !$row.find('td').eq(2).find('input').val() &&
+                                        !$row.find('td').eq(3).find('input').val() &&
+                                        !$row.find('td').eq(4).find('input').val() &&
+                                        !$row.find('td').eq(5).find('input').val() &&
+                                        !$row.find('td').eq(6).find('input').val() &&
+                                        !$row.find('td').eq(7).find('input').val() &&
+                                        !$row.find('td').eq(8).find('input').val() &&
+                                        !$row.find('td').eq(9).find('input').val() &&
+                                        !$row.find('td').eq(10).find('input').val() &&
+                                        !$row.find('td').eq(11).find('input').val() &&
+                                        !$row.find('td').eq(12).find('input').val() &&
+                                        !$row.find('td').eq(13).find('input').val() ;
+
+                        if (isEmptyRow) {
+                            $row.find('td').eq(0).find('input').val(data.interfaceName[i]); 
+                            $row.find('td').eq(1).find('input').val(data.height[i]);
+                            $row.find('td').eq(2).find('input').val(data.intDiameter[i]);
+                            $row.find('td').eq(3).find('input').val(data.totalLink[i]);
+                            $row.find('td').eq(4).find('input').val(data.totalArm[i]);
+                            $row.find('td').eq(5).find('input').val(data.totalSection[i]);
+                            $row.find('td').eq(6).find('input').val(data.extDiameter[i]); 
+                            $row.find('td').eq(7).find('input').val(data.accMass[i]);
+                            $row.find('td').eq(8).find('input').val(data.finODiam[i]);
+                            $row.find('td').eq(9).find('input').val(data.finAccSection[i]);
+                            $row.find('td').eq(10).find('input').val(data.safetyFactor[i]);
+                            $row.find('td').eq(11).find('input').val(data.interfaceCenterX[i]);
+                            $row.find('td').eq(12).find('input').val(data.interfaceCenterY[i]); 
+                            $row.find('td').eq(13).find('input').val(data.interfaceCenterZ[i]);
+                            // $row.find('td').eq(14).find('input').val(data.bushing_data_draw[i]);
+                        } else {
+                            $('#add-interface').click();
+                            $row = $('#interface-table tbody tr').last();
+                            $row.find('td').eq(0).find('input').val(data.interfaceName[i]); 
+                            $row.find('td').eq(1).find('input').val(data.height[i]);
+                            $row.find('td').eq(2).find('input').val(data.intDiameter[i]);
+                            $row.find('td').eq(3).find('input').val(data.totalLink[i]);
+                            $row.find('td').eq(4).find('input').val(data.totalArm[i]);
+                            $row.find('td').eq(5).find('input').val(data.totalSection[i]);
+                            $row.find('td').eq(6).find('input').val(data.extDiameter[i]); 
+                            $row.find('td').eq(7).find('input').val(data.accMass[i]);
+                            $row.find('td').eq(8).find('input').val(data.finODiam[i]);
+                            $row.find('td').eq(9).find('input').val(data.finAccSection[i]);
+                            $row.find('td').eq(10).find('input').val(data.safetyFactor[i]);
+                            $row.find('td').eq(11).find('input').val(data.interfaceCenterX[i]);
+                            $row.find('td').eq(12).find('input').val(data.interfaceCenterY[i]); 
+                            $row.find('td').eq(13).find('input').val(data.interfaceCenterZ[i]);
+                            // $row.find('td').eq(14).find('input').val(data.bushing_data_draw[i]);
+                        }
+
                     }
+                    
                 },
                 error: function(data) {
-                    alert("Please upload a correct file.");
+                    alert("Please upload a correct file or create the Project first.");
                 }
             });
         });

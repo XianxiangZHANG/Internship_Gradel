@@ -92,14 +92,13 @@ def bushing_add_multiple(request):
     projects = models.Project.objects.all()
     formset = BushingFormSet(queryset=models.Bushing.objects.none())
     project_part_form = ProjectPartForm()
-    # bushingError = None
 
     if request.method == 'POST':
         formset = BushingFormSet(request.POST)
         project_part_form = ProjectPartForm(request.POST)
-        # bushingName = request.POST.get('bushingName')
-        # if not bushingName:
-        #     bushingError = "Required"
+        bushingName = request.POST.get('bushingName')
+       
+            
         if formset.is_valid() and project_part_form.is_valid():
             instances = formset.save(commit=False)
             project = project_part_form.cleaned_data['project']
@@ -119,7 +118,7 @@ def bushing_add_multiple(request):
         'projects': projects,
         'formset': formset,
         'project_part_form': project_part_form,
-        # 'bushingError': bushingError,
+        'bushingError': "Bushing name is Required",
     })
 
 
@@ -145,6 +144,7 @@ def bushing_modify_multiple(request):
     return render(request, 'bushing/bushing_modify_multiple.html', {
         'filter': bushing_filter,
         'formset': formset,
+        'bushingError': "Bushing name is Required",
     })
 
 
@@ -298,15 +298,15 @@ def handle_uploaded_file_bushing(f):
                     # print(bushing_data_draw[i])
             elif cell.value == "Acc. on bush. [g]":
                 for i in range(0, numberBushing):
-                    bushing_data_acc[i] = sheetOut.cell(row=cell.row+1+i, column=cell.column ).value
+                    bushing_data_acc[i] = round(sheetOut.cell(row=cell.row+1+i, column=cell.column ).value, 2)
                     # print(bushing_data_acc[i])
             elif cell.value == "Bushing mass [g]":
                 for i in range(0, numberBushing):
-                    bushing_data_mass[i] = sheetOut.cell(row=cell.row+1+i, column=cell.column ).value
+                    bushing_data_mass[i] = round(sheetOut.cell(row=cell.row+1+i, column=cell.column ).value, 2)
                     # print(bushing_data_mass[i])
             elif cell.value == "Total bush. mass [g]":
                 for i in range(0, numberBushing):
-                    bushing_data_totalMass[i] = sheetOut.cell(row=cell.row+1+i, column=cell.column ).value
+                    bushing_data_totalMass[i] = round(sheetOut.cell(row=cell.row+1+i, column=cell.column ).value, 2)
                     # print(bushing_data_totalMass[i])
     
     bushing =  {

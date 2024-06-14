@@ -74,8 +74,12 @@
                 <td>{{ row.totalFiberLength|default_if_none:"" }}</td>
                 <td>{{ row.totalFiberMass|default_if_none:"" }}</td>
                 <td>{{ row.totalResinMass|default_if_none:"" }}</td>
-                <!-- <td><img src="{{ row.projectImage }}" alt="Project Image"></td> -->
-                <td>{{ row.projectImage|default_if_none:"" }}</td>
+                <td>{% if row.projectImage %}
+                    <img src="{{ row.projectImage.url }}" alt="Project Image">
+                {% else %}
+                    No image
+                {% endif %}</td>
+                <!-- <td>{{ row.projectImage|default_if_none:"" }}</td> -->
                 <!-- <td>{{ row.part_gh|default_if_none:"" }}</td>
                 <td>{{ row.part_mod|default_if_none:"" }}</td>
                 <td>{{ row.part_csv|default_if_none:"" }}</td>
@@ -110,8 +114,12 @@
                 <td>{{ row.totalFiberLength|default_if_none:"" }}</td>
                 <td>{{ row.totalFiberMass|default_if_none:"" }}</td>
                 <td>{{ row.totalResinMass|default_if_none:"" }}</td>
-                <!-- <td><img src="{{ row.projectImage }}" alt="Project Image"></td> -->
-                <td>{{ row.projectImage|default_if_none:"" }}</td>
+                <td>{% if row.projectImage %}
+                    <img src="{{ row.projectImage.url }}" alt="Project Image">
+                {% else %}
+                    No image
+                {% endif %}</td>
+                <!-- <td>{{ row.projectImage|default_if_none:"" }}</td> -->
                 <!-- <td>{{ row.part_gh|default_if_none:"" }}</td>
                 <td>{{ row.part_mod|default_if_none:"" }}</td>
                 <td>{{ row.part_csv|default_if_none:"" }}</td>

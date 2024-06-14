@@ -13,9 +13,10 @@ import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
-
-
+# BASE_DIR = Path(__file__).resolve().parent.parent
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+# print("PATH")
+# print(BASE_DIR)
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
@@ -143,6 +144,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # 媒体文件目录路径，用于存储上传的文件
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-
+print(MEDIA_ROOT)
 # 访问媒体文件的 URL
 MEDIA_URL = '/media/'

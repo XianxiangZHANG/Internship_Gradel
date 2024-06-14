@@ -426,7 +426,7 @@ class Part(models.Model):
     totalFiberMass = models.FloatField(verbose_name="Total Fiber Mass[kg]", null=True, blank=True)
     totalResinMass = models.FloatField(verbose_name="Total Resin Mass[g]", null=True, blank=True)
 
-    projectImage = models.FileField(upload_to='images/', verbose_name="Project Image", null=True, blank=True)
+    projectImage = models.ImageField(upload_to='images/', verbose_name="Project Image", null=True, blank=True)
 
 
     ########   3   ########

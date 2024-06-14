@@ -67,7 +67,6 @@ def interface_add_multiple(request):
     projects = models.Project.objects.all()
     formset = InterfaceFormSet(queryset=models.Interface.objects.none())
     project_part_form = ProjectPartForm()
-    # interfaceError = None
 
     if request.method == 'POST':
         formset = InterfaceFormSet(request.POST)
@@ -92,7 +91,7 @@ def interface_add_multiple(request):
         'projects': projects,
         'formset': formset,
         'project_part_form': project_part_form,
-        # 'interfaceError': interfaceError,
+        'interfaceError': "Interface name is Required",
     })
 
 
@@ -136,6 +135,7 @@ def interface_modify_multiple(request):
     return render(request, 'interface/interface_modify_multiple.html', {
         'filter': interface_filter,
         'formset': formset,
+        'interfaceError': "Interface name is Required",
     })
 
 class InterfaceEditModelForm(forms.ModelForm):
