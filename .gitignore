@@ -1,0 +1,15 @@
+# 忽略所有的 .cache 文件夹
+.__pycache__
+.vscode
+# 忽略特定文件类型，例如所有的 .log 文件
+*.log
+
+# 忽略某个特定的文件夹及其所有内容
+media/images
+
+# 忽略某个特定的文件
+n.py
+
+# 忽略某个文件夹中的所有内容，但包含特定文件
+# my_folder/*
+# !my_folder/important_file.txt
