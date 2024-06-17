@@ -23,32 +23,32 @@
             </form>
         </div>
         <div class="panel-body">
-        <form id="part-form" method="post"  class="form-horizontal" novalidate>
-            {% csrf_token %}
-            {% for field in form %}
-                <div class="col-xs-12">
-                    <div class="form-group" style="margin-bottom: 25px;">
-                        <label class="col-sm-2 control-label">{{ field.label }}</label>
-                        <div class="col-sm-10" style="position: relative">
-                                {{ field }}
-                            <br>
-                            <span style="color: red;position: absolute;">{{ field.errors.0 }}</span>
-                        </div>
-                    </div>
-                </div>
-            {% endfor %}
-            
-            <div class="row">
-                <div class="form-group">
+            <form id="part-form" method="post"  enctype="multipart/form-data" class="form-horizontal" novalidate>
+                {% csrf_token %}
+                {% for field in form %}
                     <div class="col-xs-12">
-                        <div class="col-sm-offset-6 col-sm-10">
-                            <button type="submit" class="btn btn-primary" style="width: 200px;">Save</button>
+                        <div class="form-group" style="margin-bottom: 25px;">
+                            <label class="col-sm-2 control-label">{{ field.label }}</label>
+                            <div class="col-sm-10" style="position: relative">
+                                    {{ field }}
+                                    <br>
+                                <span style="color: red;position: absolute;">{{ field.errors.0 }}</span>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+                
+                <div class="row">
+                    <div class="form-group">
+                        <div class="col-xs-12">
+                            <div class="col-sm-offset-6 col-sm-10">
+                                <button type="submit" class="btn btn-primary" style="width: 200px;">Save</button>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </form>
-    </div>
+            </form>
+        </div>
 </div>
 {% endblock %}
 
@@ -72,6 +72,7 @@
                         return;
                     }
                     $('#id_project').val(data.project_id);
+                    $('#id_partName').val(data.partName);
                     $('#id_defaultInterfaceHeight').val(data.defaultInterfaceHeight);
                     $('#id_defaultInterfaceIntDiam').val(data.defaultInterfaceIntDiam);
                     $('#id_defaultLinkType').val(data.defaultLinkType);

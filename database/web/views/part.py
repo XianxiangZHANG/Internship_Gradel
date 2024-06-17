@@ -126,8 +126,10 @@ def part_add(request):
         form = PartModelAddForm()
         return render(request, 'part/part_add.html', {"form": form})
 
-    form = PartModelAddForm(request.POST, request.FILES)
+    form = PartModelAddForm(request.POST,request.FILES)
     if not form.is_valid():
+
+        print("Form is not valid:", form.errors)
         return render(request, 'part/part_add.html', {"form": form})
 
 
@@ -137,6 +139,16 @@ def part_add(request):
     part.save()
     return redirect('/part/list/')
 
+    # if request.method == 'POST':
+    #     form = PartModelAddForm(request.POST, request.FILES)
+    #     if form.is_valid():
+    #         form.save()
+    #         return redirect('/part/list/')
+    #     else:
+    #         print("Form is not valid:", form.errors)
+    # else:
+    #     form = PartModelAddForm()
+    # return render(request, 'part/part_add.html', {'form': form})
 
 class PartEditModelForm(forms.ModelForm):
     class Meta:
@@ -244,6 +256,7 @@ def handle_uploaded_file_part(f):
     
     part_data['project_id'] = models.Project.objects.filter(projectName=project_data['projectName']).first().id
     # print(part_data['project_id'])
+    part_data['partName'] = project_data['projectName']
 
 
     for row in sheetIn.iter_rows():
@@ -252,8 +265,8 @@ def handle_uploaded_file_part(f):
                 part_data['defaultInterfaceHeight'] = int(sheetIn.cell(row=cell.row, column=cell.column + 1).value)
             elif cell.value == "Interface Int. Diam [mm]":
                 part_data['defaultInterfaceIntDiam'] = int(sheetIn.cell(row=cell.row, column=cell.column + 1).value)
-            elif cell.value == "Link (Element) Type":
-                part_data['defaultLinkType'] = sheetIn.cell(row=cell.row, column=cell.column + 1).value
+            elif cell.value == "Link (Element) Type" and sheetIn.cell(row=cell.row+1, column=cell.column ).value == "Link defined by":
+                part_data['defaultLinkType'] = sheetIn.cell(row=cell.row, column=cell.column+1 ).value
             elif cell.value == "Link defined by":
                 part_data['defaultLinkDefined'] = sheetIn.cell(row=cell.row, column=cell.column + 1).value
 

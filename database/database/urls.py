@@ -24,7 +24,7 @@ from web.views.load_fiber_resin import get_fiber_data, get_resin_data
 
 
 urlpatterns = [
-    # path('', account.login),
+    path('', account.home),
     # path('accounts/login/', account.loginA),
     path('login/', account.login),
     path('logout/', account.logout),
@@ -153,6 +153,6 @@ urlpatterns = [
     path('sequenceType/add-multiple/', sequenceType.sequenceType_add_multiple),
     path('sequenceType/modify-multiple/', sequenceType.sequenceType_modify_multiple),
 
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
