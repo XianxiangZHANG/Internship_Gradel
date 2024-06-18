@@ -53,7 +53,6 @@
 {% endblock %}
 
 {% block js %}
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 <script type="text/javascript">
     $(document).ready(function() {
@@ -92,7 +91,7 @@
                     // console.log(data.project_id);
                     // console.log(data.defaultInterfaceHeight);
                     // console.log(data.defaultInterfaceIntDiam);
-                    console.log(data.defaultLinkType);
+                    // console.log(data.defaultLinkType);
                     // console.log(data.defaultLinkDefined);
                     // console.log(data.numberLink);
                     // console.log(data.numberBushing);
@@ -108,6 +107,7 @@
                 },
                 error: function(data) {
                     alert("Please upload a correct file or create the Project first.");
+                    // alert(data.error);
                 }
             });
         });

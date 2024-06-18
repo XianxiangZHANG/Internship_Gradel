@@ -1,5 +1,4 @@
 {% extends 'layout.html' %}
-
 {% block content %}
 
 <div class="panel panel-default" style="margin-bottom: 100px;">
@@ -32,8 +31,9 @@
         </form>
     </div>
 </div>
+{% endblock %}
 
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+{% block js %}
 <script type="text/javascript">
     $(document).ready(function() {
         $('#id_project').change(function() {

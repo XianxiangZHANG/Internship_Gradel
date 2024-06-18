@@ -84,20 +84,56 @@ WSGI_APPLICATION = 'database.wsgi.application'
 #         'NAME': BASE_DIR / 'db.sqlite3',
 #     }
 # }
+
+# ON Ubuntu SQL Server
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'mssql',
+#         'NAME': 'TestDB2',
+#         'USER': 'SA',
+#         'PASSWORD': 'Zxx990605',
+#         'HOST': 'localhost',
+#         'PORT': '',
+#         'OPTIONS': {
+#             'driver': 'ODBC Driver 17 for SQL Server',  
+#         },
+#     }
+# }
+
+# ON LAP001
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'mssql',
+#         'NAME': 'master',
+#         'USER': 'SA',
+#         'PASSWORD': '123456789',
+#         'HOST': 'LAP001',
+#         'PORT': '',
+#         'OPTIONS': {
+#             'driver': 'ODBC Driver 17 for SQL Server',  
+#         },
+#     }
+# }
+
+
+# ON Ubuntu MariaDB
 DATABASES = {
     'default': {
-        'ENGINE': 'mssql',
-        'NAME': 'TestDB2',
-        'USER': 'SA',
-        'PASSWORD': 'Zxx990605',
-        'HOST': 'localhost',
-        'PORT': '',
-
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'TEST',
+        'USER': 'xx',
+        'PASSWORD': '',
+        'HOST': 'localhost',  
+        'PORT': '3306',  # default
         'OPTIONS': {
-            'driver': 'ODBC Driver 17 for SQL Server',  
-        },
+            'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
+        }
     }
 }
+
+
+
+
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators

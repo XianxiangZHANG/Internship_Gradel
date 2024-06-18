@@ -74,33 +74,7 @@
 
 {% block js %}
         <script>
-        //     function transposeTable() {
-        //     const normalTable = document.getElementById('normalTable');
-        //     const transposedTable = document.getElementById('transposedTable');
-
-        //     // Get the maximum number of columns any row has
-        //     let maxCols = 0;
-        //     for (const row of normalTable.rows) {
-        //         if (row.cells.length > maxCols) {
-        //             maxCols = row.cells.length;
-        //         }
-        //     }
-
-        //     // Create new rows for each column in the original table
-        //     for (let i = 0; i < maxCols; i++) {
-        //         const newRow = transposedTable.insertRow();
-        //         for (const row of normalTable.rows) {
-        //             const newCell = newRow.insertCell();
-        //             if (i < row.cells.length) {
-        //                 newCell.innerHTML = row.cells[i].innerHTML;
-        //             } else {
-        //                 newCell.innerHTML = ''; // Fill in empty if no data exists for this transposed cell
-        //             }
-        //         }
-        //     }
-        // }
-
-        // transposeTable();
+        
 
         $('#resetButton').click(function() {
         window.location.href = window.location.pathname; // 重定向到相同页面但无查询参数

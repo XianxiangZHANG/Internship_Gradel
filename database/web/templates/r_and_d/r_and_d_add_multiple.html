@@ -178,40 +178,11 @@
         </form>
     </div>
 </div>
+{% endblock %}
 
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+{% block js %}
 <script type="text/javascript">
     $(document).ready(function() {
-        
-
-        // $('#add-r_and_d').click(function() {
-        //     var formCount = $('#id_form-TOTAL_FORMS').val();
-        //     var newForm = $('.r_and_d-form:first').clone(true).removeClass('r_and_d-form');
-        //     newForm.find('input').each(function() {
-        //         var name = $(this).attr('name').replace('-0-', '-' + formCount + '-');
-        //         var id = 'id_' + name;
-        //         $(this).attr({'name': name, 'id': id}).val('');
-        //     });
-        //     newForm.find('td:last').html('<button type="button" class="btn btn-danger remove-form">Remove</button>');
-        //     $('#r_and_d-table tbody').append(newForm);
-        //     $('#id_form-TOTAL_FORMS').val(parseInt(formCount) + 1);
-        // });
-
-        // $(document).on('click', '.remove-form', function() {
-        //     if ($('#r_and_d-table tbody tr').length > 1) {
-        //         $(this).closest('tr').remove();
-        //         var formCount = $('#id_form-TOTAL_FORMS').val();
-        //         $('#id_form-TOTAL_FORMS').val(parseInt(formCount) - 1);
-        //         // 重新调整所有表单行的索引
-        //         $('#r_and_d-table tbody tr').each(function(index) {
-        //             $(this).find('input').each(function() {
-        //                 var name = $(this).attr('name').replace(/-\d+-/, '-' + index + '-');
-        //                 var id = 'id_' + name;
-        //                 $(this).attr({'name': name, 'id': id});
-        //             });
-        //         });
-        //     }
-        // });
 
         // Handle paste event to populate table cells
         $('#r_and_d-table tbody').on('paste', 'td', function(e) {
