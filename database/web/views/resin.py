@@ -17,16 +17,6 @@ class ResinFilter(django_filters.FilterSet):
         model = models.Resin
         fields = ['manufacturer', 'resin', 'hardener', 'accelerator', 'valid']
 
-    # class Meta:
-    #     model = models.Resin
-    #     valid = django_filters.BooleanFilter(field_name='valid')  
-    #     fields = {
-    #         'manufacturer': ['icontains'], 
-    #         'resin': ['icontains'],
-    #         'hardener': ['icontains'],
-    #         'accelerator': ['icontains'],
-    #         'valid':['']
-    #     }
 
 def resin_list(request):
     """ list of resin """
@@ -84,9 +74,7 @@ def resin_input(request):
 
     # [obj,]
     queryset = models.Resin.objects.all().order_by("id")
-    # for row in queryset:
-    #     print(row.username, row.password, row.gender, row.get_gender_display(), row.depart_id, row.depart.title)
-    
+   
     return render(request, 'resin/resin_input.html', {"queryset": queryset})
 
 

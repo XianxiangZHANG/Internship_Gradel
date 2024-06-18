@@ -18,15 +18,7 @@ class R_and_DFilter(django_filters.FilterSet):
     class Meta:
         model = models.Resin
         fields = ['program', 'projectNr', 'ERMDS', 'fiber', 'resin', 'valid']
-    # class Meta:
-    #     model = models.R_and_D
-    #     fields = {
-    #         'program': ['icontains'], 
-    #         'projectNr': ['icontains'],
-    #         'ERMDS': ['icontains'],
-    #         'fiber': ['exact'],
-    #         'resin': ['exact'],
-    #     }
+   
 
 
 class R_and_DFilterModify(django_filters.FilterSet):
@@ -63,18 +55,12 @@ def r_and_d_valid(request):
     r_and_d_filter = R_and_DFilterValid(request.GET, queryset=models.R_and_D.objects.filter(valid=True))
     return render(request, 'r_and_d/r_and_d_valid.html', {'filter': r_and_d_filter})
 
-# def r_and_d_detail(request, ermds_id):
-#     randd = get_object_or_404(models.R_and_D, ERMDS=ermds_id)
-#     comments = models.RDComment.objects.filter(ERMDS=randd)
-#     return render(request, 'r_and_d_list.html', {'randd': randd, 'comments': comments})
 
 def r_and_d_input(request):
     """ list of r_and_d """
 
     # [obj,]
     queryset = models.R_and_D.objects.all().order_by("id")
-    # for row in queryset:
-    #     print(row.username, row.password, row.gender, row.get_gender_display(), row.depart_id, row.depart.title)
     
     return render(request, 'r_and_d/r_and_d_input.html', {"queryset": queryset})
 
@@ -120,31 +106,6 @@ class R_and_DModelForm(forms.ModelForm):
         for name, filed_object in self.fields.items():
             filed_object.widget.attrs = {"class": "form-control"}
 
-
-# class RDCommentModelForm(forms.ModelForm):
-#     class Meta:
-#         model = models.RDComment
-#         fields = [
-#                 'fiber', 'numberOfBobbins', 'resin', 
-#                 'endEffector', 'impregnationBath', 'entryNozzleDiam', 'exitNozzleDiam',
-#                 'roomTemperature', 'roomhumidity',
-#                 'brakeForcebobin', 'windingSpeedRange',
-#                 'FVR', 'compositeDensity', 'porosity', 'theoreticalSampleSection', 'experimentalSampleSection', 'aged', 'temperatureOfTests',
-#                 'numberOfSamples', 'configurarion', 'sampleLength', 'numberOfCycles', 'sleeve',
-#                 'thermalExpansionCoefficient', 'thermalConductivity',
-#                 'tensileYoungModulus', 'tensileUltimateStress', 'tensileUltimateStressMA', 'tensileUltimateStressMB',
-#                 'tensileUltimateLoad', 'tensileYieldStress', 'tensileYieldStressMA', 'tensileYieldStressMB', 'tensileYieldLoad',
-#                 'compressionYoungModulus', 'compressionUltimateStress', 'compressionUltimateStressMA', 'compressionUltimateStressMB',
-#                 'compressionUltimateLoad', 'compressionYieldStress', 'compressionYieldStressMA', 'compressionYieldStressMB', 'compressionYieldLoad', 'poissonRatio',
-#                 'flexuralModulusILSS', 'ultimateShearForce', 'ultimateShearStress', 'ultimateShearStressMA', 'ultimateShearStressMB',
-#                 'flexuralModulusF', 'flexuralUltimateStrength', 'flexuralUltimateStrengthMA', 'flexuralUltimateStrengthMB', 'strainUltimateStrength', 'flexuralUltimateForce',
-#                 'yieldTorque', 'maxiTorque', 'yieldAngle', 'maxiTwistedAngle']
-
-#     def __init__(self, *args, **kwargs):
-#         super().__init__(*args, **kwargs)
-
-#         for name, filed_object in self.fields.items():
-#             filed_object.widget.attrs = {"class": "form-control"}
 
 
 class R_and_DForm(forms.ModelForm):
@@ -194,11 +155,6 @@ R_and_DFormSet = modelformset_factory(
     form=R_and_DModelForm,
     extra=1  # The number of additional forms added during initialization
 )
-# RDCommentFormSet = modelformset_factory(
-#     models.RDComment,
-#     form=RDCommentModelForm,
-#     extra=1  # The number of additional forms added during initialization
-# )
 
 R_and_DMultFormSet = modelformset_factory(
     models.R_and_D,
@@ -275,19 +231,7 @@ def r_and_d_modify_multiple(request):
             return redirect('/r_and_d/list/')
         else:
             print(formset.errors)  # Print formset errors for debugging
-        # print("try2")
-        # fiber_resin_form = FiberResinForm(request.POST)
-        # if formset.is_valid() and fiber_resin_form.is_valid():
-        #     print("try3")
-            
-        #     fiber = fiber_resin_form.cleaned_data['fiber']
-        #     resin = fiber_resin_form.cleaned_data['resin']
-        #     instances = formset.save(commit=False)
-        #     for instance in instances:
-        #         instance.fiber = fiber
-        #         instance.resin = resin
-        #         instance.save()
-        #     return redirect('/r_and_d/list/')
+        
     else:
         # print("try else")
         formset = R_and_DMultFormSet(queryset=r_and_d_filter.qs)

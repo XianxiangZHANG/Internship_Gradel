@@ -129,10 +129,10 @@
 <script src="{% static 'plugins/bootstrap-3.4.1/js/bootstrap.min.js' %}"></script>
 {% block js %}{% endblock %}
 <script>
-    // 获取按钮
+    
     var mybutton = document.getElementById("topBtn");
 
-    // 当用户向下滚动20px时，显示按钮
+     
     window.onscroll = function() {
         scrollFunction();
     };
@@ -145,12 +145,12 @@
         }
     }
 
-    // 当用户点击按钮时，滚动到页面顶部
+     
     function topFunction() {
         window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
-    // 当用户点击返回按钮时，返回上一级
+    
     function goBack() {
         window.history.back();
     }

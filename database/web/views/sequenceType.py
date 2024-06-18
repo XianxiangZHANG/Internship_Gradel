@@ -4,7 +4,6 @@ from django import forms
 from django.forms import modelformset_factory
 
 from web import models
-from utils.encrypt import md5
 import django_filters
 
 class SequenceTypeFilter(django_filters.FilterSet):
@@ -16,12 +15,6 @@ class SequenceTypeFilter(django_filters.FilterSet):
         model = models.Resin
         fields = ['sequenceType', 'description', 'valid']
 
-    # class Meta:
-    #     model = models.SequenceType
-    #     fields = {
-    #         'sequenceType': ['icontains'],
-    #         'description': ['icontains'],
-    #     }
 
 def sequenceType_list(request):
     """ list of sequenceType """

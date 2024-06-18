@@ -81,10 +81,10 @@
 
 
     $(function(){
-        // 使用 jQuery 处理点击事件
+        
         $('.input__icon').click(function() {
             var inputId = $(this).data('toggle');
-            var input = $(`input[id='id_${inputId}']`); // 假设输入框的 ID 是 'id_old_password', 'id_new_password', 'id_confirm_password'
+            var input = $(`input[id='id_${inputId}']`); // Assume the ID of the input box is 'id_old_password', 'id_new_password', 'id_confirm_password'
             var newType = input.attr('type') === 'password' ? 'text' : 'password';
             input.attr('type', newType);
             var newSrc = newType === 'password' ? '{% static 'images/eye.svg' %}' : '{% static 'images/eye-off.svg' %}';

@@ -115,18 +115,18 @@
 <script>
 $(document).ready(function() {
     $('#resetButton').click(function() {
-        window.location.href = window.location.pathname; // 重定向到相同页面但无查询参数
+        window.location.href = window.location.pathname;  
     });
 
     let DELETE_ID = 0;
 
-    // 显示删除确认对话框
+    
     function deleteAction(id) {
         DELETE_ID = id;
         $('#myModal').modal('show');
     }
 
-    // 确认删除操作
+    
     function confirmDelete() {
         $.ajax({
             url: "/department/delete/",
@@ -143,13 +143,13 @@ $(document).ready(function() {
         });
     }
 
-    // 取消删除操作
+     
     function cancelDelete() {
         DELETE_ID = 0;
         $('#myModal').modal('hide');
     }
 
-    // 绑定删除按钮点击事件
+    
     $(document).on('click', '.remove-form', function() {
         let row = $(this).closest('tr');
         let departmentId = row.find('input[name$="-id"]').val();

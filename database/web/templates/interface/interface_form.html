@@ -38,8 +38,8 @@
 <script type="text/javascript">
     $(document).ready(function() {
         $('#id_project').change(function() {
-            var url = '{% url "load_parts" %}';  // 获取对应的 URL
-            var projectId = $(this).val();  // 获取选中的 project id
+            var url = '{% url "load_parts" %}';  
+            var projectId = $(this).val();   
             
             $.ajax({
                 url: url,
@@ -47,7 +47,7 @@
                     'project_id': projectId
                 },
                 success: function(data) {
-                    $("#id_part").html('');  // 清空 part 下拉框
+                    $("#id_part").html('');   
                     $.each(data, function(key, value) {
                         $("#id_part").append('<option value="' + value.id + '">' + value.partName + '</option>');
                     });

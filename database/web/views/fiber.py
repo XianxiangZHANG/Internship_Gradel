@@ -16,14 +16,7 @@ class FiberFilter(django_filters.FilterSet):
     class Meta:
         model = models.Fiber
         fields = ['material', 'manufacturer', 'distributor', 'grade', 'valid']
-    # class Meta:
-    #     model = models.Fiber
-    #     fields = {
-    #         'material': ['icontains'], 
-    #         'manufacturer': ['icontains'],
-    #         'distributor': ['icontains'],
-    #         'grade': ['icontains'],
-    #     }
+   
 
 class FiberFilterValid(django_filters.FilterSet):
     material = django_filters.CharFilter(field_name='material', lookup_expr='icontains')
@@ -52,8 +45,6 @@ def fiber_input(request):
 
     # [obj,]
     queryset = models.Fiber.objects.all().order_by("id")
-    # for row in queryset:
-    #     print(row.username, row.password, row.gender, row.get_gender_display(), row.depart_id, row.depart.title)
     
     return render(request, 'fiber/fiber_input.html', {"queryset": queryset})
 

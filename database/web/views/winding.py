@@ -5,7 +5,6 @@ from django.forms import modelformset_factory
 from openpyxl import load_workbook
 
 from web import models
-from utils.encrypt import md5
 import django_filters
 
 class WindingFilter(django_filters.FilterSet):

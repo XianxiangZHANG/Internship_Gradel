@@ -211,7 +211,7 @@ warnings.showwarning = custom_warning_filter
 
 
 def handle_uploaded_file_link(f):
-    # 加载Excel文件
+    # load Excel document
     wb = load_workbook(filename=f, data_only=True)
     if 'CoverPage' not in wb.sheetnames:
         return {'error': 'CoverPage sheet not found'}

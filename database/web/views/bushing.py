@@ -13,19 +13,10 @@ class BushingFilter(django_filters.FilterSet):
     part = django_filters.ModelChoiceFilter(queryset=models.Part.objects.all())
     bushingName = django_filters.CharFilter(field_name='bushingName', lookup_expr='icontains')
     
-    
-
     class Meta:
         model = models.Bushing
         fields = ['project', 'part', 'bushingName']
 
-    # class Meta:
-    #     model = models.Bushing
-    #     fields = {
-    #         'project': ['exact'], 
-    #         'part': ['exact'],
-    #         'bushingName': ['icontains'],
-    #     }
 
 def bushing_list(request):
     """ list of bushing """
@@ -45,8 +36,6 @@ def bushing_input(request):
 
     # [obj,]
     queryset = models.Bushing.objects.all().order_by("id")
-    # for row in queryset:
-    #     print(row.username, row.password, row.gender, row.get_gender_display(), row.depart_id, row.depart.title)
     
     return render(request, 'bushing/bushing_input.html', {"queryset": queryset})
 
@@ -228,7 +217,7 @@ def bushing_delete_mult(request):
     
 
 def handle_uploaded_file_bushing(f):
-    # 加载Excel文件
+    # load Excel document
     wb = load_workbook(filename=f, data_only=True)
     if 'CoverPage' not in wb.sheetnames:
         return {'error': 'CoverPage sheet not found'}
@@ -241,7 +230,7 @@ def handle_uploaded_file_bushing(f):
     sheetIn = wb['Input']
     sheetOut = wb['Output']
 
-    # 获取项目数据
+    # get data
     bushing_data = {}
     
     bushing_data_numberInterface = {}

@@ -5,7 +5,6 @@ from django.forms import modelformset_factory
 from openpyxl import load_workbook
 
 from web import models
-from utils.encrypt import md5
 import django_filters
 
 class InterfaceFilter(django_filters.FilterSet):
@@ -186,7 +185,7 @@ def interface_delete(request):
     return JsonResponse({"status": True})
 
 def handle_uploaded_file_interface(f):
-    # 加载Excel文件
+    # load Excel document
     wb = load_workbook(filename=f, data_only=True)
     if 'CoverPage' not in wb.sheetnames:
         return {'error': 'CoverPage sheet not found'}
@@ -202,7 +201,7 @@ def handle_uploaded_file_interface(f):
     sheetOut = wb['Output']
     sheetBT = wb['Bushing Table']
 
-    # 获取项目数据
+    # get data
     interface_data = {}
     interfaceName = {}
     height = {}

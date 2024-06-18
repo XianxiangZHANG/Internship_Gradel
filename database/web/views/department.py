@@ -5,7 +5,6 @@ from django.forms import modelformset_factory
 from django.db.models import Count
 
 from web import models
-from utils.encrypt import md5
 import django_filters
 
 class DepartmentFilter(django_filters.FilterSet):

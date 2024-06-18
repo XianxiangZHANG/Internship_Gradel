@@ -1,13 +1,7 @@
-import hashlib
 from io import BytesIO
 from django.core.paginator import Paginator
 from django import forms
-from django.core.validators import RegexValidator
 from django.shortcuts import render, HttpResponse, redirect
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth.forms import PasswordChangeForm
-from django.contrib.auth import update_session_auth_hash
-from django.contrib.auth.hashers import check_password
 from django.core.exceptions import ValidationError
 
 
@@ -140,7 +134,7 @@ def logout(request):
 
 def home(request):
     logs = models.Log.objects.all().order_by('-timestamp')
-    paginator = Paginator(logs, 20)  # 每页显示10条日志
+    paginator = Paginator(logs, 20)  # Display 20 logs per page
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
     return render(request, 'account/home.html', {'page_obj': page_obj})
@@ -153,7 +147,7 @@ def home(request):
 def user_log(request):
     user = models.User.objects.filter(id=request.info_dict['id']).first()
     user_logs = models.Log.objects.filter(user=user).order_by('-timestamp')
-    paginator = Paginator(user_logs, 10)  # 每页显示10条日志
+    paginator = Paginator(user_logs, 10)  # Display 10 logs per page
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
     return render(request, 'account/log.html', {'page_obj': page_obj})

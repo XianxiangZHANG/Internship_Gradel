@@ -64,7 +64,7 @@
                 $(this).closest('tr').remove();
                 var formCount = $('#id_form-TOTAL_FORMS').val();
                 $('#id_form-TOTAL_FORMS').val(parseInt(formCount) - 1);
-                // 重新调整所有表单行的索引
+                
                 $('#department-table tbody tr').each(function(index) {
                     $(this).find('input').each(function() {
                         var name = $(this).attr('name').replace(/-\d+-/, '-' + index + '-');

@@ -13,7 +13,7 @@ import pytz
 @receiver(pre_save)
 def store_old_instance(sender, instance, **kwargs):
     if sender == models.Log:
-        return  # 避免处理 models.Log 的保存
+        return  # Avoid handling saving of models.Log
     try:
         instance._old_instance = sender.objects.get(pk=instance.pk)
     except sender.DoesNotExist:
@@ -22,10 +22,10 @@ def store_old_instance(sender, instance, **kwargs):
 @receiver(post_save)
 def log_save(sender, instance, created, **kwargs):
     if sender == models.Log:
-        return  # 避免记录 models.Log 的保存
+        return  # Avoid saving records in models.Log
 
     if not hasattr(instance, 'user'):
-        return  # 仅记录具有 user 属性的模型
+        return  # Only log models that have a user property
 
     user = instance.user
     model_name = sender.__name__
@@ -36,10 +36,10 @@ def log_save(sender, instance, created, **kwargs):
         changes = "Created - "+str(instance)
     else:
         action = "Updated"
-        changes = get_changes(instance)  # 获取更详细的变更信息
+        changes = get_changes(instance)  # Get more detailed change information
 
     timezone = pytz.timezone('Europe/Luxembourg')
-    timestamp = now().astimezone(timezone)  # 获取当前时间并转换为 CET
+    timestamp = now().astimezone(timezone)  # Get the current time and convert to Europe/Luxembourg
 
     models.Log.objects.create(
         user=user,
@@ -47,26 +47,26 @@ def log_save(sender, instance, created, **kwargs):
         model=model_name,
         object_id=object_id,
         changes=changes,
-        timestamp=timestamp  # 设置 CET 时间戳
+        timestamp=timestamp  # Setting Timestamp
     )
 
 @receiver(post_delete)
 def log_delete(sender, instance, **kwargs):
     if sender == models.Log:
-        return  # 避免记录 models.Log 的删除
+        return 
 
     if not hasattr(instance, 'user'):
-        return  # 仅记录具有 user 属性的模型
+        return  
     
     timezone = pytz.timezone('Europe/Luxembourg')
-    timestamp = now().astimezone(timezone)  # 获取当前时间并转换为 CET
+    timestamp = now().astimezone(timezone)  
 
     user = instance.user
     model_name = sender.__name__
     object_id = instance.pk
     # object_id = str(instance)
     action = "Deleted"
-    changes = "Deleted - "+str(instance)  # 捕获删除前的状态
+    changes = "Deleted - "+str(instance)  
 
     models.Log.objects.create(
         user=user,
@@ -74,7 +74,7 @@ def log_delete(sender, instance, **kwargs):
         model=model_name,
         object_id=object_id,
         changes=changes,
-        timestamp=timestamp  # 设置 CET 时间戳
+        timestamp=timestamp  
     )
 
 def get_changes(instance):
@@ -90,21 +90,15 @@ def get_changes(instance):
     title = "Updated - "+str(instance)
     changes = [title,]
 
-    # for field, old_value in old_values.items():
-    #     new_value = new_values[field]
-
-    #     if old_value != new_value:
-    #         field_name = instance._meta.get_field(field).verbose_name
-    #         changes.append(f"{field_name}: '{old_value}' -> '{new_value}'")
-
+  
     for field in old_values:
         old_value = old_values[field]
         new_value = new_values[field]
         
-        # 获取字段对象
+       
         field_object = instance._meta.get_field(field)
 
-        # 如果是外键字段，获取外键对象的字符串表示
+        # If it is a foreign key field, get the string representation of the foreign key object
         if isinstance(field_object, ForeignKey):
             old_value = str(field_object.related_model.objects.get(pk=old_value)) if old_value else None
             new_value = str(field_object.related_model.objects.get(pk=new_value)) if new_value else None

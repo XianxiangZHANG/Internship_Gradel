@@ -5,7 +5,6 @@ from openpyxl import load_workbook
 from datetime import datetime
 
 from web import models
-from utils.encrypt import md5
 import django_filters
 
 class ProjectFilter(django_filters.FilterSet):
@@ -19,13 +18,6 @@ class ProjectFilter(django_filters.FilterSet):
         model = models.Project
         fields = ['projectName', 'program', 'equipment', 'customer','valid']
 
-    # class Meta:
-    #     model = models.Project
-    #     fields = {
-    #         'projectName': ['icontains'],
-    #         'equipment': ['icontains'],
-    #         'customer': ['icontains'],
-    #     }
 
 def project_list(request):
     """ list of project """
@@ -127,14 +119,14 @@ class UploadFileForm(forms.Form):
 
 
 def handle_uploaded_file_project(f):
-    # 加载Excel文件
+    # load Excel document
     wb = load_workbook(filename=f, data_only=True)
     if 'CoverPage' not in wb.sheetnames:
         return {'error': 'CoverPage sheet not found'}
     
     sheet = wb['CoverPage']
 
-    # 获取项目数据
+    # get data
     project_data = {}
     for row in sheet.iter_rows():
         for cell in row:

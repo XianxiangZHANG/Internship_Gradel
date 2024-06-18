@@ -5,7 +5,6 @@ from django import forms
 from openpyxl import load_workbook
 
 from web import models
-from utils.encrypt import md5
 import django_filters
 
 class PartFilter(django_filters.FilterSet):
@@ -16,12 +15,7 @@ class PartFilter(django_filters.FilterSet):
     class Meta:
         model = models.Part
         fields = ['project', 'partName', 'valid']
-    # class Meta:
-    #     model = models.Part
-    #     fields = {
-    #         'project': ['exact'], 
-    #         'partName': ['icontains'],
-    #     }
+   
 def part_list(request):
     """ list of part """
 
@@ -139,16 +133,6 @@ def part_add(request):
     part.save()
     return redirect('/part/list/')
 
-    # if request.method == 'POST':
-    #     form = PartModelAddForm(request.POST, request.FILES)
-    #     if form.is_valid():
-    #         form.save()
-    #         return redirect('/part/list/')
-    #     else:
-    #         print("Form is not valid:", form.errors)
-    # else:
-    #     form = PartModelAddForm()
-    # return render(request, 'part/part_add.html', {'form': form})
 
 class PartEditModelForm(forms.ModelForm):
     class Meta:
@@ -228,7 +212,7 @@ def part_delete(request):
     return JsonResponse({"status": True})
 
 def handle_uploaded_file_part(f):
-    # 加载Excel文件
+    # load Excel document
     wb = load_workbook(filename=f, data_only=True)
     if 'CoverPage' not in wb.sheetnames:
         return {'error': 'CoverPage sheet not found'}
