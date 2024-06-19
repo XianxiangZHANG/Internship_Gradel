@@ -11,11 +11,18 @@
                 <span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span> New Resin
             </a>
         </div>
-    <h3>Resin List:</h3>
+    <h3>Mechanical Properties of Resin List:</h3>
     <form method="get" id="filterForm" class="from_f">
         {{ filter.form.as_p }}
         <button type="submit" id="btnf1">Filter</button>
         <button type="reset" id="resetButton" class="btnf2">Reset</button>
+        <a class="btn btn-success" href="/resin/list/" id="btnmore">
+            <span class="glyphicon glyphicon-pencil" aria-hidden="true" id="pic"></span> Check Resin List
+        </a>
+
+        <a class="btn btn-success" href="/resin/list-thermophysical-toughness-properties/" id="btnmore">
+            <span class="glyphicon glyphicon-pencil" aria-hidden="true" id="pic"></span> Check Thermophysical Toughness Properties of Resin List
+        </a>
     </form>
     <table class="table table-bordered">
         <thead>
@@ -244,6 +251,17 @@
         border: 1px solid #ccc; 
         border-radius: 4px; 
         box-sizing: border-box; 
+    }
+    #btnmore {
+        width: 500px; 
+        background-color: #49b7be; 
+        color: white; 
+        padding: 5px 10px; 
+
+        margin-left: 100px;
+        border: none; 
+        border-radius: 4px;
+        cursor: pointer; 
     }
  
    

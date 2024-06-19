@@ -313,7 +313,7 @@ def handle_uploaded_file_bushing(f):
 def upload_file_bushing(request):
     if request.method == 'POST' and 'file' in request.FILES:
         bushing = handle_uploaded_file_bushing(request.FILES['file'])
-        print(bushing)
+        # print(bushing)
         if 'error' in bushing:
             return JsonResponse(bushing, status=400)
         return JsonResponse(bushing)

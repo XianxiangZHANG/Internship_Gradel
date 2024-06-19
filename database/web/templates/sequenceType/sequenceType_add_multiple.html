@@ -16,14 +16,14 @@
                             <th style="width: 100px;">Operation</th>
                         </tr>
                     </thead>
-                    <tbody contenteditable="true">
+                    <tbody >
                         {% for field in formset %}
                         <tr class="sequenceType-form">
            
                             <td contenteditable="true">{{ field.sequenceType }}<span style="color: red;">{{ field.errors.0 }}</span></td>
                             <td contenteditable="true">{{ field.description }}<span style="color: red;">{{ field.errors.0 }}</span></td>
          
-                            <td class="text-center">{% if not forloop.first %}<button type="button" class="btn btn-danger remove-form">Remove</button>{% endif %}</td>
+                            <td class="text-center"> <button type="button" class="btn btn-danger remove-form">Remove</button> </td>
                         </tr>
                         {% endfor %}
                     </tbody>
@@ -62,18 +62,27 @@
         });
 
         $(document).on('click', '.remove-form', function() {
-            if ($('#sequenceType-table tbody tr').length > 1) {
-                $(this).closest('tr').remove();
-                var formCount = $('#id_form-TOTAL_FORMS').val();
-                $('#id_form-TOTAL_FORMS').val(parseInt(formCount) - 1);
-                 
-                $('#sequenceType-table tbody tr').each(function(index) {
-                    $(this).find('input').each(function() {
-                        var name = $(this).attr('name').replace(/-\d+-/, '-' + index + '-');
-                        var id = 'id_' + name;
-                        $(this).attr({'name': name, 'id': id});
+            var $row = $(this).closest('tr');
+            if ($row.index() === 0) {
+                // console.log("me")
+                // console.log($row.index())
+                // Clear the content of the first row
+                $row.find('input').val('');
+            } else {
+                console.log($row.index())
+                if ($('#sequenceType-table tbody tr').length > 1) {
+                    $row.remove();
+                    var formCount = $('#id_form-TOTAL_FORMS').val();
+                    $('#id_form-TOTAL_FORMS').val(parseInt(formCount) - 1);
+                    // Reindex all table rows
+                    $('#sequenceType-table tbody tr').each(function(index) {
+                        $(this).find('input').each(function() {
+                            var name = $(this).attr('name').replace(/-\d+-/, '-' + index + '-');
+                            var id = 'id_' + name;
+                            $(this).attr({'name': name, 'id': id});
+                        });
                     });
-                });
+                }
             }
         });
 
