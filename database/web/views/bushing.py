@@ -4,6 +4,8 @@ from django.http import JsonResponse
 from django import forms
 from django.forms import modelformset_factory
 from openpyxl import load_workbook
+from reportlab.lib.pagesizes import letter
+from reportlab.pdfgen import canvas
 
 from web import models
 import django_filters
@@ -318,3 +320,57 @@ def upload_file_bushing(request):
             return JsonResponse(bushing, status=400)
         return JsonResponse(bushing)
     return JsonResponse({'error': 'Invalid request'}, status=400)
+
+
+def download_bushings_pdf(request):
+    f = BushingFilter(request.GET, queryset=models.Bushing.objects.filter(part__valid=True))
+    bushings = f.qs
+
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = 'attachment; filename=bushings.pdf'
+
+    p = canvas.Canvas(response, pagesize=letter)
+    width, height = letter
+
+    p.setFont("Helvetica-Bold", 12)
+    p.drawString(30, height - 40, "Bushings List")
+
+    p.setFont("Helvetica-Bold", 10)
+    y_start = height - 70
+    x_offset = 30
+    y_offset = 60 
+    headers = ["Project Name", "Part Name", "Bushing Name",	"Number of Interface",	"Bushing Draw. Nb",	"Acc. On Bushing[g]",	"Bushing Mass[g]",	"Total Bushing Mass[g]"]
+    column_widths = [100, 100, 100, 100, 100, 100, 100, 100]  
+
+    for i, header in enumerate(headers):
+        p.drawString(x_offset + sum(column_widths[:i]), y_start, header)
+
+    p.setFont("Helvetica", 10)
+    y = y_start - y_offset
+    for index, bushing in enumerate(bushings):
+        
+        p.line(x_offset, y + y_offset/2, width - x_offset, y + y_offset/2)
+        p.drawString(x_offset, y, bushing.project.projectName)
+        p.drawString(x_offset + column_widths[0], y, bushing.part.partName)
+        p.drawString(x_offset + sum(column_widths[:2]), y, bushing.bushingName)
+        p.drawString(x_offset + sum(column_widths[:3]), y, str(bushing.numberInterface))
+        p.drawString(x_offset + sum(column_widths[:4]), y, bushing.bushingDrawNb)
+        p.drawString(x_offset + sum(column_widths[:5]), y, str(bushing.AccOnBushing))
+        p.drawString(x_offset + sum(column_widths[:6]), y, str(bushing.bushingMass))
+        p.drawString(x_offset + sum(column_widths[:7]), y, str(bushing.totalBushingMass))
+       
+
+        y -= y_offset
+        if y < 200 and index < len(bushings) - 1:  
+            p.showPage()
+            p.setFont("Helvetica-Bold", 12)
+            p.drawString(30, height - 40, "Projects List (continued)")
+            p.setFont("Helvetica-Bold", 10)
+            y = height - 70
+            for i, header in enumerate(headers):
+                p.drawString(x_offset + sum(column_widths[:i]), y, header)
+            y -= y_offset
+
+    p.showPage()
+    p.save()
+    return response

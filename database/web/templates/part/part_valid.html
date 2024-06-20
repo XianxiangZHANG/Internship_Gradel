@@ -9,9 +9,11 @@
             {{ filter.form.as_p }}
             <button type="submit" id="btnf1">Filter</button>
             <button type="reset" id="resetButton" class="btnf2">Reset</button>
+            <a id="download" href="{% url 'download_parts_pdf' %}?{{ request.GET.urlencode }}">Download PDF</a>
             <a class="btn btn-success" href="/part/valid-doc/" id="btnmore">
-                <span class="glyphicon glyphicon-search" aria-hidden="true" id="pic"></span> Read Part Documents
+                <span class="glyphicon glyphicon-search" aria-hidden="true"></span> Read Part Documents
             </a>
+            
         </form>
         <!-- <table id="transposedTable"></table> -->
     <table class="table table-bordered" id="normalTable" >
@@ -24,8 +26,8 @@
             <th>Default Interface Int Diam</th>
             <th>Default Link Type</th>
             <th>Default Link Defined</th>
-            <th>Number Link</th>
-            <th>Number Bushing</th>
+            <th>Number of Links</th>
+            <th>Number of Bushings</th> 
             <th>Total Mass Link</th>
             <th>Total Mass Accumulation</th>
             <th>Total Mass Winding</th>
@@ -70,7 +72,7 @@
                 <td>{{ row.totalFiberLength|default_if_none:"" }}</td>
                 <td>{{ row.totalFiberMass|default_if_none:"" }}</td>
                 <td>{{ row.totalResinMass|default_if_none:"" }}</td>
-                <td>{% if row.projectImage.url %}
+                <td>{% if row.projectImage %}
                     <img src="{{ row.projectImage.url }}" alt="Project Image" class="thumbnail" onclick="showModal('{{ row.projectImage.url }}')">
                 {% else %}
                     No image
@@ -126,34 +128,7 @@
 
 {% block css %}
 <style>
-    table {
-        border-collapse: collapse;
-        width: 100%;
-        margin-bottom: 100px;
-    }
-    th, td {
-        border: 1px solid #ddd;
-        padding: 8px;
-        text-align: center;
-    }
-    tr:nth-child(even) {
-        background-color: #f2f2f2;
-    }
-    th {
-        background-color: #4CAF50;
-        color: white;
-    }
-    #btnf1, .btnf2{
-        width: 100px; 
-        background-color: #49b7be; 
-        color: white; 
-        padding: 5px 10px; 
-        margin: 8px;
-        margin-right: 0px;
-        border: none; 
-        border-radius: 4px;
-        cursor: pointer; 
-    }
+  
     #id_project, input[type="text"] {
         width: 100%; 
         padding: 8px; 
@@ -163,16 +138,20 @@
         border-radius: 4px; 
         box-sizing: border-box; 
     }
-    #btnmore {
-        width: 500px; 
+    #btnmore{
+        position: absolute;
+        width: 250px; 
+        height: 40px;
         background-color: #49b7be; 
         color: white; 
-        padding: 5px 10px; 
-
-        margin-left: 100px;
+        right: 50px;
         border: none; 
         border-radius: 4px;
         cursor: pointer; 
+        font-size: large;
+    }
+    #btnmore:hover {
+        background-color: #2b6c70;
     }
 
     .thumbnail {

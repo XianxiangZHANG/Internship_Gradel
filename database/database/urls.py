@@ -78,6 +78,7 @@ urlpatterns = [
     path('project/edit/<int:aid>/', project.project_edit),
     path('project/delete/', project.project_delete),
     path('project/upload/', project.upload_file_project, name='upload_file_project'),
+    path('project/pdf/', project.download_projects_pdf, name='download_projects_pdf'),
 
     path('part/list/', part.part_list),
     path('part/list-doc/', part.part_list_doc),
@@ -88,6 +89,7 @@ urlpatterns = [
     path('part/edit-doc/<int:aid>/', part.part_edit_doc),
     path('part/delete/', part.part_delete),
     path('part/upload/', part.upload_file_part, name='upload_file_part'),
+    path('part/pdf/', part.download_parts_pdf, name='download_parts_pdf'),
 
     path('bushing/list/', bushing.bushing_list),
     path('bushing/valid/', bushing.bushing_valid),
@@ -98,6 +100,7 @@ urlpatterns = [
     path('bushing/add-multiple/', bushing.bushing_add_multiple),
     path('bushing/modify-multiple/', bushing.bushing_modify_multiple),
     path('bushing/upload/', bushing.upload_file_bushing, name='upload_file_bushing'),
+    path('bushing/pdf/', bushing.download_bushings_pdf, name='download_bushings_pdf'),
 
     path('interface/list/', interface.interface_list),
     path('interface/valid/', interface.interface_valid),

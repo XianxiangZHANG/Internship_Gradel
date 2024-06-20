@@ -3,6 +3,8 @@ from django.http import JsonResponse
 from django import forms
 from openpyxl import load_workbook
 from datetime import datetime
+from reportlab.lib.pagesizes import letter
+from reportlab.pdfgen import canvas
 
 from web import models
 import django_filters
@@ -165,3 +167,59 @@ def upload_file_project(request):
         
         return JsonResponse(project_data)
     return JsonResponse({'error': 'Invalid request'}, status=400)
+
+
+def download_projects_pdf(request):
+    f = ProjectFilterValid(request.GET, queryset=models.Project.objects.filter(valid=True))
+    projects = f.qs
+
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = 'attachment; filename=projects.pdf'
+
+    p = canvas.Canvas(response, pagesize=letter)
+    width, height = letter
+
+    p.setFont("Helvetica-Bold", 12)
+    p.drawString(100, height - 40, "Projects List")
+
+    # p.setFont("Helvetica", 10)
+    x = 50
+    xx = 200
+    y = height - 90
+    l = 20
+    i = 1
+    for index, project in enumerate(projects):
+        p.line(x/2, y +15 , width - x/2, y+15)
+        p.setFont("Helvetica-Bold", 10)
+        p.drawString(x, y, "Project Name")
+        p.drawString(x, y-l, "Program")
+        p.drawString(x, y-2*l, "Equipment")
+        p.drawString(x, y-3*l, "Customer")
+        p.drawString(x, y-4*l, "Project No")
+        p.drawString(x, y-5*l, "Relative Design")
+        p.drawString(x, y-6*l, "Structure Drawing Nb")
+        p.drawString(x, y-7*l, "Document Nb")
+        p.drawString(x, y-8*l, "Revision")
+        p.drawString(x, y-9*l, "Last Update")
+        p.setFont("Helvetica", 10)
+        p.drawString(xx, y, project.projectName)
+        p.drawString(xx, y-l, project.program)
+        p.drawString(xx, y-2*l, project.equipment)
+        p.drawString(xx, y-3*l, project.customer)
+        p.drawString(xx, y-4*l, project.projectNo)
+        p.drawString(xx, y-5*l, project.relativeDesign)
+        p.drawString(xx, y-6*l, project.structureDrawingNb)
+        p.drawString(xx, y-7*l, project.documentNb)
+        p.drawString(xx, y-8*l, project.revision)
+        p.drawString(xx, y-9*l, str(project.lastUpdate))
+        y -= 200
+        if y < 250 and index < len(projects) - 1:
+            p.showPage()
+            p.setFont("Helvetica-Bold", 12)
+            p.drawString(100, height - 40, "Projects List")
+            y = height - 90
+          
+
+    p.showPage()
+    p.save()
+    return response

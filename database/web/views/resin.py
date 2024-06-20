@@ -2,6 +2,8 @@ from django.shortcuts import render, redirect, HttpResponse
 from django.http import JsonResponse
 from django import forms
 from django.forms import modelformset_factory
+from reportlab.lib.pagesizes import letter
+from reportlab.pdfgen import canvas
 
 from web import models
 import django_filters

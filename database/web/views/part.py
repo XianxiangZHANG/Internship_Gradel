@@ -3,6 +3,9 @@ from django.http import JsonResponse
 from django.urls import path
 from django import forms
 from openpyxl import load_workbook
+from reportlab.lib.pagesizes import letter
+from reportlab.pdfgen import canvas
+import os
 
 from web import models
 import django_filters
@@ -170,7 +173,7 @@ def part_edit(request, aid):
         form = PartEditModelForm(instance=part_object)
         return render(request, 'part/part_form.html', {"form": form})
 
-    form = PartEditModelForm(instance=part_object, data=request.POST)
+    form = PartEditModelForm(request.POST,request.FILES, instance=part_object)
     if not form.is_valid():
         return render(request, 'part/part_form.html', {"form": form})
 
@@ -190,7 +193,7 @@ def part_edit_doc(request, aid):
         form = PartEditModelDocForm(instance=part_object)
         return render(request, 'part/part_form.html', {"form": form})
 
-    form = PartEditModelDocForm(instance=part_object, data=request.POST)
+    form = PartEditModelDocForm(request.POST,request.FILES, instance=part_object)
     if not form.is_valid():
         return render(request, 'part/part_form.html', {"form": form})
 
@@ -291,3 +294,79 @@ def upload_file_part(request):
             return JsonResponse(part_data, status=400)
         return JsonResponse(part_data)
     return JsonResponse({'error': 'Invalid request'}, status=400)
+
+
+def download_parts_pdf(request):
+    f = PartFilterValid(request.GET, queryset=models.Part.objects.filter(valid=True))
+    parts = f.qs
+
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = 'attachment; filename=parts.pdf'
+
+    p = canvas.Canvas(response, pagesize=letter)
+    width, height = letter
+
+    p.setFont("Helvetica-Bold", 12)
+    p.drawString(100, height - 40, "Parts List")
+
+    # p.setFont("Helvetica", 10)
+    x = 50
+    xx = 200
+    y = height - 90
+    l = 20
+    i = 1
+    for index, part in enumerate(parts):
+        p.line(x/2, y +15 , width - x/2, y+15)
+        p.setFont("Helvetica-Bold", 10)
+        p.drawString(x, y, "Project Name")
+        p.drawString(x, y-l, "Part Name")
+        p.drawString(x, y-2*l, "Default Interface Height")
+        p.drawString(x, y-3*l, "Default Interface Int Diam")
+        p.drawString(x, y-4*l, "Default Link Type")
+        p.drawString(x, y-5*l, "Default Link Defined")
+        p.drawString(x, y-6*l, "Number of Links")
+        p.drawString(x, y-7*l, "Number of Bushings")
+        p.drawString(x, y-8*l, "Total Mass Link")
+        p.drawString(x, y-9*l, "Total Mass Accumulation")
+        p.drawString(x, y-10*l, "Total Mass Winding")
+        p.drawString(x, y-11*l, "Total Mass Bushing")
+        p.drawString(x, y-12*l, "Additional Mass")
+        p.drawString(x, y-13*l, "Total Mass Structure")
+        p.drawString(x, y-14*l, "Total Fiber Length")
+        p.drawString(x, y-15*l, "Total Fiber Mass")
+        p.drawString(x, y-16*l, "Total Resin Mass")
+        p.drawString(x, y-17*l, "Project Image")
+        p.setFont("Helvetica", 10)
+        p.drawString(xx, y, part.project.projectName)
+        p.drawString(xx, y-l, part.partName)
+        p.drawString(xx, y-2*l, str(part.defaultInterfaceHeight))
+        p.drawString(xx, y-3*l, str(part.defaultInterfaceIntDiam))
+        p.drawString(xx, y-4*l, part.defaultLinkType)
+        p.drawString(xx, y-5*l, part.defaultLinkDefined)
+        p.drawString(xx, y-6*l, str(part.numberLink))
+        p.drawString(xx, y-7*l, str(part.numberBushing))
+        p.drawString(xx, y-8*l, str(part.totalMassLink))
+        p.drawString(xx, y-9*l, str(part.totalMassAccumulation))
+        p.drawString(xx, y-10*l, str(part.totalMassWinding))
+        p.drawString(xx, y-11*l, str(part.totalMassBushing))
+        p.drawString(xx, y-12*l, str(part.additionalMass))
+        p.drawString(xx, y-13*l, str(part.totalMassStructure))
+        p.drawString(xx, y-14*l, str(part.totalFiberLength))
+        p.drawString(xx, y-15*l, str(part.totalFiberMass))
+        p.drawString(xx, y-16*l, str(part.totalResinMass))
+
+
+        image_path = "/home/xx/xx/git/Internship_GRADEL/database"+part.projectImage.url
+        print(image_path)
+        p.drawImage(image_path, xx, y-17*l - 300, width = 200, height = 300, preserveAspectRatio=True, mask='auto' )
+        y -= 380
+        if y < 380 and index < len(parts) - 1:  
+            p.showPage()
+            p.setFont("Helvetica-Bold", 12)
+            p.drawString(100, height - 40, "Parts List")
+            y = height - 90
+          
+
+    p.showPage()
+    p.save()
+    return response
