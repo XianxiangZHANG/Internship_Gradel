@@ -168,6 +168,8 @@ def upload_file_project(request):
         return JsonResponse(project_data)
     return JsonResponse({'error': 'Invalid request'}, status=400)
 
+def format_value(value):
+        return str(value) if value else "--"
 
 def download_projects_pdf(request):
     f = ProjectFilterValid(request.GET, queryset=models.Project.objects.filter(valid=True))
@@ -180,7 +182,9 @@ def download_projects_pdf(request):
     width, height = letter
 
     p.setFont("Helvetica-Bold", 12)
-    p.drawString(100, height - 40, "Projects List")
+    p.drawString(50, height - 40, "Projects List")
+    p.setFont("Helvetica-Bold", 10)
+    p.drawString(150, height - 40, "\"--\" means the value is None")
 
     # p.setFont("Helvetica", 10)
     x = 50
@@ -202,21 +206,23 @@ def download_projects_pdf(request):
         p.drawString(x, y-8*l, "Revision")
         p.drawString(x, y-9*l, "Last Update")
         p.setFont("Helvetica", 10)
-        p.drawString(xx, y, project.projectName)
-        p.drawString(xx, y-l, project.program)
-        p.drawString(xx, y-2*l, project.equipment)
-        p.drawString(xx, y-3*l, project.customer)
-        p.drawString(xx, y-4*l, project.projectNo)
-        p.drawString(xx, y-5*l, project.relativeDesign)
-        p.drawString(xx, y-6*l, project.structureDrawingNb)
-        p.drawString(xx, y-7*l, project.documentNb)
-        p.drawString(xx, y-8*l, project.revision)
-        p.drawString(xx, y-9*l, str(project.lastUpdate))
-        y -= 200
+        p.drawString(xx, y, format_value(project.projectName))
+        p.drawString(xx, y-l, format_value(project.program))
+        p.drawString(xx, y-2*l, format_value(project.equipment))
+        p.drawString(xx, y-3*l, format_value(project.customer))
+        p.drawString(xx, y-4*l, format_value(project.projectNo))
+        p.drawString(xx, y-5*l, format_value(project.relativeDesign))
+        p.drawString(xx, y-6*l, format_value(project.structureDrawingNb))
+        p.drawString(xx, y-7*l, format_value(project.documentNb))
+        p.drawString(xx, y-8*l, format_value(project.revision))
+        p.drawString(xx, y-9*l, format_value(project.lastUpdate))
+        y -= 220
         if y < 250 and index < len(projects) - 1:
             p.showPage()
             p.setFont("Helvetica-Bold", 12)
-            p.drawString(100, height - 40, "Projects List")
+            p.drawString(50, height - 40, "Projects List")
+            p.setFont("Helvetica-Bold", 10)
+            p.drawString(150, height - 40, "\"--\" means the value is None")
             y = height - 90
           
 

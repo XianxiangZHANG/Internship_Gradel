@@ -296,6 +296,9 @@ def upload_file_part(request):
     return JsonResponse({'error': 'Invalid request'}, status=400)
 
 
+def format_value(value):
+    return str(value) if value else "--"
+
 def download_parts_pdf(request):
     f = PartFilterValid(request.GET, queryset=models.Part.objects.filter(valid=True))
     parts = f.qs
@@ -307,7 +310,9 @@ def download_parts_pdf(request):
     width, height = letter
 
     p.setFont("Helvetica-Bold", 12)
-    p.drawString(100, height - 40, "Parts List")
+    p.drawString(50, height - 40, "Parts List")
+    p.setFont("Helvetica-Bold", 10)
+    p.drawString(150, height - 40, "\"--\" means the value is None")
 
     # p.setFont("Helvetica", 10)
     x = 50
@@ -337,33 +342,35 @@ def download_parts_pdf(request):
         p.drawString(x, y-16*l, "Total Resin Mass")
         p.drawString(x, y-17*l, "Project Image")
         p.setFont("Helvetica", 10)
-        p.drawString(xx, y, part.project.projectName)
-        p.drawString(xx, y-l, part.partName)
-        p.drawString(xx, y-2*l, str(part.defaultInterfaceHeight))
-        p.drawString(xx, y-3*l, str(part.defaultInterfaceIntDiam))
-        p.drawString(xx, y-4*l, part.defaultLinkType)
-        p.drawString(xx, y-5*l, part.defaultLinkDefined)
-        p.drawString(xx, y-6*l, str(part.numberLink))
-        p.drawString(xx, y-7*l, str(part.numberBushing))
-        p.drawString(xx, y-8*l, str(part.totalMassLink))
-        p.drawString(xx, y-9*l, str(part.totalMassAccumulation))
-        p.drawString(xx, y-10*l, str(part.totalMassWinding))
-        p.drawString(xx, y-11*l, str(part.totalMassBushing))
-        p.drawString(xx, y-12*l, str(part.additionalMass))
-        p.drawString(xx, y-13*l, str(part.totalMassStructure))
-        p.drawString(xx, y-14*l, str(part.totalFiberLength))
-        p.drawString(xx, y-15*l, str(part.totalFiberMass))
-        p.drawString(xx, y-16*l, str(part.totalResinMass))
+        p.drawString(xx, y, format_value(part.project.projectName))
+        p.drawString(xx, y-l, format_value(part.partName))
+        p.drawString(xx, y-2*l, format_value(part.defaultInterfaceHeight))
+        p.drawString(xx, y-3*l, format_value(part.defaultInterfaceIntDiam))
+        p.drawString(xx, y-4*l, format_value(part.defaultLinkType))
+        p.drawString(xx, y-5*l, format_value(part.defaultLinkDefined))
+        p.drawString(xx, y-6*l, format_value(part.numberLink))
+        p.drawString(xx, y-7*l, format_value(part.numberBushing))
+        p.drawString(xx, y-8*l, format_value(part.totalMassLink))
+        p.drawString(xx, y-9*l, format_value(part.totalMassAccumulation))
+        p.drawString(xx, y-10*l, format_value(part.totalMassWinding))
+        p.drawString(xx, y-11*l, format_value(part.totalMassBushing))
+        p.drawString(xx, y-12*l, format_value(part.additionalMass))
+        p.drawString(xx, y-13*l, format_value(part.totalMassStructure))
+        p.drawString(xx, y-14*l, format_value(part.totalFiberLength))
+        p.drawString(xx, y-15*l, format_value(part.totalFiberMass))
+        p.drawString(xx, y-16*l, format_value(part.totalResinMass))
 
 
         image_path = "/home/xx/xx/git/Internship_GRADEL/database"+part.projectImage.url
         print(image_path)
         p.drawImage(image_path, xx, y-17*l - 300, width = 200, height = 300, preserveAspectRatio=True, mask='auto' )
         y -= 380
-        if y < 380 and index < len(parts) - 1:  
+        if index < len(parts) - 1:  
             p.showPage()
             p.setFont("Helvetica-Bold", 12)
-            p.drawString(100, height - 40, "Parts List")
+            p.drawString(50, height - 40, "Parts List")
+            p.setFont("Helvetica-Bold", 10)
+            p.drawString(150, height - 40, "\"--\" means the value is None")
             y = height - 90
           
 

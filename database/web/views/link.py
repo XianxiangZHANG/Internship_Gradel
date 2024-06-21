@@ -6,9 +6,10 @@ from django.forms import modelformset_factory
 from openpyxl import load_workbook
 from reportlab.lib.pagesizes import letter
 from reportlab.pdfgen import canvas
+from reportlab.lib.styles import getSampleStyleSheet
+from reportlab.platypus import Paragraph, Frame
 
 from web import models
-from utils.encrypt import md5
 import django_filters
 
 class LinkFilter(django_filters.FilterSet):
@@ -356,3 +357,139 @@ def upload_file_link(request):
             return JsonResponse(link, status=400)
         return JsonResponse(link)
     return JsonResponse({'error': 'Invalid request'}, status=400)
+
+
+def draw_rotated_header(canvas, x, y, text, width, height, angle):
+    canvas.saveState()
+    canvas.translate(x, y)
+    canvas.rotate(angle)
+    p = Paragraph(text, getSampleStyleSheet()['Normal'])
+    p.wrapOn(canvas, height, width)  # width and height are swapped because of rotation
+    p.drawOn(canvas, 0, 0)
+    canvas.restoreState()
+
+def format_value(value):
+        return str(value) if value else "--"
+
+def download_links_pdf(request):
+    f = LinkFilter(request.GET, queryset=models.Link.objects.filter(part__valid=True))
+    links = f.qs
+
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = 'attachment; filename=links.pdf'
+
+    p = canvas.Canvas(response, pagesize=letter)
+    width, height = letter
+    styles = getSampleStyleSheet()
+
+    p.setFont("Helvetica-Bold", 12)
+    p.drawString(30, height - 40, "Links List")
+    p.setFont("Helvetica-Bold", 10)
+    p.drawString(150, height - 40, "\"--\" means the value is None")
+    p.setDash() 
+    p.setLineWidth(1)
+    p.line(30, height - 50, width - 30, height - 50)
+    p.setFont("Helvetica-Bold", 10)
+    y_start = height - 70
+    x_offset = 30
+    y_offset = 30  
+    
+            
+    headers = ["Link Name", "Interface1","Interface2","Length [mm]","Sequence","Arm diam. [mm]",
+                "Arm Sec. [mm²]","Cycle #","Fin. Arm Sec. [mm²]","Fin. Arm diam. [mm]",
+                "Fin. Arm radius [m]","Mass [g]","Angle" ]
+    column_widths = [35, 30, 30, 40, 150, 35, 
+                     35, 20, 35, 35, 
+                     50, 35, 30]
+
+    current_project = None
+    current_part = None
+
+    p.setFont("Helvetica", 7)
+    y = y_start
+
+    for index, link in enumerate(links):
+        next_is_title = (index + 1 < len(links)) and (
+            links[index + 1].project.projectName != link.project.projectName or 
+            links[index + 1].part.partName != link.part.partName
+        )
+
+        if link.project.projectName != current_project or link.part.partName != current_part:
+            if current_project is not None:
+                y -= 10  
+                p.setDash() 
+                p.setLineWidth(1)
+                p.line(x_offset, y, width - x_offset, y)
+
+            current_project = link.project.projectName
+            current_part = link.part.partName
+            y -= y_offset
+
+            p.setFont("Helvetica-Bold", 10)
+            p.drawString(x_offset, y, "Project Name: " + current_project)
+            y -= y_offset/2
+            p.drawString(x_offset, y, "Part      Name: " + current_part)
+            y -= y_offset/2
+            p.setDash() 
+            p.setLineWidth(1)
+            p.line(x_offset, y, width - x_offset, y)
+            y -= y_offset/2
+
+            for i, header in enumerate(headers):
+                draw_rotated_header(p, x_offset + sum(column_widths[:i]) + column_widths[i] / 2, y - 3 * y_offset, header, 200,200,  90)
+            y -= 4 * y_offset
+
+
+            p.setFont("Helvetica", 9)
+
+        
+        p.setDash(1, 2) 
+        p.setLineWidth(1)
+        values = [
+            format_value(link.linkName), format_value(link.interface1), format_value(link.interface2), format_value(link.length),
+            Paragraph(format_value(link.sequence), styles['Normal']), format_value(link.armDiam), format_value(link.armSection), format_value(link.cycle),
+            format_value(link.finArmSection), format_value(link.finArmDiam), format_value(link.finArmRadius), format_value(link.mass),
+            format_value(link.angle)
+        ]
+
+        p.drawString(x_offset, y, values[0])
+        for i in range(1, len(values)):
+            p.line(x_offset + sum(column_widths[:i]) - 5, y + y_offset / 2, x_offset + sum(column_widths[:i]) - 5, y - y_offset / 2)
+            if isinstance(values[i], Paragraph):
+                values[i].wrapOn(p, column_widths[i]-10, y_offset)
+                values[i].drawOn(p, x_offset + sum(column_widths[:i]), y - y_offset / 2)
+            else:
+                p.drawString(x_offset + sum(column_widths[:i]), y, values[i])
+
+        y -= y_offset
+        if next_is_title:
+            p.showPage()
+            p.setFont("Helvetica-Bold", 12)
+            p.drawString(30, height - 40, "Links List")
+            p.setFont("Helvetica-Bold", 10)
+            p.drawString(150, height - 40, "\"--\" means the value is None")
+            p.setDash() 
+            p.setLineWidth(1)
+            p.line(30, height - 50, width - 30, height - 50)
+            p.setFont("Helvetica-Bold", 10)
+            y = height - 70
+            current_project = None
+            current_part = None 
+        else:
+            if y < 100 :
+                p.showPage()
+                p.setFont("Helvetica-Bold", 12)
+                p.drawString(30, height - 40, "Links List (continued)")
+                p.setFont("Helvetica-Bold", 10)
+                p.drawString(200, height - 40, "\"--\" means the value is None")
+                p.setDash() 
+                p.setLineWidth(1)
+                p.line(30, height - 50, width - 30, height - 50)
+                p.setFont("Helvetica-Bold", 10)
+                y = height - 70
+                current_project = None
+                current_part = None 
+
+    p.showPage()
+    p.save()
+    return response

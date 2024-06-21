@@ -111,6 +111,7 @@ urlpatterns = [
     path('interface/add-multiple/', interface.interface_add_multiple),
     path('interface/modify-multiple/', interface.interface_modify_multiple),
     path('interface/upload/', interface.upload_file_interface, name='upload_file_interface'),
+    path('interface/pdf/', interface.download_interfaces_pdf, name='download_interfaces_pdf'),
 
     path('link/list/', link.link_list),
     path('link/valid/', link.link_valid),
@@ -122,6 +123,7 @@ urlpatterns = [
     path('link/add-multiple/', link.link_add_multiple),
     path('link/modify-multiple/', link.link_modify_multiple),
     path('link/upload/', link.upload_file_link, name='upload_file_link'),
+    path('link/pdf/', link.download_links_pdf, name='download_links_pdf'),
 
 
     path('winding/list/', winding.winding_list),
