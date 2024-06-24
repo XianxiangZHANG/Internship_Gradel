@@ -3,6 +3,18 @@
 {% block content %}
 <div  style="margin-bottom: 100px;">
     <h3>Resin List:</h3>
+    <details>
+        <summary>
+          <span class="glyphicon glyphicon-question-sign" aria-hidden="true" id="help-title">
+            Help
+          </span>
+        </summary>        
+        <div id="help-content">
+            Here, we can enter the value of each attribute manually or by batch copying and pasting. <br>
+            Make sure we have added the base attributes before adding the additional attributes.<br>
+            Click the <a id="help-btn-save">Save</a> button to save the data to the database.<br>
+        </div>
+    </details>
    
     {% if formset.total_form_count > 0 %}
     <form method="post">
@@ -70,7 +82,6 @@
      
     #btns {
         width: 100px;
-        background-color: #13bd13;
         color: white;
         padding: 5px 10px;
         margin: 8px;

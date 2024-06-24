@@ -8,6 +8,7 @@ from reportlab.pdfgen import canvas
 import os
 
 from web import models
+from database.settings import BASE_DIR
 import django_filters
 
 class PartFilter(django_filters.FilterSet):
@@ -304,7 +305,7 @@ def download_parts_pdf(request):
     parts = f.qs
 
     response = HttpResponse(content_type='application/pdf')
-    response['Content-Disposition'] = 'attachment; filename=parts.pdf'
+    response['Content-Disposition'] = 'attachment; filename="parts.pdf"'
 
     p = canvas.Canvas(response, pagesize=letter)
     width, height = letter
@@ -360,10 +361,13 @@ def download_parts_pdf(request):
         p.drawString(xx, y-15*l, format_value(part.totalFiberMass))
         p.drawString(xx, y-16*l, format_value(part.totalResinMass))
 
+        if part.projectImage:
 
-        image_path = "/home/xx/xx/git/Internship_GRADEL/database"+part.projectImage.url
-        print(image_path)
-        p.drawImage(image_path, xx, y-17*l - 300, width = 200, height = 300, preserveAspectRatio=True, mask='auto' )
+            image_path = str(BASE_DIR) + part.projectImage.url
+            print(image_path)
+            p.drawImage(image_path, xx, y-17*l - 300, width = 200, height = 300, preserveAspectRatio=True, mask='auto' )
+        else:
+            p.drawString(xx, y-17*l, "--")
         y -= 380
         if index < len(parts) - 1:  
             p.showPage()

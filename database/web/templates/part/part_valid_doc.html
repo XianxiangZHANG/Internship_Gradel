@@ -5,6 +5,21 @@
 
     <div  style="margin-bottom: 100px;">
         <h3>Part List:</h3>
+        <details>
+            <summary>
+              <span class="glyphicon glyphicon-question-sign" aria-hidden="true" id="help-title">
+                Help
+              </span>
+            </summary>        
+            <div id="help-content">
+                Here, we can read the value of each record. <br>
+                We can use <a id="help-btn-filter">Filter</a> to select some specific records.<br>
+                Click the <a id="help-btn-filter">Reset</a> button to reset the filter to the original state.<br>
+                Click the <a id="help-btn-download">Download PDF</a> button to download the displayed data(after filtering) as a pdf document.<br>
+
+                Click the <a id="help-btn-filter">Read Part List</a> button to jump to Read Part List<br>
+            </div>
+        </details>
         <form method="get" id="filterForm">
             {{ filter.form.as_p }}
             <button type="submit" id="btnf1">Filter</button>

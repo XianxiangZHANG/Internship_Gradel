@@ -176,7 +176,7 @@ def download_projects_pdf(request):
     projects = f.qs
 
     response = HttpResponse(content_type='application/pdf')
-    response['Content-Disposition'] = 'attachment; filename=projects.pdf'
+    response['Content-Disposition'] = 'attachment; filename="projects.pdf"'
 
     p = canvas.Canvas(response, pagesize=letter)
     width, height = letter

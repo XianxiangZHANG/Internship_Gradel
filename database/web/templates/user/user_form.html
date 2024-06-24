@@ -3,7 +3,19 @@
 {% block content %}
 
     <div class="panel panel-default" style="margin-bottom: 100px; width: 50%; margin-left: 25%;">
-        <div class="panel-heading"><span class="glyphicon glyphicon-indent-right" aria-hidden="true"></span> Edit User Information</div>
+        <div class="panel-heading"><span class="glyphicon glyphicon-indent-right" aria-hidden="true"></span> Edit User Information
+            <details>
+                <summary>
+                <span class="glyphicon glyphicon-question-sign" aria-hidden="true" id="help-title">
+                    Help
+                </span>
+                </summary>        
+                <div id="help-content">
+                    Here, we can edit the value of each attribute manually or by copying and pasting. <br>
+                    Click the <a id="help-btn-save">Save</a> button to save the data to the database.<br>
+                </div>
+            </details>
+        </div>
         <div class="panel-body">
             <form class="form-horizontal" method="post" novalidate>
                 {% csrf_token %}

@@ -333,7 +333,7 @@ def download_bushings_pdf(request):
     bushings = f.qs
 
     response = HttpResponse(content_type='application/pdf')
-    response['Content-Disposition'] = 'attachment; filename=bushings.pdf'
+    response['Content-Disposition'] = 'attachment; filename="bushings.pdf"'
 
     p = canvas.Canvas(response, pagesize=letter)
     width, height = letter
@@ -417,7 +417,7 @@ def download_bushings_pdf(request):
             current_project = None
             current_part = None 
         else:
-            if y < 100 :
+            if y < 50 :
                 p.showPage()
                 p.setFont("Helvetica-Bold", 12)
                 p.drawString(30, height - 40, "Bushings List (continued)")

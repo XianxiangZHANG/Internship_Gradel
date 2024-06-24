@@ -11,7 +11,7 @@
     font-size: large;
 }
 #btnf1:hover, .btnf2:hover {
-    background-color: #2b6c70;
+    background-color: #378488;
 }
 #download {
     width: 200px; 
@@ -47,4 +47,74 @@ th {
     background-color: #4CAF50;
     color: white;
 }
+details {
+    margin-top: 20px;
+    margin-bottom: 10px;
+    max-width: 100%;
+    background: #F6FAFF;
+    border-radius: 0.5rem;
+    border: 1px solid #C3DEFF;
+    transition: all 0.3s ease-in-out;
+    font-weight: bold;
+}
 
+details:hover {
+    border: 1px solid #A4A1FF;
+}
+summary {
+    user-select: none;
+    cursor: pointer;
+    font-size: 18px;
+    display: flex;
+    list-style: none;
+    padding: 1rem;
+}
+
+summary:hover .help-title {
+    opacity: 1;
+}
+
+summary::-webkit-details-marker {
+    display: none;
+}
+
+summary:focus {
+    outline: none;
+}
+
+#help-title {
+    color: #0026ff;
+    opacity: 0.65;
+    transition: all 250ms ease-in-out;
+}
+
+#help-content {
+    color: #303651;
+    padding: 0.2rem 1rem 1rem 1rem;
+    line-height: 1.5;
+}
+
+#help-btn-add {
+    color: rgb(163, 163, 163);
+}
+#help-btn-remove {
+    color: rgb(255, 0, 0);
+}
+#help-btn-filter {
+    color: rgb(125, 202, 233);
+}
+#help-btn-save {
+    color: rgb(110, 147, 216);
+}
+#help-btn-edit {
+    color: rgb(0, 81, 255);
+}
+#help-btn-upload {
+    color: #2f7a30;
+}
+#help-btn-file {
+    color: rgb(114, 114, 114);
+}
+#help-btn-download{
+    color: #6ebe49;
+}

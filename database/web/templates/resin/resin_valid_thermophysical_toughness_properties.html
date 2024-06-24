@@ -4,11 +4,26 @@
 {% block content %}
 <div style="margin-bottom: 100px;">
     <h3>Thermophysical Toughness Properties of Resin List:</h3>
+    <details>
+        <summary>
+          <span class="glyphicon glyphicon-question-sign" aria-hidden="true" id="help-title">
+            Help
+          </span>
+        </summary>        
+        <div id="help-content">
+            Here, we can read the value of each record. <br>
+            We can use <a id="help-btn-filter">Filter</a> to select some specific records.<br>
+            Click the <a id="help-btn-filter">Reset</a> button to reset the filter to the original state.<br>
+            Click the <a id="help-btn-filter">Read Resin List</a> button to jump to Read Resin List.<br>
+            Click the <a id="help-btn-filter">Read Mechanical Properties of Resin List</a> button to jump to Read Mechanical Properties of Resin List.<br>
+            <!-- Click the Download PDF button to download the displayed data(after filtering) as a pdf document.<br> -->
+        </div>
+    </details>
     <form method="get" id="filterForm" class="from_f">
         {{ filter.form.as_p }}
         <button type="submit" id="btnf1">Filter</button>
         <button type="reset" id="resetButton" class="btnf2">Reset</button>
-        <a id="download" href="{% url 'download_projects_pdf' %}?{{ request.GET.urlencode }}">Download PDF</a>
+        <!-- <a id="download" href="{% url 'download_projects_pdf' %}?{{ request.GET.urlencode }}">Download PDF</a> -->
         <a class="btn btn-success" href="/resin/valid/" id="btnmore">
             <span class="glyphicon glyphicon-search" aria-hidden="true" id="pic"></span> Read Resin List
         </a>

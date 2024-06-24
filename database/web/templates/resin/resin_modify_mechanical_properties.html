@@ -3,6 +3,22 @@
 {% block content %}
 <div  style="margin-bottom: 100px;">
     <h3>Mechanical Properties of Resin List:</h3>
+    <details>
+        <summary>
+          <span class="glyphicon glyphicon-question-sign" aria-hidden="true" id="help-title">
+            Help
+          </span>
+        </summary>        
+        <div id="help-content">
+            Here, we can modify the value of each record. <br>
+            We can use <a id="help-btn-filter">Filter</a> to select some specific records.<br>
+            Click the <a id="help-btn-filter">Reset</a> button to reset the filter to the original state.<br>
+            Click the <a id="help-btn-filter">Modify Resin List</a> button to jump to Modify Resin List.<br>
+            Click the <a id="help-btn-filter">Modify Thermophysical Toughness Properties of Resin List</a> button to jump to Modify Thermophysical Toughness Properties of Resin List.<br>
+            Click the <a id="help-btn-remove">Delete</a> button to delete the corresponding row.<br>
+            Click the <a id="help-btn-save">Save</a> button to save the new data to the database.<br>
+        </div>
+    </details>
     <form method="get" id="filterForm">
         {{ filter.form.as_p }}
         <button type="submit" id="btnf1">Filter</button>

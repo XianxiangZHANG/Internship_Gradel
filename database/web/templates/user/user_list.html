@@ -12,6 +12,21 @@
             </a>
         </div>  
     <h3>User List:</h3>
+    <details>
+        <summary>
+          <span class="glyphicon glyphicon-question-sign" aria-hidden="true" id="help-title">
+            Help
+          </span>
+        </summary>        
+        <div id="help-content">
+            Here, we can check the value of each record. <br>
+            Click the <a id="help-btn-upload">New User</a> button to jump to create new Users records.<br>
+            We can use <a id="help-btn-filter">Filter</a> to select some specific records.<br>
+            Click the <a id="help-btn-filter">Reset</a> button to reset the filter to the original state.<br>
+            Click the <a id="help-btn-edit">Edit</a> button to modify the data of the corresponding row.<br>
+            Click the <a id="help-btn-remove">Delete</a> button to delete the corresponding row.<br>
+        </div>
+    </details>
     <form method="get" id="filterForm" class="from_f">
         {{ filter.form.as_p }}
         <button type="submit" id="btnf1">Filter</button>

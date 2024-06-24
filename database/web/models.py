@@ -539,7 +539,7 @@ class SequenceType(models.Model):
     """ SequenceTypeTable """
     ########   3   ########
     sequenceType = models.CharField(verbose_name="Sequence Type", max_length=30, unique= True)
-    description = models.CharField(verbose_name="Description", max_length=255, null=True, blank=True)
+    description = models.TextField(verbose_name="Description", null=True, blank=True)
     valid = models.BooleanField(verbose_name="Validation", default=False)
 
     def __str__(self):

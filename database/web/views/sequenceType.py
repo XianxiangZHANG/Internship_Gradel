@@ -3,7 +3,10 @@ from django.http import JsonResponse
 from django import forms
 from django.forms import modelformset_factory
 from reportlab.lib.pagesizes import letter
+from reportlab.lib import colors
 from reportlab.pdfgen import canvas
+from reportlab.lib.styles import getSampleStyleSheet
+from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph, Frame, PageBreak
 
 from web import models
 import django_filters
@@ -177,3 +180,59 @@ def sequenceType_delete_mult(request):
         return JsonResponse({"status": True})
     except models.SequenceType.DoesNotExist:
         return JsonResponse({"status": False, "error": "sequenceType not found"})
+    
+def format_value(value):
+        return str(value) if value else "--"
+
+def download_sequenceTypes_pdf(request):
+    f = SequenceTypeFilter(request.GET, queryset=models.SequenceType.objects.filter(valid=True))
+    sequenceTypes = f.qs
+
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = 'attachment; filename="sequenceTypes.pdf"'
+
+    doc = SimpleDocTemplate(response, pagesize=letter)
+    elements = []
+    styles = getSampleStyleSheet()
+
+    title_style = styles['Title']
+    normal_style = styles['Normal']
+
+    title = Paragraph("Sequence Types List", title_style)
+    subtitle = Paragraph("\"--\" means the value is None", normal_style)
+    elements.append(title)
+    elements.append(subtitle)
+
+    headers = ["Sequence", "Description"]
+    data = [headers]
+
+    for sequenceType in sequenceTypes:
+        sequence = format_value(sequenceType.sequenceType)
+        description = Paragraph(format_value(sequenceType.description), normal_style)
+        data.append([sequence, description])
+
+    # Define table style
+    table_style = TableStyle([
+        ('BACKGROUND', (0, 0), (-1, 0), colors.white),
+        ('TEXTCOLOR', (0, 0), (-1, 0), colors.black),
+        ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
+        ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
+        ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
+        ('BOTTOMPADDING', (0, 0), (-1, 0), 12),
+        ('BACKGROUND', (0, 1), (-1, -1), colors.white),
+        ('GRID', (0, 0), (-1, -1), 1, colors.black),
+    ])
+
+    # Create table with pagination
+    rows_per_page = 25
+    for i in range(0, len(data), rows_per_page):
+        chunk = data[i:i + rows_per_page]
+        table = Table(chunk, colWidths=[100, 400])
+        table.setStyle(table_style)
+        elements.append(table)
+        if i + rows_per_page < len(data):
+            elements.append(PageBreak())
+
+    doc.build(elements)
+
+    return response

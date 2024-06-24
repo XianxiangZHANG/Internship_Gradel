@@ -386,7 +386,7 @@ def download_interfaces_pdf(request):
     interfaces = f.qs
 
     response = HttpResponse(content_type='application/pdf')
-    response['Content-Disposition'] = 'attachment; filename=interfaces.pdf'
+    response['Content-Disposition'] = 'attachment; filename="interfaces.pdf"'
 
     p = canvas.Canvas(response, pagesize=letter)
     width, height = letter

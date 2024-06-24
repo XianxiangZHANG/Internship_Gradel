@@ -157,6 +157,7 @@ urlpatterns = [
     path('sequenceType/delete/', sequenceType.sequenceType_delete),
     path('sequenceType/add-multiple/', sequenceType.sequenceType_add_multiple),
     path('sequenceType/modify-multiple/', sequenceType.sequenceType_modify_multiple),
+    path('sequenceType/pdf/', sequenceType.download_sequenceTypes_pdf, name='download_sequenceTypes_pdf'),
 
 ]
 if settings.DEBUG:

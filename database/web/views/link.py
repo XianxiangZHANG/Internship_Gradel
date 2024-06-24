@@ -376,14 +376,14 @@ def download_links_pdf(request):
     links = f.qs
 
     response = HttpResponse(content_type='application/pdf')
-    response['Content-Disposition'] = 'attachment; filename=links.pdf'
+    response['Content-Disposition'] = 'attachment; filename="links.pdf"'
 
     p = canvas.Canvas(response, pagesize=letter)
     width, height = letter
     styles = getSampleStyleSheet()
 
     p.setFont("Helvetica-Bold", 12)
-    p.drawString(30, height - 40, "Links List")
+    p.drawString(30, height - 40, "Links List")      
     p.setFont("Helvetica-Bold", 10)
     p.drawString(150, height - 40, "\"--\" means the value is None")
     p.setDash() 
@@ -476,7 +476,7 @@ def download_links_pdf(request):
             current_project = None
             current_part = None 
         else:
-            if y < 100 :
+            if y < 50 :
                 p.showPage()
                 p.setFont("Helvetica-Bold", 12)
                 p.drawString(30, height - 40, "Links List (continued)")
