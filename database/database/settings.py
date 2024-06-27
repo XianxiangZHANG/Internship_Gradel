@@ -88,19 +88,19 @@ WSGI_APPLICATION = 'database.wsgi.application'
 # }
 
 # ON Ubuntu SQL Server
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'mssql',
-#         'NAME': 'TestDB2',
-#         'USER': 'SA',
-#         'PASSWORD': 'Zxx990605',
-#         'HOST': 'localhost',
-#         'PORT': '',
-#         'OPTIONS': {
-#             'driver': 'ODBC Driver 17 for SQL Server',  
-#         },
-#     }
-# }
+DATABASES = {
+    'default': {
+        'ENGINE': 'mssql',
+        'NAME': 'TestDB3',
+        'USER': 'SA',
+        'PASSWORD': 'Zxx990605',
+        'HOST': 'localhost',
+        'PORT': '',
+        'OPTIONS': {
+            'driver': 'ODBC Driver 17 for SQL Server',  
+        },
+    }
+}
 
 # ON LAP001
 # DATABASES = {
@@ -119,19 +119,19 @@ WSGI_APPLICATION = 'database.wsgi.application'
 
 
 # ON Ubuntu MariaDB
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'TEST',
-        'USER': 'xx',
-        'PASSWORD': '',
-        'HOST': 'localhost',  
-        'PORT': '3306',  # default
-        'OPTIONS': {
-            'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
-        }
-    }
-}
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': 'TEST',
+#         'USER': 'xx',
+#         'PASSWORD': '',
+#         'HOST': 'localhost',  
+#         'PORT': '3306',  # default
+#         'OPTIONS': {
+#             'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
+#         }
+#     }
+# }
 
 
 CELERY_BEAT_SCHEDULE = {

@@ -40,7 +40,7 @@
     </div>
 
     <div class="panel-body">
-        <form class="form-horizontal" method="post" novalidate>
+        <form  id="main-form" class="form-horizontal" method="post" novalidate>
             {% csrf_token %}
             <div class="row">
                 <div class="col-xs-12">
@@ -61,56 +61,67 @@
                         <div class="col-sm-11" style="position: relative">
                             <select id="id_part" name="part" class="form-control">
                                 <option value=""> - - - - Please select one - - - - </option>
+                                {% for part in parts %}
+                                    <option value="{{ part.id }}">{{ part.partName }}</option>
+                                {% endfor %}
                                 <!-- Options will be loaded dynamically -->
                             </select>
                             <span style="color: red;">{{ project_part_form.part.errors.0 }}</span>
                         </div>
                     </div>
                 </div>
-                {{ formset.management_form }}
+               
                 <table class="table table-bordered" id="link-table">
                     <thead>
                         <tr>
-                            <th style="width: 90px;">Link Name</th> 
-                            <th style="width: 80px;">Interface1 Name</th>
-                            <th style="width: 80px;">Interface2 Name</th>
-                            <th style="width: 100px;">Length[mm]</th>
-                            <th style="width: 400px;">Sequence</th>
+                            <th style="width: 120px;">Link Name</th> 
+                            <th style="width: 100px;">Interface1 Name</th>
+                            <th style="width: 100px;">Interface2 Name</th>
+                            {% comment %} <th style="width: 100px;">Length[mm]</th> {% endcomment %}
+                            <th >Sequence</th>
+                            <th style="width: 100px;">Ratio</th>
                             <!-- <th>Link Type</th> -->
                             <th style="width: 100px;">Arm Diam.[mm]</th>
                             <th style="width: 100px;">Arm Section[mm²]</th>
-                            <th>Cycle #</th>
-                            
+                            <th style="width: 100px;">Cycle #</th>
+                            {% comment %}                             
                             <th>Fin. Arm Section[mm²]</th>
                             <th>Fin. Arm Diam.[mm]</th>
                             <th>Fin. Arm Radius[m]</th>
-                            <th>Mass[g]</th>
-                            <th>*Angle*</th>
+                            <th>Mass[g]</th> {% endcomment %}
+                            <th style="width: 100px;">*Angle*</th>
                             <th style="width: 100px;">Operation</th>
                         </tr>
                     </thead>
                     <tbody >
-                        {% for field in formset %}
+                        {{ formset.management_form }}
+                        {% for field in formset.forms %}
                         <tr class="link-form">
                             <td contenteditable="true">{{ field.linkName }}
-                                {% if field.interface1.value or field.interface2.value or field.length.value or field.sequence.value or field.armDiam.value or field.armSection.value or field.cycle.value or field.finArmSection.value or field.finArmDiam.value or field.finArmRadius.value or field..value or field.mass.value or field.angle.value %}
+                                {% if field.interface1.value or field.interface2.value or  field.sequence.value or field.armDiam.value or field.armSection.value or field.cycle.value  or field.angle.value %}
                                 {% if not field.linkName.value %}
                                     <span style="color: red;">{{ linkError }}</span>
                                 {% endif %}{% endif %}</td>
 
-                            <td contenteditable="true">{{ field.interface1 }}</td>
-                            <td contenteditable="true">{{ field.interface2 }}</td>
-                            <td contenteditable="true">{{ field.length }}</td>
+                            <td>{{ field.interface1 }}</td>
+                            <td>{{ field.interface2 }}</td>
+                            {% comment %} <td contenteditable="true">
+                                <select id="id_interface2" name="interface" class="form-control">
+                                <option value=""> </option>
+                                <!-- Options will be loaded dynamically -->
+                            </select></td> {% endcomment %}
+                            {% comment %} <td contenteditable="true">{{ field.length }}</td> {% endcomment %}
                             <td contenteditable="true">{{ field.sequence }}</td>
+                            <td contenteditable="true">{{ field.ratio }}</td>
                             <!-- <td contenteditable="true">{{ field.linkType }}</td> -->
                             <td contenteditable="true">{{ field.armDiam }}</td>
                             <td contenteditable="true">{{ field.armSection }}</td>
                             <td contenteditable="true">{{ field.cycle }}</td>
-                            
+{% comment %}                             
                             <td contenteditable="true">{{ field.finArmSection }}</td>
                             <td contenteditable="true">{{ field.finArmDiam }}</td>
                             <td contenteditable="true">{{ field.finArmRadius }}</td>
-                            <td contenteditable="true">{{ field.mass }}</td>
+                            <td contenteditable="true">{{ field.mass }}</td> {% endcomment %}
                             <td contenteditable="true">{{ field.angle }}</td>
                          
                             <td class="text-center"> <button type="button" class="btn btn-danger remove-form">Remove</button> </td>
@@ -150,40 +161,43 @@
                     $.each(data, function(key, value) {
                         $("#id_part").append('<option value="' + value.id + '">' + value.partName + '</option>');
                     });
+                    console.log("part")
                 }
             });
         }
 
-        // function loadInterfaces(projectId) {
-        //     var url = '{% url "load_interfaces" %}';
-        //     $.ajax({
-        //         url: url,
-        //         data: {
-        //             'part_id': partId
-        //         },
-        //         success: function(data) {
-        //             $("#id_interface").html('<option value=""> - - - - </option>');
-        //             $.each(data, function(key, value) {
-        //                 $("#id_interface").append('<option value="' + value.id + '">' + value.interfaceName + '</option>');
-        //             });
-        //         }
-        //     });
-        // }
+        function loadInterfaces(partId) {
+            var url = '{% url "load_interfaces" %}';
+            $.ajax({
+                url: url,
+                data: {
+                    'part_id': partId
+                },
+                success: function(data) {
+                    $('.link-form select[name$="interface1"]').html('<option value=""> - - - </option>');
+                    $('.link-form select[name$="interface2"]').html('<option value=""> - - - </option>');
+                    $.each(data, function(key, value) {
+                        $('.link-form select[name$="interface1"]').append('<option value="' + value.id + '">' + value.interfaceName + '</option>');
+                        $('.link-form select[name$="interface2"]').append('<option value="' + value.id + '">' + value.interfaceName + '</option>');
+                    });
+                }
+            });
+        }
 
         $('#id_project').change(function() {
             var projectId = $(this).val();
             loadParts(projectId);
         });
 
-        // $('#id_part').change(function() {
-        //     var partId = $(this).val();
-        //     loadInterfaces(partId);
-        // });
+        $('#id_part').change(function() {
+            var partId = $(this).val();
+            loadInterfaces(partId);
+        }); 
 
         $('#add-link').click(function() {
             var formCount = $('#id_form-TOTAL_FORMS').val();
             var newForm = $('.link-form:first').clone(true).removeClass('link-form');
-            newForm.find('input').each(function() {
+            newForm.find('input, select').each(function() {
                 var name = $(this).attr('name').replace('-0-', '-' + formCount + '-');
                 var id = 'id_' + name;
                 $(this).attr({'name': name, 'id': id}).val('');
@@ -192,12 +206,13 @@
             newForm.find('td:last').html('<button type="button" class="btn btn-danger remove-form">Remove</button>');
             $('#link-table tbody').append(newForm);
             $('#id_form-TOTAL_FORMS').val(parseInt(formCount) + 1);
-
+            
             // newForm.find('.select2').select2({
             //     placeholder: 'Select or type to search',
             //     allowClear: true,
             //     tags: true
             // });
+            
         });
 
         $(document).on('click', '.remove-form', function() {
@@ -215,7 +230,7 @@
                     $('#id_form-TOTAL_FORMS').val(parseInt(formCount) - 1);
                     // Reindex all table rows
                     $('#link-table tbody tr').each(function(index) {
-                        $(this).find('input').each(function() {
+                        $(this).find('input, select').each(function() {
                             var name = $(this).attr('name').replace(/-\d+-/, '-' + index + '-');
                             var id = 'id_' + name;
                             $(this).attr({'name': name, 'id': id});
@@ -224,6 +239,25 @@
                 }
             }
         });
+
+        {% comment %} $('#main-form').on('submit', function(e) {
+            var project = $('#id_project').val();
+            var part = $('#id_part').val();
+            if (!project || !part) {
+                e.preventDefault();
+                alert('Please select a Project and a Part before saving.');
+                return;
+            }
+            $('#link-table tbody tr').each(function() {
+                var interface1 = $(this).find('#id_interface1').val();
+                var interface2 = $(this).find('#id_interface2').val();
+                if (!interface1 || !interface2) {
+                    e.preventDefault();
+                    alert('Please select Interface1 and Interface2 for all links.');
+                    return false;
+                }
+            });
+        }); {% endcomment %}
 
         // Handle paste event to populate table cells
         $('#link-table tbody').on('paste', 'td', function(e) {
@@ -259,67 +293,45 @@
                 processData: false,
                 contentType: false,
                 success: function(data) {
+                    console.log(data);
                     if (data.error) {
                         alert(data.error);
                         return;
                     }
-                    $('#id_project').val(data.link_data.project_id);
-                    loadParts(data.link_data.project_id);
+                    $('#id_project').val(data.link_data.project_id); 
+
+                    $('#id_part').val(data.link_data.part_id);
                     // Populate form fields with returned data
                     
-                    for(var i=0; i<data.numberLink; i++) {
+                    for (var i = 0; i < data.numberLink; i++) {
                         var $row = $('#link-table tbody tr').last();
-                        // Check if the last row is empty
                         var isEmptyRow = !$row.find('td').eq(0).find('input').val() &&
-                                        !$row.find('td').eq(1).find('input').val() &&
-                                        !$row.find('td').eq(2).find('input').val() &&
+                                        !$row.find('td').eq(1).find('select').val() &&
+                                        !$row.find('td').eq(2).find('select').val() &&
                                         !$row.find('td').eq(3).find('input').val() &&
                                         !$row.find('td').eq(4).find('input').val() &&
                                         !$row.find('td').eq(5).find('input').val() &&
                                         !$row.find('td').eq(6).find('input').val() &&
                                         !$row.find('td').eq(7).find('input').val() &&
-                                        !$row.find('td').eq(8).find('input').val() &&
-                                        !$row.find('td').eq(9).find('input').val() &&
-                                        !$row.find('td').eq(10).find('input').val() &&
-                                        !$row.find('td').eq(11).find('input').val() &&
-                                        !$row.find('td').eq(12).find('input').val();
+                                        !$row.find('td').eq(8).find('input').val();
 
-                        if (isEmptyRow) {
-                            $row.find('td').eq(0).find('input').val(data.linkName[i]); 
-                            $row.find('td').eq(1).find('input').val(data.interface1[i]);
-                            $row.find('td').eq(2).find('input').val(data.interface2[i]);
-                            $row.find('td').eq(3).find('input').val(data.lengthLink[i]);
-                            $row.find('td').eq(4).find('input').val(data.sequence[i]);
-                            $row.find('td').eq(5).find('input').val(data.armDiam[i]);
-                            $row.find('td').eq(6).find('input').val(data.armSection[i]); 
-                            $row.find('td').eq(7).find('input').val(data.cycle[i]);
-                            $row.find('td').eq(8).find('input').val(data.finArmSection[i]);
-                            $row.find('td').eq(9).find('input').val(data.finArmDiam[i]);
-                            $row.find('td').eq(10).find('input').val(data.finArmRadius[i]);
-                            $row.find('td').eq(11).find('input').val(data.mass[i]); 
-                            $row.find('td').eq(12).find('input').val(data.angle[i]);
-                            // $row.find('td').eq(14).find('input').val(data.bushing_data_draw[i]);
-                        } else {
+                        if (!isEmptyRow) {
                             $('#add-link').click();
                             $row = $('#link-table tbody tr').last();
-                            $row.find('td').eq(0).find('input').val(data.linkName[i]); 
-                            $row.find('td').eq(1).find('input').val(data.interface1[i]);
-                            $row.find('td').eq(2).find('input').val(data.interface2[i]);
-                            $row.find('td').eq(3).find('input').val(data.lengthLink[i]);
-                            $row.find('td').eq(4).find('input').val(data.sequence[i]);
-                            $row.find('td').eq(5).find('input').val(data.armDiam[i]);
-                            $row.find('td').eq(6).find('input').val(data.armSection[i]); 
-                            $row.find('td').eq(7).find('input').val(data.cycle[i]);
-                            $row.find('td').eq(8).find('input').val(data.finArmSection[i]);
-                            $row.find('td').eq(9).find('input').val(data.finArmDiam[i]);
-                            $row.find('td').eq(10).find('input').val(data.finArmRadius[i]);
-                            $row.find('td').eq(11).find('input').val(data.mass[i]); 
-                            $row.find('td').eq(12).find('input').val(data.angle[i]);
-                            // $row.find('td').eq(14).find('input').val(data.bushing_data_draw[i]);
                         }
 
-
+                        $row.find('td').eq(0).find('input').val(data.linkName[i]);
+                        $row.find('td').eq(1).find('select').val(data.interface1[i]);
+                        $row.find('td').eq(2).find('select').val(data.interface2[i]);
+                        $row.find('td').eq(3).find('input').val(data.sequence[i]);
+                        $row.find('td').eq(4).find('input').val(data.ratio[i]);
+                        $row.find('td').eq(5).find('input').val(data.armDiam[i]);
+                        $row.find('td').eq(6).find('input').val(data.armSection[i]);
+                        $row.find('td').eq(7).find('input').val(data.cycle[i]);
+                        $row.find('td').eq(8).find('input').val(data.angle[i]);
                     }
+                    
+                
                 },
                 error: function(data) {
                     alert("Please upload a correct file or create the Project first.");

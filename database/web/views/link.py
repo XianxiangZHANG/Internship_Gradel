@@ -8,6 +8,7 @@ from reportlab.lib.pagesizes import letter
 from reportlab.pdfgen import canvas
 from reportlab.lib.styles import getSampleStyleSheet
 from reportlab.platypus import Paragraph, Frame
+from django import forms
 
 from web import models
 import django_filters
@@ -25,13 +26,15 @@ def link_list(request):
     """ list of link """
 
     link_filter = LinkFilter(request.GET, queryset=models.Link.objects.all())
-    return render(request, 'link/link_list.html', {'filter': link_filter})
+    links = link_filter.qs
+    return render(request, 'link/link_list.html', {'filter': link_filter, 'links': links})
 
 def link_valid(request):
     """ list of link """
 
     link_filter = LinkFilter(request.GET, queryset=models.Link.objects.filter(part__valid=True))
-    return render(request, 'link/link_valid.html', {'filter': link_filter})
+    links = link_filter.qs
+    return render(request, 'link/link_valid.html', {'filter': link_filter, 'links': links})
 
 def link_input(request):
     """ list of link """
@@ -43,11 +46,16 @@ def link_input(request):
 
    
 class LinkModelForm(forms.ModelForm):
+    interface1 = forms.ModelChoiceField(queryset=models.Interface.objects.all(), required=True)
+    interface2 = forms.ModelChoiceField(queryset=models.Interface.objects.all(), required=True)
+
+
     class Meta:
         model = models.Link
-        fields = ['linkName', 'interface1', 'interface2', 'length',  'sequence', 'armDiam', 'armSection', 
-                  'cycle', 'finArmSection', 'finArmDiam', 'finArmRadius',
-                'mass', 'angle']
+        fields = [
+                  
+                  'linkName',  'interface1', 'interface2', 
+                'sequence', 'ratio', 'armDiam', 'armSection', 'cycle', 'angle',]
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -59,6 +67,9 @@ class ProjectPartForm(forms.Form):
     project = forms.ModelChoiceField(queryset=models.Project.objects.all(), required=True)
     part = forms.ModelChoiceField(queryset=models.Part.objects.all(), required=True)
     
+class InterfaceForm(forms.Form):
+    interface1 = forms.ModelChoiceField(queryset=models.Interface.objects.all(), required=True)
+    interface2 = forms.ModelChoiceField(queryset=models.Interface.objects.all(), required=True)
 
 LinkFormSet = modelformset_factory(
     models.Link,
@@ -68,40 +79,64 @@ LinkFormSet = modelformset_factory(
 
 def link_add_multiple(request):
     projects = models.Project.objects.all()
+    parts = models.Part.objects.all()
+    # interfaces = models.Interface.objects.all()
     formset = LinkFormSet(queryset=models.Link.objects.none())
     project_part_form = ProjectPartForm()
-   
+    # interface_form = InterfaceForm()
 
     if request.method == 'POST':
+        print("post")
         formset = LinkFormSet(request.POST)
         project_part_form = ProjectPartForm(request.POST)
+        # interface_form = InterfaceForm(request.POST)
 
-        if formset.is_valid() and project_part_form.is_valid(): 
-            instances = formset.save(commit=False)
+        if project_part_form.is_valid(): 
+            print("project")
             project = project_part_form.cleaned_data['project']
             part = project_part_form.cleaned_data['part']
-            for instance in instances:
-                instance.user = models.User.objects.filter(id=request.info_dict['id']).first()  
-                instance.project = project
-                instance.part = part
-                instance.save()
-            return redirect('/link/list/')  # Replace with your redirect URL
+            # if interface_form.is_valid():
+            #     print("interface")
+            #     interface1 = interface_form.cleaned_data['interface1']
+            #     interface2 = interface_form.cleaned_data['interface2']
+            if formset.is_valid() : 
+                print("formset")
+                instances = formset.save(commit=False)
+                
+                for form,instance in zip(formset.forms,instances):
+                    interface1 = form.cleaned_data['interface1']
+                    interface2 = form.cleaned_data['interface2']
+                    instance.user = models.User.objects.filter(id=request.info_dict['id']).first()  
+                    instance.project = project
+                    instance.part = part
+                    instance.interface1 = interface1
+                    instance.interface2 = interface2
+                    instance.save()
+                return redirect('/link/list/')  # Replace with your redirect URL
+            else:
+                # Handle formset or project_part_form validation errors here
+                print(formset.errors)
+            # else:
+            #     # Handle formset or project_part_form validation errors here
+            #     print(interface_form.errors)
         else:
             # Handle formset or project_part_form validation errors here
-            print(formset.errors)
             print(project_part_form.errors)
 
     return render(request, 'link/link_add_multiple.html', {
         'projects': projects,
+        'parts': parts,
+        # 'interfaces': interfaces,
         'formset': formset,
         'project_part_form': project_part_form,
+        # 'interface_form': interface_form,
         'linkError': "Link name is Required",
     })
 
 def link_modify_multiple(request):
     # Get filtered data
     link_filter = LinkFilter(request.GET, queryset=models.Link.objects.all())
-    
+    interfaces = models.Interface.objects.all()
     # Define form set
     LinkFormSet = modelformset_factory(models.Link, form=LinkModelForm, extra=0)
     
@@ -121,6 +156,7 @@ def link_modify_multiple(request):
     return render(request, 'link/link_modify_multiple.html', {
         'filter': link_filter,
         'formset': formset,
+        'interfaces': interfaces,
         'linkError': "Link name is Required",
     })
 
@@ -144,15 +180,17 @@ def link_add(request):
 class LinkEditModelForm(forms.ModelForm):
     class Meta:
         model = models.Link
-        fields = ['project', 'part', 'linkName', 'interface1', 'interface2', 'length', 'sequence', 'armDiam', 'armSection', 
-                  'cycle',  'finArmSection', 'finArmDiam', 'finArmRadius',
-                'mass', 'angle',]
+        fields = ['linkName', 
+                # 'length', 
+                'sequence', 'ratio', 
+                'armDiam', 'armSection', 
+                'cycle',  
+                # 'finArmSection', 'finArmDiam', 'finArmRadius', 'mass', 
+                'angle',]
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        self.fields['part'].queryset = models.Part.objects.all()
-        self.fields['project'].queryset = models.Project.objects.all()
         for name, filed_object in self.fields.items():
             filed_object.widget.attrs = {"class": "form-control"}
 
@@ -220,9 +258,12 @@ def handle_uploaded_file_link(f):
         return {'error': 'CoverPage sheet not found'}
     if 'Link Table' not in wb.sheetnames:
         return {'error': 'Link Table sheet not found'}
+    if 'Sequence' not in wb.sheetnames:
+        return {'error': 'Sequence sheet not found'}
     
     sheetCP = wb['CoverPage']
     sheetLT = wb['Link Table']
+    sheetSE = wb['Sequence']
 
     numberLink = 0
 
@@ -231,16 +272,17 @@ def handle_uploaded_file_link(f):
     interface1 = {}
     interface2 = {}
 
-    lengthLink = {}
+    # lengthLink = {}
     # linkType = {}
     armDiam = {}
     armSection = {}
 
     cycle = {}
     sequence = {}
-    finArmSection = {}
-    finArmDiam = {}
-    finArmRadius = {}
+    ratio= {}
+    # finArmSection = {}
+    # finArmDiam = {}
+    # finArmRadius = {}
     mass = {}
     angle = {}
     
@@ -255,8 +297,19 @@ def handle_uploaded_file_link(f):
                 project_data['projectNo'] = sheetCP.cell(row=cell.row, column=cell.column + 2).value
     project_data['projectName'] = project_data['projectNo'] +' - '+ project_data['customer'] +' - '+ project_data['program']
 
+    try:
+        project = models.Project.objects.get(projectName=project_data['projectName'])
+        link_data['project_id'] = project.id
+    except models.Project.DoesNotExist:
+            return {'error': 'Project not found'}
+    try:
+        part = models.Part.objects.get(partName=project_data['projectName'])
+        link_data['part_id'] = part.id
+    except models.Part.DoesNotExist:
+            return {'error': 'Part not found'}
     
-    link_data['project_id'] = models.Project.objects.filter(projectName=project_data['projectName']).first().id
+    
+    # link_data['project_id'] = models.Project.objects.filter(projectName=project_data['projectName']).first().id
 
 
     # for row in sheetCP.iter_rows():
@@ -283,20 +336,32 @@ def handle_uploaded_file_link(f):
                     # print(str(i) + linkName[i])
             elif cell.value == "Bushing Bi":
                 for i in range(0, numberLink):
-                    interface1[i] = sheetLT.cell(row=cell.row+ 1 + i, column=cell.column).value
+                    interface_obj = models.Interface.objects.filter(interfaceName=sheetLT.cell(row=cell.row+ 1 + i, column=cell.column).value, part_id=part.id).first()
+                    if interface_obj:
+                        interface_id = interface_obj.id
+                        interface1[i] = interface_id
+                    else:
+                        interface1[i] = None
+                    
+                    
                     # print(interface1[i])
             elif cell.value == "Bushing Bj":
                 for i in range(0, numberLink):
-                    interface2[i] = sheetLT.cell(row=cell.row+ 1 + i, column=cell.column ).value
+                    interface_obj = models.Interface.objects.filter(interfaceName=sheetLT.cell(row=cell.row+ 1 + i, column=cell.column).value, part_id=part.id).first()
+                    if interface_obj:
+                        interface_id = interface_obj.id
+                        interface2[i] = interface_id
+                    else:
+                        interface2[i] = None
                     # print(interface2[i])
             elif cell.value == "Sequence":
                 for i in range(0, numberLink):
                     sequence[i] = sheetLT.cell(row=cell.row+ 1 + i, column=cell.column).value
                     # print(sequence[i])
-            elif cell.value == "Length [mm]":
-                for i in range(0, numberLink):
-                    lengthLink[i] = round(sheetLT.cell(row=cell.row+ 1 + i, column=cell.column ).value,2)
-                    # print(lengthLink[i])
+            # elif cell.value == "Length [mm]":
+            #     for i in range(0, numberLink):
+            #         lengthLink[i] = round(sheetLT.cell(row=cell.row+ 1 + i, column=cell.column ).value,2)
+            #         # print(lengthLink[i])
             elif cell.value == "Arm diam. [mm]":
                 for i in range(0, numberLink):
                     armDiam[i] = sheetLT.cell(row=cell.row+ 1 + i, column=cell.column ).value
@@ -309,42 +374,67 @@ def handle_uploaded_file_link(f):
                 for i in range(0, numberLink):
                     cycle[i] = sheetLT.cell(row=cell.row+ 1 + i, column=cell.column ).value
                     # print(cycle[i])
-            elif cell.value == "Fin. Arm Sec. [mm²]":
-                for i in range(0, numberLink):
-                    finArmSection[i] = round(sheetLT.cell(row=cell.row+ 1 + i, column=cell.column ).value,2)
-                    # print(finArmSection[i])
-            elif cell.value == "Fin. Arm diam. [mm]":
-                for i in range(0, numberLink):
-                    finArmDiam[i] = round(sheetLT.cell(row=cell.row+ 1 + i, column=cell.column ).value,2)
-                    # print(finArmDiam[i])
-            elif cell.value == "Fin. Arm radius [m]":
-                for i in range(0, numberLink):
-                    finArmRadius[i] = sheetLT.cell(row=cell.row+ 1 + i, column=cell.column ).value 
-                    # print(finArmRadius[i])
-            elif cell.value == "Mass [g]":
-                for i in range(0, numberLink):
-                    mass[i] = round(sheetLT.cell(row=cell.row+1 + i, column=cell.column ).value,2)
-                    # print(mass[i])
-            # elif cell.value == "Angle":
+            # elif cell.value == "Fin. Arm Sec. [mm²]":
             #     for i in range(0, numberLink):
-            #         angle[i] = sheetLT.cell(row=cell.row+1+i, column=cell.column ).value
-            #         # print(angle[i])
+            #         finArmSection[i] = round(sheetLT.cell(row=cell.row+ 1 + i, column=cell.column ).value,2)
+            #         # print(finArmSection[i])
+            # elif cell.value == "Fin. Arm diam. [mm]":
+            #     for i in range(0, numberLink):
+            #         finArmDiam[i] = round(sheetLT.cell(row=cell.row+ 1 + i, column=cell.column ).value,2)
+            #         # print(finArmDiam[i])
+            # elif cell.value == "Fin. Arm radius [m]":
+            #     for i in range(0, numberLink):
+            #         finArmRadius[i] = sheetLT.cell(row=cell.row+ 1 + i, column=cell.column ).value 
+            #         # print(finArmRadius[i])
+            # elif cell.value == "Mass [g]":
+            #     for i in range(0, numberLink):
+            #         mass[i] = round(sheetLT.cell(row=cell.row+1 + i, column=cell.column ).value,2)
+            #         # print(mass[i])
+            elif cell.value == "Angle":
+                for i in range(0, numberLink):
+                    angle[i] = sheetLT.cell(row=cell.row+1+i, column=cell.column ).value
+                    # print(angle[i])
+            else :
+                for i in range(0, numberLink):
+                    angle[i] = 0
+
+
+    for row in sheetSE.iter_rows():
+        for cell in row:
+            if cell.value == "Ratio":
+                for i in range(0, numberLink):
+                    # print(cell.row, cell.column)
+                    ratio[i] = sheetSE.cell(row=cell.row+ 1 + i, column=cell.column ).value
+                    # print(str(i) + linkName[i])
+
+    links = []
+                                                 
+    # for i in range(numberLink):
+    #     try:
+    #         interface1_instance = models.Interface.objects.filter(interfaceName=interface1[i], part_id=part.id).first().id
+    #         interface2_instance = models.Interface.objects.filter(interfaceName=interface2[i], part_id=part.id).first().id
+    #     except models.Interface.DoesNotExist:
+    #         return {'error': f'Interface not found for link {linkName[i]}'}
+        
 
     link =  {
         'numberLink':numberLink,
         'link_data':link_data,
         'linkName':linkName,
-        'interface1':interface1,
-        'interface2':interface2,
-        'lengthLink' :lengthLink,
+        # 'interface1':interface1_instance ,
+        # 'interface2':interface2_instance ,
+        'interface1': interface1,
+        'interface2': interface2,
+        # 'lengthLink' :lengthLink,
         'armDiam':armDiam,
         'armSection':armSection,
         'cycle':cycle,
         'sequence':sequence,
-        'finArmSection':finArmSection,
-        'finArmDiam':finArmDiam,
-        'finArmRadius':finArmRadius,
-        'mass':mass,
+        'ratio':ratio,
+        # 'finArmSection':finArmSection,
+        # 'finArmDiam':finArmDiam,
+        # 'finArmRadius':finArmRadius,
+        # 'mass':mass,
         'angle':angle,
     }
     return link

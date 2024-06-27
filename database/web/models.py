@@ -1,5 +1,6 @@
 from django.db import models
-
+from django.db.models import Sum
+import math
 
 class Department(models.Model):
     """ DepartmentTable """
@@ -56,7 +57,7 @@ class Resin(models.Model):
     priceResin = models.CharField(verbose_name="Price resin", max_length=30, null=True, blank=True)
     priceHardener = models.CharField(verbose_name="Price hardener", max_length=30, null=True, blank=True)
 
-    densityR = models.CharField(verbose_name="Density (g/cm³)", max_length=30, null=True, blank=True)
+    densityR = models.FloatField(verbose_name="Density (g/cm³)", null=True, blank=True)
     flexuralStrength = models.CharField(verbose_name="Flexural strength (MPa)", max_length=30, null=True, blank=True)
     flexuralmodulus = models.CharField(verbose_name="Flexural modulus (GPa)", max_length=30, null=True, blank=True)
     modulusElasticity = models.CharField(verbose_name="Modulus of elasticity (GPa) (tensile)", max_length=30, null=True, blank=True)
@@ -270,98 +271,6 @@ class R_and_D(models.Model):
     
 
 
-
-# class RDComment(models.Model):
-#     """ R&D comment Table """
-#     program = models.CharField(max_length=30, null=True, blank=True)
-#     projectNr = models.CharField(max_length=30, null=True, blank=True)
-
-#     ERMDS = models.CharField(max_length=30, unique= True)
-#     lastUpdate = models.CharField(max_length=30, null=True, blank=True)
-#     verifiedBy = models.CharField(max_length=30, null=True, blank=True)
-#     approvedBy = models.CharField(max_length=30, null=True, blank=True)
-#     fiber = models.CharField(max_length=30, null=True, blank=True)
-#     numberOfBobbins = models.CharField(max_length=30, null=True, blank=True)
-#     resin = models.CharField(max_length=30, null=True, blank=True)
-#     handener = models.CharField(max_length=30, null=True, blank=True)
-#     curingCycle = models.CharField(max_length=30, null=True, blank=True)
-
-#     fiberTow = models.CharField(max_length=30, null=True, blank=True)
-#     fiberTex = models.CharField(max_length=30, null=True, blank=True)
-#     fiberDensity = models.CharField(max_length=30, null=True, blank=True)
-#     matrixDensity = models.CharField(max_length=30, null=True, blank=True)
-
-#     endEffector = models.CharField(max_length=30, null=True, blank=True)
-#     impregnationBath = models.CharField(max_length=30, null=True, blank=True)
-#     entryNozzleDiam = models.CharField(max_length=30, null=True, blank=True)
-#     exitNozzleDiam = models.CharField(max_length=30, null=True, blank=True)
-
-#     roomTemperature = models.CharField(max_length=30, null=True, blank=True)
-#     roomhumidity = models.CharField(max_length=30, null=True, blank=True)
-
-#     brakeForcebobin = models.CharField(max_length=30, null=True, blank=True)
-#     windingSpeedRange = models.CharField(max_length=30, null=True, blank=True)
-
-#     FVR = models.CharField(max_length=30, null=True, blank=True)
-#     compositeDensity = models.CharField(max_length=30, null=True, blank=True)
-#     porosity = models.CharField(max_length=30, null=True, blank=True)
-#     theoreticalSampleSection = models.CharField(max_length=30, null=True, blank=True)
-#     experimentalSampleSection = models.CharField(max_length=30, null=True, blank=True)
-#     aged = models.CharField(max_length=30, null=True, blank=True)
-#     temperatureOfTests = models.CharField(max_length=30, null=True, blank=True)
-
-#     numberOfSamples = models.CharField(max_length=30, null=True, blank=True)
-#     configurarion = models.CharField(max_length=30, null=True, blank=True)
-#     sampleLength = models.CharField(max_length=30, null=True, blank=True)
-#     numberOfCycles = models.CharField(max_length=30, null=True, blank=True)
-#     sleeve = models.CharField(max_length=30, null=True, blank=True)
-
-#     thermalExpansionCoefficient = models.CharField(max_length=30, null=True, blank=True)
-#     thermalConductivity = models.CharField(max_length=30, null=True, blank=True)
-
-#     tensileYoungModulus = models.CharField(default="Samples number: ", max_length=30, null=True, blank=True)
-#     tensileUltimateStress = models.CharField(default="Samples number: ", max_length=30, null=True, blank=True)
-#     tensileUltimateStressMA = models.CharField(default="Samples number: ", max_length=30, null=True, blank=True)
-#     tensileUltimateStressMB = models.CharField(default="Samples number: ", max_length=30, null=True, blank=True)
-#     tensileUltimateLoad = models.CharField(default="Samples number: ", max_length=30, null=True, blank=True)
-#     tensileYieldStress = models.CharField(default="Samples number: ", max_length=30, null=True, blank=True)
-#     tensileYieldStressMA = models.CharField(default="Samples number: ", max_length=30, null=True, blank=True)
-#     tensileYieldStressMB = models.CharField(default="Samples number: ", max_length=30, null=True, blank=True)
-#     tensileYieldLoad = models.CharField(default="Samples number: ", max_length=30, null=True, blank=True)
-
-#     compressionYoungModulus = models.CharField(default="Samples number: ", max_length=30, null=True, blank=True)
-#     compressionUltimateStress = models.CharField(default="Samples number: ", max_length=30, null=True, blank=True)
-#     compressionUltimateStressMA = models.CharField(default="Samples number: ", max_length=30, null=True, blank=True)
-#     compressionUltimateStressMB = models.CharField(default="Samples number: ", max_length=30, null=True, blank=True)
-#     compressionUltimateLoad = models.CharField(default="Samples number: ", max_length=30, null=True, blank=True)
-#     compressionYieldStress = models.CharField(default="Samples number: ", max_length=30, null=True, blank=True)
-#     compressionYieldStressMA = models.CharField(default="Samples number: ", max_length=30, null=True, blank=True)
-#     compressionYieldStressMB = models.CharField(default="Samples number: ", max_length=30, null=True, blank=True)
-#     compressionYieldLoad = models.CharField(default="Samples number: ", max_length=30, null=True, blank=True)
-#     poissonRatio = models.CharField(default="Samples number: ", max_length=30, null=True, blank=True)
-
-#     flexuralModulusILSS = models.CharField(default="Samples number: ", max_length=30, null=True, blank=True)
-#     ultimateShearForce = models.CharField(default="Samples number: ", max_length=30, null=True, blank=True)
-#     ultimateShearStress = models.CharField(default="Samples number: ", max_length=30, null=True, blank=True)
-#     ultimateShearStressMA = models.CharField(default="Samples number: ", max_length=30, null=True, blank=True)
-#     ultimateShearStressMB = models.CharField(default="Samples number: ", max_length=30, null=True, blank=True)
-
-#     flexuralModulusF = models.CharField(default="Samples number: ", max_length=30, null=True, blank=True)
-#     flexuralUltimateStrength = models.CharField(default="Samples number: ", max_length=30, null=True, blank=True)
-#     flexuralUltimateStrengthMA = models.CharField(default="Samples number: ", max_length=30, null=True, blank=True)
-#     flexuralUltimateStrengthMB = models.CharField(default="Samples number: ", max_length=30, null=True, blank=True)
-#     strainUltimateStrength = models.CharField(default="Samples number: ", max_length=30, null=True, blank=True)
-#     flexuralUltimateForce = models.CharField(default="Samples number: ", max_length=30, null=True, blank=True)
-
-#     yieldTorque = models.CharField(default="Samples number: ", max_length=30, null=True, blank=True)
-#     maxiTorque = models.CharField(default="Samples number: ", max_length=30, null=True, blank=True)
-#     yieldAngle = models.CharField(default="Samples number: ", max_length=30, null=True, blank=True)
-#     maxiTwistedAngle = models.CharField(default="Samples number: ", max_length=30, null=True, blank=True)
-
-#     ERMDS = models.ForeignKey(verbose_name="ERMDS", to=R_and_D, on_delete=models.CASCADE, to_field='id')
-
-
-
 class Project(models.Model):
     """ ProjectTable """
     projectName = models.CharField(verbose_name="Project Name", max_length=128, unique= True)
@@ -386,46 +295,41 @@ class Part(models.Model):
     """ PartTable """
     ########   1   ########
     partName = models.CharField(verbose_name="Part Name", max_length=128)
+    fiber = models.ForeignKey(verbose_name="Fiber Name", to=Fiber, on_delete=models.CASCADE, to_field='id')
 
+    resin = models.ForeignKey(verbose_name="Resin Name", to=Resin, on_delete=models.CASCADE, to_field='id')
     # resinName = models.CharField(verbose_name="Resin Name", max_length=50, null=True, blank=True)
     # resinDensity = models.FloatField(verbose_name="", null=True, blank=True)
     # fiberName = models.CharField(verbose_name="FiberName", max_length=50, null=True, blank=True)
-    # totalTowNumber = models.IntegerField(verbose_name="Total Tow Number", null=True, blank=True)
+    totalTowNumber = models.IntegerField(verbose_name="Number of Spools", null=True, blank=True)
     # fiberDensity = models.FloatField(verbose_name="Fiber Density[kg/m^3]", null=True, blank=True)
 
-    # fiberVolumeRatio = models.FloatField(verbose_name="Fiber Volume Ratio[%]", null=True, blank=True)
+    fiberVolumeRatio = models.FloatField(verbose_name="Fiber Volume Ratio[%]", null=True, blank=True)
 
     # windingDensity = models.FloatField(verbose_name="Winding Density[kg/m^3]", null=True, blank=True)
-    # fiberSectionCalc = models.FloatField(verbose_name="Fiber Section calc.[mm²]", null=True, blank=True)
-    # fiberSectionAcc = models.FloatField(verbose_name="Fiber Section acc.[mm²]", null=True, blank=True)
+    fiberSectionCalc = models.FloatField(verbose_name="Fiber Section calc.[mm²]", null=True, blank=True)
+    fiberSectionAcc = models.FloatField(verbose_name="Fiber Section acc.[mm²]", null=True, blank=True)
 
     defaultInterfaceHeight = models.IntegerField(verbose_name="Default Interface Height[mm]", null=True, blank=True)
     defaultInterfaceIntDiam = models.IntegerField(verbose_name="Default Interface Int. Diam.[mm]", null=True, blank=True)
     defaultLinkType = models.CharField(verbose_name="Default Link(Element) Type", max_length=30, null=True, blank=True)
     defaultLinkDefined = models.CharField(verbose_name="Default Link defined by", max_length=30, null=True, blank=True)
-    # defaultCycleNumber = models.IntegerField(verbose_name="Default Cycle Number", null=True, blank=True)
-
-    # tensileYoungModulus = models.FloatField(verbose_name="Tensile Young's Modulus", null=True, blank=True)
-    # tensileUtimateStress = models.FloatField(verbose_name="Tensile Utimate Stress", null=True, blank=True)
-    # tensileYieldStress = models.FloatField(verbose_name="Tensile Yield Stress", null=True, blank=True)
-    # compressionYoungModulus = models.FloatField(verbose_name="Compression Young's Modulus", null=True, blank=True)
-    # flexuralModulus = models.FloatField(verbose_name="Flexural Modulus", null=True, blank=True)
 
 
     ########   2   ########
-    numberLink = models.IntegerField(verbose_name="Number of Links", null=True, blank=True)
-    numberBushing = models.IntegerField(verbose_name="Number of Bushings", null=True, blank=True)
+    # numberLink = models.IntegerField(verbose_name="Number of Links", null=True, blank=True)
+    # numberBushing = models.IntegerField(verbose_name="Number of Bushings", null=True, blank=True)
 
-    totalMassLink = models.FloatField(verbose_name="Total Mass of Links[g]", null=True, blank=True)
-    totalMassAccumulation = models.FloatField(verbose_name="Total Mass of Accumulation[g]", null=True, blank=True)
-    totalMassWinding = models.FloatField(verbose_name="Total Mass of Winding[g]", null=True, blank=True)
-    totalMassBushing = models.FloatField(verbose_name="Total Mass of Bushings[g]", null=True, blank=True)
+    # totalMassLink = models.FloatField(verbose_name="Total Mass of Links[g]", null=True, blank=True)
+    # totalMassAccumulation = models.FloatField(verbose_name="Total Mass of Accumulation[g]", null=True, blank=True)
+    # totalMassWinding = models.FloatField(verbose_name="Total Mass of Winding[g]", null=True, blank=True)
+    # totalMassBushing = models.FloatField(verbose_name="Total Mass of Bushings[g]", null=True, blank=True)
     additionalMass = models.FloatField(verbose_name="Additional Masses[g]", null=True, blank=True)
-    totalMassStructure = models.FloatField(verbose_name="Total Mass of Structure[g]", null=True, blank=True)
+    # totalMassStructure = models.FloatField(verbose_name="Total Mass of Structure[g]", null=True, blank=True)
 
-    totalFiberLength = models.FloatField(verbose_name="Total Fiber Length[m]", null=True, blank=True)
-    totalFiberMass = models.FloatField(verbose_name="Total Fiber Mass[kg]", null=True, blank=True)
-    totalResinMass = models.FloatField(verbose_name="Total Resin Mass[g]", null=True, blank=True)
+    # totalFiberLength = models.FloatField(verbose_name="Total Fiber Length[m]", null=True, blank=True)
+    # totalFiberMass = models.FloatField(verbose_name="Total Fiber Mass[kg]", null=True, blank=True)
+    # totalResinMass = models.FloatField(verbose_name="Total Resin Mass[g]", null=True, blank=True)
 
     projectImage = models.ImageField(upload_to='images/', verbose_name="Project Image", null=True, blank=True)
 
@@ -446,6 +350,144 @@ class Part(models.Model):
 
     def __str__(self):
         return self.partName
+    
+    @property
+    def fiberDensity(self):
+        return self.calculate_fiberDensity()
+    
+    @property
+    def resinDensity(self):
+        return self.calculate_resinDensity()
+    
+    @property
+    def windingDensity(self):
+        return self.calculate_windingDensity()
+
+    @property
+    def numberLink(self):
+        return self.calculate_numberLink()
+
+    @property
+    def numberBushing(self):
+        return self.calculate_numberBushing()
+
+    @property
+    def totalMassLink(self):
+        return self.calculate_totalMassLink()
+
+    @property
+    def totalMassAccumulation(self):
+        return self.calculate_totalMassAccumulation()
+
+    @property
+    def totalMassWinding(self):
+        return self.calculate_totalMassWinding()
+
+    @property
+    def totalMassBushing(self):
+        return self.calculate_totalMassBushing()
+
+    @property
+    def totalMassStructure(self):
+        return self.calculate_totalMassStructure()
+
+    @property
+    def totalFiberLength(self):
+        return self.calculate_totalFiberLength()
+
+    @property
+    def totalFiberMass(self):
+        return self.calculate_totalFiberMass()
+
+    @property
+    def totalResinMass(self):
+        return self.calculate_totalResinMass()
+
+    def calculate_fiberDensity(self):
+        if self.fiber.density:
+            return self.fiber.density  * 1000
+        return 0.0
+    
+    def calculate_resinDensity(self):
+        if self.resin.densityR :
+            return self.resin.densityR * 1000
+        return 0.0
+    
+    def calculate_windingDensity(self):
+        if self.fiberDensity and self.fiberVolumeRatio and self.resinDensity and self.fiberVolumeRatio:
+            return (self.fiberDensity * self.fiberVolumeRatio + self.resinDensity * (1 - self.fiberVolumeRatio))
+        return 0.0
+
+    def calculate_numberLink(self):
+        if Link.objects.filter(part=self):
+            return Link.objects.filter(part=self).count()
+        return 0
+
+    def calculate_numberBushing(self):
+        if Bushing.objects.filter(part=self):
+            return Bushing.objects.filter(part=self).count()
+        return 0
+
+    def calculate_totalMassLink(self):
+        total_mass = 0
+        if Link.objects.filter(part=self):
+            links = Link.objects.filter(part=self)
+            for link in links:
+                total_mass += link.mass
+        return round(total_mass,2)
+
+    def calculate_totalMassAccumulation(self):
+        total_accumulation = 0
+        if Interface.objects.filter(part=self):
+            interfaces = Interface.objects.filter(part=self)
+            print(interfaces)
+            for interface in interfaces:
+                total_accumulation += interface.accMass
+                print(total_accumulation)
+        return round(total_accumulation,2)
+
+    def calculate_totalMassWinding(self):
+        if self.totalMassLink and self.totalMassAccumulation:
+            return round(self.totalMassLink + self.totalMassAccumulation,2)
+        return 0
+
+    def calculate_totalMassBushing(self):
+        total_mass = 0
+        if Bushing.objects.filter(part=self):
+            bushings = Bushing.objects.filter(part=self)
+            for bushing in bushings:
+                if bushing.bushingMass:
+                    total_mass += bushing.bushingMass
+        return round(total_mass,2)
+
+    def calculate_totalMassStructure(self):
+        totalMassStructure = 0
+        if self.totalMassWinding and self.totalMassBushing and self.additionalMass:
+            totalMassStructure = self.totalMassWinding + self.totalMassBushing + self.additionalMass
+        elif self.totalMassWinding and self.totalMassBushing:
+            totalMassStructure = self.totalMassWinding + self.totalMassBushing
+        return round(totalMassStructure,2)
+
+    def calculate_totalFiberLength(self):
+        total_length = 0
+        if self.totalMassAccumulation and self.totalMassLink and self.windingDensity and self.fiberSectionAcc and self.fiberSectionCalc:
+            mass = self.totalMassAccumulation + self.totalMassLink
+            total_length = mass / (1000000 * self.windingDensity * (self.fiberSectionAcc + self.fiberSectionCalc)/2)
+        return round(total_length,2)
+
+    def calculate_totalFiberMass(self):
+        fiber_mass = 0
+        if self.totalMassAccumulation and self.totalMassLink and self.windingDensity and self.fiberVolumeRatio and self.fiberDensity:
+            mass = self.totalMassAccumulation + self.totalMassLink
+            fiber_mass = mass / self.windingDensity * self.fiberVolumeRatio * self.fiberDensity / 1000
+        return round(fiber_mass,3)
+
+    def calculate_totalResinMass(self):
+        resin_mass = 0
+        if self.totalMassAccumulation and self.totalMassLink and self.windingDensity and self.fiberVolumeRatio and self.resinDensity:
+            mass = self.totalMassAccumulation + self.totalMassLink
+            resin_mass = mass / self.windingDensity * (1 - self.fiberVolumeRatio) * self.resinDensity
+        return round(resin_mass,2)
 
 class Bushing(models.Model):
     """ BushingTable """
@@ -474,13 +516,13 @@ class Interface(models.Model):
 
     height = models.IntegerField(verbose_name="Height[mm]", null=True, blank=True)
     intDiameter = models.IntegerField(verbose_name="Int. Diameter[mm]", null=True, blank=True)
-    totalLink = models.IntegerField(verbose_name="Total Link", null=True, blank=True)
-    totalArm = models.IntegerField(verbose_name="Total Arm", null=True, blank=True)
+    # totalLink = models.IntegerField(verbose_name="Total Link", null=True, blank=True)
+    # totalArm = models.IntegerField(verbose_name="Total Arm", null=True, blank=True)
 
-    totalSection = models.FloatField(verbose_name="Total Section[mm²]", null=True, blank=True)
-    extDiameter = models.FloatField(verbose_name="Ext. Diameter[mm]", null=True, blank=True)
+    # totalSection = models.FloatField(verbose_name="Total Section[mm²]", null=True, blank=True)
+    # extDiameter = models.FloatField(verbose_name="Ext. Diameter[mm]", null=True, blank=True)
     # theoHeight = models.FloatField(verbose_name="Theo. Height[mm]", null=True, blank=True)
-    accMass = models.FloatField(verbose_name="Acc. Mass[g]", null=True, blank=True)
+    # accMass = models.FloatField(verbose_name="Acc. Mass[g]", null=True, blank=True)
     finODiam = models.FloatField(verbose_name="Fin. O. Diam.[mm]", null=True, blank=True)
     finAccSection = models.FloatField(verbose_name="Fin. Acc. Section[mm²]", null=True, blank=True)
 
@@ -503,25 +545,121 @@ class Interface(models.Model):
 
     def __str__(self):
         return self.interfaceName
+    
+    @property
+    def totalLink(self):
+        return self.calculate_totalLink()
+
+    @property
+    def totalArm(self):
+        return self.calculate_totalArm()
+    
+    @property
+    def totalSection(self):
+        return self.calculate_totalSection()
+
+    @property
+    def extDiameter(self):
+        return self.calculate_extDiameter()
+
+    @property
+    def accMass(self):
+        return self.calculate_accMass()
+
+    def calculate_totalLink(self):
+        return Link.objects.filter(models.Q(interface1=self) | models.Q(interface2=self)).count()
+
+    def calculate_totalArm(self):
+        tot_arm = 0
+        links = Link.objects.filter(models.Q(interface1=self) | models.Q(interface2=self))
+        for link in links:
+            if link.sequence:
+                if link.sequence == "A":
+                    tot_arm = tot_arm + 1
+                    
+                elif link.sequence == "B":
+                    tot_arm = tot_arm + 2
+                        
+                elif ("C0" in link.sequence) or ("C1" in link.sequence) or ("B" in link.sequence) or ("C1X" in link.sequence) or ("C0X" in link.sequence):
+                    tot_arm = tot_arm + 2
+
+        return tot_arm
+    
+    def calculate_totalSection(self):
+        tot_sec_lnk = 0
+        tot_sec_acc = 0
+        total_sec = 0
+        links = Link.objects.filter(models.Q(interface1=self) | models.Q(interface2=self))
+        if self.part.fiberSectionAcc:
+            for link in links:
+                if link.cycle and link.ratio:
+                    link_final_section = link.cycle * self.part.fiberSectionAcc
+
+                    if link.sequence == "A":
+                        tot_sec_lnk = tot_sec_lnk + link_final_section 
+                        
+                    elif link.sequence == "B":
+                        tot_sec_lnk = tot_sec_lnk + link_final_section
+                        tot_sec_acc = tot_sec_acc + link_final_section
+                            
+                    elif ("C0" in link.sequence) or ("C1" in link.sequence) or ("B" in link.sequence) or ("C1X" in link.sequence) or ("C0X" in link.sequence):
+                        ratio = link.ratio
+                        tot_sec_acc = tot_sec_acc + link_final_section * ratio 
+                        tot_sec_lnk = tot_sec_lnk + link_final_section
+        total_sec = tot_sec_acc + tot_sec_lnk
+        return round(total_sec,2)
+
+    def calculate_extDiameter(self):
+        if self.height and self.intDiameter and self.height != 0:
+            total_sec = self.totalSection
+            ext_diam = self.intDiameter + 2 * total_sec / self.height
+            return round(ext_diam, 2)
+        return 0.0
+
+    def calculate_accMass(self):
+        total_sec_acc = 0
+        links = Link.objects.filter(models.Q(interface1=self) | models.Q(interface2=self))
+        if self.part.fiberSectionAcc:
+            for link in links:
+                if link.cycle and link.ratio:
+                    link_final_section = link.cycle * self.part.fiberSectionAcc
+
+                    if link.sequence == "B":
+                        total_sec_acc = total_sec_acc + link_final_section
+                            
+                    elif ("C0" in link.sequence) or ("C1" in link.sequence) or ("B" in link.sequence) or ("C1X" in link.sequence) or ("C0X" in link.sequence):
+                        ratio = link.ratio
+                        total_sec_acc = total_sec_acc + link_final_section * ratio 
+
+        if self.height and self.intDiameter and self.height != 0 and self.part.fiberSectionAcc and self.part.fiberSectionCalc:
+            total_sec = self.totalSection
+            if total_sec!=0 and self.part.windingDensity :
+                diam_acc_max = self.intDiameter + 2 * total_sec / self.height
+                diam_acc_min = self.intDiameter + 2 * total_sec_acc / self.height
+                diam_acc_mass_max = self.intDiameter + 2 * (total_sec / self.part.fiberSectionAcc * ((self.part.fiberSectionAcc+self.part.fiberSectionCalc) / 2)) / self.height
+                diam_acc_mass_min = self.intDiameter + 2 * (total_sec_acc / self.part.fiberSectionAcc * ((self.part.fiberSectionAcc+self.part.fiberSectionCalc) / 2 ))/ self.height 
+                acc_mass = ((diam_acc_mass_max ** 2) / 8 - (diam_acc_mass_min ** 2) / 8 - (self.intDiameter ** 2)/4) * math.pi * self.height * self.part.windingDensity / 1000000
+                return round(acc_mass, 2)
+        return 0.0
 
 class Link(models.Model):
     """ InterfaceTable """
     ########   2   ########
     linkName = models.CharField(verbose_name="Link Name", max_length=30)
-    interface1 = models.CharField(verbose_name="Interface1 Name", max_length=30)
-    interface2 = models.CharField(verbose_name="Interface2 Name", max_length=30)
-
-    length = models.FloatField(verbose_name="Length[mm]", null=True, blank=True)
+    interface1 = models.ForeignKey(Interface, related_name='link_interface1', on_delete=models.CASCADE)
+    interface2 = models.ForeignKey(Interface, related_name='link_interface2', on_delete=models.CASCADE)
+    # length = models.FloatField(verbose_name="Length[mm]", null=True, blank=True, editable=False)
     # linkType = models.CharField(verbose_name="Link Type", max_length=30, null=True, blank=True)
     armDiam = models.FloatField(verbose_name="Arm Diam.[mm]", null=True, blank=True)
     armSection = models.FloatField(verbose_name="Arm Section[mm²]", max_length=30, null=True, blank=True)
 
     cycle = models.IntegerField(verbose_name="Cycle", null=True, blank=True)
     sequence = models.CharField(verbose_name="Sequence", max_length=50, null=True, blank=True)
-    finArmSection = models.FloatField(verbose_name="Fin. Arm Section[mm²]", null=True, blank=True)
-    finArmDiam = models.FloatField(verbose_name="Fin. Arm Diam.[mm]", null=True, blank=True)
-    finArmRadius = models.FloatField(verbose_name="Fin. Arm Radius[m]", null=True, blank=True)
-    mass = models.FloatField(verbose_name="Mass[g]", null=True, blank=True)
+    ratio = models.FloatField(verbose_name="Ratio", null=True, blank=True)
+    # finArmSection = models.FloatField(verbose_name="Fin. Arm Section[mm²]", null=True, blank=True, editable=False)
+    # finArmDiam = models.FloatField(verbose_name="Fin. Arm Diam.[mm]", null=True, blank=True, editable=False)
+    # finArmRadius = models.FloatField(verbose_name="Fin. Arm Radius[m]", null=True, blank=True, editable=False)
+    # mass = models.FloatField(verbose_name="Mass[g]", null=True, blank=True, editable=False)
     angle = models.FloatField(verbose_name="Angle", null=True, blank=True)
     # valid = models.BooleanField(verbose_name="Validation", default=False)
 
@@ -534,6 +672,60 @@ class Link(models.Model):
 
     def __str__(self):
         return self.linkName
+    
+    @property
+    def length(self):
+        return self.calculate_length()
+
+    @property
+    def finArmSection(self):
+        return self.calculate_finArmSection()
+
+    @property
+    def finArmDiam(self):
+        return self.calculate_finArmDiam()
+
+    @property
+    def finArmRadius(self):
+        return self.calculate_finArmRadius()
+
+    @property
+    def mass(self):
+        return self.calculate_mass()
+
+    def calculate_length(self):
+        if self.interface1 and self.interface2:
+            length = math.sqrt(
+                (self.interface2.interfaceCenterX - self.interface1.interfaceCenterX) ** 2 +
+                (self.interface2.interfaceCenterY - self.interface1.interfaceCenterY) ** 2 +
+                (self.interface2.interfaceCenterZ - self.interface1.interfaceCenterZ) ** 2
+            )
+            return round(length,2)
+        return 0.0
+
+    def calculate_finArmSection(self):
+        if self.part.fiberSectionCalc and self.cycle:
+            finArmSection = self.part.fiberSectionCalc * self.cycle
+            return round(finArmSection,2)
+        return 0.0
+    
+    def calculate_finArmDiam(self):
+        if self.finArmSection:
+            finArmDiam = math.sqrt(self.finArmSection * 4 / math.pi)
+            return round(finArmDiam,2)
+        return 0.0
+    
+    def calculate_finArmRadius(self):
+        if self.finArmDiam:
+            finArmRadius = self.finArmDiam / 2 /1000
+            return round(finArmRadius, 6)
+        return 0.0
+    
+    def calculate_mass(self):
+        if self.length and self.finArmSection and self.part.windingDensity:
+            mass = float(self.length) * float(self.finArmSection) * float(self.part.windingDensity)/1000000
+            return round(mass,2)
+        return 0.0
                                      
 class SequenceType(models.Model):
     """ SequenceTypeTable """

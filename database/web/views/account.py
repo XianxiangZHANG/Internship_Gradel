@@ -90,7 +90,7 @@ def login(request):
         return render(request, 'account/login.html', {"form": form, 'error': "Wrong username or password"})
 
     request.session['info'] = {"id": User_object.id, 'name': User_object.username}
-    request.session.set_expiry(60 * 60 * 24)
+    request.session.set_expiry(60 * 60 * 13)
 
     return redirect("/home/")
 

@@ -6,6 +6,7 @@ from openpyxl import load_workbook
 from reportlab.lib.pagesizes import letter
 from reportlab.pdfgen import canvas
 import os
+from django.db.models import Subquery, OuterRef, Count
 
 from web import models
 from database.settings import BASE_DIR
@@ -14,17 +15,27 @@ import django_filters
 class PartFilter(django_filters.FilterSet):
     project = django_filters.ModelChoiceFilter(queryset=models.Project.objects.all())
     partName = django_filters.CharFilter(field_name='partName', lookup_expr='icontains')
+    resin = django_filters.ModelChoiceFilter(queryset=models.Resin.objects.all())
+    fiber = django_filters.ModelChoiceFilter(queryset=models.Fiber.objects.all())
     valid = django_filters.BooleanFilter(field_name='valid')  
 
     class Meta:
         model = models.Part
-        fields = ['project', 'partName', 'valid']
+        fields = ['project', 'partName', 'resin', 'fiber', 'valid']
    
+# def part_list(request):
+#     """ list of part """
+
+#     part_filter = PartFilter(request.GET, queryset=models.Part.objects.all())
+
+#     return render(request, 'part/part_list.html', {'filter': part_filter})
 def part_list(request):
     """ list of part """
-
     part_filter = PartFilter(request.GET, queryset=models.Part.objects.all())
-    return render(request, 'part/part_list.html', {'filter': part_filter})
+    parts = part_filter.qs
+    
+    return render(request, 'part/part_list.html', {'filter': part_filter, 'parts': parts})
+    
 
 def part_list_doc(request):
     """ list of part """
@@ -35,11 +46,13 @@ def part_list_doc(request):
 class PartFilterValid(django_filters.FilterSet):
     project = django_filters.ModelChoiceFilter(queryset=models.Project.objects.all())
     partName = django_filters.CharFilter(field_name='partName', lookup_expr='icontains')
+    resin = django_filters.ModelChoiceFilter(queryset=models.Resin.objects.all())
+    fiber = django_filters.ModelChoiceFilter(queryset=models.Fiber.objects.all())
     
 
     class Meta:
         model = models.Part
-        fields = ['project', 'partName',]
+        fields = ['project', 'partName', 'resin', 'fiber']
    
 def part_valid(request):
     """ list of part """
@@ -63,10 +76,10 @@ def part_input(request):
 class PartModelForm(forms.ModelForm):
     class Meta:
         model = models.Part
-        fields = ['project', 'partName',
-                  'defaultInterfaceHeight', 'defaultInterfaceIntDiam', 'defaultLinkType', 'defaultLinkDefined', 'numberLink', 'numberBushing', 
-                  'totalMassLink', 'totalMassAccumulation', 'totalMassWinding', 'totalMassBushing', 'additionalMass', 
-                  'totalMassStructure', 'totalFiberLength', 'totalFiberMass', 'totalResinMass', 'projectImage','valid'
+        fields = ['project', 'partName', 'resin', 'fiber',  'totalTowNumber', 'fiberVolumeRatio', 'fiberSectionCalc', 'fiberSectionAcc',
+                  'defaultInterfaceHeight', 'defaultInterfaceIntDiam', 'defaultLinkType', 'defaultLinkDefined', 
+                   'additionalMass', 
+                  'projectImage','valid'
                 #   'part_gh', 'part_mod', 'part_csv', 'part_rs', 'part_log', 'part_mp4', 'part_jpg'
                   ]
 
@@ -79,10 +92,10 @@ class PartModelForm(forms.ModelForm):
 class PartModelAddForm(forms.ModelForm):
     class Meta:
         model = models.Part
-        fields = ['project', 'partName',
-                  'defaultInterfaceHeight', 'defaultInterfaceIntDiam', 'defaultLinkType', 'defaultLinkDefined', 'numberLink', 'numberBushing', 
-                  'totalMassLink', 'totalMassAccumulation', 'totalMassWinding', 'totalMassBushing', 'additionalMass', 
-                  'totalMassStructure', 'totalFiberLength', 'totalFiberMass', 'totalResinMass', 'projectImage',
+        fields = ['project', 'partName', 'resin','fiber',  'totalTowNumber', 'fiberVolumeRatio', 'fiberSectionCalc', 'fiberSectionAcc',
+                  'defaultInterfaceHeight', 'defaultInterfaceIntDiam', 'defaultLinkType', 'defaultLinkDefined', 
+                   'additionalMass', 
+                  'projectImage',
                  ]
 
     def __init__(self, *args, **kwargs):
@@ -141,10 +154,10 @@ def part_add(request):
 class PartEditModelForm(forms.ModelForm):
     class Meta:
         model = models.Part
-        fields = ['project', 'partName',
-                  'defaultInterfaceHeight', 'defaultInterfaceIntDiam', 'defaultLinkType', 'defaultLinkDefined', 'numberLink', 'numberBushing', 
-                  'totalMassLink', 'totalMassAccumulation', 'totalMassWinding', 'totalMassBushing', 'additionalMass', 
-                  'totalMassStructure', 'totalFiberLength', 'totalFiberMass', 'totalResinMass', 'projectImage','valid'
+        fields = ['project', 'partName', 'resin', 'fiber', 'totalTowNumber', 'fiberVolumeRatio', 'fiberSectionCalc', 'fiberSectionAcc',
+                  'defaultInterfaceHeight', 'defaultInterfaceIntDiam', 'defaultLinkType', 'defaultLinkDefined', 
+                  'additionalMass', 
+                  'projectImage','valid'
                 #   'part_gh', 'part_mod', 'part_csv', 'part_rs', 'part_log', 'part_mp4', 'part_jpg'
                   ]
 
@@ -253,11 +266,35 @@ def handle_uploaded_file_part(f):
                 part_data['defaultInterfaceHeight'] = int(sheetIn.cell(row=cell.row, column=cell.column + 1).value)
             elif cell.value == "Interface Int. Diam [mm]":
                 part_data['defaultInterfaceIntDiam'] = int(sheetIn.cell(row=cell.row, column=cell.column + 1).value)
+            elif cell.value == "Resin name":
+                part_data['resinName'] = sheetIn.cell(row=cell.row, column=cell.column+1 ).value
+            elif cell.value == "Fiber name":
+                part_data['fiberName'] = sheetIn.cell(row=cell.row, column=cell.column+1 ).value
+            elif cell.value == "Fiber volume ratio [%]":
+                part_data['fiberVolumeRatio'] = float(sheetIn.cell(row=cell.row, column=cell.column+1 ).value)
+            elif cell.value == "Fiber Section calc. [mm²]":
+                part_data['fiberSectionCalc'] = sheetIn.cell(row=cell.row, column=cell.column+1 ).value
+            elif cell.value == "Fiber Section acc. [mm²]":
+                part_data['fiberSectionAcc'] = sheetIn.cell(row=cell.row, column=cell.column+1 ).value
             elif cell.value == "Link (Element) Type" and sheetIn.cell(row=cell.row+1, column=cell.column ).value == "Link defined by":
                 part_data['defaultLinkType'] = sheetIn.cell(row=cell.row, column=cell.column+1 ).value
             elif cell.value == "Link defined by":
                 part_data['defaultLinkDefined'] = sheetIn.cell(row=cell.row, column=cell.column + 1).value
+            elif cell.value == "Number of spools":
+                part_data['totalTowNumber'] = sheetIn.cell(row=cell.row, column=cell.column + 1).value
 
+    resin_name = str(part_data['resinName'])
+    matching_resin = models.Resin.objects.filter(resin__icontains=resin_name).first()
+    if matching_resin is not None:
+        part_data['resin_id'] = matching_resin.id
+    else:
+        part_data['resin_id'] = None
+    fiber_name = str(part_data['fiberName'])
+    matching_fiber = models.Fiber.objects.filter(grade__icontains=fiber_name).first()
+    if matching_fiber is not None:
+        part_data['fiber_id'] = matching_fiber.id
+    else:
+        part_data['fiber_id'] = None
 
     for row in sheetOut.iter_rows():
         for cell in row:

@@ -13,7 +13,7 @@ def load_parts(request):
 def load_interfaces(request):
     part_id = request.GET.get('part_id')
     if part_id:
-        interfaces = models.Interface.objects.filter(part_id=part_id).order_by('interfaceName')
+        interfaces = models.Interface.objects.filter(part_id=part_id).order_by('id')
         interface_list = list(interfaces.values('id', 'interfaceName'))
         return JsonResponse(interface_list, safe=False)
     else:

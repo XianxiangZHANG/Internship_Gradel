@@ -25,12 +25,15 @@ def interface_list(request):
     """ list of interface """
 
     interface_filter = InterfaceFilter(request.GET, queryset=models.Interface.objects.all())
-    return render(request, 'interface/interface_list.html', {'filter': interface_filter})
+    interfaces = interface_filter.qs
+    return render(request, 'interface/interface_list.html', {'filter': interface_filter, 'interfaces': interfaces})
+
 
 def interface_valid(request):
     """ list of interface """
     interface_filter = InterfaceFilter(request.GET, queryset=models.Interface.objects.filter(part__valid=True))
-    return render(request, 'interface/interface_valid.html', {'filter': interface_filter})
+    interfaces = interface_filter.qs
+    return render(request, 'interface/interface_valid.html', {'filter': interface_filter, 'interfaces': interfaces})
 
 def interface_input(request):
     """ list of interface """
@@ -44,8 +47,8 @@ def interface_input(request):
 class InterfaceModelForm(forms.ModelForm):
     class Meta:
         model = models.Interface
-        fields = ['interfaceName', 'height', 'intDiameter', 'totalLink', 'totalArm', 'totalSection',
-                'extDiameter', 'accMass', 'finODiam', 'finAccSection', 'safetyFactor',
+        fields = ['interfaceName', 'height', 'intDiameter',
+                'finODiam', 'finAccSection', 'safetyFactor',
                 'interfaceCenterX', 'interfaceCenterY', 'interfaceCenterZ',
                 'directionVectorX', 'directionVectorY', 'directionVectorZ',
                 'divisionStep',]
@@ -145,8 +148,8 @@ def interface_modify_multiple(request):
 class InterfaceEditModelForm(forms.ModelForm):
     class Meta:
         model = models.Interface
-        fields = ['project', 'part', 'interfaceName', 'height', 'intDiameter', 'totalLink', 'totalArm', 'totalSection',
-                'extDiameter', 'accMass', 'finODiam', 'finAccSection', 'safetyFactor',
+        fields = ['project', 'part', 'interfaceName', 'height', 'intDiameter', 
+                'finODiam', 'finAccSection', 'safetyFactor',
                 'interfaceCenterX', 'interfaceCenterY', 'interfaceCenterZ',
                 'directionVectorX', 'directionVectorY', 'directionVectorZ',
                 'divisionStep',]

@@ -31,24 +31,23 @@
             <thead>
                 <thead>
                     <tr>
-                        <!-- <th>Part ID</th> -->
-                        <th style="width: 90px;">Link Name</th> 
-                        <th style="width: 80px;">Interface1 Name</th>
-                        <th style="width: 80px;">Interface2 Name</th>
-                        <th style="width: 100px;">Length[mm]</th>
-                        <th style="width: 400px;">Sequence</th>
+                        <th style="width: 120px;">Link Name</th> 
+                        <th style="width: 100px;">Interface1 Name</th>
+                        <th style="width: 100px;">Interface2 Name</th>
+                        {% comment %} <th style="width: 100px;">Length[mm]</th> {% endcomment %}
+                        <th >Sequence</th>
+                        <th style="width: 100px;">Ratio</th>
                         <!-- <th>Link Type</th> -->
                         <th style="width: 100px;">Arm Diam.[mm]</th>
                         <th style="width: 100px;">Arm Section[mm²]</th>
-                        <th>Cycle #</th>
-                        
-                        <th>Fin. Arm Sec. [mm²]</th>
-                        <th>Fin. Arm diam. [mm]</th>
-                        <th>Fin. Arm radius [m]</th>
-                        <th>Mass [g]</th>
-                        <th>*Angle*</th>
-                        <th colspan="2">Operation</th>
-                        
+                        <th style="width: 100px;">Cycle #</th>
+                        {% comment %}                             
+                        <th>Fin. Arm Section[mm²]</th>
+                        <th>Fin. Arm Diam.[mm]</th>
+                        <th>Fin. Arm Radius[m]</th>
+                        <th>Mass[g]</th> {% endcomment %}
+                        <th style="width: 100px;">*Angle*</th>
+                        <th style="width: 100px;">Operation</th>
                     </tr>
                 </thead>
             </thead>
@@ -61,21 +60,23 @@
                             <span style="color: red;">{{ linkError }}</span>
                         {% endif %}{% endif %}</td>
 
-                    <td contenteditable="true">{{ field.interface1 }}</td>
-                    <td contenteditable="true">{{ field.interface2 }}</td>
-                    <td contenteditable="true">{{ field.length }}</td>
+                    <td>{{ field.interface1 }} </td>
+                    <td>{{ field.interface2 }} </td>
+                    {% comment %} <td contenteditable="true">{{ field.length }}</td> {% endcomment %}
                     <td contenteditable="true">{{ field.sequence }}</td>
+                    <td contenteditable="true">{{ field.ratio }}</td>
                     <!-- <td contenteditable="true">{{ field.linkType }}</td> -->
                     <td contenteditable="true">{{ field.armDiam }}</td>
                     <td contenteditable="true">{{ field.armSection }}</td>
                     <td contenteditable="true">{{ field.cycle }}</td>
-                    
+{% comment %}                     
                     <td contenteditable="true">{{ field.finArmSection }}</td>
                     <td contenteditable="true">{{ field.finArmDiam }}</td>
                     <td contenteditable="true">{{ field.finArmRadius }}</td>
-                    <td contenteditable="true">{{ field.mass }}</td>
+                    <td contenteditable="true">{{ field.mass }}</td> {% endcomment %}
                     <td contenteditable="true">{{ field.angle }}</td>
                     <td class="text-center"><button type="button" class="btn btn-danger remove-form">Delete</button></td>
+                    <input type="hidden" name="{{ form.prefix }}-part" value="{{ form.instance.part_id }}">
                 </tr>
                 {% endfor %}
             </tbody>
@@ -209,6 +210,7 @@ $(document).ready(function() {
             }
         });
     });
+   
 });
 </script>
 {% endblock %}

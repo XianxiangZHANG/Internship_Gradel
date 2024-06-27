@@ -34,12 +34,20 @@
             
         </form>
         <!-- <table id="transposedTable"></table> -->
-    <table class="table table-bordered" id="normalTable" >
+    <table class="table table-bordered" id="normalTable" style=" font-size: 12px">
         <thead>
         <tr>
             <th>ID</th>
-            <th>Project Name</th>
             <th>Part Name</th>
+            <th>Resin Name</th>
+            <th>Resin Density [kg/m3]</th>
+            <th>Fiber Name</th>
+            <th>Fiber Density [kg/m3]</th>
+            <th>Number of Spools</th>
+            <th>Fiber Volume Ratio[%]</th>
+            <th>Winding Density [kg/m3]</th>
+            <th>Fiber Section calc.[mm²]</th>
+            <th>Fiber Section acc.[mm²]</th>
             <th>Default Interface Height [mm]</th>
             <th>Default Interface Int Diam [mm]</th>
             <th>Default Link (Element) Type</th>
@@ -69,18 +77,26 @@
         </tr>
         </thead>
         <tbody>
-        {% for row in filter.qs %}
+        {% for row in parts %}
             {% if row.valid %} 
             <tr style="background-color: #67fafa70;">
                 <td>{{ row.id }}</td>
-                <td>{{ row.project.projectName }}</td>
                 <td>{{ row.partName }}</td>
+                <td>{{ row.resin|default_if_none:"" }}</td>
+                <td>{{ row.resinDensity|default_if_none:"" }}</td>
+                <td>{{ row.fiber|default_if_none:"" }}</td>
+                <td>{{ row.fiberDensity|default_if_none:"" }}</td>
+                <td>{{ row.totalTowNumber|default_if_none:"" }}</td>
+                <td>{{ row.fiberVolumeRatio|default_if_none:"" }}</td>
+                <td>{{ row.windingDensity|default_if_none:"" }}</td>
+                <td>{{ row.fiberSectionCalc|default_if_none:"" }}</td>
+                <td>{{ row.fiberSectionAcc|default_if_none:"" }}</td>
                 <td>{{ row.defaultInterfaceHeight|default_if_none:"" }}</td>
                 <td>{{ row.defaultInterfaceIntDiam|default_if_none:"" }}</td>
                 <td>{{ row.defaultLinkType|default_if_none:"" }}</td>
                 <td>{{ row.defaultLinkDefined|default_if_none:"" }}</td>
-                <td>{{ row.numberLink|default_if_none:"" }}</td>
-                <td>{{ row.numberBushing|default_if_none:"" }}</td>
+                <td>{{ row.numberLinks|default_if_none:"0" }}</td>
+                <td>{{ row.numberBushings|default_if_none:"0" }}</td>
                 <td>{{ row.totalMassLink|default_if_none:"" }}</td>
                 <td>{{ row.totalMassAccumulation|default_if_none:"" }}</td>
                 <td>{{ row.totalMassWinding|default_if_none:"" }}</td>
@@ -96,14 +112,6 @@
                     No image
                 {% endif %}</td>
                 
-                <!-- <td>{{ row.projectImage|default_if_none:"" }}</td> -->
-                <!-- <td>{{ row.part_gh|default_if_none:"" }}</td>
-                <td>{{ row.part_mod|default_if_none:"" }}</td>
-                <td>{{ row.part_csv|default_if_none:"" }}</td>
-                <td>{{ row.part_rs|default_if_none:"" }}</td>
-                <td>{{ row.part_log|default_if_none:"" }}</td>
-                <td>{{ row.part_mp4|default_if_none:"" }}</td>
-                <td>{{ row.part_jpg|default_if_none:"" }}</td> -->
                 <td>
                     <a class="btn btn-primary btn-xs" href="/part/edit/{{ row.id }}/" style="width: 70px; text-align: center; margin-bottom: 5px;"> Edit </a>
                     <br>
@@ -114,14 +122,22 @@
             {% else %}
             <tr>
                 <td>{{ row.id }}</td>
-                <td>{{ row.project.projectName }}</td>
                 <td>{{ row.partName }}</td>
+                <td>{{ row.resin|default_if_none:"" }}</td>
+                <td>{{ row.resinDensity|default_if_none:"" }}</td>
+                <td>{{ row.fiber|default_if_none:"" }}</td>
+                <td>{{ row.fiberDensity|default_if_none:"" }}</td>
+                <td>{{ row.totalTowNumber|default_if_none:"" }}</td>
+                <td>{{ row.fiberVolumeRatio|default_if_none:"" }}</td>
+                <td>{{ row.windingDensity|default_if_none:"" }}</td>
+                <td>{{ row.fiberSectionCalc|default_if_none:"" }}</td>
+                <td>{{ row.fiberSectionAcc|default_if_none:"" }}</td>
                 <td>{{ row.defaultInterfaceHeight|default_if_none:"" }}</td>
                 <td>{{ row.defaultInterfaceIntDiam|default_if_none:"" }}</td>
                 <td>{{ row.defaultLinkType|default_if_none:"" }}</td>
                 <td>{{ row.defaultLinkDefined|default_if_none:"" }}</td>
-                <td>{{ row.numberLink|default_if_none:"" }}</td>
-                <td>{{ row.numberBushing|default_if_none:"" }}</td>
+                <td>{{ row.numberLink|default_if_none:"0" }}</td>
+                <td>{{ row.numberBushing|default_if_none:"0" }}</td>
                 <td>{{ row.totalMassLink|default_if_none:"" }}</td>
                 <td>{{ row.totalMassAccumulation|default_if_none:"" }}</td>
                 <td>{{ row.totalMassWinding|default_if_none:"" }}</td>
@@ -132,20 +148,12 @@
                 <td>{{ row.totalFiberMass|default_if_none:"" }}</td>
                 <td>{{ row.totalResinMass|default_if_none:"" }}</td>
                 <td>{% if row.projectImage %}
-                    <!-- <img src="{{ row.projectImage.url }}" alt="Project Image" style="width: 100px;"> -->
+                   
                     <img src="{{ row.projectImage.url }}" alt="Project Image" class="thumbnail" onclick="showModal('{{ row.projectImage.url }}')">
                 {% else %}
                     No image
                 {% endif %}</td>
                 
-                <!-- <td>{{ row.projectImage|default_if_none:"" }}</td> -->
-                <!-- <td>{{ row.part_gh|default_if_none:"" }}</td>
-                <td>{{ row.part_mod|default_if_none:"" }}</td>
-                <td>{{ row.part_csv|default_if_none:"" }}</td>
-                <td>{{ row.part_rs|default_if_none:"" }}</td>
-                <td>{{ row.part_log|default_if_none:"" }}</td>
-                <td>{{ row.part_mp4|default_if_none:"" }}</td>
-                <td>{{ row.part_jpg|default_if_none:"" }}</td> -->
                 <td>
                     <a class="btn btn-primary btn-xs" href="/part/edit/{{ row.id }}/" style="width: 70px; text-align: center; margin-bottom: 5px;"> Edit </a>
                     <br>
@@ -156,7 +164,7 @@
             {% endif %}
             {% empty %}
             <tr>
-                <td colspan="20" class="text-center" style="font-size: large;">No data found.</td>
+                <td colspan="28" class="text-center" style="font-size: large;">No data found.</td>
             </tr>
             {% endfor %}
         </tbody>
@@ -256,7 +264,7 @@
 {% block css %}
 <style>
     
-    #id_project, input[type="text"], #id_valid {
+    #id_project, #id_resin, #id_fiber, input[type="text"], #id_valid {
         width: 100%; 
         padding: 8px; 
         margin: 0px 0; 
@@ -268,7 +276,7 @@
     
 
     .thumbnail {
-        width: 100px;
+        width: 60px;
         height: auto;
         cursor: pointer;
     }
@@ -278,9 +286,9 @@
         z-index: 1;
         padding-top: 60px;
         left: 25%;
-        top: 20%;
+        top: 10%;
         width: 50%;
-        height: 60%;
+        height: 90%;
         overflow: auto;
         background-color: rgba(0, 0, 0, 0.274);
     }
