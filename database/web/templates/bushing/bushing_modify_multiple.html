@@ -30,12 +30,12 @@
         <table class="table table-bordered" id="bushing-table">
             <thead>
                 <tr>
-                    <th style="width: 15.5%;">Bushing Name</th>
-                    <th style="width: 15.5%;">Number Interface</th>
-                    <th style="width: 15.5%;">Bushing Draw. Nr.</th>
-                    <th style="width: 15.5%;">Acc. On Bushing[g]</th>
-                    <th style="width: 15.5%;">Bushing Mass[g]</th>
-                    <th style="width: 15.5%;">Total Bushing Mass[g]</th>
+                    <th style="width: 22%;">Bushing Name</th>
+                    <th style="width: 22%;">Number Interface</th>
+                    <th style="width: 22%;">Bushing Draw. Nr.</th>
+                    {% comment %} <th style="width: 15.5%;">Acc. On Bushing[g]</th> {% endcomment %}
+                    <th style="width: 22%;">Bushing Mass[g]</th>
+                    {% comment %} <th style="width: 15.5%;">Total Bushing Mass[g]</th> {% endcomment %}
                     <th colspan="2">Operation</th>
                 </tr>
             </thead>
@@ -49,9 +49,9 @@
                         {% endif %}{% endif %}</td>
                     <td contenteditable="true">{{ field.numberInterface }}</td>
                     <td contenteditable="true">{{ field.bushingDrawNb }}</td>
-                    <td contenteditable="true">{{ field.AccOnBushing }}</td>
+                    {% comment %} <td contenteditable="true">{{ field.AccOnBushing }}</td> {% endcomment %}
                     <td contenteditable="true">{{ field.bushingMass }}</td>
-                    <td contenteditable="true">{{ field.totalBushingMass }}</td>
+                    {% comment %} <td contenteditable="true">{{ field.totalBushingMass }}</td> {% endcomment %}
                     <td class="text-center"><button type="button" class="btn btn-danger remove-form">Delete</button></td>
                 </tr>
                 {% endfor %}

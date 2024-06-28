@@ -1,6 +1,4 @@
 {% extends 'layout.html' %}
-
-
 {% block content %}
 
     
@@ -31,6 +29,9 @@
             {{ filter.form.as_p }}
             <button type="submit" id="btnf1">Filter</button>
             <button type="reset" id="resetButton" class="btnf2">Reset</button>
+            <a class="btn btn-success" href="/interface/modify-multiple/" id="btnmore">
+                <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> Modify Interface List
+            </a>
         </form>
         
     <table class="table table-bordered" id="normalTable">
@@ -74,10 +75,10 @@
                 <td>{{ row.intDiameter|default_if_none:"" }}</td>
                 <td>{{ row.totalLink|default_if_none:"" }}</td>
                 <td>{{ row.totalArm|default_if_none:"" }}</td>
-                <td>{{ row.totalSection|default_if_none:"" }}</td>
-                <td>{{ row.extDiameter|default_if_none:"" }}</td>
+                <td>{{ row.totalSectionShow|default_if_none:""|floatformat:2 }}</td>
+                <td>{{ row.extDiameterShow|default_if_none:"" }}</td>
                 <!-- <td>{{ row.theoHeight|default_if_none:"" }}</td> -->
-                <td>{{ row.accMass|default_if_none:"" }}</td>
+                <td>{{ row.accMassShow|default_if_none:"" }}</td>
                 <td>{{ row.finODiam|default_if_none:"" }}</td>
                 <td>{{ row.finAccSection|default_if_none:"" }}</td>
                 <td>{{ row.safetyFactor|default_if_none:"" }}</td>
@@ -106,10 +107,10 @@
                 <td>{{ row.intDiameter|default_if_none:"" }}</td>
                 <td>{{ row.totalLink|default_if_none:"" }}</td>
                 <td>{{ row.totalArm|default_if_none:"" }}</td>
-                <td>{{ row.totalSection|default_if_none:"" }}</td>
-                <td>{{ row.extDiameter|default_if_none:"" }}</td>
+                <td>{{ row.totalSectionShow|default_if_none:"" }}</td>
+                <td>{{ row.extDiameterShow|default_if_none:"" }}</td>
                 <!-- <td>{{ row.theoHeight|default_if_none:"" }}</td> -->
-                <td>{{ row.accMass|default_if_none:"" }}</td>
+                <td>{{ row.accMassShow|default_if_none:"" }}</td>
                 <td>{{ row.finODiam|default_if_none:"" }}</td>
                 <td>{{ row.finAccSection|default_if_none:"" }}</td>
                 <td>{{ row.safetyFactor|default_if_none:"" }}</td>
@@ -214,6 +215,21 @@
         border: 1px solid #ccc; 
         border-radius: 4px; 
         box-sizing: border-box; 
+    }
+    #btnmore {
+        width: 250px; 
+        background-color: #49b7be; 
+        color: white; 
+        padding: 5px 10px; 
+        cursor: pointer; 
+        height: 30px;
+        position: absolute;
+        right: 2%;
+        margin-top: 8px;
+        border: none; 
+        border-radius: 4px;
+        cursor: pointer; 
+        font-size: large;
     }
 </style>
 {% endblock %}

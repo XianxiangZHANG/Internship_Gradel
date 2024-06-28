@@ -26,6 +26,7 @@ def interface_list(request):
 
     interface_filter = InterfaceFilter(request.GET, queryset=models.Interface.objects.all())
     interfaces = interface_filter.qs
+    
     return render(request, 'interface/interface_list.html', {'filter': interface_filter, 'interfaces': interfaces})
 
 
@@ -48,7 +49,7 @@ class InterfaceModelForm(forms.ModelForm):
     class Meta:
         model = models.Interface
         fields = ['interfaceName', 'height', 'intDiameter',
-                'finODiam', 'finAccSection', 'safetyFactor',
+                'finODiam', 'finAccSection', 
                 'interfaceCenterX', 'interfaceCenterY', 'interfaceCenterZ',
                 'directionVectorX', 'directionVectorY', 'directionVectorZ',
                 'divisionStep',]
@@ -72,6 +73,7 @@ InterfaceFormSet = modelformset_factory(
 
 def interface_add_multiple(request):
     projects = models.Project.objects.all()
+    parts = models.Part.objects.all()
     formset = InterfaceFormSet(queryset=models.Interface.objects.none())
     project_part_form = ProjectPartForm()
 
@@ -96,6 +98,7 @@ def interface_add_multiple(request):
 
     return render(request, 'interface/interface_add_multiple.html', {
         'projects': projects,
+        'parts': parts,
         'formset': formset,
         'project_part_form': project_part_form,
         'interfaceError': "Interface name is Required",
@@ -149,7 +152,7 @@ class InterfaceEditModelForm(forms.ModelForm):
     class Meta:
         model = models.Interface
         fields = ['project', 'part', 'interfaceName', 'height', 'intDiameter', 
-                'finODiam', 'finAccSection', 'safetyFactor',
+                'finODiam', 'finAccSection',
                 'interfaceCenterX', 'interfaceCenterY', 'interfaceCenterZ',
                 'directionVectorX', 'directionVectorY', 'directionVectorZ',
                 'divisionStep',]
@@ -246,6 +249,7 @@ def handle_uploaded_file_interface(f):
 
     
     interface_data['project_id'] = models.Project.objects.filter(projectName=project_data['projectName']).first().id
+    interface_data['part_id'] = models.Part.objects.filter(partName=project_data['projectName']).first().id
 
 
     # for row in sheetCP.iter_rows():

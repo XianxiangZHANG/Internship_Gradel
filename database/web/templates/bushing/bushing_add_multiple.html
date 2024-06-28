@@ -61,6 +61,9 @@
                         <div class="col-sm-11" style="position: relative">
                             <select id="id_part" name="part" class="form-control">
                                 <option value=""> - - - - Please select one - - - - </option>
+                                {% for part in parts %}
+                                    <option value="{{ part.id }}">{{ part.partName }}</option>
+                                {% endfor %}
                                 <!-- Options will be loaded dynamically -->
                             </select>
                             <span style="color: red;">{{ project_part_form.part.errors.0 }}</span>
@@ -75,9 +78,9 @@
                             
                             <th >Number Interface</th>
                             <th >Bushing Draw. Nr.</th>
-                            <th >Acc. On Bushing[g]</th>
+                            {% comment %} <th >Acc. On Bushing[g]</th> {% endcomment %}
                             <th >Bushing Mass[g]</th>
-                            <th >Total Bushing Mass[g]</th>
+                            {% comment %} <th >Total Bushing Mass[g]</th> {% endcomment %}
                             <th style="width: 100px;">Operation</th>
                         </tr>
                     </thead>
@@ -92,9 +95,9 @@
                                 {% endif %}{% endif %}</td>
                             <td contenteditable="true">{{ field.numberInterface }}</td>
                             <td contenteditable="true">{{ field.bushingDrawNb }}</td>
-                            <td contenteditable="true">{{ field.AccOnBushing }}</td>
+                            {% comment %} <td contenteditable="true">{{ field.AccOnBushing }}</td> {% endcomment %}
                             <td contenteditable="true">{{ field.bushingMass }}</td>
-                            <td contenteditable="true">{{ field.totalBushingMass }}</td>
+                            {% comment %} <td contenteditable="true">{{ field.totalBushingMass }}</td> {% endcomment %}
 
                             <td class="text-center"><button type="button" class="btn btn-danger remove-form">Remove</button></td>
                         </tr>
@@ -218,13 +221,15 @@
                 processData: false,
                 contentType: false,
                 success: function(data) {
+                    
                     if (data.error) {
                         alert(data.error);
                         return;
                     }
+                    
                     $('#id_project').val(data.bushing_data.project_id);
-
-                    loadParts(data.bushing_data.project_id);
+                    $('#id_part').val(data.bushing_data.part_id);
+                    
                     // Populate form fields with returned data
                     for (var i = 0; i < data.numberBushing; i++) {
                         var $row = $('#bushing-table tbody tr').last();
@@ -233,26 +238,20 @@
                         var isEmptyRow = !$row.find('td').eq(0).find('input').val() &&
                                         !$row.find('td').eq(1).find('input').val() &&
                                         !$row.find('td').eq(2).find('input').val() &&
-                                        !$row.find('td').eq(3).find('input').val() &&
-                                        !$row.find('td').eq(4).find('input').val() &&
-                                        !$row.find('td').eq(5).find('input').val();
+                                        !$row.find('td').eq(3).find('input').val();
 
                         if (isEmptyRow) {
                             $row.find('td').eq(0).find('input').val(data.bushing_data_position[i]);
                             $row.find('td').eq(1).find('input').val(data.bushing_data_numberInterface[i]);
                             $row.find('td').eq(2).find('input').val(data.bushing_data_draw[i]);
-                            $row.find('td').eq(3).find('input').val(data.bushing_data_acc[i]);
-                            $row.find('td').eq(4).find('input').val(data.bushing_data_mass[i]);
-                            $row.find('td').eq(5).find('input').val(data.bushing_data_totalMass[i]);
+                            $row.find('td').eq(3).find('input').val(data.bushing_data_mass[i]);
                         } else {
                             $('#add-bushing').click();
                             $row = $('#bushing-table tbody tr').last();
                             $row.find('td').eq(0).find('input').val(data.bushing_data_position[i]);
                             $row.find('td').eq(1).find('input').val(data.bushing_data_numberInterface[i]);
                             $row.find('td').eq(2).find('input').val(data.bushing_data_draw[i]);
-                            $row.find('td').eq(3).find('input').val(data.bushing_data_acc[i]);
-                            $row.find('td').eq(4).find('input').val(data.bushing_data_mass[i]);
-                            $row.find('td').eq(5).find('input').val(data.bushing_data_totalMass[i]);
+                            $row.find('td').eq(3).find('input').val(data.bushing_data_mass[i]);
                         }
                     }
                 },

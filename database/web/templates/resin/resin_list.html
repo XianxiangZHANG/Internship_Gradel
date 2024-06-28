@@ -34,12 +34,15 @@
         {{ filter.form.as_p }}
         <button type="submit" id="btnf1">Filter</button>
         <button type="reset" id="resetButton" class="btnf2">Reset</button>
-        <a class="btn btn-success" href="/resin/list-mechanical-properties/" id="btnmore">
+        <a class="btn btn-success" href="/resin/list-mechanical-properties/" id="btnmore1">
             <span class="glyphicon glyphicon-pencil" aria-hidden="true" id="pic"></span> Check Mechanical Properties of Resin List
         </a>
 
-        <a class="btn btn-success" href="/resin/list-thermophysical-toughness-properties/" id="btnmore">
+        <a class="btn btn-success" href="/resin/list-thermophysical-toughness-properties/" id="btnmore2">
             <span class="glyphicon glyphicon-pencil" aria-hidden="true" id="pic"></span> Check Thermophysical Toughness Properties of Resin List
+        </a>
+        <a class="btn btn-success" href="/resin/modify-multiple/" id="btnmore3">
+            <span class="glyphicon glyphicon-pencil" aria-hidden="true" id="pic"></span> Modify Resin List
         </a>
     </form>
     <table class="table table-bordered">
@@ -231,16 +234,48 @@
         border-radius: 4px; 
         box-sizing: border-box; 
     }
-    #btnmore {
-        width: 500px; 
+    #btnmore1 {
+        width: 400px; 
+        height: 30px;
         background-color: #49b7be; 
         color: white; 
         padding: 5px 10px; 
-
-        margin-left: 100px;
+        font-size: 15px;
+        font-weight:800;
+        margin-top: -3px;
+        margin-left: 20px;
         border: none; 
         border-radius: 4px;
         cursor: pointer; 
+    }
+    #btnmore2 {
+        width: 500px; 
+        height: 30px;
+        background-color: #49b7be; 
+        color: white; 
+        padding: 5px 10px; 
+        font-size: 15px;
+        font-weight:800;
+        margin-top: -3px;
+        margin-left: 20px;
+        border: none; 
+        border-radius: 4px;
+        cursor: pointer; 
+    }
+    #btnmore3 {
+        width: 300px; 
+        background-color: #49b7be; 
+        color: white; 
+        padding: 5px 10px; 
+        cursor: pointer; 
+        height: 30px;
+        position: absolute;
+        right: 2%;
+        margin-top: 8px;
+        border: none; 
+        border-radius: 4px;
+        cursor: pointer; 
+        font-size: large;
     }
    
 </style>

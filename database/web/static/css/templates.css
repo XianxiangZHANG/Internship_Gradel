@@ -13,6 +13,18 @@
 #btnf1:hover, .btnf2:hover {
     background-color: #378488;
 }
+#btnmore {
+    width: 500px; 
+    background-color: #49b7be; 
+    color: white; 
+    padding: 5px 10px; 
+
+    margin-left: 100px;
+    border: none; 
+    border-radius: 4px;
+    cursor: pointer; 
+}
+
 #download {
     width: 200px; 
     height: 30px;
@@ -118,3 +130,4 @@ summary:focus {
 #help-btn-download{
     color: #6ebe49;
 }
+

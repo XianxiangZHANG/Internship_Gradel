@@ -48,7 +48,7 @@ def bushing_input(request):
 class BushingModelForm(forms.ModelForm):
     class Meta:
         model = models.Bushing
-        fields = ['bushingName', 'numberInterface', 'bushingDrawNb', 'AccOnBushing', 'bushingMass', 'totalBushingMass']
+        fields = ['bushingName', 'numberInterface', 'bushingDrawNb', 'bushingMass', ]
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -58,7 +58,7 @@ class BushingModelForm(forms.ModelForm):
 class BushingForm(forms.ModelForm):
     class Meta:
         model = models.Bushing
-        fields = ['project', 'part', 'bushingName', 'numberInterface', 'bushingDrawNb', 'AccOnBushing', 'bushingMass', 'totalBushingMass']
+        fields = ['project', 'part', 'bushingName', 'numberInterface', 'bushingDrawNb',  'bushingMass',]
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -84,13 +84,14 @@ BushingMultFormSet = modelformset_factory(
 
 def bushing_add_multiple(request):
     projects = models.Project.objects.all()
+    parts = models.Part.objects.all()
     formset = BushingFormSet(queryset=models.Bushing.objects.none())
     project_part_form = ProjectPartForm()
 
     if request.method == 'POST':
         formset = BushingFormSet(request.POST)
         project_part_form = ProjectPartForm(request.POST)
-        bushingName = request.POST.get('bushingName')
+        # bushingName = request.POST.get('bushingName')
        
             
         if formset.is_valid() and project_part_form.is_valid():
@@ -111,6 +112,7 @@ def bushing_add_multiple(request):
     return render(request, 'bushing/bushing_add_multiple.html', {
         'projects': projects,
         'formset': formset,
+        'parts': parts,
         'project_part_form': project_part_form,
         'bushingError': "Bushing name is Required",
     })
@@ -164,7 +166,7 @@ def bushing_add(request):
 class BushingEditModelForm(forms.ModelForm):
     class Meta:
         model = models.Bushing
-        fields = ['project', 'part', 'bushingName', 'numberInterface', 'bushingDrawNb', 'AccOnBushing', 'bushingMass', 'totalBushingMass']
+        fields = ['project', 'part', 'bushingName', 'numberInterface', 'bushingDrawNb', 'bushingMass', ]
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -258,6 +260,7 @@ def handle_uploaded_file_bushing(f):
 
     
     bushing_data['project_id'] = models.Project.objects.filter(projectName=project_data['projectName']).first().id
+    bushing_data['part_id'] = models.Part.objects.filter(partName=project_data['projectName']).first().id
 
     # for row in sheetCP.iter_rows():
     #     for cell in row:

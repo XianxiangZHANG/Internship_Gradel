@@ -14,6 +14,9 @@ from web import models
 import django_filters
 
 class LinkFilter(django_filters.FilterSet):
+    interface1 = forms.ModelChoiceField(queryset=models.Interface.objects.all(), required=True)
+    interface2 = forms.ModelChoiceField(queryset=models.Interface.objects.all(), required=True)
+
     class Meta:
         model = models.Link
         fields = {
@@ -67,9 +70,9 @@ class ProjectPartForm(forms.Form):
     project = forms.ModelChoiceField(queryset=models.Project.objects.all(), required=True)
     part = forms.ModelChoiceField(queryset=models.Part.objects.all(), required=True)
     
-class InterfaceForm(forms.Form):
-    interface1 = forms.ModelChoiceField(queryset=models.Interface.objects.all(), required=True)
-    interface2 = forms.ModelChoiceField(queryset=models.Interface.objects.all(), required=True)
+# class InterfaceForm(forms.Form):
+#     interface1 = forms.ModelChoiceField(queryset=models.Interface.objects.all(), required=True)
+#     interface2 = forms.ModelChoiceField(queryset=models.Interface.objects.all(), required=True)
 
 LinkFormSet = modelformset_factory(
     models.Link,
@@ -136,7 +139,7 @@ def link_add_multiple(request):
 def link_modify_multiple(request):
     # Get filtered data
     link_filter = LinkFilter(request.GET, queryset=models.Link.objects.all())
-    interfaces = models.Interface.objects.all()
+    # interfaces = models.Interface.objects.all()
     # Define form set
     LinkFormSet = modelformset_factory(models.Link, form=LinkModelForm, extra=0)
     
@@ -150,13 +153,14 @@ def link_modify_multiple(request):
                 instance.user = models.User.objects.filter(id=request.info_dict['id']).first()  
                 instance.save()
             return redirect('/link/list/')
+        
     else:
         formset = LinkFormSet(queryset=link_filter.qs)
 
     return render(request, 'link/link_modify_multiple.html', {
         'filter': link_filter,
         'formset': formset,
-        'interfaces': interfaces,
+        # 'interfaces': interfaces,
         'linkError': "Link name is Required",
     })
 

@@ -440,10 +440,10 @@ class Part(models.Model):
         total_accumulation = 0
         if Interface.objects.filter(part=self):
             interfaces = Interface.objects.filter(part=self)
-            print(interfaces)
+            # print(interfaces)
             for interface in interfaces:
                 total_accumulation += interface.accMass
-                print(total_accumulation)
+                # print(total_accumulation)
         return round(total_accumulation,2)
 
     def calculate_totalMassWinding(self):
@@ -472,7 +472,7 @@ class Part(models.Model):
         total_length = 0
         if self.totalMassAccumulation and self.totalMassLink and self.windingDensity and self.fiberSectionAcc and self.fiberSectionCalc:
             mass = self.totalMassAccumulation + self.totalMassLink
-            total_length = mass / (1000000 * self.windingDensity * (self.fiberSectionAcc + self.fiberSectionCalc)/2)
+            total_length = mass / (self.windingDensity * (self.fiberSectionAcc + self.fiberSectionCalc)/2)*1000
         return round(total_length,2)
 
     def calculate_totalFiberMass(self):
@@ -497,9 +497,9 @@ class Bushing(models.Model):
     numberInterface = models.IntegerField(verbose_name="Number of Interface", null=True, blank=True)
 
     bushingDrawNb = models.CharField(verbose_name="Bushing Draw. Nb", max_length=30, null=True, blank=True)
-    AccOnBushing = models.FloatField(verbose_name="Acc. On Bushing[g]", null=True, blank=True)
+    # AccOnBushing = models.FloatField(verbose_name="Acc. On Bushing[g]", null=True, blank=True)
     bushingMass = models.FloatField(verbose_name="Bushing Mass[g]", null=True, blank=True)
-    totalBushingMass = models.FloatField(verbose_name="Total Bushing Mass[g]", null=True, blank=True)
+    # totalBushingMass = models.FloatField(verbose_name="Total Bushing Mass[g]", null=True, blank=True)
 
     project = models.ForeignKey(verbose_name="Project Name", to=Project, on_delete=models.CASCADE, to_field='id')
     part = models.ForeignKey(verbose_name="Part Name", to=Part, on_delete=models.CASCADE,  to_field='id')
@@ -507,6 +507,26 @@ class Bushing(models.Model):
 
     def __str__(self):
         return self.bushingName
+    
+    @property
+    def AccOnBushing(self):
+        return self.calculate_AccOnBushing()
+
+    @property
+    def totalBushingMass(self):
+        return self.calculate_totalBushingMass()
+
+    def calculate_AccOnBushing(self):
+        if(Interface.objects.filter(part=self.part, interfaceName__startswith=self.bushingName + '.')):
+            interfaces = Interface.objects.filter(part=self.part, interfaceName__startswith=self.bushingName + '.')
+            total_acc_mass = sum(interface.accMass for interface in interfaces if interface.accMass is not None)
+            return round(total_acc_mass, 2)
+        return 0.0
+    
+    def calculate_totalBushingMass(self):
+        acc_on_bushing = self.AccOnBushing
+        total_mass = acc_on_bushing + (self.bushingMass if self.bushingMass else 0)
+        return round(total_mass, 2)
 
 
 class Interface(models.Model):
@@ -526,7 +546,7 @@ class Interface(models.Model):
     finODiam = models.FloatField(verbose_name="Fin. O. Diam.[mm]", null=True, blank=True)
     finAccSection = models.FloatField(verbose_name="Fin. Acc. Section[mm²]", null=True, blank=True)
 
-    safetyFactor = models.IntegerField(verbose_name="Safety Factor[%]", null=True, blank=True)
+    # safetyFactor = models.IntegerField(verbose_name="Safety Factor[%]", null=True, blank=True)
 
     interfaceCenterX = models.FloatField(verbose_name="Interface Center X", null=True, blank=True)
     interfaceCenterY = models.FloatField(verbose_name="Interface Center Y", null=True, blank=True)
@@ -565,10 +585,27 @@ class Interface(models.Model):
     @property
     def accMass(self):
         return self.calculate_accMass()
+    
+    @property
+    def totalSectionShow(self):
+        return round(self.totalSection,2)
+
+    @property
+    def extDiameterShow(self):
+        return round(self.extDiameter,2)
+
+    @property
+    def accMassShow(self):
+        return round(self.accMass,2)
+    
+    @property
+    def safetyFactor(self):
+        return self.calculate_safetyFactor()
 
     def calculate_totalLink(self):
         return Link.objects.filter(models.Q(interface1=self) | models.Q(interface2=self)).count()
 
+    
     def calculate_totalArm(self):
         tot_arm = 0
         links = Link.objects.filter(models.Q(interface1=self) | models.Q(interface2=self))
@@ -607,13 +644,13 @@ class Interface(models.Model):
                         tot_sec_acc = tot_sec_acc + link_final_section * ratio 
                         tot_sec_lnk = tot_sec_lnk + link_final_section
         total_sec = tot_sec_acc + tot_sec_lnk
-        return round(total_sec,2)
+        return total_sec
 
     def calculate_extDiameter(self):
         if self.height and self.intDiameter and self.height != 0:
             total_sec = self.totalSection
             ext_diam = self.intDiameter + 2 * total_sec / self.height
-            return round(ext_diam, 2)
+            return ext_diam
         return 0.0
 
     def calculate_accMass(self):
@@ -633,15 +670,28 @@ class Interface(models.Model):
 
         if self.height and self.intDiameter and self.height != 0 and self.part.fiberSectionAcc and self.part.fiberSectionCalc:
             total_sec = self.totalSection
+            
             if total_sec!=0 and self.part.windingDensity :
                 diam_acc_max = self.intDiameter + 2 * total_sec / self.height
                 diam_acc_min = self.intDiameter + 2 * total_sec_acc / self.height
                 diam_acc_mass_max = self.intDiameter + 2 * (total_sec / self.part.fiberSectionAcc * ((self.part.fiberSectionAcc+self.part.fiberSectionCalc) / 2)) / self.height
+                # print(diam_acc_mass_max)
                 diam_acc_mass_min = self.intDiameter + 2 * (total_sec_acc / self.part.fiberSectionAcc * ((self.part.fiberSectionAcc+self.part.fiberSectionCalc) / 2 ))/ self.height 
-                acc_mass = ((diam_acc_mass_max ** 2) / 8 - (diam_acc_mass_min ** 2) / 8 - (self.intDiameter ** 2)/4) * math.pi * self.height * self.part.windingDensity / 1000000
-                return round(acc_mass, 2)
+                # print(diam_acc_mass_min)
+                acc_mass = ((diam_acc_mass_max ** 2) / 8 + (diam_acc_mass_min ** 2) / 8 - (self.intDiameter ** 2)/4) * math.pi * self.height * self.part.windingDensity / 1000000
+                return acc_mass
         return 0.0
 
+    def calculate_safetyFactor(self):
+        if self.finODiam:
+            if self.intDiameter and self.extDiameter:
+                return str(round((self.finODiam - self.intDiameter) / (self.extDiameter - self.intDiameter)*100))+"%"
+        elif self.finAccSection:
+            if self.totalSection:
+                return str(round(self.finAccSection / self.totalSection))+"%"
+        else:
+            return "0%"
+    
 class Link(models.Model):
     """ InterfaceTable """
     ########   2   ########
@@ -692,6 +742,26 @@ class Link(models.Model):
     @property
     def mass(self):
         return self.calculate_mass()
+    
+    @property
+    def lengthShow(self):
+        return round(self.length,2)
+
+    @property
+    def finArmSectionShow(self):
+        return round(self.finArmSection,2)
+
+    @property
+    def finArmDiamShow(self):
+        return round(self.finArmDiam,2)
+
+    @property
+    def finArmRadiusShow(self):
+        return round(self.finArmRadius,6)
+
+    @property
+    def massShow(self):
+        return round(self.mass,2)
 
     def calculate_length(self):
         if self.interface1 and self.interface2:
@@ -700,31 +770,36 @@ class Link(models.Model):
                 (self.interface2.interfaceCenterY - self.interface1.interfaceCenterY) ** 2 +
                 (self.interface2.interfaceCenterZ - self.interface1.interfaceCenterZ) ** 2
             )
-            return round(length,2)
+            return length
         return 0.0
 
     def calculate_finArmSection(self):
         if self.part.fiberSectionCalc and self.cycle:
             finArmSection = self.part.fiberSectionCalc * self.cycle
-            return round(finArmSection,2)
+            return finArmSection
         return 0.0
     
     def calculate_finArmDiam(self):
         if self.finArmSection:
             finArmDiam = math.sqrt(self.finArmSection * 4 / math.pi)
-            return round(finArmDiam,2)
+            return finArmDiam
         return 0.0
     
     def calculate_finArmRadius(self):
         if self.finArmDiam:
             finArmRadius = self.finArmDiam / 2 /1000
-            return round(finArmRadius, 6)
+            return finArmRadius
         return 0.0
     
     def calculate_mass(self):
+        mass = 0
         if self.length and self.finArmSection and self.part.windingDensity:
-            mass = float(self.length) * float(self.finArmSection) * float(self.part.windingDensity)/1000000
-            return round(mass,2)
+            if self.sequence == "A":
+                mass = float(self.length) * float(self.finArmSection) * float(self.part.fiberDensity)/1000000
+            else:
+                mass = float(self.length) * float(self.finArmSection) * float(self.part.fiberDensity)/1000000 * 2 
+                
+            return mass
         return 0.0
                                      
 class SequenceType(models.Model):

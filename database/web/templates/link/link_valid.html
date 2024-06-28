@@ -58,7 +58,7 @@
                 <td>{{ row.linkName }}</td>
                 <td>{{ row.interface1 }}</td>
                 <td>{{ row.interface2 }}</td>
-                <td>{{ row.length|default_if_none:"" }}</td>
+                <td>{{ row.lengthShow|default_if_none:"" }}</td>
                 <td>{{ row.sequence|default_if_none:"" }}</td>
                 <td>{{ row.ratio|default_if_none:"" }}</td>
                 <!-- <td>{{ row.linkType|default_if_none:"" }}</td> -->
@@ -66,10 +66,10 @@
                 <td>{{ row.armSection|default_if_none:"" }}</td>
                 <td>{{ row.cycle|default_if_none:"" }}</td>
                 
-                <td>{{ row.finArmSection|default_if_none:"" }}</td>
-                <td>{{ row.finArmDiam|default_if_none:"" }}</td>
-                <td>{{ row.finArmRadius|default_if_none:"" }}</td>
-                <td>{{ row.mass|default_if_none:"" }}</td>
+                <td>{{ row.finArmSectionShow|default_if_none:"" }}</td>
+                <td>{{ row.finArmDiamShow|default_if_none:"" }}</td>
+                <td>{{ row.finArmRadiusShow|default_if_none:"" }}</td>
+                <td>{{ row.massShow|default_if_none:"" }}</td>
                 <td>{{ row.angle|default_if_none:"" }}</td>
                
             </tr>

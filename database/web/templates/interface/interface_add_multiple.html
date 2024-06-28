@@ -60,6 +60,9 @@
                         <div class="col-sm-11" style="position: relative">
                             <select id="id_part" name="part" class="form-control">
                                 <option value=""> - - - - Please select one - - - - </option>
+                                {% for part in parts %}
+                                    <option value="{{ part.id }}">{{ part.partName }}</option>
+                                {% endfor %}
                                 <!-- Options will be loaded dynamically -->
                             </select>
                             <span style="color: red;">{{ project_part_form.part.errors.0 }}</span>
@@ -73,14 +76,14 @@
                             <th>Interface Name</th>
                             <th>Height [mm]</th>
                             <th>Int. Diameter [mm]</th>
-                            <th>Total Link</th>
+                            {% comment %} <th>Total Link</th>
                             <th>Total Arm</th>
                             <th>Total Section [mm²]</th>
                             <th>Ext. Diameter [mm]</th>
-                            <th>Acc. Mass [g]</th>
+                            <th>Acc. Mass [g]</th> {% endcomment %}
                             <th>Fin. O. Diam. [mm]</th>
                             <th>Fin. Acc. section [mm²]</th>
-                            <th>Safety Factor [%]</th>
+                            {% comment %} <th>Safety Factor [%]</th> {% endcomment %}
                             <th>Interface's center X [mm]</th>
                             <th>Interface's center Y [mm]</th>
                             <th>Interface's center Z [mm]</th>
@@ -102,16 +105,16 @@
 
                             <td contenteditable="true">{{ field.height }}</td>
                             <td contenteditable="true">{{ field.intDiameter }}</td>
-                            <td contenteditable="true">{{ field.totalLink }}</td>
+                            {% comment %} <td contenteditable="true">{{ field.totalLink }}</td>
                             <td contenteditable="true">{{ field.totalArm }}</td>
 
                             <td contenteditable="true">{{ field.totalSection }}</td>
                             <td contenteditable="true">{{ field.extDiameter }}</td>
-                            <td contenteditable="true">{{ field.accMass }}</td>
+                            <td contenteditable="true">{{ field.accMass }}</td> {% endcomment %}
                             <td contenteditable="true">{{ field.finODiam }}</td>
 
                             <td contenteditable="true">{{ field.finAccSection }}</td>
-                            <td contenteditable="true">{{ field.safetyFactor }}</td>
+                            {% comment %} <td contenteditable="true">{{ field.safetyFactor }}</td> {% endcomment %}
                             <td contenteditable="true">{{ field.interfaceCenterX }}</td>
                             <td contenteditable="true">{{ field.interfaceCenterY }}</td>
 
@@ -246,7 +249,7 @@
                         return;
                     }
                     $('#id_project').val(data.interface_data.project_id);
-                    loadParts(data.interface_data.project_id);
+                    $('#id_part').val(data.interface_data.part_id);
                     // Populate form fields with returned data
                     for(var i=0; i<data.numberInterface; i++) {
                         var $row = $('#interface-table tbody tr').last();
@@ -271,17 +274,11 @@
                             $row.find('td').eq(0).find('input').val(data.interfaceName[i]); 
                             $row.find('td').eq(1).find('input').val(data.height[i]);
                             $row.find('td').eq(2).find('input').val(data.intDiameter[i]);
-                            $row.find('td').eq(3).find('input').val(data.totalLink[i]);
-                            $row.find('td').eq(4).find('input').val(data.totalArm[i]);
-                            $row.find('td').eq(5).find('input').val(data.totalSection[i]);
-                            $row.find('td').eq(6).find('input').val(data.extDiameter[i]); 
-                            $row.find('td').eq(7).find('input').val(data.accMass[i]);
-                            $row.find('td').eq(8).find('input').val(data.finODiam[i]);
-                            $row.find('td').eq(9).find('input').val(data.finAccSection[i]);
-                            $row.find('td').eq(10).find('input').val(data.safetyFactor[i]);
-                            $row.find('td').eq(11).find('input').val(data.interfaceCenterX[i]);
-                            $row.find('td').eq(12).find('input').val(data.interfaceCenterY[i]); 
-                            $row.find('td').eq(13).find('input').val(data.interfaceCenterZ[i]);
+                            $row.find('td').eq(3).find('input').val(data.finODiam[i]);
+                            $row.find('td').eq(4).find('input').val(data.finAccSection[i]);
+                            $row.find('td').eq(5).find('input').val(data.interfaceCenterX[i]);
+                            $row.find('td').eq(6).find('input').val(data.interfaceCenterY[i]); 
+                            $row.find('td').eq(7).find('input').val(data.interfaceCenterZ[i]);
                             // $row.find('td').eq(14).find('input').val(data.bushing_data_draw[i]);
                         } else {
                             $('#add-interface').click();
@@ -289,17 +286,11 @@
                             $row.find('td').eq(0).find('input').val(data.interfaceName[i]); 
                             $row.find('td').eq(1).find('input').val(data.height[i]);
                             $row.find('td').eq(2).find('input').val(data.intDiameter[i]);
-                            $row.find('td').eq(3).find('input').val(data.totalLink[i]);
-                            $row.find('td').eq(4).find('input').val(data.totalArm[i]);
-                            $row.find('td').eq(5).find('input').val(data.totalSection[i]);
-                            $row.find('td').eq(6).find('input').val(data.extDiameter[i]); 
-                            $row.find('td').eq(7).find('input').val(data.accMass[i]);
-                            $row.find('td').eq(8).find('input').val(data.finODiam[i]);
-                            $row.find('td').eq(9).find('input').val(data.finAccSection[i]);
-                            $row.find('td').eq(10).find('input').val(data.safetyFactor[i]);
-                            $row.find('td').eq(11).find('input').val(data.interfaceCenterX[i]);
-                            $row.find('td').eq(12).find('input').val(data.interfaceCenterY[i]); 
-                            $row.find('td').eq(13).find('input').val(data.interfaceCenterZ[i]);
+                            $row.find('td').eq(3).find('input').val(data.finODiam[i]);
+                            $row.find('td').eq(4).find('input').val(data.finAccSection[i]);
+                            $row.find('td').eq(5).find('input').val(data.interfaceCenterX[i]);
+                            $row.find('td').eq(6).find('input').val(data.interfaceCenterY[i]); 
+                            $row.find('td').eq(7).find('input').val(data.interfaceCenterZ[i]);
                             // $row.find('td').eq(14).find('input').val(data.bushing_data_draw[i]);
                         }
 
