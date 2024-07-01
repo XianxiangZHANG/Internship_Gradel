@@ -29,7 +29,7 @@ urlpatterns = [
     path('login/', account.login),
     path('logout/', account.logout),
     path('img/code/', account.img_code),
-    path('home/', account.home),
+    path('home/', account.home, name='home'),
     # path('home/', log.log_list),
     path('upload/', account.upload),
     path('check/', account.check),

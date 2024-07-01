@@ -42,6 +42,7 @@
             <tbody>
                 {% for field in formset %}
                 <tr class="bushing-form">
+                    {{ field.id }}
                     <td contenteditable="true">{{ field.bushingName }}
                         {% if field.numberInterface.value or field.bushingDrawNb.value or field.AccOnBushing.value or field.bushingMass.value or field.totalBushingMass.value %}
                         {% if not field.bushingName.value %}
@@ -108,7 +109,7 @@
 <script>
 $(document).ready(function() {
     $('#resetButton').click(function() {
-        window.location.href = window.location.pathname; // 重定向到相同页面但无查询参数
+        window.location.href = window.location.pathname; 
     });
 
     let DELETE_ID = 0;

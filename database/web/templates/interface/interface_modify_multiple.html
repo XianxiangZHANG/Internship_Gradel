@@ -52,6 +52,7 @@
                 <tr class="interface-form">
                     
                     <tr class="interface-form">
+                        {{ field.id }}
                         <td contenteditable="true">{{ field.interfaceName }}
                             {% if field.height.value or field.intDiameter.value or field.totalLink.value or field.totalArm.value or field.totalSection.value or field.extDiameter.value or field.accMass.value or field.finODiam.value or field.finAccSection.value or field.safetyFactor.value or field.interfaceCenterX.value or field.interfaceCenterY.value or field.interfaceCenterZ.value or field.directionVectorX.value or field.directionVectorY.value or field.directionVectorZ.value or field.divisionStep.value %}
                             {% if not field.interfaceName.value %}

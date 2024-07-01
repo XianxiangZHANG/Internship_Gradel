@@ -30,8 +30,7 @@
         <thead>
         <tr>
             <th>ID</th>
-            <th>Project Name</th>
-            <th>Part Name</th>
+            <th style="width:400px;">Part Name</th>
             
             <th>.gh</th>
             <th>.mod</th>
@@ -40,7 +39,7 @@
             <th>.log</th>
             <th>.mp4</th>
             <th>.jpg</th>
-            <th>Operations</th>
+            <th style="width:100px;">Operations</th>
 
 
         </tr>
@@ -50,7 +49,6 @@
             {% if row.valid %} 
             <tr style="background-color: #67fa6770;">
                 <td>{{ row.id }}</td>
-                <td>{{ row.project.projectName }}</td>
                 <td>{{ row.partName }}</td>
                 <td>{{ row.part_gh|default_if_none:"" }}</td>
                 <td>{{ row.part_mod|default_if_none:"" }}</td>
@@ -67,7 +65,6 @@
             {% else %}
             <tr>
                 <td>{{ row.id }}</td>
-                <td>{{ row.project.projectName }}</td>
                 <td>{{ row.partName }}</td>
                 <td>{{ row.part_gh|default_if_none:"" }}</td>
                 <td>{{ row.part_mod|default_if_none:"" }}</td>

@@ -21,16 +21,16 @@ class User(models.Model):
         return self.username
 
 class Log(models.Model):
-    user = models.ForeignKey(to=User, on_delete=models.CASCADE, to_field='id')
-    action = models.CharField(max_length=30)
-    model = models.CharField(max_length=30)
-    object_id = models.CharField(max_length=50)
-    timestamp = models.DateTimeField(max_length=50)
+    user = models.ForeignKey(verbose_name="Username:",to=User, on_delete=models.CASCADE, to_field='id')
+    action = models.CharField(verbose_name="Action:",max_length=30)
+    model = models.CharField(verbose_name="Table:",max_length=30)
+    object_id = models.CharField(verbose_name="Object ID:",max_length=50)
+    timestamp = models.DateTimeField(verbose_name="Timestamp: (From - To)",max_length=50)
     # timestamp = models.CharField(max_length=50)
-    changes = models.TextField(null=True, blank=True)
+    changes = models.TextField(verbose_name="Changes:",null=True, blank=True)
 
     def __str__(self):
-        return f"{self.user} {self.action} {self.model} {self.object_id} on {self.timestamp}"
+        return f"{self.user.username} {self.action} {self.model} {self.object_id} on {self.timestamp}"
 
 
 
@@ -105,13 +105,13 @@ class Fiber(models.Model):
 
 class R_and_D(models.Model):
     """ R&D Table """
-    program = models.CharField(verbose_name="Program ", max_length=30)
-    projectNr = models.CharField(verbose_name="Project Nr. ", max_length=30)
+    program = models.CharField(verbose_name="Program ", max_length=50)
+    projectNr = models.CharField(verbose_name="Project Nr. ", max_length=50)
 
-    ERMDS = models.CharField(verbose_name="ERMDS Nr. ", max_length=30)
-    lastUpdate = models.CharField(verbose_name="Last update ", max_length=30, null=True, blank=True)
-    verifiedBy = models.CharField(verbose_name="Verified by", max_length=30, null=True, blank=True)
-    approvedBy = models.CharField(verbose_name="Approved by ", max_length=30, null=True, blank=True)
+    ERMDS = models.CharField(verbose_name="ERMDS Nr. ", max_length=50)
+    lastUpdate = models.CharField(verbose_name="Last update ", max_length=50, null=True, blank=True)
+    verifiedBy = models.CharField(verbose_name="Verified by", max_length=50, null=True, blank=True)
+    approvedBy = models.CharField(verbose_name="Approved by ", max_length=50, null=True, blank=True)
 
     fiber = models.ForeignKey(verbose_name="Fiber", to=Fiber, on_delete=models.CASCADE, to_field='id')
     numberOfBobbins = models.IntegerField(verbose_name="Number of bobbins", null=True, blank=True)
@@ -592,7 +592,10 @@ class Interface(models.Model):
 
     @property
     def extDiameterShow(self):
-        return round(self.extDiameter,2)
+        if isinstance(self.extDiameter, (int, float)):
+            return round(self.extDiameter, 2)
+        return "--"
+        
 
     @property
     def accMassShow(self):
@@ -601,6 +604,7 @@ class Interface(models.Model):
     @property
     def safetyFactor(self):
         return self.calculate_safetyFactor()
+
 
     def calculate_totalLink(self):
         return Link.objects.filter(models.Q(interface1=self) | models.Q(interface2=self)).count()
@@ -648,10 +652,10 @@ class Interface(models.Model):
 
     def calculate_extDiameter(self):
         if self.height and self.intDiameter and self.height != 0:
-            total_sec = self.totalSection
-            ext_diam = self.intDiameter + 2 * total_sec / self.height
-            return ext_diam
-        return 0.0
+            if self.totalSection!=0:
+                ext_diam = self.intDiameter + 2 * self.totalSection / self.height
+                return ext_diam
+        return "--"
 
     def calculate_accMass(self):
         total_sec_acc = 0
@@ -684,13 +688,12 @@ class Interface(models.Model):
 
     def calculate_safetyFactor(self):
         if self.finODiam:
-            if self.intDiameter and self.extDiameter:
+            if self.intDiameter and isinstance(self.extDiameter, (int, float)):
                 return str(round((self.finODiam - self.intDiameter) / (self.extDiameter - self.intDiameter)*100))+"%"
         elif self.finAccSection:
             if self.totalSection:
                 return str(round(self.finAccSection / self.totalSection))+"%"
-        else:
-            return "0%"
+        return "--"
     
 class Link(models.Model):
     """ InterfaceTable """
@@ -806,7 +809,7 @@ class SequenceType(models.Model):
     """ SequenceTypeTable """
     ########   3   ########
     sequenceType = models.CharField(verbose_name="Sequence Type", max_length=30, unique= True)
-    description = models.TextField(verbose_name="Description", null=True, blank=True)
+    description = models.CharField(verbose_name="Description", max_length=1023, null=True, blank=True)
     valid = models.BooleanField(verbose_name="Validation", default=False)
 
     def __str__(self):

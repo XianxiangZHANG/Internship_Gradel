@@ -106,13 +106,14 @@ DATABASES = {
 # DATABASES = {
 #     'default': {
 #         'ENGINE': 'mssql',
-#         'NAME': 'master',
-#         'USER': 'SA',
+#         'NAME': 'TestDB',
+#         'USER': 'sa',
 #         'PASSWORD': '123456789',
 #         'HOST': 'LAP001',
-#         'PORT': '',
+#         'PORT': '1433',
 #         'OPTIONS': {
-#             'driver': 'ODBC Driver 17 for SQL Server',  
+#             'driver': 'ODBC Driver 17 for SQL Server',
+#             'extra _params': "TrustServerCertificate=yes;'
 #         },
 #     }
 # }

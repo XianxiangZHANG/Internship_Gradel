@@ -76,9 +76,6 @@
         $(document).on('click', '.remove-form', function() {
             var $row = $(this).closest('tr');
             if ($row.index() === 0) {
-                // console.log("me")
-                // console.log($row.index())
-                // Clear the content of the first row
                 $row.find('input').val('');
             } else {
                 console.log($row.index())

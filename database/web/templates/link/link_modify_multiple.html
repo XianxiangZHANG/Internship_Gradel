@@ -54,14 +54,15 @@
             <tbody>
                 {% for field in formset %}
                 <tr class="link-form">
+                    {{ field.id }}
                     <td contenteditable="true">{{ field.linkName }}
                         {% if field.interface1.value or field.interface2.value or field.length.value or field.sequence.value or field.armDiam.value or field.armSection.value or field.cycle.value or field.finArmSection.value or field.finArmDiam.value or field.finArmRadius.value or field..value or field.mass.value or field.angle.value %}
                         {% if not field.linkName.value %}
                             <span style="color: red;">{{ linkError }}</span>
                         {% endif %}{% endif %}</td>
 
-                    <td>{{ field.interface1 }} </td>
-                    <td>{{ field.interface2 }} </td>
+                    <td>{{ field.interface1 }}<span style="color: red;">{{ field.interface1.errors.0 }}</span></td>
+                    <td>{{ field.interface2 }}<span style="color: red;">{{ field.interface2.errors.0 }}</span></td>
                     {% comment %} <td contenteditable="true">{{ field.length }}</td> {% endcomment %}
                     <td contenteditable="true">{{ field.sequence }}</td>
                     <td contenteditable="true">{{ field.ratio }}</td>

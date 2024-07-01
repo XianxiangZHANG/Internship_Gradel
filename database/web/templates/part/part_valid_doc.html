@@ -34,24 +34,8 @@
         <thead>
         <tr>
             <th>ID</th>
-            <th>Project Name</th>
-            <th>Part Name</th>
-            <!-- <th>Default Interface Height</th>
-            <th>Default Interface Int Diam</th>
-            <th>Default Link Type</th>
-            <th>Default Link Defined</th>
-            <th>Number Link</th>
-            <th>Number Bushing</th>
-            <th>Total Mass Link</th>
-            <th>Total Mass Accumulation</th>
-            <th>Total Mass Winding</th>
-            <th>Total Mass Bushing</th>
-            <th>Additional Mass</th>
-            <th>Total Mass Structure</th>
-            <th>Total Fiber Length</th>
-            <th>Total Fiber Mass</th>
-            <th>Total Resin Mass</th>
-            <th>Project Image</th> -->
+            <th style="width:500px;">Part Name</th>
+            
             <th>.gh</th>
             <th>.mod</th>
             <th>.csv</th>
@@ -59,7 +43,6 @@
             <th>.log</th>
             <th>.mp4</th>
             <th>.jpg</th>
-            <!-- <th>Operations</th> -->
 
 
         </tr>
@@ -69,25 +52,7 @@
             
             <tr>
                 <td>{{ row.id }}</td>
-                <td>{{ row.project.projectName }}</td>
                 <td>{{ row.partName }}</td>
-                <!-- <td>{{ row.defaultInterfaceHeight|default_if_none:"" }}</td>
-                <td>{{ row.defaultInterfaceIntDiam|default_if_none:"" }}</td>
-                <td>{{ row.defaultLinkType|default_if_none:"" }}</td>
-                <td>{{ row.defaultLinkDefined|default_if_none:"" }}</td>
-                <td>{{ row.numberLink|default_if_none:"" }}</td>
-                <td>{{ row.numberBushing|default_if_none:"" }}</td>
-                <td>{{ row.totalMassLink|default_if_none:"" }}</td>
-                <td>{{ row.totalMassAccumulation|default_if_none:"" }}</td>
-                <td>{{ row.totalMassWinding|default_if_none:"" }}</td>
-                <td>{{ row.totalMassBushing|default_if_none:"" }}</td>
-                <td>{{ row.additionalMass|default_if_none:"" }}</td>
-                <td>{{ row.totalMassStructure|default_if_none:"" }}</td>
-                <td>{{ row.totalFiberLength|default_if_none:"" }}</td>
-                <td>{{ row.totalFiberMass|default_if_none:"" }}</td>
-                <td>{{ row.totalResinMass|default_if_none:"" }}</td>
-                <td><img src="{{ project.projectImage.url }}" alt="Project Image"></td>
-                <td>{{ row.projectImage|default_if_none:"" }}</td> -->
                 <td>{{ row.part_gh|default_if_none:"" }}</td>
                 <td>{{ row.part_mod|default_if_none:"" }}</td>
                 <td>{{ row.part_csv|default_if_none:"" }}</td>
@@ -111,8 +76,6 @@
 
 {% block js %}
     <script>
-       
-
         $('#resetButton').click(function() {
         window.location.href = window.location.pathname; 
         });

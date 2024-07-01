@@ -126,7 +126,9 @@ def bushing_modify_multiple(request):
     BushingFormSet = modelformset_factory(models.Bushing, form=BushingModelForm, extra=0)
     
     if request.method == 'POST':
+        print("post")
         formset = BushingFormSet(request.POST)
+        print(formset)
         if formset.is_valid():
             instances = formset.save(commit=False)
             

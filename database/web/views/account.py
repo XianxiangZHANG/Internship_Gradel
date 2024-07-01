@@ -3,7 +3,7 @@ from django.core.paginator import Paginator
 from django import forms
 from django.shortcuts import render, HttpResponse, redirect
 from django.core.exceptions import ValidationError
-
+import django_filters
 
 from web import models
 from utils.encrypt import md5
@@ -131,26 +131,46 @@ def logout(request):
     request.session.clear()
     return redirect('login/')
 
+class LogFilter(django_filters.FilterSet):
+    user = django_filters.ModelChoiceFilter(queryset=models.Log.objects.values_list('user', flat=True).distinct())
+    action = django_filters.ChoiceFilter(choices=[(action, action) for action in models.Log.objects.values_list('action', flat=True).distinct()])
+    model = django_filters.ChoiceFilter(choices=[(model, model) for model in models.Log.objects.values_list('model', flat=True).distinct()])
+    object_id = django_filters.CharFilter(field_name='object_id', lookup_expr='exact')
+    timestamp = django_filters.DateFromToRangeFilter()
+    
+    class Meta:
+        model = models.Log
+        fields = ['user', 'action', 'model', 'object_id', 'timestamp']
 
 def home(request):
-    logs = models.Log.objects.all().order_by('-timestamp')
-    paginator = Paginator(logs, 20)  # Display 20 logs per page
-    page_number = request.GET.get('page')
+    log_filter = LogFilter(request.GET, queryset=models.Log.objects.all().order_by('-timestamp'))
+    paginator = Paginator(log_filter.qs, 20)  # Display 20 logs per page
+    page_number = request.GET.get('page')   
     page_obj = paginator.get_page(page_number)
-    return render(request, 'account/home.html', {'page_obj': page_obj})
+    
+    return render(request, 'account/home.html', {'page_obj': page_obj, 'filter': log_filter})
 
     # print(request.info_dict)
     # request.info_dict['name']
     # return render(request, 'account/home.html')
 
+class LogFilterUser(django_filters.FilterSet):
+    action = django_filters.ChoiceFilter(choices=[(action, action) for action in models.Log.objects.values_list('action', flat=True).distinct()])
+    model = django_filters.ChoiceFilter(choices=[(model, model) for model in models.Log.objects.values_list('model', flat=True).distinct()])
+    object_id = django_filters.CharFilter(field_name='object_id', lookup_expr='exact')
+    timestamp = django_filters.DateFromToRangeFilter()
+    
+    class Meta:
+        model = models.Log
+        fields = ['timestamp', 'action', 'model', 'object_id', ]
 
 def user_log(request):
     user = models.User.objects.filter(id=request.info_dict['id']).first()
-    user_logs = models.Log.objects.filter(user=user).order_by('-timestamp')
-    paginator = Paginator(user_logs, 10)  # Display 10 logs per page
+    user_logs = LogFilterUser(request.GET, queryset=models.Log.objects.filter(user=user).order_by('-timestamp')) 
+    paginator = Paginator(user_logs.qs, 10)  # Display 10 logs per page
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
-    return render(request, 'account/log.html', {'page_obj': page_obj})
+    return render(request, 'account/log.html', {'page_obj': page_obj, 'filter': user_logs})
 
 class UserForm(forms.ModelForm):
     class Meta:

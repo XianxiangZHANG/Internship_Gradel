@@ -2,8 +2,12 @@
 
 {% block content %}
 <div id="cont">
-    <h2>Welcome to the Database of Gradel Light Weight, {{ request.info_dict.name }}.</h3>
     <h4>Log Messages:</h4>
+    <form method="get" id="filterForm">
+        {{ filter.form.as_p }}
+        <button type="submit" id="btnf1">Filter</button>
+        <button type="reset" id="resetButton" class="btnf2">Reset</button>
+    </form>
     <div id="log">
        
         <table class="table table-bordered" id="normalTable">
@@ -36,24 +40,24 @@
         <div>
             <ul class="pagination">
                 {% if page_obj.has_previous %}
-                    <li><a href="?page=1">&laquo; first</a></li>
-                    <li><a href="?page={{ page_obj.previous_page_number }}">previous</a></li>
+                    <li><a href="?page=1{% if request.GET %}&{{ request.GET.urlencode }}{% endif %}">&laquo; first</a></li>
+                    <li><a href="?page={{ page_obj.previous_page_number }}{% if request.GET %}&{{ request.GET.urlencode }}{% endif %}">previous</a></li>
                 {% else %}
                     <li class="disabled"><a>&laquo; first</a></li>
                     <li class="disabled"><a>previous</a></li>
                 {% endif %}
-    
+
                 {% for num in page_obj.paginator.page_range %}
                     {% if page_obj.number == num %}
                         <li class="active"><a>{{ num }}</a></li>
                     {% elif num > page_obj.number|add:'-5' and num < page_obj.number|add:'5' %}
-                        <li><a href="?page={{ num }}">{{ num }}</a></li>
+                        <li><a href="?page={{ num }}{% if request.GET %}&{{ request.GET.urlencode }}{% endif %}">{{ num }}</a></li>
                     {% endif %}
                 {% endfor %}
-    
+
                 {% if page_obj.has_next %}
-                    <li><a href="?page={{ page_obj.next_page_number }}">next</a></li>
-                    <li><a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a></li>
+                    <li><a href="?page={{ page_obj.next_page_number }}{% if request.GET %}&{{ request.GET.urlencode }}{% endif %}">next</a></li>
+                    <li><a href="?page={{ page_obj.paginator.num_pages }}{% if request.GET %}&{{ request.GET.urlencode }}{% endif %}">last &raquo;</a></li>
                 {% else %}
                     <li class="disabled"><a>next</a></li>
                     <li class="disabled"><a>last &raquo;</a></li>
@@ -113,6 +117,23 @@
     }
     .pagination .disabled a {
         color: #ccc;
+    }
+    #id_action, #id_model, #id_object_id, input[type="text"] {
+        width: 100%; 
+        padding: 8px; 
+        margin-top: 10px; 
+        display: inline-block;
+        border: 1px solid #ccc; 
+        border-radius: 4px; 
+        box-sizing: border-box; 
+    }
+    #id_timestamp, input[type="text"]{
+        width: 40%;
+        padding: 8px; 
+        display: inline-block;
+        border: 1px solid #ccc; 
+        border-radius: 4px; 
+        box-sizing: border-box; 
     }
 </style>
 {% endblock %}

@@ -103,8 +103,8 @@
                                     <span style="color: red;">{{ linkError }}</span>
                                 {% endif %}{% endif %}</td>
 
-                            <td>{{ field.interface1 }}</td>
-                            <td>{{ field.interface2 }}</td>
+                            <td>{{ field.interface1 }}<span style="color: red;">{{ field.interface1.errors.0 }}</span></td>
+                            <td>{{ field.interface2 }}<span style="color: red;">{{ field.interface2.errors.0 }}</span></td>
                             {% comment %} <td contenteditable="true">
                                 <select id="id_interface2" name="interface" class="form-control">
                                 <option value=""> </option>
