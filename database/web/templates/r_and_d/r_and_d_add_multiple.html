@@ -260,19 +260,28 @@
 {% block css %}
 <style>
     
-    #id_fiber, #id_resin, input[type="text"] {
+    #id_fiber, #id_resin, input[type="text"], textarea {
         width: 100%; 
         padding: 8px; 
         margin: 0px 0; 
+        height: 35px;
         display: inline-block;
         border: 1px solid #ccc; 
         border-radius: 4px; 
         box-sizing: border-box; 
     }
+    .form-control {
+        height: 35px; 
+        max-height: 35px; 
+        min-height: 35px; 
+    }
     #vc {
         font-size: large; 
         color: #000;
         text-align: center;
+    }
+    td {
+        background-color: #eeeeee; 
     }
 </style>
 {% endblock %}
