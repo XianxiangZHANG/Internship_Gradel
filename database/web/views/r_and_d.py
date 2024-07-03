@@ -35,9 +35,21 @@ class R_and_DFilterModify(django_filters.FilterSet):
 
 def r_and_d_list(request):
     """ list of r_and_d """
-
+    r_and_ds = None
     r_and_d_filter = R_and_DFilter(request.GET, queryset=models.R_and_D.objects.all())
-    return render(request, 'r_and_d/r_and_d_list.html', {'filter': r_and_d_filter})
+
+    message = "No R&D data to display. Please use the filter to load data."
+
+    if any(request.GET.values()):
+        r_and_ds = r_and_d_filter.qs
+        message = "No data found."
+    elif 'filter' in request.GET:
+        r_and_ds = r_and_d_filter.qs
+        message = "No data found."
+    
+    return render(request, 'r_and_d/r_and_d_list.html', {'filter': r_and_d_filter, 'r_and_ds': r_and_ds, 'message':message})
+
+
 
 
 class R_and_DFilterValid(django_filters.FilterSet):
@@ -53,9 +65,19 @@ class R_and_DFilterValid(django_filters.FilterSet):
 
 def r_and_d_valid(request):
     """ list of r_and_d """
-
+    r_and_ds = None
     r_and_d_filter = R_and_DFilterValid(request.GET, queryset=models.R_and_D.objects.filter(valid=True))
-    return render(request, 'r_and_d/r_and_d_valid.html', {'filter': r_and_d_filter})
+
+    message = "No R&D data to display. Please use the filter to load data."
+
+    if any(request.GET.values()):
+        r_and_ds = r_and_d_filter.qs
+        message = "No data found."
+    elif 'filter' in request.GET:
+        r_and_ds = r_and_d_filter.qs
+        message = "No data found."
+    
+    return render(request, 'r_and_d/r_and_d_valid.html', {'filter': r_and_d_filter, 'r_and_ds': r_and_ds, 'message':message})
 
 
 def r_and_d_input(request):
@@ -215,6 +237,9 @@ def r_and_d_modify_multiple(request):
     # Define form set
     R_and_DMultFormSet = modelformset_factory(models.R_and_D, form=R_and_DModelForm, extra=0)
     
+    formset = None
+    message = "No R&D data to display. Please use the filter to load data."
+
     if request.method == 'POST':
         # print("try")
         formset = R_and_DMultFormSet(request.POST)
@@ -236,8 +261,16 @@ def r_and_d_modify_multiple(request):
         
     else:
         # print("try else")
-        formset = R_and_DMultFormSet(queryset=r_and_d_filter.qs)
+        # formset = R_and_DMultFormSet(queryset=r_and_d_filter.qs)
         # fiber_resin_form = FiberResinForm()
+        if any(request.GET.values()):
+            formset = R_and_DMultFormSet(queryset=r_and_d_filter.qs)
+            if not r_and_d_filter.qs.exists():
+                message = "No data found."
+        elif 'filter' in request.GET:
+            formset = R_and_DMultFormSet(queryset=r_and_d_filter.qs)
+            if not r_and_d_filter.qs.exists():
+                message = "No data found."
 
     return render(request, 'r_and_d/r_and_d_modify_multiple.html', {
         'filter': r_and_d_filter,
@@ -245,6 +278,7 @@ def r_and_d_modify_multiple(request):
         # 'fiber_resin_from': fiber_resin_form,
         'fibers':fibers,
         'resins': resins,
+        'message': message,
     })
 
 

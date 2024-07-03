@@ -22,22 +22,53 @@ class ResinFilter(django_filters.FilterSet):
 
 def resin_list(request):
     """ list of resin """
-
+    resins = None
     resin_filter = ResinFilter(request.GET, queryset=models.Resin.objects.all())
-    return render(request, 'resin/resin_list.html', {'filter': resin_filter})
+
+    message = "No resin to display. Please use the filter to load data."
+
+    if any(request.GET.values()):
+        resins = resin_filter.qs
+        message = "No data found."
+    elif 'filter' in request.GET:
+        resins = resin_filter.qs
+        message = "No data found."
+    
+    return render(request, 'resin/resin_list.html', {'filter': resin_filter, 'resins': resins, 'message':message})
+
 
 def resin_list_mechanical_properties(request):
     """ list of resin """
-
+    resins = None
     resin_filter = ResinFilter(request.GET, queryset=models.Resin.objects.all())
-    return render(request, 'resin/resin_list_mechanical_properties.html', {'filter': resin_filter})
+
+    message = "No resin to display. Please use the filter to load data."
+
+    if any(request.GET.values()):
+        resins = resin_filter.qs
+        message = "No data found."
+    elif 'filter' in request.GET:
+        resins = resin_filter.qs
+        message = "No data found."
+    
+    return render(request, 'resin/resin_list_mechanical_properties.html', {'filter': resin_filter, 'resins': resins, 'message':message})
    
 
 def resin_list_thermophysical_toughness_properties(request):
     """ list of resin """
-
+    resins = None
     resin_filter = ResinFilter(request.GET, queryset=models.Resin.objects.all())
-    return render(request, 'resin/resin_list_thermophysical_toughness_properties.html', {'filter': resin_filter})
+
+    message = "No resin to display. Please use the filter to load data."
+
+    if any(request.GET.values()):
+        resins = resin_filter.qs
+        message = "No data found."
+    elif 'filter' in request.GET:
+        resins = resin_filter.qs
+        message = "No data found."
+    
+    return render(request, 'resin/resin_list_thermophysical_toughness_properties.html', {'filter': resin_filter, 'resins': resins, 'message':message})
   
 
 
@@ -54,21 +85,51 @@ class ResinFilterValid(django_filters.FilterSet):
 
 def resin_valid(request):
     """ list of resin """
-
+    resins = None
     resin_filter = ResinFilterValid(request.GET, queryset=models.Resin.objects.filter(valid=True))
-    return render(request, 'resin/resin_valid.html', {'filter': resin_filter})
+
+    message = "No resin to display. Please use the filter to load data."
+
+    if any(request.GET.values()):
+        resins = resin_filter.qs
+        message = "No data found."
+    elif 'filter' in request.GET:
+        resins = resin_filter.qs
+        message = "No data found."
+    
+    return render(request, 'resin/resin_valid.html', {'filter': resin_filter, 'resins': resins, 'message':message})
 
 def resin_valid_mechanical_properties(request):
     """ list of resin """
-
+    resins = None
     resin_filter = ResinFilterValid(request.GET, queryset=models.Resin.objects.filter(valid=True))
-    return render(request, 'resin/resin_valid_mechanical_properties.html', {'filter': resin_filter})
+
+    message = "No resin to display. Please use the filter to load data."
+
+    if any(request.GET.values()):
+        resins = resin_filter.qs
+        message = "No data found."
+    elif 'filter' in request.GET:
+        resins = resin_filter.qs
+        message = "No data found."
+    
+    return render(request, 'resin/resin_valid_mechanical_properties.html', {'filter': resin_filter, 'resins': resins, 'message':message})
 
 def resin_valid_thermophysical_toughness_properties(request):
     """ list of resin """
-
+    resins = None
     resin_filter = ResinFilterValid(request.GET, queryset=models.Resin.objects.filter(valid=True))
-    return render(request, 'resin/resin_valid_thermophysical_toughness_properties.html', {'filter': resin_filter})
+
+    message = "No resin to display. Please use the filter to load data."
+
+    if any(request.GET.values()):
+        resins = resin_filter.qs
+        message = "No data found."
+    elif 'filter' in request.GET:
+        resins = resin_filter.qs
+        message = "No data found."
+    
+    return render(request, 'resin/resin_valid_thermophysical_toughness_properties.html', {'filter': resin_filter, 'resins': resins, 'message':message})
 
 
 def resin_input(request):
@@ -249,6 +310,9 @@ def resin_modify_multiple(request):
     # Define form set
     ResinFormSet = modelformset_factory(models.Resin, form=ResinModelFormInit, extra=0)
     
+    formset = None
+    message = "No resin to display. Please use the filter to load data."
+
     if request.method == 'POST':
         formset = ResinFormSet(request.POST)
         if formset.is_valid():
@@ -260,11 +324,19 @@ def resin_modify_multiple(request):
                 instance.save()
             return redirect('/resin/list/')
     else:
-        formset = ResinFormSet(queryset=resin_filter.qs)
+        if any(request.GET.values()):
+            formset = ResinFormSet(queryset=resin_filter.qs)
+            if not resin_filter.qs.exists():
+                message = "This table is empty. You need to add the basic information of Resin first."
+        elif 'filter' in request.GET:
+            formset = ResinFormSet(queryset=resin_filter.qs)
+            if not resin_filter.qs.exists():
+                message = "This table is empty. You need to add the basic information of Resin first."
 
     return render(request, 'resin/resin_modify_multiple.html', {
         'filter': resin_filter,
         'formset': formset,
+        'message': message,
     })
 
 def resin_modify_mechanical_properties(request):
@@ -273,6 +345,9 @@ def resin_modify_mechanical_properties(request):
     
     # Define form set
     ResinFormSet = modelformset_factory(models.Resin, form=ResinModelFormM, extra=0)
+
+    formset = None
+    message = "No resin to display. Please use the filter to load data."
     
     if request.method == 'POST':
         # print("post")
@@ -288,11 +363,19 @@ def resin_modify_mechanical_properties(request):
                 instance.save()
             return redirect('/resin/list-mechanical-properties/')
     else:
-        formset = ResinFormSet(queryset=resin_filter.qs)
+        if any(request.GET.values()):
+            formset = ResinFormSet(queryset=resin_filter.qs)
+            if not resin_filter.qs.exists():
+                message = "This table is empty. You need to add the basic information of Resin first."
+        elif 'filter' in request.GET:
+            formset = ResinFormSet(queryset=resin_filter.qs)
+            if not resin_filter.qs.exists():
+                message = "This table is empty. You need to add the basic information of Resin first."
 
     return render(request, 'resin/resin_modify_mechanical_properties.html', {
         'filter': resin_filter,
         'formset': formset,
+        'message': message,
     })
   
 
@@ -302,6 +385,9 @@ def resin_modify_thermophysical_toughness_properties(request):
     
     # Define form set
     ResinFormSet = modelformset_factory(models.Resin, form=ResinModelFormTT, extra=0)
+
+    formset = None
+    message = "No resin to display. Please use the filter to load data."
     
     if request.method == 'POST':
         formset = ResinFormSet(request.POST)
@@ -315,11 +401,19 @@ def resin_modify_thermophysical_toughness_properties(request):
                 instance.save()
             return redirect('/resin/list-thermophysical-toughness-properties/')
     else:
-        formset = ResinFormSet(queryset=resin_filter.qs)
+        if any(request.GET.values()):
+            formset = ResinFormSet(queryset=resin_filter.qs)
+            if not resin_filter.qs.exists():
+                message = "This table is empty. You need to add the basic information of Resin first."
+        elif 'filter' in request.GET:
+            formset = ResinFormSet(queryset=resin_filter.qs)
+            if not resin_filter.qs.exists():
+                message = "This table is empty. You need to add the basic information of Resin first."
 
     return render(request, 'resin/resin_modify_thermophysical_toughness_properties.html', {
         'filter': resin_filter,
         'formset': formset,
+        'message': message,
     })
 
 def resin_add(request):

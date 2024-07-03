@@ -19,16 +19,37 @@ class WindingFilter(django_filters.FilterSet):
 
 def winding_list(request):
     """ list of winding """
-
+    windings = None
     winding_filter = WindingFilter(request.GET, queryset=models.Winding.objects.all())
-    return render(request, 'winding/winding_list.html', {'filter': winding_filter})
+
+    message = "No winding to display. Please use the filter to load data."
+
+    if any(request.GET.values()):
+        windings = winding_filter.qs
+        message = "No data found."
+    elif 'filter' in request.GET:
+        windings = winding_filter.qs
+        message = "No data found."
+    
+    return render(request, 'winding/winding_list.html', {'filter': winding_filter, 'windings': windings, 'message':message})
+
 
 def winding_valid(request):
     """ list of winding """
-
+    windings = None
     winding_filter = WindingFilter(request.GET, queryset=models.Winding.objects.filter(part__valid=True))
-    return render(request, 'winding/winding_valid.html', {'filter': winding_filter})
 
+    message = "No winding to display. Please use the filter to load data."
+
+    if any(request.GET.values()):
+        windings = winding_filter.qs
+        message = "No data found."
+    elif 'filter' in request.GET:
+        windings = winding_filter.qs
+        message = "No data found."
+    
+    return render(request, 'winding/winding_valid.html', {'filter': winding_filter, 'windings': windings, 'message':message})
+    
 def winding_input(request):
     """ list of winding """
 
@@ -103,6 +124,9 @@ def winding_modify_multiple(request):
     # Define form set
     WindingFormSet = modelformset_factory(models.Winding, form=WindingModelForm, extra=0)
     
+    formset = None
+    message = "No winding to display. Please use the filter to load data."
+
     if request.method == 'POST':
         formset = WindingFormSet(request.POST)
         if formset.is_valid():
@@ -113,12 +137,20 @@ def winding_modify_multiple(request):
                 instance.save()
             return redirect('/winding/list/')
     else:
-        formset = WindingFormSet(queryset=winding_filter.qs)
+        if any(request.GET.values()):
+            formset = WindingFormSet(queryset=winding_filter.qs)
+            if not winding_filter.qs.exists():
+                message = "No data found."
+        elif 'filter' in request.GET:
+            formset = WindingFormSet(queryset=winding_filter.qs)
+            if not winding_filter.qs.exists():
+                message = "No data found."
 
     return render(request, 'winding/winding_modify_multiple.html', {
         'filter': winding_filter,
         'formset': formset,
         'linkError': "Link name is Required",
+        'message': message,
     })
 
 def winding_add(request):

@@ -17,13 +17,18 @@ from django.contrib import admin
 from django.urls import path
 from django.conf import settings
 from django.conf.urls.static import static
-from web.views import account, project, part, bushing, interface, link, winding, user, department, fiber, resin, r_and_d, sequenceType
+from web.views import account, project, part, bushing, interface, link, winding, user, department, fiber, resin, r_and_d, sequenceType,docs
 from web.views.load_parts import load_parts, load_interfaces, load_links
 from web.views.load_fiber_resin import get_fiber_data, get_resin_data
-
-
+from django.urls import path, re_path
+from django.views.generic import TemplateView
+from django.views.static import serve
 
 urlpatterns = [
+    path('static/docs/', docs.documentation, name='documentation'),
+    re_path(r'^docs/(?P<path>.*)$', serve, {'document_root': settings.STATICFILES_DIRS[0] + '/docs'}),
+    
+
     path('', account.home),
     # path('accounts/login/', account.loginA),
     path('login/', account.login),
@@ -159,6 +164,9 @@ urlpatterns = [
     path('sequenceType/modify-multiple/', sequenceType.sequenceType_modify_multiple),
     path('sequenceType/pdf/', sequenceType.download_sequenceTypes_pdf, name='download_sequenceTypes_pdf'),
 
+    
+
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

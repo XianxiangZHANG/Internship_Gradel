@@ -22,7 +22,7 @@
         </details>
         <form method="get" id="filterForm">
             {{ filter.form.as_p }}
-            <button type="submit" id="btnf1">Filter</button>
+            <button type="submit" id="btnf1" name="filter">Filter</button>
             <button type="reset" id="resetButton" class="btnf2">Reset</button>
             <a id="download" href="{% url 'download_projects_pdf' %}?{{ request.GET.urlencode }}">Download PDF</a>
             <a class="btn btn-success" href="/part/valid/" id="btnmore">
@@ -30,7 +30,8 @@
             </a>
         </form>
         <!-- <table id="transposedTable"></table> -->
-    <table class="table table-bordered" id="normalTable" >
+        {% if parts %}
+        <table class="table table-bordered" id="normalTable" >
         <thead>
         <tr>
             <th>ID</th>
@@ -48,7 +49,7 @@
         </tr>
         </thead>
         <tbody>
-        {% for row in filter.qs %}
+        {% for row in parts %}
             
             <tr>
                 <td>{{ row.id }}</td>
@@ -65,11 +66,15 @@
          
             {% empty %}
             <tr>
-                <td colspan="10" class="text-center" style="font-size: large;">No data found.</td>
+                <td colspan="10" class="text-center" style="font-size: large;">{{ message }}</td>
             </tr>
             {% endfor %}
         </tbody>
-    </table></div>
+    </table>
+    {% else %}
+        <h3 class="text-center">{{ message }}</h3>
+    {% endif %}
+</div>
     
 
 {% endblock %}
@@ -79,6 +84,7 @@
         $('#resetButton').click(function() {
         window.location.href = window.location.pathname; 
         });
+        
 
        
     </script>

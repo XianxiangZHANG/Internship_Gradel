@@ -18,7 +18,7 @@ class FiberFilter(django_filters.FilterSet):
     class Meta:
         model = models.Fiber
         fields = ['material', 'manufacturer', 'distributor', 'grade', 'valid']
-   
+
 
 class FiberFilterValid(django_filters.FilterSet):
     material = django_filters.CharFilter(field_name='material', lookup_expr='icontains')
@@ -32,15 +32,37 @@ class FiberFilterValid(django_filters.FilterSet):
 
 def fiber_list(request):
     """ list of fiber """
-
+    fibers = None
     fiber_filter = FiberFilter(request.GET, queryset=models.Fiber.objects.all())
-    return render(request, 'fiber/fiber_list.html', {'filter': fiber_filter})
+
+    message = "No fiber to display. Please use the filter to load data."
+
+    if any(request.GET.values()):
+        fibers = fiber_filter.qs
+        message = "No data found."
+    elif 'filter' in request.GET:
+        fibers = fiber_filter.qs
+        message = "No data found."
+    
+    return render(request, 'fiber/fiber_list.html', {'filter': fiber_filter, 'fibers': fibers, 'message':message})
+
 
 def fiber_valid(request):
     """ list of fiber """
-
+    fibers = None
     fiber_filter = FiberFilterValid(request.GET, queryset=models.Fiber.objects.filter(valid=True))
-    return render(request, 'fiber/fiber_valid.html', {'filter': fiber_filter})
+
+    message = "No fiber to display. Please use the filter to load data."
+
+    if any(request.GET.values()):
+        fibers = fiber_filter.qs
+        message = "No data found."
+    elif 'filter' in request.GET:
+        fibers = fiber_filter.qs
+        message = "No data found."
+    
+    return render(request, 'fiber/fiber_valid.html', {'filter': fiber_filter, 'fibers': fibers, 'message':message})
+
 
 def fiber_input(request):
     """ list of fiber """
@@ -122,6 +144,10 @@ def fiber_modify_multiple(request):
     # Define form set
     FiberFormSet = modelformset_factory(models.Fiber, form=FiberModelForm, extra=0)
     
+    formset = None
+    message = "No fiber to display. Please use the filter to load data."
+
+
     if request.method == 'POST':
         formset = FiberFormSet(request.POST)
         if formset.is_valid():
@@ -132,11 +158,19 @@ def fiber_modify_multiple(request):
                 instance.save()
             return redirect('/fiber/list/')
     else:
-        formset = FiberFormSet(queryset=fiber_filter.qs)
+        if any(request.GET.values()):
+            formset = FiberFormSet(queryset=fiber_filter.qs)
+            if not fiber_filter.qs.exists():
+                message = "No data found."
+        elif 'filter' in request.GET:
+            formset = FiberFormSet(queryset=fiber_filter.qs)
+            if not fiber_filter.qs.exists():
+                message = "No data found."
 
     return render(request, 'fiber/fiber_modify_multiple.html', {
         'filter': fiber_filter,
         'formset': formset,
+        'message': message,
     })
 
 

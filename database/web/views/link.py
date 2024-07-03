@@ -27,17 +27,38 @@ class LinkFilter(django_filters.FilterSet):
 
 def link_list(request):
     """ list of link """
-
+    links = None
     link_filter = LinkFilter(request.GET, queryset=models.Link.objects.all())
-    links = link_filter.qs
-    return render(request, 'link/link_list.html', {'filter': link_filter, 'links': links})
+
+    message = "No interface to display. Please use the filter to load data."
+
+    if any(request.GET.values()):
+        links = link_filter.qs
+        message = "No data found."
+    elif 'filter' in request.GET:
+        links = link_filter.qs
+        message = "No data found."
+    
+    return render(request, 'link/link_list.html', {'filter': link_filter, 'links': links, 'message':message})
+
+
 
 def link_valid(request):
     """ list of link """
-
+    links = None
     link_filter = LinkFilter(request.GET, queryset=models.Link.objects.filter(part__valid=True))
-    links = link_filter.qs
-    return render(request, 'link/link_valid.html', {'filter': link_filter, 'links': links})
+
+    message = "No interface to display. Please use the filter to load data."
+
+    if any(request.GET.values()):
+        links = link_filter.qs
+        message = "No data found."
+    elif 'filter' in request.GET:
+        links = link_filter.qs
+        message = "No data found."
+    
+    return render(request, 'link/link_valid.html', {'filter': link_filter, 'links': links, 'message':message})
+
 
 def link_input(request):
     """ list of link """
@@ -139,10 +160,14 @@ def link_add_multiple(request):
 def link_modify_multiple(request):
     # Get filtered data
     link_filter = LinkFilter(request.GET, queryset=models.Link.objects.all())
-    # interfaces = models.Interface.objects.all()
+    
     # Define form set
     LinkFormSet = modelformset_factory(models.Link, form=LinkModelForm, extra=0)
     
+    formset = None
+    message = "No link to display. Please use the filter to load data."
+
+
     if request.method == 'POST':
         formset = LinkFormSet(request.POST)
         if formset.is_valid():
@@ -155,13 +180,21 @@ def link_modify_multiple(request):
             return redirect('/link/list/')
         
     else:
-        formset = LinkFormSet(queryset=link_filter.qs)
+        if any(request.GET.values()):
+            formset = LinkFormSet(queryset=link_filter.qs)
+            if not link_filter.qs.exists():
+                message = "No data found."
+        elif 'filter' in request.GET:
+            formset = LinkFormSet(queryset=link_filter.qs)
+            if not link_filter.qs.exists():
+                message = "No data found."
 
     return render(request, 'link/link_modify_multiple.html', {
         'filter': link_filter,
         'formset': formset,
         # 'interfaces': interfaces,
         'linkError': "Link name is Required",
+        'message': message,
     })
 
 def link_add(request):
@@ -262,8 +295,8 @@ def handle_uploaded_file_link(f):
         return {'error': 'CoverPage sheet not found'}
     if 'Link Table' not in wb.sheetnames:
         return {'error': 'Link Table sheet not found'}
-    if 'Sequence' not in wb.sheetnames:
-        return {'error': 'Sequence sheet not found'}
+    # if 'Sequence' not in wb.sheetnames:
+    #     return {'error': 'Sequence sheet not found'}
     
     sheetCP = wb['CoverPage']
     sheetLT = wb['Link Table']
@@ -276,17 +309,12 @@ def handle_uploaded_file_link(f):
     interface1 = {}
     interface2 = {}
 
-    # lengthLink = {}
-    # linkType = {}
     armDiam = {}
     armSection = {}
 
     cycle = {}
     sequence = {}
     ratio= {}
-    # finArmSection = {}
-    # finArmDiam = {}
-    # finArmRadius = {}
     mass = {}
     angle = {}
     
@@ -313,14 +341,6 @@ def handle_uploaded_file_link(f):
             return {'error': 'Part not found'}
     
     
-    # link_data['project_id'] = models.Project.objects.filter(projectName=project_data['projectName']).first().id
-
-
-    # for row in sheetCP.iter_rows():
-    #     for cell in row:
-    #         if cell.value == "Program : ":
-    #             # link_data['project_projectName'] = sheetCP.cell(row=cell.row, column=cell.column + 2).value
-    #             link_data['project_id'] = models.Project.objects.filter(projectName=sheetCP.cell(row=cell.row, column=cell.column + 2).value).first().id
                
     for row in sheetLT.iter_rows():
         for cell in row:
@@ -362,10 +382,7 @@ def handle_uploaded_file_link(f):
                 for i in range(0, numberLink):
                     sequence[i] = sheetLT.cell(row=cell.row+ 1 + i, column=cell.column).value
                     # print(sequence[i])
-            # elif cell.value == "Length [mm]":
-            #     for i in range(0, numberLink):
-            #         lengthLink[i] = round(sheetLT.cell(row=cell.row+ 1 + i, column=cell.column ).value,2)
-            #         # print(lengthLink[i])
+           
             elif cell.value == "Arm diam. [mm]":
                 for i in range(0, numberLink):
                     armDiam[i] = sheetLT.cell(row=cell.row+ 1 + i, column=cell.column ).value
@@ -378,22 +395,7 @@ def handle_uploaded_file_link(f):
                 for i in range(0, numberLink):
                     cycle[i] = sheetLT.cell(row=cell.row+ 1 + i, column=cell.column ).value
                     # print(cycle[i])
-            # elif cell.value == "Fin. Arm Sec. [mm²]":
-            #     for i in range(0, numberLink):
-            #         finArmSection[i] = round(sheetLT.cell(row=cell.row+ 1 + i, column=cell.column ).value,2)
-            #         # print(finArmSection[i])
-            # elif cell.value == "Fin. Arm diam. [mm]":
-            #     for i in range(0, numberLink):
-            #         finArmDiam[i] = round(sheetLT.cell(row=cell.row+ 1 + i, column=cell.column ).value,2)
-            #         # print(finArmDiam[i])
-            # elif cell.value == "Fin. Arm radius [m]":
-            #     for i in range(0, numberLink):
-            #         finArmRadius[i] = sheetLT.cell(row=cell.row+ 1 + i, column=cell.column ).value 
-            #         # print(finArmRadius[i])
-            # elif cell.value == "Mass [g]":
-            #     for i in range(0, numberLink):
-            #         mass[i] = round(sheetLT.cell(row=cell.row+1 + i, column=cell.column ).value,2)
-            #         # print(mass[i])
+           
             elif cell.value == "Angle":
                 for i in range(0, numberLink):
                     angle[i] = sheetLT.cell(row=cell.row+1+i, column=cell.column ).value
@@ -402,14 +404,17 @@ def handle_uploaded_file_link(f):
                 for i in range(0, numberLink):
                     angle[i] = 0
 
-
-    for row in sheetSE.iter_rows():
-        for cell in row:
-            if cell.value == "Ratio":
-                for i in range(0, numberLink):
-                    # print(cell.row, cell.column)
-                    ratio[i] = sheetSE.cell(row=cell.row+ 1 + i, column=cell.column ).value
-                    # print(str(i) + linkName[i])
+    if sheetSE:
+        for row in sheetSE.iter_rows():
+            for cell in row:
+                if cell.value == "Ratio":
+                    for i in range(0, numberLink):
+                        # print(cell.row, cell.column)
+                        ratio[i] = sheetSE.cell(row=cell.row+ 1 + i, column=cell.column ).value
+                        # print(str(i) + linkName[i])
+    else:
+        for i in range(0, numberLink):
+            ratio[i] = "--"
 
     links = []
                                                  

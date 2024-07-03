@@ -23,10 +23,20 @@ class ProjectFilter(django_filters.FilterSet):
 
 def project_list(request):
     """ list of project """
-
+    projects = None
     project_filter = ProjectFilter(request.GET, queryset=models.Project.objects.all())
 
-    return render(request, 'project/project_list.html', {'filter': project_filter})
+    message = "No project to display. Please use the filter to load data."
+
+    if any(request.GET.values()):
+        projects = project_filter.qs
+        message = "No data found."
+    elif 'filter' in request.GET:
+        projects = project_filter.qs
+        message = "No data found."
+    
+    return render(request, 'project/project_list.html', {'filter': project_filter, 'projects': projects, 'message':message})
+
 
 class ProjectFilterValid(django_filters.FilterSet):
     projectName = django_filters.CharFilter(field_name='projectName', lookup_expr='icontains')
@@ -42,8 +52,19 @@ class ProjectFilterValid(django_filters.FilterSet):
 def project_valid(request):
     """ list of project """
 
+    projects = None
     project_filter = ProjectFilterValid(request.GET, queryset=models.Project.objects.filter(valid=True))
-    return render(request, 'project/project_valid.html', {'filter': project_filter})
+
+    message = "No project to display. Please use the filter to load data."
+
+    if any(request.GET.values()):
+        projects = project_filter.qs
+        message = "No data found."
+    elif 'filter' in request.GET:
+        projects = project_filter.qs
+        message = "No data found."
+    
+    return render(request, 'project/project_valid.html', {'filter': project_filter, 'projects': projects, 'message':message})
 
 
 class ProjectModelForm(forms.ModelForm):

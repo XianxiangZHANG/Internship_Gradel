@@ -25,15 +25,37 @@ class BushingFilter(django_filters.FilterSet):
 
 def bushing_list(request):
     """ list of bushing """
-
+    bushings = None
     bushing_filter = BushingFilter(request.GET, queryset=models.Bushing.objects.all())
-    return render(request, 'bushing/bushing_list.html', {'filter': bushing_filter})
+
+    message = "No bushing to display. Please use the filter to load data."
+
+    if any(request.GET.values()):
+        bushings = bushing_filter.qs
+        message = "No data found."
+    elif 'filter' in request.GET:
+        bushings = bushing_filter.qs
+        message = "No data found."
+    
+    return render(request, 'bushing/bushing_list.html', {'filter': bushing_filter, 'bushings': bushings, 'message':message})
+
 
 def bushing_valid(request):
     """ list of bushing """
-
+    bushings = None
     bushing_filter = BushingFilter(request.GET, queryset=models.Bushing.objects.filter(part__valid=True))
-    return render(request, 'bushing/bushing_valid.html', {'filter': bushing_filter})
+
+    message = "No bushing to display. Please use the filter to load data."
+
+    if any(request.GET.values()):
+        bushings = bushing_filter.qs
+        message = "No data found."
+    elif 'filter' in request.GET:
+        bushings = bushing_filter.qs
+        message = "No data found."
+    
+    return render(request, 'bushing/bushing_valid.html', {'filter': bushing_filter, 'bushings': bushings, 'message':message})
+
 
 
 def bushing_input(request):
@@ -125,10 +147,13 @@ def bushing_modify_multiple(request):
     # Define form set
     BushingFormSet = modelformset_factory(models.Bushing, form=BushingModelForm, extra=0)
     
+    formset = None
+    message = "No bushing to display. Please use the filter to load data."
+
     if request.method == 'POST':
-        print("post")
+        # print("post")
         formset = BushingFormSet(request.POST)
-        print(formset)
+        # print(formset)
         if formset.is_valid():
             instances = formset.save(commit=False)
             
@@ -137,12 +162,20 @@ def bushing_modify_multiple(request):
                 instance.save()
             return redirect('/bushing/list/')
     else:
-        formset = BushingFormSet(queryset=bushing_filter.qs)
+        if any(request.GET.values()):
+            formset = BushingFormSet(queryset=bushing_filter.qs)
+            if not bushing_filter.qs.exists():
+                message = "No data found."
+        elif 'filter' in request.GET:
+            formset = BushingFormSet(queryset=bushing_filter.qs)
+            if not bushing_filter.qs.exists():
+                message = "No data found."
 
     return render(request, 'bushing/bushing_modify_multiple.html', {
         'filter': bushing_filter,
         'formset': formset,
         'bushingError': "Bushing name is Required",
+        'message': message,
     })
 
 

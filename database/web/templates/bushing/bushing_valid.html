@@ -21,11 +21,11 @@
         </details>
         <form method="get" id="filterForm">
             {{ filter.form.as_p }}
-            <button type="submit" id="btnf1">Filter</button>
+            <button type="submit" id="btnf1" name="filter">Filter</button>
             <button type="reset" id="resetButton" class="btnf2">Reset</button>
             <a id="download" href="{% url 'download_bushings_pdf' %}?{{ request.GET.urlencode }}">Download PDF</a>
         </form>
-        
+        {% if bushings %}
     <table class="table table-bordered" id="normalTable">
         <thead>
         <tr>
@@ -42,7 +42,7 @@
         </tr>
         </thead>
         <tbody>
-        {% for row in filter.qs %}
+        {% for row in bushings %}
             
             <tr>
                 <td>{{ row.id }}</td>
@@ -59,11 +59,15 @@
            
             {% empty %}
             <tr>
-                <td colspan="9" class="text-center" style="font-size: large;">No data found.</td>
+                <td colspan="9" class="text-center" style="font-size: large;">{{ message }}</td>
             </tr>
             {% endfor %}
         </tbody>
-    </table></div>
+    </table>
+    {% else %}
+        <h3 class="text-center">{{ message }}</h3>
+    {% endif %}
+</div>
     
 
 {% endblock %}

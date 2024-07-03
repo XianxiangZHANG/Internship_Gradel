@@ -23,25 +23,38 @@ class PartFilter(django_filters.FilterSet):
         model = models.Part
         fields = ['project', 'partName', 'resin', 'fiber', 'valid']
    
-# def part_list(request):
-#     """ list of part """
-
-#     part_filter = PartFilter(request.GET, queryset=models.Part.objects.all())
-
-#     return render(request, 'part/part_list.html', {'filter': part_filter})
 def part_list(request):
     """ list of part """
+    parts = None
     part_filter = PartFilter(request.GET, queryset=models.Part.objects.all())
-    parts = part_filter.qs
+
+    message = "No part to display. Please use the filter to load data."
+
+    if any(request.GET.values()):
+        parts = part_filter.qs.select_related('fiber', 'resin', 'project').prefetch_related('link_set', 'bushing_set', 'interface_set')
+        message = "No data found."
+    elif 'filter' in request.GET:
+        parts = part_filter.qs.select_related('fiber', 'resin', 'project').prefetch_related('link_set', 'bushing_set', 'interface_set')
+        message = "No data found."
     
-    return render(request, 'part/part_list.html', {'filter': part_filter, 'parts': parts})
+    return render(request, 'part/part_list.html', {'filter': part_filter, 'parts': parts, 'message':message})
     
 
 def part_list_doc(request):
     """ list of part """
-
+    parts = None
     part_filter = PartFilter(request.GET, queryset=models.Part.objects.all())
-    return render(request, 'part/part_list_doc.html', {'filter': part_filter})
+
+    message = "No part to display. Please use the filter to load data."
+
+    if any(request.GET.values()):
+        parts = part_filter.qs.select_related('fiber', 'resin', 'project').prefetch_related('link_set', 'bushing_set', 'interface_set')
+        message = "No data found."
+    elif 'filter' in request.GET:
+        parts = part_filter.qs.select_related('fiber', 'resin', 'project').prefetch_related('link_set', 'bushing_set', 'interface_set')
+        message = "No data found."
+    
+    return render(request, 'part/part_list_doc.html', {'filter': part_filter, 'parts': parts, 'message':message})
 
 class PartFilterValid(django_filters.FilterSet):
     project = django_filters.ModelChoiceFilter(queryset=models.Project.objects.all())
@@ -56,15 +69,36 @@ class PartFilterValid(django_filters.FilterSet):
    
 def part_valid(request):
     """ list of part """
-
+    parts = None
     part_filter = PartFilterValid(request.GET, queryset=models.Part.objects.filter(valid=True))
-    return render(request, 'part/part_valid.html', {'filter': part_filter})
+
+    message = "No part to display. Please use the filter to load data."
+
+    if any(request.GET.values()):
+        parts = part_filter.qs.select_related('fiber', 'resin', 'project').prefetch_related('link_set', 'bushing_set', 'interface_set')
+        message = "No data found."
+    elif 'filter' in request.GET:
+        parts = part_filter.qs.select_related('fiber', 'resin', 'project').prefetch_related('link_set', 'bushing_set', 'interface_set')
+        message = "No data found."
+    
+    return render(request, 'part/part_valid.html', {'filter': part_filter, 'parts': parts, 'message':message})
+
 
 def part_valid_doc(request):
     """ list of part """
-
+    parts = None
     part_filter = PartFilterValid(request.GET, queryset=models.Part.objects.filter(valid=True))
-    return render(request, 'part/part_valid_doc.html', {'filter': part_filter})
+
+    message = "No part to display. Please use the filter to load data."
+
+    if any(request.GET.values()):
+        parts = part_filter.qs.select_related('fiber', 'resin', 'project').prefetch_related('link_set', 'bushing_set', 'interface_set')
+        message = "No data found."
+    elif 'filter' in request.GET:
+        parts = part_filter.qs.select_related('fiber', 'resin', 'project').prefetch_related('link_set', 'bushing_set', 'interface_set')
+        message = "No data found."
+    
+    return render(request, 'part/part_valid_doc.html', {'filter': part_filter, 'parts': parts, 'message':message})
 
 def part_input(request):
     """ list of part """

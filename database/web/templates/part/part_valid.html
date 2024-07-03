@@ -22,7 +22,7 @@
         </details>
         <form method="get" id="filterForm">
             {{ filter.form.as_p }}
-            <button type="submit" id="btnf1">Filter</button>
+            <button type="submit" id="btnf1" name="filter">Filter</button>
             <button type="reset" id="resetButton" class="btnf2">Reset</button>
             <a id="download" href="{% url 'download_parts_pdf' %}?{{ request.GET.urlencode }}">Download PDF</a>
             <a class="btn btn-success" href="/part/valid-doc/" id="btnmore">
@@ -31,7 +31,8 @@
             
         </form>
         <!-- <table id="transposedTable"></table> -->
-    <table class="table table-bordered" id="normalTable" style=" font-size: 12px">
+        {% if parts %}
+        <table class="table table-bordered" id="normalTable" style=" font-size: 12px">
         <thead>
         <tr>
             <th>ID</th>
@@ -61,20 +62,10 @@
             <th>Total Fiber Mass [kg]</th>
             <th>Total Resin Mass [g]</th>
             <th>Project Image</th>
-            <!-- <th>.gh</th>
-            <th>.mod</th>
-            <th>.csv</th>
-            <th>.rs</th>
-            <th>.log</th>
-            <th>.mp4</th>
-            <th>.jpg</th> -->
-            <!-- <th>Operations</th> -->
-
-
         </tr>
         </thead>
         <tbody>
-        {% for row in filter.qs %}
+        {% for row in parts %}
             
             <tr>
                 <td>{{ row.id }}</td>
@@ -108,24 +99,19 @@
                 {% else %}
                     No image
                 {% endif %}</td>
-                <!-- <td>{{ row.projectImage|default_if_none:"" }}</td> -->
-                <!-- <td>{{ row.part_gh|default_if_none:"" }}</td>
-                <td>{{ row.part_mod|default_if_none:"" }}</td>
-                <td>{{ row.part_csv|default_if_none:"" }}</td>
-                <td>{{ row.part_rs|default_if_none:"" }}</td>
-                <td>{{ row.part_log|default_if_none:"" }}</td>
-                <td>{{ row.part_mp4|default_if_none:"" }}</td>
-                <td>{{ row.part_jpg|default_if_none:"" }}</td> -->
-                
             </tr>
          
             {% empty %}
             <tr>
-                <td colspan="27" class="text-center" style="font-size: large;">No data found.</td>
+                <td colspan="27" class="text-center" style="font-size: large;">{{ message }}</td>
             </tr>
             {% endfor %}
         </tbody>
-    </table></div>
+    </table>
+    {% else %}
+        <h3 class="text-center">{{ message }}</h3>
+    {% endif %}
+    </div>
     <div id="myModalImage" class="modalIamge">
         <span class="close" onclick="closeModal()">&times;</span>
         <img class="modal-content" id="modalImage">
@@ -141,6 +127,7 @@
         $('#resetButton').click(function() {
         window.location.href = window.location.pathname;  
         });
+        
         function showModal(src) {
             var modal = document.getElementById("myModalImage");
             var modalImg = document.getElementById("modalImage");

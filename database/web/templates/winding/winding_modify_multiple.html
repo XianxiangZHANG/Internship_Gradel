@@ -20,7 +20,7 @@
     </details>
     <form method="get" id="filterForm">
         {{ filter.form.as_p }}
-        <button type="submit" id="btnf1">Filter</button>
+        <button type="submit" id="btnf1" name="filter">Filter</button>
         <button type="reset" id="resetButton" class="btnf2">Reset</button>
     </form>
     {% if formset.total_form_count > 0 %}

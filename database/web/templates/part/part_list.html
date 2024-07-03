@@ -16,7 +16,7 @@
               <span class="glyphicon glyphicon-question-sign" aria-hidden="true" id="help-title">
                 Help
               </span>
-            </summary>        
+            </summary>
             <div id="help-content">
                 Here, we can check the value of each record. <br>
                 Data with a blue background color indicates that the data has been confirmed and can be read by other departments.<br>
@@ -29,146 +29,114 @@
         </details>
         <form method="get" id="filterForm">
             {{ filter.form.as_p }}
-            <button type="submit" id="btnf1">Filter</button>
+            <button type="submit" id="btnf1" name="filter">Filter</button>
             <button type="reset" id="resetButton" class="btnf2">Reset</button>
             
         </form>
         <!-- <table id="transposedTable"></table> -->
-    <table class="table table-bordered" id="normalTable" style=" font-size: 12px">
-        <thead>
-        <tr>
-            <th>ID</th>
-            <th>Part Name</th>
-            <th>Resin Name</th>
-            <th>Resin Density [kg/m3]</th>
-            <th>Fiber Name</th>
-            <th>Fiber Density [kg/m3]</th>
-            <th>Number of Spools</th>
-            <th>Fiber Volume Ratio[%]</th>
-            <th>Winding Density [kg/m3]</th>
-            <th>Fiber Section calc.[mm²]</th>
-            <th>Fiber Section acc.[mm²]</th>
-            <th>Default Interface Height [mm]</th>
-            <th>Default Interface Int Diam [mm]</th>
-            <th>Default Link (Element) Type</th>
-            <th>Default Link Defined by</th>
-            <th>Number of Links</th>
-            <th>Number of Bushings</th>
-            <th>Total Mass of Links [g]</th>
-            <th>Total Mass of Accumulation [g]</th>
-            <th>Total Mass of Winding [g]</th>
-            <th>Total Mass of Bushing [g]</th>
-            <th>Additional Masses [g]</th>
-            <th>Total Mass of Structure [g]</th>
-            <th>Total Fiber Length [m]</th>
-            <th>Total Fiber Mass [kg]</th>
-            <th>Total Resin Mass [g]</th>
-            <th>Project Image</th>
-            <!-- <th>.gh</th>
-            <th>.mod</th>
-            <th>.csv</th>
-            <th>.rs</th>
-            <th>.log</th>
-            <th>.mp4</th>
-            <th>.jpg</th> -->
-            <th>Operations</th>
+
+        {% if parts %}
+            <table class="table table-bordered" id="normalTable" style=" font-size: 12px; ">
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Part Name</th>
+                    <th>Resin Name</th>
+                    <th>Resin Density [kg/m3]</th>
+                    <th>Fiber Name</th>
+                    <th>Fiber Density [kg/m3]</th>
+                    <th>Number of Spools</th>
+                    <th>Fiber Volume Ratio[%]</th>
+                    <th>Winding Density [kg/m3]</th>
+                    <th>Fiber Section calc.[mm²]</th>
+                    <th>Fiber Section acc.[mm²]</th>
+                    <th>Default Interface Height [mm]</th>
+                    <th>Default Interface Int Diam [mm]</th>
+                    <th>Default Link (Element) Type</th>
+                    <th>Default Link Defined by</th>
+                    <th>Number of Links</th>
+                    <th>Number of Bushings</th>
+                    <th>Total Mass of Links [g]</th>
+                    <th>Total Mass of Accumulation [g]</th>
+                    <th>Total Mass of Winding [g]</th>
+                    <th>Total Mass of Bushing [g]</th>
+                    <th>Additional Masses [g]</th>
+                    <th>Total Mass of Structure [g]</th>
+                    <th>Total Fiber Length [m]</th>
+                    <th>Total Fiber Mass [kg]</th>
+                    <th>Total Resin Mass [g]</th>
+                    <th>Project Image</th>
+                    <!-- <th>.gh</th>
+                    <th>.mod</th>
+                    <th>.csv</th>
+                    <th>.rs</th>
+                    <th>.log</th>
+                    <th>.mp4</th>
+                    <th>.jpg</th> -->
+                    <th>Operations</th>
 
 
-        </tr>
-        </thead>
-        <tbody>
-        {% for row in parts %}
-            {% if row.valid %} 
-            <tr style="background-color: #67fafa70;">
-                <td>{{ row.id }}</td>
-                <td>{{ row.partName }}</td>
-                <td>{{ row.resin|default_if_none:"" }}</td>
-                <td>{{ row.resinDensity|default_if_none:"" }}</td>
-                <td>{{ row.fiber|default_if_none:"" }}</td>
-                <td>{{ row.fiberDensity|default_if_none:"" }}</td>
-                <td>{{ row.totalTowNumber|default_if_none:"" }}</td>
-                <td>{{ row.fiberVolumeRatio|default_if_none:"" }}</td>
-                <td>{{ row.windingDensity|default_if_none:"" }}</td>
-                <td>{{ row.fiberSectionCalc|default_if_none:"" }}</td>
-                <td>{{ row.fiberSectionAcc|default_if_none:"" }}</td>
-                <td>{{ row.defaultInterfaceHeight|default_if_none:"" }}</td>
-                <td>{{ row.defaultInterfaceIntDiam|default_if_none:"" }}</td>
-                <td>{{ row.defaultLinkType|default_if_none:"" }}</td>
-                <td>{{ row.defaultLinkDefined|default_if_none:"" }}</td>
-                <td>{{ row.numberLinks|default_if_none:"0" }}</td>
-                <td>{{ row.numberBushings|default_if_none:"0" }}</td>
-                <td>{{ row.totalMassLink|default_if_none:"" }}</td>
-                <td>{{ row.totalMassAccumulation|default_if_none:"" }}</td>
-                <td>{{ row.totalMassWinding|default_if_none:"" }}</td>
-                <td>{{ row.totalMassBushing|default_if_none:"" }}</td>
-                <td>{{ row.additionalMass|default_if_none:"" }}</td>
-                <td>{{ row.totalMassStructure|default_if_none:"" }}</td>
-                <td>{{ row.totalFiberLength|default_if_none:"" }}</td>
-                <td>{{ row.totalFiberMass|default_if_none:"" }}</td>
-                <td>{{ row.totalResinMass|default_if_none:"" }}</td>
-                <td>{% if row.projectImage %}
-                    <img src="{{ row.projectImage.url }}" alt="Project Image" class="thumbnail" onclick="showModal('{{ row.projectImage.url }}')">
-                {% else %}
-                    No image
-                {% endif %}</td>
-                
-                <td>
-                    <a class="btn btn-primary btn-xs" href="/part/edit/{{ row.id }}/" style="width: 70px; text-align: center; margin-bottom: 5px;"> Edit </a>
-                    <br>
-                    <input type="button" value="Delete" class="btn btn-danger btn-xs" style="width: 70px; text-align: center;"
-                           onclick="deleteAction({{ row.id }});"/>
-                </td>
-            </tr>
-            {% else %}
-            <tr>
-                <td>{{ row.id }}</td>
-                <td>{{ row.partName }}</td>
-                <td>{{ row.resin|default_if_none:"" }}</td>
-                <td>{{ row.resinDensity|default_if_none:"" }}</td>
-                <td>{{ row.fiber|default_if_none:"" }}</td>
-                <td>{{ row.fiberDensity|default_if_none:"" }}</td>
-                <td>{{ row.totalTowNumber|default_if_none:"" }}</td>
-                <td>{{ row.fiberVolumeRatio|default_if_none:"" }}</td>
-                <td>{{ row.windingDensity|default_if_none:"" }}</td>
-                <td>{{ row.fiberSectionCalc|default_if_none:"" }}</td>
-                <td>{{ row.fiberSectionAcc|default_if_none:"" }}</td>
-                <td>{{ row.defaultInterfaceHeight|default_if_none:"" }}</td>
-                <td>{{ row.defaultInterfaceIntDiam|default_if_none:"" }}</td>
-                <td>{{ row.defaultLinkType|default_if_none:"" }}</td>
-                <td>{{ row.defaultLinkDefined|default_if_none:"" }}</td>
-                <td>{{ row.numberLink|default_if_none:"0" }}</td>
-                <td>{{ row.numberBushing|default_if_none:"0" }}</td>
-                <td>{{ row.totalMassLink|default_if_none:"" }}</td>
-                <td>{{ row.totalMassAccumulation|default_if_none:"" }}</td>
-                <td>{{ row.totalMassWinding|default_if_none:"" }}</td>
-                <td>{{ row.totalMassBushing|default_if_none:"" }}</td>
-                <td>{{ row.additionalMass|default_if_none:"" }}</td>
-                <td>{{ row.totalMassStructure|default_if_none:"" }}</td>
-                <td>{{ row.totalFiberLength|default_if_none:"" }}</td>
-                <td>{{ row.totalFiberMass|default_if_none:"" }}</td>
-                <td>{{ row.totalResinMass|default_if_none:"" }}</td>
-                <td>{% if row.projectImage %}
-                   
-                    <img src="{{ row.projectImage.url }}" alt="Project Image" class="thumbnail" onclick="showModal('{{ row.projectImage.url }}')">
-                {% else %}
-                    No image
-                {% endif %}</td>
-                
-                <td>
-                    <a class="btn btn-primary btn-xs" href="/part/edit/{{ row.id }}/" style="width: 70px; text-align: center; margin-bottom: 5px;"> Edit </a>
-                    <br>
-                    <input type="button" value="Delete" class="btn btn-danger btn-xs" style="width: 70px; text-align: center;"
-                           onclick="deleteAction({{ row.id }});"/>
-                </td>
-            </tr>
-            {% endif %}
-            {% empty %}
-            <tr>
-                <td colspan="28" class="text-center" style="font-size: large;">No data found.</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table></div>
+                </tr>
+                </thead>
+                <tbody>
+                {% for row in parts %}
+                    {% if row.valid %} 
+                    <tr style="background-color: #67fafa70;">
+                    {% else %}
+                    <tr>
+                        {% endif %}
+                        <td>{{ row.id }}</td>
+                        <td>{{ row.partName }}</td>
+                        <td>{{ row.resin|default_if_none:"" }}</td>
+                        <td>{{ row.resinDensity|default_if_none:"" }}</td>
+                        <td>{{ row.fiber|default_if_none:"" }}</td>
+                        <td>{{ row.fiberDensity|default_if_none:"" }}</td>
+                        <td>{{ row.totalTowNumber|default_if_none:"" }}</td>
+                        <td>{{ row.fiberVolumeRatio|default_if_none:"" }}</td>
+                        <td>{{ row.windingDensity|default_if_none:"" }}</td>
+                        <td>{{ row.fiberSectionCalc|default_if_none:"" }}</td>
+                        <td>{{ row.fiberSectionAcc|default_if_none:"" }}</td>
+                        <td>{{ row.defaultInterfaceHeight|default_if_none:"" }}</td>
+                        <td>{{ row.defaultInterfaceIntDiam|default_if_none:"" }}</td>
+                        <td>{{ row.defaultLinkType|default_if_none:"" }}</td>
+                        <td>{{ row.defaultLinkDefined|default_if_none:"" }}</td>
+                        <td>{{ row.numberLink|default_if_none:"0" }}</td>
+                        <td>{{ row.numberBushing|default_if_none:"0" }}</td>
+                        <td>{{ row.totalMassLink|default_if_none:"" }}</td>
+                        <td>{{ row.totalMassAccumulation|default_if_none:"" }}</td>
+                        <td>{{ row.totalMassWinding|default_if_none:"" }}</td>
+                        <td>{{ row.totalMassBushing|default_if_none:"" }}</td>
+                        <td>{{ row.additionalMass|default_if_none:"" }}</td>
+                        <td>{{ row.totalMassStructure|default_if_none:"" }}</td>
+                        <td>{{ row.totalFiberLength|default_if_none:"" }}</td>
+                        <td>{{ row.totalFiberMass|default_if_none:"" }}</td>
+                        <td>{{ row.totalResinMass|default_if_none:"" }}</td>
+                        <td>{% if row.projectImage %}
+                        
+                            <img src="{{ row.projectImage.url }}" alt="Project Image" class="thumbnail" onclick="showModal('{{ row.projectImage.url }}')">
+                        {% else %}
+                            No image
+                        {% endif %}</td>
+                        
+                        <td>
+                            <a class="btn btn-primary btn-xs" href="/part/edit/{{ row.id }}/" style="width: 70px; text-align: center; margin-bottom: 5px;"> Edit </a>
+                            <br>
+                            <input type="button" value="Delete" class="btn btn-danger btn-xs" style="width: 70px; text-align: center;"
+                                onclick="deleteAction({{ row.id }});"/>
+                        </td>
+                    </tr>
+                    
+                    {% empty %}
+                    <tr>
+                        <td colspan="28" class="text-center" style="font-size: large;">{{ message }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <h3 class="text-center">{{ message }}</h3>
+        {% endif %}
+        </div>
     
 
     <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">

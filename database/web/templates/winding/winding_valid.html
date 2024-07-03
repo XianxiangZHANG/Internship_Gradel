@@ -21,7 +21,7 @@
         
         <form method="get" id="filterForm">
             {{ filter.form.as_p }}
-            <button type="submit" id="btnf1">Filter</button>
+            <button type="submit" id="btnf1" name="filter">Filter</button>
             <button type="reset" id="resetButton" class="btnf2">Reset</button>
             <a id="download" href="{% url 'download_projects_pdf' %}?{{ request.GET.urlencode }}">Download PDF</a>
         </form>

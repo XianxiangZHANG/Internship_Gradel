@@ -5,7 +5,7 @@
     <h3>R&D List:</h3>
     <form method="get" id="filterForm">
         {{ filter.form.as_p }}
-        <button type="submit" id="btnf1">Filter</button>
+        <button type="submit" id="btnf1" name="filter">Filter</button>
         <button type="reset" id="resetButton" class="btnf2">Reset</button>
     </form>
 
@@ -180,6 +180,11 @@
         border: 1px solid #ccc;
         border-radius: 4px;
         box-sizing: border-box;
+    }
+    .form-control {
+        height: 35px; 
+        max-height: 35px; 
+        min-height: 35px; 
     }
 </style>
 {% endblock %}

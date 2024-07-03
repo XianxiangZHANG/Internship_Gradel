@@ -419,32 +419,34 @@ class Part(models.Model):
         return 0.0
 
     def calculate_numberLink(self):
-        if Link.objects.filter(part=self):
-            return Link.objects.filter(part=self).count()
-        return 0
+        return Link.objects.filter(part=self).count()
 
     def calculate_numberBushing(self):
-        if Bushing.objects.filter(part=self):
-            return Bushing.objects.filter(part=self).count()
-        return 0
+        return Bushing.objects.filter(part=self).count()
 
     def calculate_totalMassLink(self):
-        total_mass = 0
-        if Link.objects.filter(part=self):
-            links = Link.objects.filter(part=self)
-            for link in links:
-                total_mass += link.mass
-        return round(total_mass,2)
+        links = Link.objects.filter(part=self)
+        total_mass = sum(link.mass for link in links)
+        return round(total_mass, 2)
+        # total_mass = 0
+        # if Link.objects.filter(part=self):
+        #     links = Link.objects.filter(part=self)
+        #     for link in links:
+        #         total_mass += link.mass
+        # return round(total_mass,2)
 
     def calculate_totalMassAccumulation(self):
-        total_accumulation = 0
-        if Interface.objects.filter(part=self):
-            interfaces = Interface.objects.filter(part=self)
-            # print(interfaces)
-            for interface in interfaces:
-                total_accumulation += interface.accMass
-                # print(total_accumulation)
-        return round(total_accumulation,2)
+        interfaces = Interface.objects.filter(part=self)
+        total_accumulation = sum(interface.accMass for interface in interfaces if interface.accMass is not None)
+        return round(total_accumulation, 2)
+        # total_accumulation = 0
+        # if Interface.objects.filter(part=self):
+        #     interfaces = Interface.objects.filter(part=self)
+        #     # print(interfaces)
+        #     for interface in interfaces:
+        #         total_accumulation += interface.accMass
+        #         # print(total_accumulation)
+        # return round(total_accumulation,2)
 
     def calculate_totalMassWinding(self):
         if self.totalMassLink and self.totalMassAccumulation:
@@ -452,13 +454,16 @@ class Part(models.Model):
         return 0
 
     def calculate_totalMassBushing(self):
-        total_mass = 0
-        if Bushing.objects.filter(part=self):
-            bushings = Bushing.objects.filter(part=self)
-            for bushing in bushings:
-                if bushing.bushingMass:
-                    total_mass += bushing.bushingMass
-        return round(total_mass,2)
+        bushings = Bushing.objects.filter(part=self)
+        total_mass = sum(bushing.bushingMass for bushing in bushings if bushing.bushingMass is not None)
+        return round(total_mass, 2)
+        # total_mass = 0
+        # if Bushing.objects.filter(part=self):
+        #     bushings = Bushing.objects.filter(part=self)
+        #     for bushing in bushings:
+        #         if bushing.bushingMass:
+        #             total_mass += bushing.bushingMass
+        # return round(total_mass,2)
 
     def calculate_totalMassStructure(self):
         totalMassStructure = 0
