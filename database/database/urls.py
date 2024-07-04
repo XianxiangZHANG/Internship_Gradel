@@ -21,13 +21,14 @@ from web.views import account, project, part, bushing, interface, link, winding,
 from web.views.load_parts import load_parts, load_interfaces, load_links
 from web.views.load_fiber_resin import get_fiber_data, get_resin_data
 from django.urls import path, re_path
-from django.views.generic import TemplateView
+from django.views.generic import RedirectView
 from django.views.static import serve
+import os
+
+
 
 urlpatterns = [
-    path('static/docs/', docs.documentation, name='documentation'),
-    re_path(r'^docs/(?P<path>.*)$', serve, {'document_root': settings.STATICFILES_DIRS[0] + '/docs'}),
-    
+    re_path(r'^documentation/(?P<path>.*)$', docs.serve_docs, name='documentation'),
 
     path('', account.home),
     # path('accounts/login/', account.loginA),

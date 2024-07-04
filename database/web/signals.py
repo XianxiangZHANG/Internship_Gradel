@@ -4,11 +4,8 @@ from django.dispatch import receiver
 from django.forms import model_to_dict
 from web import models
 from django.db.models import ForeignKey
-from django.contrib.auth.models import User
-from django.apps import apps
-from django.utils.timezone import now
+from django.utils.timezone import now, localtime
 import pytz
-
 
 @receiver(pre_save)
 def store_old_instance(sender, instance, **kwargs):
@@ -39,7 +36,7 @@ def log_save(sender, instance, created, **kwargs):
         changes = get_changes(instance)  # Get more detailed change information
 
     timezone = pytz.timezone('Europe/Luxembourg')
-    timestamp = now().astimezone(timezone)  # Get the current time and convert to Europe/Luxembourg
+    timestamp = now().astimezone(timezone)
 
     models.Log.objects.create(
         user=user,
@@ -59,7 +56,11 @@ def log_delete(sender, instance, **kwargs):
         return  
     
     timezone = pytz.timezone('Europe/Luxembourg')
-    timestamp = now().astimezone(timezone)  
+    timestamp = now().astimezone(timezone)
+
+    # Print for debugging
+    # print("Local Time: ", timestamp)
+    # print("UTC Time: ", now())
 
     user = instance.user
     model_name = sender.__name__

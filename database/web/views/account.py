@@ -143,12 +143,49 @@ class LogFilter(django_filters.FilterSet):
         fields = ['user', 'action', 'model', 'object_id', 'timestamp']
 
 def home(request):
-    log_filter = LogFilter(request.GET, queryset=models.Log.objects.all().order_by('-timestamp'))
-    paginator = Paginator(log_filter.qs, 20)  # Display 20 logs per page
-    page_number = request.GET.get('page')   
-    page_obj = paginator.get_page(page_number)
+    # log_filter = LogFilter(request.GET, queryset=models.Log.objects.all().order_by('-timestamp'))
+    # paginator = Paginator(log_filter.qs, 20)  # Display 20 logs per page
+    # page_number = request.GET.get('page')   
+    # page_obj = paginator.get_page(page_number)
     
-    return render(request, 'account/home.html', {'page_obj': page_obj, 'filter': log_filter})
+    # return render(request, 'account/home.html', {'page_obj': page_obj, 'filter': log_filter})
+    logs = models.Log.objects.all().order_by('-timestamp')
+
+    user_filter = request.GET.get('user')
+    if user_filter:
+        logs = logs.filter(user__username=user_filter)
+
+    action_filter = request.GET.get('action')
+    if action_filter:
+        logs = logs.filter(action=action_filter)
+
+    table_filter = request.GET.get('table')
+    if table_filter:
+        logs = logs.filter(model=table_filter)
+
+    object_id_filter = request.GET.get('object_id')
+    if object_id_filter:
+        logs = logs.filter(object_id=object_id_filter)
+
+    timestamp_filter = request.GET.get('timestamp')
+    if timestamp_filter:
+        logs = logs.filter(timestamp__icontains=timestamp_filter)
+
+    paginator = Paginator(logs, 20)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    users = models.Log.objects.values_list('user__username', flat=True).distinct()
+    actions = models.Log.objects.values_list('action', flat=True).distinct()
+    tables = models.Log.objects.values_list('model', flat=True).distinct()
+
+    context = {
+        'page_obj': page_obj,
+        'users': users,
+        'actions': actions,
+        'tables': tables,
+    }
+    return render(request, 'account/home.html', context)
 
     # print(request.info_dict)
     # request.info_dict['name']

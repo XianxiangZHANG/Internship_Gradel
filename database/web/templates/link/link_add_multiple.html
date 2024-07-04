@@ -13,7 +13,7 @@
                 Here, we can enter the value of each attribute manually or by batch copying and pasting. <br>
                 Click the <a id="help-btn-add">Add Link</a> button to add a row.<br>
                 Click the <a id="help-btn-remove">Remove</a> button to clear the corresponding row.<br>
-                Click the <a id="help-btn-save">Save</a> button to save the data to the database.<br>
+                Click the <a id="help-btn-save">Save</a> button to save the data to the database.<br><br>
                 Please make sure we have the correct Project and Part selected before saving.<br>
             </div>
         </details>
@@ -149,6 +149,8 @@
 {% block js %}
 <script type="text/javascript">
     $(document).ready(function() {
+        loadInterfaces( )
+        loadParts( )
         function loadParts(projectId) {
             var url = '{% url "load_parts" %}';
             $.ajax({
@@ -240,24 +242,6 @@
             }
         });
 
-        {% comment %} $('#main-form').on('submit', function(e) {
-            var project = $('#id_project').val();
-            var part = $('#id_part').val();
-            if (!project || !part) {
-                e.preventDefault();
-                alert('Please select a Project and a Part before saving.');
-                return;
-            }
-            $('#link-table tbody tr').each(function() {
-                var interface1 = $(this).find('#id_interface1').val();
-                var interface2 = $(this).find('#id_interface2').val();
-                if (!interface1 || !interface2) {
-                    e.preventDefault();
-                    alert('Please select Interface1 and Interface2 for all links.');
-                    return false;
-                }
-            });
-        }); {% endcomment %}
 
         // Handle paste event to populate table cells
         $('#link-table tbody').on('paste', 'td', function(e) {

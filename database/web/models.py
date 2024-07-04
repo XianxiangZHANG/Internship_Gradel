@@ -294,7 +294,7 @@ class Project(models.Model):
 class Part(models.Model):
     """ PartTable """
     ########   1   ########
-    partName = models.CharField(verbose_name="Part Name", max_length=128)
+    partName = models.CharField(verbose_name="Part Name", max_length=128, unique= True)
     fiber = models.ForeignKey(verbose_name="Fiber Name", to=Fiber, on_delete=models.CASCADE, to_field='id')
 
     resin = models.ForeignKey(verbose_name="Resin Name", to=Resin, on_delete=models.CASCADE, to_field='id')

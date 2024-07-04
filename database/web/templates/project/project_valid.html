@@ -18,7 +18,9 @@
             Here, we can read the value of each record. <br>
             We can use <a id="help-btn-filter">Filter</a> to select some specific records.<br>
             Click the <a id="help-btn-filter">Reset</a> button to reset the filter to the original state.<br>
-            Click the <a id="help-btn-download">Download PDF</a> button to download the displayed data(after filtering) as a pdf document.<br>
+            Click the <a id="help-btn-download">Download PDF</a> button to download the displayed data(after filtering) as a pdf document.<br><br>
+            In order to avoid loading too much data when entering for the first time, relevant data will be loaded only after clicking <a id="help-btn-filter">Filter</a>. <br>
+            If you want to load all the data in the database, click <a id="help-btn-filter">Filter</a> directly without entering or selecting any keywords in the filter.<br>
         </div>
     </details>
    
@@ -61,7 +63,7 @@
                 <td>{{ row.structureDrawingNb|default_if_none:"" }}</td>
                 <td>{{ row.documentNb|default_if_none:"" }}</td>
                 <td>{{ row.revision|default_if_none:"" }}</td>
-                <td>{{ row.lastUpdate|default_if_none:"" }}</td>
+                <td>{{ row.lastUpdate|default_if_none:""|date:"m/d/Y" }}</td>
                
             </tr>
        

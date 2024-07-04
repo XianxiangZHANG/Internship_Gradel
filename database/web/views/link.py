@@ -545,9 +545,9 @@ def download_links_pdf(request):
         p.setDash(1, 2) 
         p.setLineWidth(1)
         values = [
-            format_value(link.linkName), format_value(link.interface1), format_value(link.interface2), format_value(link.length),
+            format_value(link.linkName), format_value(link.interface1), format_value(link.interface2), format_value(link.lengthShow),
             Paragraph(format_value(link.sequence), styles['Normal']), format_value(link.armDiam), format_value(link.armSection), format_value(link.cycle),
-            format_value(link.finArmSection), format_value(link.finArmDiam), format_value(link.finArmRadius), format_value(link.mass),
+            format_value(link.finArmSectionShow), format_value(link.finArmDiamShow), format_value(link.finArmRadiusShow), format_value(link.massShow),
             format_value(link.angle)
         ]
 

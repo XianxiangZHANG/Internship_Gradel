@@ -497,7 +497,7 @@ def download_interfaces_pdf(request):
         p.setLineWidth(1)
         values = [
             format_value(interface.interfaceName), format_value(interface.height), format_value(interface.intDiameter), format_value(interface.totalLink),
-            format_value(interface.totalArm), format_value(interface.totalSection), format_value(interface.extDiameter), format_value(interface.accMass),
+            format_value(interface.totalArm), format_value(interface.totalSectionShow), format_value(interface.extDiameterShow), format_value(interface.accMassShow),
             format_value(interface.finODiam), format_value(interface.finAccSection), format_value(interface.safetyFactor), format_value(interface.interfaceCenterX),
             format_value(interface.interfaceCenterY), format_value(interface.interfaceCenterZ), format_value(interface.directionVectorX), format_value(interface.directionVectorY),
             format_value(interface.directionVectorZ), format_value(interface.divisionStep)

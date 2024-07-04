@@ -2,10 +2,11 @@ from django.shortcuts import render, redirect, HttpResponse
 from django.http import JsonResponse
 from django import forms
 from openpyxl import load_workbook
-from datetime import datetime
+from django.forms.widgets import DateInput
+from datetime import date, datetime
 from reportlab.lib.pagesizes import letter
 from reportlab.pdfgen import canvas
-
+import datetime
 from web import models
 import django_filters
 
@@ -96,11 +97,27 @@ def project_add(request):
     return redirect('/project/list/')
     
 
+class CustomDateInput(DateInput):
+    input_type = 'text'
+    
+    def __init__(self, **kwargs):
+        kwargs['format'] = '%m/%d/%Y'
+        super().__init__(**kwargs)
+    
+    def format_value(self, value):
+        if value is None:
+            return ''
+        if isinstance(value, (datetime.date, datetime.datetime)):
+            return value.strftime(self.format)
+        return value
 
 class ProjectEditModelForm(forms.ModelForm):
     class Meta:
         model = models.Project
         fields = ['projectName', 'program', 'equipment', 'customer', 'projectNo', 'relativeDesign', 'structureDrawingNb', 'documentNb', 'revision', 'lastUpdate','valid']
+        widgets = {
+            'lastUpdate': CustomDateInput(),
+        }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -108,6 +125,7 @@ class ProjectEditModelForm(forms.ModelForm):
         for name, filed_object in self.fields.items():
             filed_object.widget.attrs = {"class": "form-control"}
 
+    
 
 def project_edit(request, aid):
     project_object = models.Project.objects.filter(id=aid).first()
@@ -236,7 +254,7 @@ def download_projects_pdf(request):
         p.drawString(xx, y-6*l, format_value(project.structureDrawingNb))
         p.drawString(xx, y-7*l, format_value(project.documentNb))
         p.drawString(xx, y-8*l, format_value(project.revision))
-        p.drawString(xx, y-9*l, format_value(project.lastUpdate))
+        p.drawString(xx, y-9*l, format_value(project.lastUpdate.strftime("%m-%d-%Y") ))
         y -= 220
         if y < 250 and index < len(projects) - 1:
             p.showPage()
