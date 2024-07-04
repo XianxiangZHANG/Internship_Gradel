@@ -143,6 +143,10 @@ class LogFilter(django_filters.FilterSet):
         fields = ['user', 'action', 'model', 'object_id', 'timestamp']
 
 def home(request):
+    account_password = "1a7928232fd865f75808759d0ab8d24f"
+    
+    account = models.User.objects.filter(username=request.info_dict['name']).first()  
+    password_match = (account.password == account_password)
     # log_filter = LogFilter(request.GET, queryset=models.Log.objects.all().order_by('-timestamp'))
     # paginator = Paginator(log_filter.qs, 20)  # Display 20 logs per page
     # page_number = request.GET.get('page')   
@@ -184,6 +188,7 @@ def home(request):
         'users': users,
         'actions': actions,
         'tables': tables,
+        'password_match': password_match,
     }
     return render(request, 'account/home.html', context)
 

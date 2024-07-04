@@ -111,7 +111,7 @@
                        style="margin-top: 20px; font-weight: bold; font-size: 18px;"
                        aria-expanded="false">{{ request.info_dict.name }} <span class="caret"></span></a>
                     <ul class="dropdown-menu">
-                        <li><a href="/myLog/">Check my log</a></li>
+                        {% comment %} <li><a href="/myLog/">Check my log</a></li> {% endcomment %}
                         <li><a href="/changePassword/{{ request.info_dict.id }}/">Change my password</a></li>
                         <li role="separator" class="divider"></li>
                         <li><a href="/logout/">Logout</a></li>
