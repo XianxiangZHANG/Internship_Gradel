@@ -25,69 +25,58 @@
         <button type="submit" id="btnf1" name="filter">Filter</button>
         <button type="reset" id="resetButton" class="btnf2">Reset</button>
     </form>
+    <div id="loading" class="loading-overlay">
+        <div class="spinner"></div>
+        <a id="loadingtext"> Loading </a>
+    </div>
     {% if formset.total_form_count > 0 %}
-    <form method="post">
-        {% csrf_token %}
-        {{ formset.management_form }}
-        <table class="table table-bordered" id="link-table">
-            <thead>
+        <form method="post">
+            {% csrf_token %}
+            {{ formset.management_form }}
+            <table class="table table-bordered" id="link-table">
                 <thead>
-                    <tr>
-                        <th style="width: 120px;">Link Name</th> 
-                        <th style="width: 100px;">Interface1 Name</th>
-                        <th style="width: 100px;">Interface2 Name</th>
-                        {% comment %} <th style="width: 100px;">Length[mm]</th> {% endcomment %}
-                        <th >Sequence</th>
-                        <th style="width: 100px;">Ratio</th>
-                        <!-- <th>Link Type</th> -->
-                        <th style="width: 100px;">Arm Diam.[mm]</th>
-                        <th style="width: 100px;">Arm Section[mm²]</th>
-                        <th style="width: 100px;">Cycle #</th>
-                        {% comment %}                             
-                        <th>Fin. Arm Section[mm²]</th>
-                        <th>Fin. Arm Diam.[mm]</th>
-                        <th>Fin. Arm Radius[m]</th>
-                        <th>Mass[g]</th> {% endcomment %}
-                        <th style="width: 100px;">*Angle*</th>
-                        <th style="width: 100px;">Operation</th>
-                    </tr>
+                    <thead>
+                        <tr>
+                            <th style="width: 120px;">Link Name</th> 
+                            <th style="width: 100px;">Interface1 Name</th>
+                            <th style="width: 100px;">Interface2 Name</th>
+                            <th >Sequence</th>
+                            <th style="width: 100px;">Arm Diam.[mm]</th>
+                            <th style="width: 100px;">Arm Section[mm²]</th>
+                            <th style="width: 100px;">Cycle #</th>
+                            <th style="width: 100px;">*Angle*</th>
+                            <th style="width: 100px;">Operation</th>
+                        </tr>
+                    </thead>
                 </thead>
-            </thead>
-            <tbody>
-                {% for field in formset %}
-                <tr class="link-form">
-                    {{ field.id }}
-                    <td contenteditable="true">{{ field.linkName }}
-                        {% if field.interface1.value or field.interface2.value or field.length.value or field.sequence.value or field.armDiam.value or field.armSection.value or field.cycle.value or field.finArmSection.value or field.finArmDiam.value or field.finArmRadius.value or field..value or field.mass.value or field.angle.value %}
-                        {% if not field.linkName.value %}
-                            <span style="color: red;">{{ linkError }}</span>
-                        {% endif %}{% endif %}</td>
+                <tbody>
+                    {% for field in formset %}
+                    <tr class="link-form">
+                        {{ field.id }}
+                        <td contenteditable="true">{{ field.linkName }}
+                            {% if field.interface1.value or field.interface2.value or field.length.value or field.sequence.value or field.armDiam.value or field.armSection.value or field.cycle.value or field.finArmSection.value or field.finArmDiam.value or field.finArmRadius.value or field..value or field.mass.value or field.angle.value %}
+                            {% if not field.linkName.value %}
+                                <span style="color: red;">{{ linkError }}</span>
+                            {% endif %}{% endif %}</td>
 
-                    <td>{{ field.interface1 }}<span style="color: red;">{{ field.interface1.errors.0 }}</span></td>
-                    <td>{{ field.interface2 }}<span style="color: red;">{{ field.interface2.errors.0 }}</span></td>
-                    {% comment %} <td contenteditable="true">{{ field.length }}</td> {% endcomment %}
-                    <td contenteditable="true">{{ field.sequence }}</td>
-                    <td contenteditable="true">{{ field.ratio }}</td>
-                    <!-- <td contenteditable="true">{{ field.linkType }}</td> -->
-                    <td contenteditable="true">{{ field.armDiam }}</td>
-                    <td contenteditable="true">{{ field.armSection }}</td>
-                    <td contenteditable="true">{{ field.cycle }}</td>
-{% comment %}                     
-                    <td contenteditable="true">{{ field.finArmSection }}</td>
-                    <td contenteditable="true">{{ field.finArmDiam }}</td>
-                    <td contenteditable="true">{{ field.finArmRadius }}</td>
-                    <td contenteditable="true">{{ field.mass }}</td> {% endcomment %}
-                    <td contenteditable="true">{{ field.angle }}</td>
-                    <td class="text-center"><button type="button" class="btn btn-danger remove-form">Delete</button></td>
-                    <input type="hidden" name="{{ form.prefix }}-part" value="{{ form.instance.part_id }}">
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-        <button type="submit" class="btn btn-primary" id="btns">Save</button>
-    </form>
+                        <td>{{ field.interface1 }}<span style="color: red;">{{ field.interface1.errors.0 }}</span></td>
+                        <td>{{ field.interface2 }}<span style="color: red;">{{ field.interface2.errors.0 }}</span></td>
+                        
+                        <td contenteditable="true">{{ field.sequence }}</td>
+                        <td contenteditable="true">{{ field.armDiam }}</td>
+                        <td contenteditable="true">{{ field.armSection }}</td>
+                        <td contenteditable="true">{{ field.cycle }}</td>
+                        <td contenteditable="true">{{ field.angle }}</td>
+                        <td class="text-center"><button type="button" class="btn btn-danger remove-form">Delete</button></td>
+                        <input type="hidden" name="{{ form.prefix }}-part" value="{{ form.instance.part_id }}">
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <button type="submit" class="btn btn-primary" id="btns">Save</button>
+        </form>
     {% else %}
-        <h3 class="text-center">{{ message }}</h3>
+        <h3 class="text-center" id="NoMessage">{{ message }}</h3>
     {% endif %}
 </div>
 
@@ -134,10 +123,7 @@
 {% block js %}
 <script>
 $(document).ready(function() {
-    $('#resetButton').click(function() {
-        window.location.href = window.location.pathname;  
-    });
-
+   
     let DELETE_ID = 0;
 
      

@@ -48,25 +48,25 @@
 
 {% block js %}
 <script type="text/javascript">
-    $(document).ready(function() {
-        $('#id_project').change(function() {
-            var url = '{% url "load_parts" %}';  
-            var projectId = $(this).val();   
-            
-            $.ajax({
-                url: url,
-                data: {
-                    'project_id': projectId
-                },
-                success: function(data) {
-                    $("#id_part").html('');  
-                    $.each(data, function(key, value) {
-                        $("#id_part").append('<option value="' + value.id + '">' + value.partName + '</option>');
-                    });
-                }
-            });
+$(document).ready(function() {
+    $('#id_project').change(function() {
+        var url = '{% url "load_parts" %}';  
+        var projectId = $(this).val();   
+        
+        $.ajax({
+            url: url,
+            data: {
+                'project_id': projectId
+            },
+            success: function(data) {
+                $("#id_part").html('');  
+                $.each(data, function(key, value) {
+                    $("#id_part").append('<option value="' + value.id + '">' + value.partName + '</option>');
+                });
+            }
         });
     });
+});
 </script>
 
 {% endblock %}

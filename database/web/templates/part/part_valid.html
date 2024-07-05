@@ -3,147 +3,145 @@
 
 {% block content %}
 
-    <div  style="margin-bottom: 100px;">
-        <h3>Part List:</h3>
-        <details>
-            <summary>
-              <span class="glyphicon glyphicon-question-sign" aria-hidden="true" id="help-title">
-                Help
-              </span>
-            </summary>        
-            <div id="help-content">
-                Here, we can read the value of each record. <br>
-                We can use <a id="help-btn-filter">Filter</a> to select some specific records.<br>
-                Click the <a id="help-btn-filter">Reset</a> button to reset the filter to the original state.<br>
-                Click the <a id="help-btn-download">Download PDF</a> button to download the displayed data(after filtering) as a pdf document.<br>
+<div style="margin-bottom: 100px;">
+    <h3>Part List:</h3>
+    <details>
+        <summary>
+            <span class="glyphicon glyphicon-question-sign" aria-hidden="true" id="help-title">
+            Help
+            </span>
+        </summary>        
+        <div id="help-content">
+            Here, we can read the value of each record. <br>
+            We can use <a id="help-btn-filter">Filter</a> to select some specific records.<br>
+            Click the <a id="help-btn-filter">Reset</a> button to reset the filter to the original state.<br>
+            Click the <a id="help-btn-download">Download PDF</a> button to download the displayed data(after filtering) as a pdf document.<br>
 
-                Click the <a id="help-btn-filter">Read Part Documents</a> button to jump to Read Part Documents<br><br>
-                In order to avoid loading too much data when entering for the first time, relevant data will be loaded only after clicking <a id="help-btn-filter">Filter</a>. <br>
-                If you want to load all the data in the database, click <a id="help-btn-filter">Filter</a> directly without entering or selecting any keywords in the filter.<br>
-            </div>
-        </details>
-        <form method="get" id="filterForm">
-            {{ filter.form.as_p }}
-            <button type="submit" id="btnf1" name="filter">Filter</button>
-            <button type="reset" id="resetButton" class="btnf2">Reset</button>
-            <a id="download" href="{% url 'download_parts_pdf' %}?{{ request.GET.urlencode }}">Download PDF</a>
-            <a class="btn btn-success" href="/part/valid-doc/" id="btnmore">
-                <span class="glyphicon glyphicon-search" aria-hidden="true"></span> Read Part Documents
-            </a>
-            
-        </form>
-        <!-- <table id="transposedTable"></table> -->
-        {% if parts %}
+            Click the <a id="help-btn-filter">Read Part Documents</a> button to jump to Read Part Documents<br><br>
+            In order to avoid loading too much data when entering for the first time, relevant data will be loaded only after clicking <a id="help-btn-filter">Filter</a>. <br>
+            If you want to load all the data in the database, click <a id="help-btn-filter">Filter</a> directly without entering or selecting any keywords in the filter.<br>
+        </div>
+    </details>
+    <form method="get" id="filterForm">
+        {{ filter.form.as_p }}
+        <button type="submit" id="btnf1" name="filter">Filter</button>
+        <button type="reset" id="resetButton" class="btnf2">Reset</button>
+        <a id="download" href="{% url 'download_parts_pdf' %}?{{ request.GET.urlencode }}">Download PDF</a>
+        <a class="btn btn-success" href="/part/valid-doc/" id="btnmore">
+            <span class="glyphicon glyphicon-search" aria-hidden="true"></span> Read Part Documents
+        </a>
+        
+    </form>
+    <div id="loading" class="loading-overlay">
+        <div class="spinner"></div>
+        <a id="loadingtext"> Loading </a>
+    </div>
+    {% if parts %}
         <table class="table table-bordered" id="normalTable" style=" font-size: 12px">
-        <thead>
-        <tr>
-            <th>ID</th>
-            <th>Part Name</th>
-            <th>Resin Name</th>
-            <th>Resin Density [kg/m3]</th>
-            <th>Fiber Name</th>
-            <th>Fiber Density [kg/m3]</th>
-            <th>Number of Spools</th>
-            <th>Fiber Volume Ratio[%]</th>
-            <th>Winding Density [kg/m3]</th>
-            <th>Fiber Section calc.[mm²]</th>
-            <th>Fiber Section acc.[mm²]</th>
-            <th>Default Interface Height [mm]</th>
-            <th>Default Interface Int Diam [mm]</th>
-            <th>Default Link (Element) Type</th>
-            <th>Default Link Defined by</th>
-            <th>Number of Links</th>
-            <th>Number of Bushings</th>
-            <th>Total Mass of Links [g]</th>
-            <th>Total Mass of Accumulation [g]</th>
-            <th>Total Mass of Winding [g]</th>
-            <th>Total Mass of Bushing [g]</th>
-            <th>Additional Masses [g]</th>
-            <th>Total Mass of Structure [g]</th>
-            <th>Total Fiber Length [m]</th>
-            <th>Total Fiber Mass [kg]</th>
-            <th>Total Resin Mass [g]</th>
-            <th>Project Image</th>
-        </tr>
-        </thead>
-        <tbody>
-        {% for row in parts %}
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Part Name</th>
+                    <th>Resin Name</th>
+                    <th>Resin Density [kg/m3]</th>
+                    <th>Fiber Name</th>
+                    <th>Fiber Density [kg/m3]</th>
+                    <th>Number of Spools</th>
+                    <th>Fiber Volume Ratio[%]</th>
+                    <th>Winding Density [kg/m3]</th>
+                    <th>Fiber Section calc.[mm²]</th>
+                    <th>Fiber Section acc.[mm²]</th>
+                    <th>Default Interface Height [mm]</th>
+                    <th>Default Interface Int Diam [mm]</th>
+                    <th>Default Link (Element) Type</th>
+                    <th>Default Link Defined by</th>
+                    <th>Number of Links</th>
+                    <th>Number of Bushings</th>
+                    <th>Total Mass of Links [g]</th>
+                    <th>Total Mass of Accumulation [g]</th>
+                    <th>Total Mass of Winding [g]</th>
+                    <th>Total Mass of Bushing [g]</th>
+                    <th>Additional Masses [g]</th>
+                    <th>Total Mass of Structure [g]</th>
+                    <th>Total Fiber Length [m]</th>
+                    <th>Total Fiber Mass [kg]</th>
+                    <th>Total Resin Mass [g]</th>
+                    <th>Project Image</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for row in parts %}
+                
+                <tr>
+                    <td>{{ row.id }}</td>
+                    <td>{{ row.partName }}</td>
+                    <td>{{ row.resin|default_if_none:"" }}</td>
+                    <td>{{ row.resinDensity|default_if_none:"" }}</td>
+                    <td>{{ row.fiber|default_if_none:"" }}</td>
+                    <td>{{ row.fiberDensity|default_if_none:"" }}</td>
+                    <td>{{ row.totalTowNumber|default_if_none:"" }}</td>
+                    <td>{{ row.fiberVolumeRatio|default_if_none:"" }}</td>
+                    <td>{{ row.windingDensity|default_if_none:"" }}</td>
+                    <td>{{ row.fiberSectionCalc|default_if_none:"" }}</td>
+                    <td>{{ row.fiberSectionAcc|default_if_none:"" }}</td>
+                    <td>{{ row.defaultInterfaceHeight|default_if_none:"" }}</td>
+                    <td>{{ row.defaultInterfaceIntDiam|default_if_none:"" }}</td>
+                    <td>{{ row.defaultLinkType|default_if_none:"" }}</td>
+                    <td>{{ row.defaultLinkDefined|default_if_none:"" }}</td>
+                    <td>{{ row.numberLink|default_if_none:"0" }}</td>
+                    <td>{{ row.numberBushing|default_if_none:"0" }}</td>
+                    <td>{{ row.totalMassLink|default_if_none:"" }}</td>
+                    <td>{{ row.totalMassAccumulation|default_if_none:"" }}</td>
+                    <td>{{ row.totalMassWinding|default_if_none:"" }}</td>
+                    <td>{{ row.totalMassBushing|default_if_none:"" }}</td>
+                    <td>{{ row.additionalMass|default_if_none:"" }}</td>
+                    <td>{{ row.totalMassStructure|default_if_none:"" }}</td>
+                    <td>{{ row.totalFiberLength|default_if_none:"" }}</td>
+                    <td>{{ row.totalFiberMass|default_if_none:"" }}</td>
+                    <td>{{ row.totalResinMass|default_if_none:"" }}</td>
+                    <td>{% if row.projectImage %}
+                        <img src="{{ row.projectImage.url }}" alt="Project Image" class="thumbnail" onclick="showModal('{{ row.projectImage.url }}')">
+                    {% else %}
+                        No image
+                    {% endif %}</td>
+                </tr>
             
-            <tr>
-                <td>{{ row.id }}</td>
-                <td>{{ row.partName }}</td>
-                <td>{{ row.resin|default_if_none:"" }}</td>
-                <td>{{ row.resinDensity|default_if_none:"" }}</td>
-                <td>{{ row.fiber|default_if_none:"" }}</td>
-                <td>{{ row.fiberDensity|default_if_none:"" }}</td>
-                <td>{{ row.totalTowNumber|default_if_none:"" }}</td>
-                <td>{{ row.fiberVolumeRatio|default_if_none:"" }}</td>
-                <td>{{ row.windingDensity|default_if_none:"" }}</td>
-                <td>{{ row.fiberSectionCalc|default_if_none:"" }}</td>
-                <td>{{ row.fiberSectionAcc|default_if_none:"" }}</td>
-                <td>{{ row.defaultInterfaceHeight|default_if_none:"" }}</td>
-                <td>{{ row.defaultInterfaceIntDiam|default_if_none:"" }}</td>
-                <td>{{ row.defaultLinkType|default_if_none:"" }}</td>
-                <td>{{ row.defaultLinkDefined|default_if_none:"" }}</td>
-                <td>{{ row.numberLink|default_if_none:"0" }}</td>
-                <td>{{ row.numberBushing|default_if_none:"0" }}</td>
-                <td>{{ row.totalMassLink|default_if_none:"" }}</td>
-                <td>{{ row.totalMassAccumulation|default_if_none:"" }}</td>
-                <td>{{ row.totalMassWinding|default_if_none:"" }}</td>
-                <td>{{ row.totalMassBushing|default_if_none:"" }}</td>
-                <td>{{ row.additionalMass|default_if_none:"" }}</td>
-                <td>{{ row.totalMassStructure|default_if_none:"" }}</td>
-                <td>{{ row.totalFiberLength|default_if_none:"" }}</td>
-                <td>{{ row.totalFiberMass|default_if_none:"" }}</td>
-                <td>{{ row.totalResinMass|default_if_none:"" }}</td>
-                <td>{% if row.projectImage %}
-                    <img src="{{ row.projectImage.url }}" alt="Project Image" class="thumbnail" onclick="showModal('{{ row.projectImage.url }}')">
-                {% else %}
-                    No image
-                {% endif %}</td>
-            </tr>
-         
             {% empty %}
-            <tr>
-                <td colspan="27" class="text-center" style="font-size: large;">{{ message }}</td>
-            </tr>
+                <tr>
+                    <td colspan="27" class="text-center" style="font-size: large;">{{ message }}</td>
+                </tr>
             {% endfor %}
-        </tbody>
-    </table>
+            </tbody>
+        </table>
     {% else %}
-        <h3 class="text-center">{{ message }}</h3>
+        <h3 class="text-center" id="NoMessage">{{ message }}</h3>
     {% endif %}
-    </div>
-    <div id="myModalImage" class="modalIamge">
-        <span class="close" onclick="closeModal()">&times;</span>
-        <img class="modal-content" id="modalImage">
-    </div>
+</div>  
+<div id="myModalImage" class="modalIamge">
+    <span class="close" onclick="closeModal()">&times;</span>
+    <img class="modal-content" id="modalImage">
+</div>
     
 
 {% endblock %}
 
 {% block js %}
-    <script>
-       
+<script>
+    
+    function showModal(src) {
+        var modal = document.getElementById("myModalImage");
+        var modalImg = document.getElementById("modalImage");
+        modal.style.display = "block";
+        modalImg.src = src;
+    }
 
-        $('#resetButton').click(function() {
-        window.location.href = window.location.pathname;  
-        });
-        
-        function showModal(src) {
-            var modal = document.getElementById("myModalImage");
-            var modalImg = document.getElementById("modalImage");
-            modal.style.display = "block";
-            modalImg.src = src;
-        }
+    function closeModal() {
+        var modal = document.getElementById("myModalImage");
+        modal.style.display = "none";
+    }
 
-        function closeModal() {
-            var modal = document.getElementById("myModalImage");
-            modal.style.display = "none";
-        }
-
-       
-    </script>
+    
+</script>
 {% endblock %}
 
 {% block css %}

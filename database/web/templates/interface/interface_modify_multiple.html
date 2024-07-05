@@ -25,69 +25,70 @@
         <button type="submit" id="btnf1" name="filter">Filter</button>
         <button type="reset" id="resetButton" class="btnf2">Reset</button>
     </form>
+    <div id="loading" class="loading-overlay">
+        <div class="spinner"></div>
+        <a id="loadingtext"> Loading </a>
+    </div>
     {% if formset.total_form_count > 0 %}
-    <form method="post">
-        {% csrf_token %}
-        {{ formset.management_form }}
-        <table class="table table-bordered" id="interface-table">
-            <thead>
+        <form method="post">
+            {% csrf_token %}
+            {{ formset.management_form }}
+            <table class="table table-bordered" id="interface-table">
                 <thead>
-                    <tr>
-                        <th style="width: 80px;">Interface Name</th>
-                        <th style="width: 70px;">Height [mm]</th>
-                        <th style="width: 70px;">Int. Diameter [mm]</th>
-                        <th>Fin. O. Diam. [mm]</th>
-                        <th>Fin. Acc. section [mm²]</th>
-                        <th>Interface's center X [mm]</th>
-                        <th>Interface's center Y [mm]</th>
-                        <th>Interface's center Z [mm]</th>
-                        <th>Direction vector X [mm]</th>
-                        <th>Direction vector Y [mm]</th>
-                        <th>Direction vector Z [mm]</th>
-                        <th>Division Step</th>
-                        <th colspan="2">Operation</th>
-                    </tr>
+                    <thead>
+                        <tr>
+                            <th style="width: 80px;">Interface Name</th>
+                            <th style="width: 70px;">Height [mm]</th>
+                            <th style="width: 70px;">Int. Diameter [mm]</th>
+                            <th>Fin. O. Diam. [mm]</th>
+                            <th>Fin. Acc. section [mm²]</th>
+                            <th>Interface's center X [mm]</th>
+                            <th>Interface's center Y [mm]</th>
+                            <th>Interface's center Z [mm]</th>
+                            <th>Direction vector X [mm]</th>
+                            <th>Direction vector Y [mm]</th>
+                            <th>Direction vector Z [mm]</th>
+                            <th>Division Step</th>
+                            <th colspan="2">Operation</th>
+                        </tr>
+                    </thead>
                 </thead>
-            </thead>
-            <tbody>
-                {% for field in formset %}
-                <tr class="interface-form">
-                    
+                <tbody>
+                    {% for field in formset %}
                     <tr class="interface-form">
-                        {{ field.id }}
-                        <td contenteditable="true">{{ field.interfaceName }}
-                            {% if field.height.value or field.intDiameter.value or field.totalLink.value or field.totalArm.value or field.totalSection.value or field.extDiameter.value or field.accMass.value or field.finODiam.value or field.finAccSection.value or field.safetyFactor.value or field.interfaceCenterX.value or field.interfaceCenterY.value or field.interfaceCenterZ.value or field.directionVectorX.value or field.directionVectorY.value or field.directionVectorZ.value or field.divisionStep.value %}
-                            {% if not field.interfaceName.value %}
-                                <span style="color: red;">{{ interfaceError }}</span>
-                            {% endif %}{% endif %}</td>
+                        
+                        <tr class="interface-form">
+                            {{ field.id }}
+                            <td contenteditable="true">{{ field.interfaceName }}
+                                {% if field.height.value or field.intDiameter.value or field.totalLink.value or field.totalArm.value or field.totalSection.value or field.extDiameter.value or field.accMass.value or field.finODiam.value or field.finAccSection.value or field.safetyFactor.value or field.interfaceCenterX.value or field.interfaceCenterY.value or field.interfaceCenterZ.value or field.directionVectorX.value or field.directionVectorY.value or field.directionVectorZ.value or field.divisionStep.value %}
+                                {% if not field.interfaceName.value %}
+                                    <span style="color: red;">{{ interfaceError }}</span>
+                                {% endif %}{% endif %}</td>
 
-                        <td contenteditable="true">{{ field.height }}</td>
-                        <td contenteditable="true">{{ field.intDiameter }}</td>
-
-                        <td contenteditable="true">{{ field.finODiam }}</td>
-
-                        <td contenteditable="true">{{ field.finAccSection }}</td>
-                        <td contenteditable="true">{{ field.interfaceCenterX }}</td>
-                        <td contenteditable="true">{{ field.interfaceCenterY }}</td>
-
-                        <td contenteditable="true">{{ field.interfaceCenterZ }}</td>
-                        <td contenteditable="true">{{ field.directionVectorX }}</td>
-                        <td contenteditable="true">{{ field.directionVectorY }}</td>
-                        <td contenteditable="true">{{ field.directionVectorZ }}</td>
-                        <td contenteditable="true">{{ field.divisionStep }}</td>
-                       
-                    <td class="text-center">
-                        <input type="hidden" name="{{ form.id.name }}" value="{{ form.id.value }}">
-                        <button type="button" class="btn btn-danger remove-form">Delete</button>
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-        <button type="submit" class="btn btn-primary" id="btns">Save</button>
-    </form>
+                            <td contenteditable="true">{{ field.height }}</td>
+                            <td contenteditable="true">{{ field.intDiameter }}</td>
+                            <td contenteditable="true">{{ field.finODiam }}</td>
+                            <td contenteditable="true">{{ field.finAccSection }}</td>
+                            <td contenteditable="true">{{ field.interfaceCenterX }}</td>
+                            <td contenteditable="true">{{ field.interfaceCenterY }}</td>
+                            <td contenteditable="true">{{ field.interfaceCenterZ }}</td>
+                            <td contenteditable="true">{{ field.directionVectorX }}</td>
+                            <td contenteditable="true">{{ field.directionVectorY }}</td>
+                            <td contenteditable="true">{{ field.directionVectorZ }}</td>
+                            <td contenteditable="true">{{ field.divisionStep }}</td>
+                        
+                        <td class="text-center">
+                            <input type="hidden" name="{{ form.id.name }}" value="{{ form.id.value }}">
+                            <button type="button" class="btn btn-danger remove-form">Delete</button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <button type="submit" class="btn btn-primary" id="btns">Save</button>
+        </form>
     {% else %}
-        <h3 class="text-center">{{ message }}</h3>
+        <h3 class="text-center" id="NoMessage">{{ message }}</h3>
     {% endif %}
 </div>
 
@@ -135,9 +136,7 @@
 
 <script>
 $(document).ready(function() {
-    $('#resetButton').click(function() {
-        window.location.href = window.location.pathname;  
-    });
+   
 
     let DELETE_ID = 0;
 

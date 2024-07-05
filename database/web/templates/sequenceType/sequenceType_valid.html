@@ -27,6 +27,10 @@
         <button type="reset" id="resetButton" class="btnf2">Reset</button>
         <a id="download" href="{% url 'download_sequenceTypes_pdf' %}?{{ request.GET.urlencode }}">Download PDF</a>
     </form>
+    <div id="loading" class="loading-overlay">
+        <div class="spinner"></div>
+        <a id="loadingtext"> Loading </a>
+    </div>
     <table class="table table-bordered">
         <thead>
         <tr>
@@ -57,10 +61,7 @@
 
 {% block js %}
     <script>
-        $('#resetButton').click(function() {
-        window.location.href = window.location.pathname; 
-        });
-
+        
     </script>
 {% endblock %}
 

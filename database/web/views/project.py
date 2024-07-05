@@ -6,7 +6,6 @@ from django.forms.widgets import DateInput
 from datetime import date, datetime
 from reportlab.lib.pagesizes import letter
 from reportlab.pdfgen import canvas
-import datetime
 from web import models
 import django_filters
 

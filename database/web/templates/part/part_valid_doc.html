@@ -1,80 +1,76 @@
 {% extends 'layout.html' %}
 
-
 {% block content %}
+<div style="margin-bottom: 100px;">
+    <h3>Part List:</h3>
+    <details>
+        <summary>
+            <span class="glyphicon glyphicon-question-sign" aria-hidden="true" id="help-title">
+            Help
+            </span>
+        </summary>        
+        <div id="help-content">
+            Here, we can read the value of each record. <br>
+            We can use <a id="help-btn-filter">Filter</a> to select some specific records.<br>
+            Click the <a id="help-btn-filter">Reset</a> button to reset the filter to the original state.<br>
+            Click the <a id="help-btn-download">Download PDF</a> button to download the displayed data(after filtering) as a pdf document.<br>
 
-    <div  style="margin-bottom: 100px;">
-        <h3>Part List:</h3>
-        <details>
-            <summary>
-              <span class="glyphicon glyphicon-question-sign" aria-hidden="true" id="help-title">
-                Help
-              </span>
-            </summary>        
-            <div id="help-content">
-                Here, we can read the value of each record. <br>
-                We can use <a id="help-btn-filter">Filter</a> to select some specific records.<br>
-                Click the <a id="help-btn-filter">Reset</a> button to reset the filter to the original state.<br>
-                Click the <a id="help-btn-download">Download PDF</a> button to download the displayed data(after filtering) as a pdf document.<br>
-
-                Click the <a id="help-btn-filter">Read Part List</a> button to jump to Read Part List<br><br>
-                In order to avoid loading too much data when entering for the first time, relevant data will be loaded only after clicking <a id="help-btn-filter">Filter</a>. <br>
-                If you want to load all the data in the database, click <a id="help-btn-filter">Filter</a> directly without entering or selecting any keywords in the filter.<br>
-            </div>
-        </details>
-        <form method="get" id="filterForm">
-            {{ filter.form.as_p }}
-            <button type="submit" id="btnf1" name="filter">Filter</button>
-            <button type="reset" id="resetButton" class="btnf2">Reset</button>
-            <a id="download" href="{% url 'download_projects_pdf' %}?{{ request.GET.urlencode }}">Download PDF</a>
-            <a class="btn btn-success" href="/part/valid/" id="btnmore">
-                <span class="glyphicon glyphicon-search" aria-hidden="true"></span> Read Part List
-            </a>
-        </form>
-        <!-- <table id="transposedTable"></table> -->
-        {% if parts %}
+            Click the <a id="help-btn-filter">Read Part List</a> button to jump to Read Part List<br><br>
+            In order to avoid loading too much data when entering for the first time, relevant data will be loaded only after clicking <a id="help-btn-filter">Filter</a>. <br>
+            If you want to load all the data in the database, click <a id="help-btn-filter">Filter</a> directly without entering or selecting any keywords in the filter.<br>
+        </div>
+    </details>
+    <form method="get" id="filterForm">
+        {{ filter.form.as_p }}
+        <button type="submit" id="btnf1" name="filter">Filter</button>
+        <button type="reset" id="resetButton" class="btnf2">Reset</button>
+        <a id="download" href="{% url 'download_projects_pdf' %}?{{ request.GET.urlencode }}">Download PDF</a>
+        <a class="btn btn-success" href="/part/valid/" id="btnmore">
+            <span class="glyphicon glyphicon-search" aria-hidden="true"></span> Read Part List
+        </a>
+    </form>
+    <div id="loading" class="loading-overlay">
+        <div class="spinner"></div>
+        <a id="loadingtext"> Loading </a>
+    </div>
+    <!-- <table id="transposedTable"></table> -->
+    {% if parts %}
         <table class="table table-bordered" id="normalTable" >
-        <thead>
-        <tr>
-            <th>ID</th>
-            <th style="width:500px;">Part Name</th>
-            
-            <th>.gh</th>
-            <th>.mod</th>
-            <th>.csv</th>
-            <th>.rs</th>
-            <th>.log</th>
-            <th>.mp4</th>
-            <th>.jpg</th>
-
-
-        </tr>
-        </thead>
-        <tbody>
-        {% for row in parts %}
-            
-            <tr>
-                <td>{{ row.id }}</td>
-                <td>{{ row.partName }}</td>
-                <td>{{ row.part_gh|default_if_none:"" }}</td>
-                <td>{{ row.part_mod|default_if_none:"" }}</td>
-                <td>{{ row.part_csv|default_if_none:"" }}</td>
-                <td>{{ row.part_rs|default_if_none:"" }}</td>
-                <td>{{ row.part_log|default_if_none:"" }}</td>
-                <td>{{ row.part_mp4|default_if_none:"" }}</td>
-                <td>{{ row.part_jpg|default_if_none:"" }}</td>
-                
-            </tr>
-         
-            {% empty %}
-            <tr>
-                <td colspan="10" class="text-center" style="font-size: large;">{{ message }}</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th style="width:500px;">Part Name</th>
+                    <th>.gh</th>
+                    <th>.mod</th>
+                    <th>.csv</th>
+                    <th>.rs</th>
+                    <th>.log</th>
+                    <th>.mp4</th>
+                    <th>.jpg</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in parts %}
+                    <tr>
+                        <td>{{ row.id }}</td>
+                        <td>{{ row.partName }}</td>
+                        <td>{{ row.part_gh|default_if_none:"" }}</td>
+                        <td>{{ row.part_mod|default_if_none:"" }}</td>
+                        <td>{{ row.part_csv|default_if_none:"" }}</td>
+                        <td>{{ row.part_rs|default_if_none:"" }}</td>
+                        <td>{{ row.part_log|default_if_none:"" }}</td>
+                        <td>{{ row.part_mp4|default_if_none:"" }}</td>
+                        <td>{{ row.part_jpg|default_if_none:"" }}</td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="10" class="text-center" style="font-size: large;">{{ message }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
     {% else %}
-        <h3 class="text-center">{{ message }}</h3>
+        <h3 class="text-center" id="NoMessage">{{ message }}</h3>
     {% endif %}
 </div>
     
@@ -82,14 +78,9 @@
 {% endblock %}
 
 {% block js %}
-    <script>
-        $('#resetButton').click(function() {
-        window.location.href = window.location.pathname; 
-        });
-        
-
-       
-    </script>
+<script>
+    
+</script>
 {% endblock %}
 
 {% block css %}

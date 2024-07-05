@@ -79,7 +79,7 @@ class LinkModelForm(forms.ModelForm):
         fields = [
                   
                   'linkName',  'interface1', 'interface2', 
-                'sequence', 'ratio', 'armDiam', 'armSection', 'cycle', 'angle',]
+                'sequence', 'armDiam', 'armSection', 'cycle', 'angle',]
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -219,7 +219,7 @@ class LinkEditModelForm(forms.ModelForm):
         model = models.Link
         fields = ['linkName', 
                 # 'length', 
-                'sequence', 'ratio', 
+                'sequence', 
                 'armDiam', 'armSection', 
                 'cycle',  
                 # 'finArmSection', 'finArmDiam', 'finArmRadius', 'mass', 
@@ -300,7 +300,8 @@ def handle_uploaded_file_link(f):
     
     sheetCP = wb['CoverPage']
     sheetLT = wb['Link Table']
-    sheetSE = wb['Sequence']
+    # if 'Sequence' in wb.sheetnames:
+    #     sheetSE = wb['Sequence']
 
     numberLink = 0
 
@@ -379,9 +380,21 @@ def handle_uploaded_file_link(f):
                         interface2[i] = None
                     # print(interface2[i])
             elif cell.value == "Sequence":
+                
                 for i in range(0, numberLink):
                     sequence[i] = sheetLT.cell(row=cell.row+ 1 + i, column=cell.column).value
+                    # print(cell.row+ 1 + i, cell.column)
+                    # print(sheetLT.cell(row=cell.row+ 1 + i, column=cell.column).value)
                     # print(sequence[i])
+
+            elif cell.value == "Link Type":
+                
+                for i in range(0, numberLink):
+                    sequence[i] = sheetLT.cell(row=cell.row+ 1 + i, column=cell.column).value
+                    # print(cell.row+ 1 + i, cell.column)
+                    # print(sheetLT.cell(row=cell.row+ 1 + i, column=cell.column).value)
+                    # print(sequence[i])
+
            
             elif cell.value == "Arm diam. [mm]":
                 for i in range(0, numberLink):
@@ -392,6 +405,7 @@ def handle_uploaded_file_link(f):
                     armSection[i] = sheetLT.cell(row=cell.row+ 1 + i, column=cell.column ).value
                     # print(armSection[i])
             elif cell.value == "Cycle #":
+                # print("read cycle")
                 for i in range(0, numberLink):
                     cycle[i] = sheetLT.cell(row=cell.row+ 1 + i, column=cell.column ).value
                     # print(cycle[i])
@@ -404,19 +418,21 @@ def handle_uploaded_file_link(f):
                 for i in range(0, numberLink):
                     angle[i] = 0
 
-    if sheetSE:
-        for row in sheetSE.iter_rows():
-            for cell in row:
-                if cell.value == "Ratio":
-                    for i in range(0, numberLink):
-                        # print(cell.row, cell.column)
-                        ratio[i] = sheetSE.cell(row=cell.row+ 1 + i, column=cell.column ).value
-                        # print(str(i) + linkName[i])
-    else:
-        for i in range(0, numberLink):
-            ratio[i] = "--"
+    # if 'Sequence' in wb.sheetnames:
+    #     for row in sheetSE.iter_rows():
+    #         for cell in row:
+    #             if cell.value == "Ratio":
+    #                 for i in range(0, numberLink):
+    #                     # print(cell.row, cell.column)
+    #                     ratio[i] = sheetSE.cell(row=cell.row+ 1 + i, column=cell.column ).value
+    #                     # print(str(i) + linkName[i])
+    # else:
+    #     for i in range(0, numberLink):
+    #         print("read Sequence")
+    #         ratio[i] = 0.5
+    #         print(ratio[i])
 
-    links = []
+    # links = []
                                                  
     # for i in range(numberLink):
     #     try:
@@ -439,7 +455,7 @@ def handle_uploaded_file_link(f):
         'armSection':armSection,
         'cycle':cycle,
         'sequence':sequence,
-        'ratio':ratio,
+        # 'ratio':ratio,
         # 'finArmSection':finArmSection,
         # 'finArmDiam':finArmDiam,
         # 'finArmRadius':finArmRadius,

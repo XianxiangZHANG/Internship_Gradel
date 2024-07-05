@@ -49,7 +49,7 @@
         <button type="submit" class="btn btn-primary" id="btns">Save</button>
     </form>
     {% else %}
-        <h2>This table is empty.</h2>
+        <h3 class="text-center" id="NoMessage">This table is empty.</h3>
     {% endif %}
 </div>
 
@@ -101,10 +101,7 @@
 {% block js %}
 <script>
 $(document).ready(function() {
-    $('#resetButton').click(function() {
-        window.location.href = window.location.pathname;  
-    });
-
+    
     let DELETE_ID = 0;
 
      

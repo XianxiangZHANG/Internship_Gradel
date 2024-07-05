@@ -119,3 +119,42 @@ summary:focus {
 #help-btn-download{
     color: #6ebe49;
 }
+
+#loading {
+    font-size: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100px;
+    display:none;
+    margin-left:48%;
+    margin-top:50px;
+}
+#loadingtext {
+    color: #00a2ff;
+}
+
+
+
+.loading-overlay {
+    background: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.spinner {
+    width: 50px;
+    height: 50px;
+    margin-left:30px;
+    border: 8px solid rgba(0, 0, 0, 0);
+    border-top-color: #3498db;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}

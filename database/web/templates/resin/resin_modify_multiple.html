@@ -33,6 +33,10 @@
             <span class="glyphicon glyphicon-pencil" aria-hidden="true" id="pic"></span> Modify Thermophysical Toughness Properties of Resin List
         </a>
     </form>
+    <div id="loading" class="loading-overlay">
+        <div class="spinner"></div>
+        <a id="loadingtext"> Loading </a>
+    </div>
     {% if formset.total_form_count > 0 %}
     <form method="post">
         {% csrf_token %}
@@ -86,7 +90,7 @@
         <button type="submit" class="btn btn-primary" id="btns">Save</button>
     </form>
     {% else %}
-        <h3 class="text-center">{{ message }}</h3>
+        <h3 class="text-center" id="NoMessage">{{ message }}</h3>
     {% endif %}
 </div>
 
@@ -148,9 +152,7 @@
 {% block js %}
 <script>
 $(document).ready(function() {
-    $('#resetButton').click(function() {
-        window.location.href = window.location.pathname; 
-    });
+     
 
     let DELETE_ID = 0;
 

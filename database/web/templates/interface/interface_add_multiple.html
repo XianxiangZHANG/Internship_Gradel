@@ -15,6 +15,7 @@
                 Click the <a id="help-btn-remove">Remove</a> button to clear the corresponding row.<br>
                 Click the <a id="help-btn-save">Save</a> button to save the data to the database.<br><br>
                 Please make sure we have the correct Project and Part selected before saving.<br>
+                If use the file upload method, please make sure that the Excel file contains the project and part information.<br>
             </div>
         </details>
     </div>
@@ -76,14 +77,8 @@
                             <th>Interface Name</th>
                             <th>Height [mm]</th>
                             <th>Int. Diameter [mm]</th>
-                            {% comment %} <th>Total Link</th>
-                            <th>Total Arm</th>
-                            <th>Total Section [mm²]</th>
-                            <th>Ext. Diameter [mm]</th>
-                            <th>Acc. Mass [g]</th> {% endcomment %}
                             <th>Fin. O. Diam. [mm]</th>
                             <th>Fin. Acc. section [mm²]</th>
-                            {% comment %} <th>Safety Factor [%]</th> {% endcomment %}
                             <th>Interface's center X [mm]</th>
                             <th>Interface's center Y [mm]</th>
                             <th>Interface's center Z [mm]</th>
@@ -105,25 +100,15 @@
 
                             <td contenteditable="true">{{ field.height }}</td>
                             <td contenteditable="true">{{ field.intDiameter }}</td>
-                            {% comment %} <td contenteditable="true">{{ field.totalLink }}</td>
-                            <td contenteditable="true">{{ field.totalArm }}</td>
-
-                            <td contenteditable="true">{{ field.totalSection }}</td>
-                            <td contenteditable="true">{{ field.extDiameter }}</td>
-                            <td contenteditable="true">{{ field.accMass }}</td> {% endcomment %}
                             <td contenteditable="true">{{ field.finODiam }}</td>
-
                             <td contenteditable="true">{{ field.finAccSection }}</td>
-                            {% comment %} <td contenteditable="true">{{ field.safetyFactor }}</td> {% endcomment %}
                             <td contenteditable="true">{{ field.interfaceCenterX }}</td>
                             <td contenteditable="true">{{ field.interfaceCenterY }}</td>
-
                             <td contenteditable="true">{{ field.interfaceCenterZ }}</td>
                             <td contenteditable="true">{{ field.directionVectorX }}</td>
                             <td contenteditable="true">{{ field.directionVectorY }}</td>
                             <td contenteditable="true">{{ field.directionVectorZ }}</td>
                             <td contenteditable="true">{{ field.divisionStep }}</td>
-                           
                             <td class="text-center"> <button type="button" class="btn btn-danger remove-form">Remove</button></td>
                         </tr>
                         {% endfor %}
@@ -149,160 +134,160 @@
 {% block js %}
 <script type="text/javascript">
     
-    $(document).ready(function() {
-        function loadParts(projectId) {
-            var url = '{% url "load_parts" %}';
-            $.ajax({
-                url: url,
-                data: {
-                    'project_id': projectId
-                },
-                success: function(data) {
-                    $("#id_part").html('<option value=""> - - - - Please select one - - - - </option>');
-                    $.each(data, function(key, value) {
-                        $("#id_part").append('<option value="' + value.id + '">' + value.partName + '</option>');
-                    });
-                }
-            });
-        }
-
-        $('#id_project').change(function() {
-            var projectId = $(this).val();
-            loadParts(projectId);
-        });
-
-        $('#add-interface').click(function() {
-            var formCount = $('#id_form-TOTAL_FORMS').val();
-            var newForm = $('.interface-form:first').clone(true).removeClass('interface-form');
-            newForm.find('input').each(function() {
-                var name = $(this).attr('name').replace('-0-', '-' + formCount + '-');
-                var id = 'id_' + name;
-                $(this).attr({'name': name, 'id': id}).val('');
-            });
-            newForm.find('td:last').html('<button type="button" class="btn btn-danger remove-form">Remove</button>');
-            $('#interface-table tbody').append(newForm);
-            $('#id_form-TOTAL_FORMS').val(parseInt(formCount) + 1);
-        });
-
-        $(document).on('click', '.remove-form', function() {
-            var $row = $(this).closest('tr');
-            if ($row.index() === 0) {
-                // console.log("me")
-                // console.log($row.index())
-                // Clear the content of the first row
-                $row.find('input').val('');
-            } else {
-                console.log($row.index())
-                if ($('#interface-table tbody tr').length > 1) {
-                    $row.remove();
-                    var formCount = $('#id_form-TOTAL_FORMS').val();
-                    $('#id_form-TOTAL_FORMS').val(parseInt(formCount) - 1);
-                    // Reindex all table rows
-                    $('#interface-table tbody tr').each(function(index) {
-                        $(this).find('input').each(function() {
-                            var name = $(this).attr('name').replace(/-\d+-/, '-' + index + '-');
-                            var id = 'id_' + name;
-                            $(this).attr({'name': name, 'id': id});
-                        });
-                    });
-                }
+$(document).ready(function() {
+    function loadParts(projectId) {
+        var url = '{% url "load_parts" %}';
+        $.ajax({
+            url: url,
+            data: {
+                'project_id': projectId
+            },
+            success: function(data) {
+                $("#id_part").html('<option value=""> - - - - Please select one - - - - </option>');
+                $.each(data, function(key, value) {
+                    $("#id_part").append('<option value="' + value.id + '">' + value.partName + '</option>');
+                });
             }
         });
+    }
 
-        // Handle paste event to populate table cells
-        $('#interface-table tbody').on('paste', 'td', function(e) {
-            e.preventDefault();
-            var text = (e.originalEvent || e).clipboardData.getData('text/plain');
-            var rows = text.split('\n');
-            var $currentRow = $(this).closest('tr');
-            var startRowIndex = $currentRow.index();
-            var startColIndex = $(this).index();
+    $('#id_project').change(function() {
+        var projectId = $(this).val();
+        loadParts(projectId);
+    });
 
-            rows.forEach(function(row, rowIndex) {
-                if (row.trim() !== '') {
-                    var cols = row.split('\t');
-                    var $row = $('#interface-table tbody tr').eq(startRowIndex + rowIndex);
-                    if ($row.length === 0) {
-                        $('#add-interface').click();
-                        $row = $('#interface-table tbody tr').last();
-                    }
-                    cols.forEach(function(col, colIndex) {
-                        var $cell = $row.find('td').eq(startColIndex + colIndex);
-                        $cell.find('input').val(col.trim() || '');
-                    });
-                }
-            });
+    $('#add-interface').click(function() {
+        var formCount = $('#id_form-TOTAL_FORMS').val();
+        var newForm = $('.interface-form:first').clone(true).removeClass('interface-form');
+        newForm.find('input').each(function() {
+            var name = $(this).attr('name').replace('-0-', '-' + formCount + '-');
+            var id = 'id_' + name;
+            $(this).attr({'name': name, 'id': id}).val('');
         });
-        
-        $('#upload-form').on('submit', function(e) {
-            e.preventDefault();
-            var formData = new FormData(this);
-            $.ajax({
-                url: "{% url 'upload_file_interface' %}",
-                type: "POST",
-                data: formData,
-                processData: false,
-                contentType: false,
-                success: function(data) {
-                    if (data.error) {
-                        alert(data.error);
-                        return;
-                    }
-                    $('#id_project').val(data.interface_data.project_id);
-                    $('#id_part').val(data.interface_data.part_id);
-                    // Populate form fields with returned data
-                    for(var i=0; i<data.numberInterface; i++) {
-                        var $row = $('#interface-table tbody tr').last();
+        newForm.find('td:last').html('<button type="button" class="btn btn-danger remove-form">Remove</button>');
+        $('#interface-table tbody').append(newForm);
+        $('#id_form-TOTAL_FORMS').val(parseInt(formCount) + 1);
+    });
 
-                        // Check if the last row is empty
-                        var isEmptyRow = !$row.find('td').eq(0).find('input').val() &&
-                                        !$row.find('td').eq(1).find('input').val() &&
-                                        !$row.find('td').eq(2).find('input').val() &&
-                                        !$row.find('td').eq(3).find('input').val() &&
-                                        !$row.find('td').eq(4).find('input').val() &&
-                                        !$row.find('td').eq(5).find('input').val() &&
-                                        !$row.find('td').eq(6).find('input').val() &&
-                                        !$row.find('td').eq(7).find('input').val() &&
-                                        !$row.find('td').eq(8).find('input').val() &&
-                                        !$row.find('td').eq(9).find('input').val() &&
-                                        !$row.find('td').eq(10).find('input').val() &&
-                                        !$row.find('td').eq(11).find('input').val() &&
-                                        !$row.find('td').eq(12).find('input').val() &&
-                                        !$row.find('td').eq(13).find('input').val() ;
+    $(document).on('click', '.remove-form', function() {
+        var $row = $(this).closest('tr');
+        if ($row.index() === 0) {
+            // console.log("me")
+            // console.log($row.index())
+            // Clear the content of the first row
+            $row.find('input').val('');
+        } else {
+            console.log($row.index())
+            if ($('#interface-table tbody tr').length > 1) {
+                $row.remove();
+                var formCount = $('#id_form-TOTAL_FORMS').val();
+                $('#id_form-TOTAL_FORMS').val(parseInt(formCount) - 1);
+                // Reindex all table rows
+                $('#interface-table tbody tr').each(function(index) {
+                    $(this).find('input').each(function() {
+                        var name = $(this).attr('name').replace(/-\d+-/, '-' + index + '-');
+                        var id = 'id_' + name;
+                        $(this).attr({'name': name, 'id': id});
+                    });
+                });
+            }
+        }
+    });
 
-                        if (isEmptyRow) {
-                            $row.find('td').eq(0).find('input').val(data.interfaceName[i]); 
-                            $row.find('td').eq(1).find('input').val(data.height[i]);
-                            $row.find('td').eq(2).find('input').val(data.intDiameter[i]);
-                            $row.find('td').eq(3).find('input').val(data.finODiam[i]);
-                            $row.find('td').eq(4).find('input').val(data.finAccSection[i]);
-                            $row.find('td').eq(5).find('input').val(data.interfaceCenterX[i]);
-                            $row.find('td').eq(6).find('input').val(data.interfaceCenterY[i]); 
-                            $row.find('td').eq(7).find('input').val(data.interfaceCenterZ[i]);
-                            // $row.find('td').eq(14).find('input').val(data.bushing_data_draw[i]);
-                        } else {
-                            $('#add-interface').click();
-                            $row = $('#interface-table tbody tr').last();
-                            $row.find('td').eq(0).find('input').val(data.interfaceName[i]); 
-                            $row.find('td').eq(1).find('input').val(data.height[i]);
-                            $row.find('td').eq(2).find('input').val(data.intDiameter[i]);
-                            $row.find('td').eq(3).find('input').val(data.finODiam[i]);
-                            $row.find('td').eq(4).find('input').val(data.finAccSection[i]);
-                            $row.find('td').eq(5).find('input').val(data.interfaceCenterX[i]);
-                            $row.find('td').eq(6).find('input').val(data.interfaceCenterY[i]); 
-                            $row.find('td').eq(7).find('input').val(data.interfaceCenterZ[i]);
-                            // $row.find('td').eq(14).find('input').val(data.bushing_data_draw[i]);
-                        }
+    // Handle paste event to populate table cells
+    $('#interface-table tbody').on('paste', 'td', function(e) {
+        e.preventDefault();
+        var text = (e.originalEvent || e).clipboardData.getData('text/plain');
+        var rows = text.split('\n');
+        var $currentRow = $(this).closest('tr');
+        var startRowIndex = $currentRow.index();
+        var startColIndex = $(this).index();
 
-                    }
-                    
-                },
-                error: function(data) {
-                    alert("Please upload a correct file or create the Project first.");
+        rows.forEach(function(row, rowIndex) {
+            if (row.trim() !== '') {
+                var cols = row.split('\t');
+                var $row = $('#interface-table tbody tr').eq(startRowIndex + rowIndex);
+                if ($row.length === 0) {
+                    $('#add-interface').click();
+                    $row = $('#interface-table tbody tr').last();
                 }
-            });
+                cols.forEach(function(col, colIndex) {
+                    var $cell = $row.find('td').eq(startColIndex + colIndex);
+                    $cell.find('input').val(col.trim() || '');
+                });
+            }
         });
     });
+    
+    $('#upload-form').on('submit', function(e) {
+        e.preventDefault();
+        var formData = new FormData(this);
+        $.ajax({
+            url: "{% url 'upload_file_interface' %}",
+            type: "POST",
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function(data) {
+                if (data.error) {
+                    alert(data.error);
+                    return;
+                }
+                $('#id_project').val(data.interface_data.project_id);
+                $('#id_part').val(data.interface_data.part_id);
+                // Populate form fields with returned data
+                for(var i=0; i<data.numberInterface; i++) {
+                    var $row = $('#interface-table tbody tr').last();
+
+                    // Check if the last row is empty
+                    var isEmptyRow = !$row.find('td').eq(0).find('input').val() &&
+                                    !$row.find('td').eq(1).find('input').val() &&
+                                    !$row.find('td').eq(2).find('input').val() &&
+                                    !$row.find('td').eq(3).find('input').val() &&
+                                    !$row.find('td').eq(4).find('input').val() &&
+                                    !$row.find('td').eq(5).find('input').val() &&
+                                    !$row.find('td').eq(6).find('input').val() &&
+                                    !$row.find('td').eq(7).find('input').val() &&
+                                    !$row.find('td').eq(8).find('input').val() &&
+                                    !$row.find('td').eq(9).find('input').val() &&
+                                    !$row.find('td').eq(10).find('input').val() &&
+                                    !$row.find('td').eq(11).find('input').val() &&
+                                    !$row.find('td').eq(12).find('input').val() &&
+                                    !$row.find('td').eq(13).find('input').val() ;
+
+                    if (isEmptyRow) {
+                        $row.find('td').eq(0).find('input').val(data.interfaceName[i]); 
+                        $row.find('td').eq(1).find('input').val(data.height[i]);
+                        $row.find('td').eq(2).find('input').val(data.intDiameter[i]);
+                        $row.find('td').eq(3).find('input').val(data.finODiam[i]);
+                        $row.find('td').eq(4).find('input').val(data.finAccSection[i]);
+                        $row.find('td').eq(5).find('input').val(data.interfaceCenterX[i]);
+                        $row.find('td').eq(6).find('input').val(data.interfaceCenterY[i]); 
+                        $row.find('td').eq(7).find('input').val(data.interfaceCenterZ[i]);
+                        // $row.find('td').eq(14).find('input').val(data.bushing_data_draw[i]);
+                    } else {
+                        $('#add-interface').click();
+                        $row = $('#interface-table tbody tr').last();
+                        $row.find('td').eq(0).find('input').val(data.interfaceName[i]); 
+                        $row.find('td').eq(1).find('input').val(data.height[i]);
+                        $row.find('td').eq(2).find('input').val(data.intDiameter[i]);
+                        $row.find('td').eq(3).find('input').val(data.finODiam[i]);
+                        $row.find('td').eq(4).find('input').val(data.finAccSection[i]);
+                        $row.find('td').eq(5).find('input').val(data.interfaceCenterX[i]);
+                        $row.find('td').eq(6).find('input').val(data.interfaceCenterY[i]); 
+                        $row.find('td').eq(7).find('input').val(data.interfaceCenterZ[i]);
+                        // $row.find('td').eq(14).find('input').val(data.bushing_data_draw[i]);
+                    }
+
+                }
+                
+            },
+            error: function(data) {
+                alert("Please upload a correct file or create the Project first.");
+            }
+        });
+    });
+});
 </script>
 
 {% endblock %}

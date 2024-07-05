@@ -2,8 +2,6 @@
 
 
 {% block content %}
-
-   
     <div  style="margin-bottom: 100px;">
         <h3>Bushing List:</h3>
         <details>
@@ -27,69 +25,65 @@
             <button type="reset" id="resetButton" class="btnf2">Reset</button>
             <a id="download" href="{% url 'download_bushings_pdf' %}?{{ request.GET.urlencode }}">Download PDF</a>
         </form>
+        <div id="loading" class="loading-overlay">
+            <div class="spinner"></div>
+            <a id="loadingtext"> Loading </a>
+        </div>
         {% if bushings %}
-    <table class="table table-bordered" id="normalTable">
-        <thead>
-        <tr>
-            <th>ID</th>
-            <th>Project Name</th>
-            <th>Part Name</th>
-            <th>Bushing Name</th>
-            <th>Number of Interface</th>
-            <th>Bushing Draw. Nb</th>
-            <th>Acc. On Bushing[g]</th>
-            <th>Bushing Mass[g]</th>
-            <th>Total Bushing Mass[g]</th>
-            
-        </tr>
-        </thead>
-        <tbody>
-        {% for row in bushings %}
-            
+        <table class="table table-bordered" id="normalTable">
+            <thead>
             <tr>
-                <td>{{ row.id }}</td>
-                <td>{{ row.project.projectName|default_if_none:"" }}</td>
-                <td>{{ row.part.partName|default_if_none:"" }}</td>
-                <td>{{ row.bushingName|default_if_none:"" }}</td>
-                <td>{{ row.numberInterface|default_if_none:"" }}</td>
-                <td>{{ row.bushingDrawNb|default_if_none:"" }}</td>
-                <td>{{ row.AccOnBushing|default_if_none:"" }}</td>
-                <td>{{ row.bushingMass|default_if_none:"" }}</td>
-                <td>{{ row.totalBushingMass|default_if_none:"" }}</td>
-               
+                <th>ID</th>
+                <th>Project Name</th>
+                <th>Part Name</th>
+                <th>Bushing Name</th>
+                <th>Number of Interface</th>
+                <th>Bushing Draw. Nb</th>
+                <th>Acc. On Bushing[g]</th>
+                <th>Bushing Mass[g]</th>
+                <th>Total Bushing Mass[g]</th>
+                
             </tr>
-           
-            {% empty %}
-            <tr>
-                <td colspan="9" class="text-center" style="font-size: large;">{{ message }}</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-    {% else %}
-        <h3 class="text-center">{{ message }}</h3>
-    {% endif %}
-</div>
-    
+            </thead>
+            <tbody>
+            {% for row in bushings %}
+                
+                <tr>
+                    <td>{{ row.id }}</td>
+                    <td>{{ row.project.projectName|default_if_none:"" }}</td>
+                    <td>{{ row.part.partName|default_if_none:"" }}</td>
+                    <td>{{ row.bushingName|default_if_none:"" }}</td>
+                    <td>{{ row.numberInterface|default_if_none:"" }}</td>
+                    <td>{{ row.bushingDrawNb|default_if_none:"" }}</td>
+                    <td>{{ row.AccOnBushing|default_if_none:"" }}</td>
+                    <td>{{ row.bushingMass|default_if_none:"" }}</td>
+                    <td>{{ row.totalBushingMass|default_if_none:"" }}</td>
+                
+                </tr>
+            
+                {% empty %}
+                <tr>
+                    <td colspan="9" class="text-center" style="font-size: large;">{{ message }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+            <h3 class="text-center" id="NoMessage">{{ message }}</h3>
+        {% endif %}
+    </div>
+        
 
 {% endblock %}
 
 {% block js %}
-        <script>
-        
-
-        $('#resetButton').click(function() {
-        window.location.href = window.location.pathname; 
-        });
-
-      
-    </script>
-    
+<script>
+            
+</script>
 {% endblock %}
 
 {% block css %}
 <style>
-   
     #id_project, #id_part, input[type="text"] {
         width: 100%; 
         padding: 8px; 

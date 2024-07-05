@@ -16,6 +16,7 @@
                 Click the <a id="help-btn-remove">Remove</a> button to clear the corresponding row.<br>
                 Click the <a id="help-btn-save">Save</a> button to save the data to the database.<br><br>
                 Please make sure we have the correct Project and Part selected before saving.<br>
+                If use the file upload method, please make sure that the Excel file contains the project and part information.<br>
             </div>
         </details>
     </div>
@@ -64,7 +65,6 @@
                                 {% for part in parts %}
                                     <option value="{{ part.id }}">{{ part.partName }}</option>
                                 {% endfor %}
-                                <!-- Options will be loaded dynamically -->
                             </select>
                             <span style="color: red;">{{ project_part_form.part.errors.0 }}</span>
                         </div>
@@ -75,19 +75,15 @@
                     <thead>
                         <tr>
                             <th >Bushing Name</th>
-                            
                             <th >Number Interface</th>
                             <th >Bushing Draw. Nr.</th>
-                            {% comment %} <th >Acc. On Bushing[g]</th> {% endcomment %}
                             <th >Bushing Mass[g]</th>
-                            {% comment %} <th >Total Bushing Mass[g]</th> {% endcomment %}
                             <th style="width: 100px;">Operation</th>
                         </tr>
                     </thead>
                     <tbody >
                         {% for field in formset %}
                         <tr class="bushing-form">
-                            
                             <td contenteditable="true">{{ field.bushingName }}
                                 {% if field.numberInterface.value or field.bushingDrawNb.value or field.AccOnBushing.value or field.bushingMass.value or field.totalBushingMass.value %}
                                 {% if not field.bushingName.value %}
@@ -95,14 +91,10 @@
                                 {% endif %}{% endif %}</td>
                             <td contenteditable="true">{{ field.numberInterface }}</td>
                             <td contenteditable="true">{{ field.bushingDrawNb }}</td>
-                            {% comment %} <td contenteditable="true">{{ field.AccOnBushing }}</td> {% endcomment %}
                             <td contenteditable="true">{{ field.bushingMass }}</td>
-                            {% comment %} <td contenteditable="true">{{ field.totalBushingMass }}</td> {% endcomment %}
-
                             <td class="text-center"><button type="button" class="btn btn-danger remove-form">Remove</button></td>
                         </tr>
                         {% endfor %}
-                        
                     </tbody>
                 </table>
             </div>

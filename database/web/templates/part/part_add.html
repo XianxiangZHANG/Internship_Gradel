@@ -22,51 +22,50 @@
             </div>
         </details>
     </div>
-        <div class="panel-body">
-            <form id="upload-form" method="post" enctype="multipart/form-data" class="form-horizontal"  novalidate>
-                {% csrf_token %}
+    <div class="panel-body">
+        <form id="upload-form" method="post" enctype="multipart/form-data" class="form-horizontal"  novalidate>
+            {% csrf_token %}
+            <div class="col-xs-12">
+                <div class="form-group" style="margin-bottom: 25px;">
+                    <label for="file"  class="col-sm-2 control-label">Upload Excel File</label>
+                    <div class="col-sm-10">
+                        <div class="file-upload-container">
+                            <input type="file" id="file" name="file" class="form-control">
+                            <button type="submit" id="uploadbtn" class="btn btn-primary">Upload</button>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="panel-body">
+        <form id="part-form" method="post"  enctype="multipart/form-data" class="form-horizontal" novalidate>
+            {% csrf_token %}
+            {% for field in form %}
                 <div class="col-xs-12">
                     <div class="form-group" style="margin-bottom: 25px;">
-                        <label for="file"  class="col-sm-2 control-label">Upload Excel File</label>
-                        <div class="col-sm-10">
-                            <div class="file-upload-container">
-                                <input type="file" id="file" name="file" class="form-control">
-                                <button type="submit" id="uploadbtn" class="btn btn-primary">Upload</button>
-                            </div>
+                        <label class="col-sm-2 control-label">{{ field.label }}</label>
+                        <div class="col-sm-10" style="position: relative">
+                                {{ field }}
+                                <br>
+                            <span style="color: red;position: absolute;">{{ field.errors.0 }}</span>
                         </div>
-                       
                     </div>
                 </div>
-               
-            </form>
-        </div>
-        <div class="panel-body">
-            <form id="part-form" method="post"  enctype="multipart/form-data" class="form-horizontal" novalidate>
-                {% csrf_token %}
-                {% for field in form %}
+            {% endfor %}
+            
+            <div class="row">
+                <div class="form-group">
                     <div class="col-xs-12">
-                        <div class="form-group" style="margin-bottom: 25px;">
-                            <label class="col-sm-2 control-label">{{ field.label }}</label>
-                            <div class="col-sm-10" style="position: relative">
-                                    {{ field }}
-                                    <br>
-                                <span style="color: red;position: absolute;">{{ field.errors.0 }}</span>
-                            </div>
-                        </div>
-                    </div>
-                {% endfor %}
-                
-                <div class="row">
-                    <div class="form-group">
-                        <div class="col-xs-12">
-                            <div class="col-sm-offset-6 col-sm-10">
-                                <button type="submit" class="btn btn-primary" style="width: 200px;">Save</button>
-                            </div>
+                        <div class="col-sm-offset-6 col-sm-10">
+                            <button type="submit" class="btn btn-primary" style="width: 200px;">Save</button>
                         </div>
                     </div>
                 </div>
-            </form>
-        </div>
+            </div>
+        </form>
+    </div>
 </div>
 {% endblock %}
 
@@ -113,26 +112,10 @@
                     $('#id_totalFiberMass').val(data.totalFiberMass);
                     $('#id_totalResinMass').val(data.totalResinMass);
 
-                    // console.log(data.project_id);
-                    // console.log(data.defaultInterfaceHeight);
-                    // console.log(data.defaultInterfaceIntDiam);
-                    // console.log(data.defaultLinkType);
-                    // console.log(data.defaultLinkDefined);
-                    // console.log(data.numberLink);
-                    // console.log(data.numberBushing);
-                    // console.log(data.totalMassLink);
-                    // console.log(data.totalMassWinding);
-                    // console.log(data.totalMassBushing);
-                    // console.log(data.additionalMass);
-                    // console.log(data.totalMassStructure);
-                    // console.log(data.totalFiberLength);
-                    // console.log(data.totalFiberMass);
-                    // console.log(data.totalResinMass);
-                    
                 },
                 error: function(data) {
                     alert("Please upload a correct file or create the Project first.");
-                    // alert(data.error);
+                   
                 }
             });
         });

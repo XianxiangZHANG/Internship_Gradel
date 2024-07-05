@@ -1,45 +1,44 @@
 {% extends 'layout.html' %}
-
-
 {% block content %}
-
-    
-    <div  style="margin-bottom: 100px;">
-        <div style="margin-bottom: 10px">
-            <a class="btn btn-success" href="/part/add/">
-                <span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span> New part
-            </a>
+<div style="margin-bottom: 100px;">
+    <div style="margin-bottom: 10px">
+        <a class="btn btn-success" href="/part/add/">
+            <span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span> New part
+        </a>
+    </div>
+    <h3>Part List:</h3>
+    <details>
+        <summary>
+            <span class="glyphicon glyphicon-question-sign" aria-hidden="true" id="help-title">
+            Help
+            </span>
+        </summary>
+        <div id="help-content">
+            Here, we can check the value of each record. <br>
+            Data with a blue background color indicates that the data has been confirmed and can be read by other departments.<br>
+            Click the <a id="help-btn-upload">New Part</a> button to jump to create a new Part record.<br>
+            We can use <a id="help-btn-filter">Filter</a> to select some specific records.<br>
+            Click the <a id="help-btn-filter">Reset</a> button to reset the filter to the original state.<br>
+            Click the <a id="help-btn-edit">Edit</a> button to modify the data of the corresponding row.<br>
+            Click the <a id="help-btn-remove">Delete</a> button to delete the corresponding row.<br><br>
+            In order to avoid loading too much data when entering for the first time, relevant data will be loaded only after clicking <a id="help-btn-filter">Filter</a>. <br>
+            If you want to load all the data in the database, click <a id="help-btn-filter">Filter</a> directly without entering or selecting any keywords in the filter.<br>
         </div>
-        <h3>Part List:</h3>
-        <details>
-            <summary>
-              <span class="glyphicon glyphicon-question-sign" aria-hidden="true" id="help-title">
-                Help
-              </span>
-            </summary>
-            <div id="help-content">
-                Here, we can check the value of each record. <br>
-                Data with a blue background color indicates that the data has been confirmed and can be read by other departments.<br>
-                Click the <a id="help-btn-upload">New Part</a> button to jump to create a new Part record.<br>
-                We can use <a id="help-btn-filter">Filter</a> to select some specific records.<br>
-                Click the <a id="help-btn-filter">Reset</a> button to reset the filter to the original state.<br>
-                Click the <a id="help-btn-edit">Edit</a> button to modify the data of the corresponding row.<br>
-                Click the <a id="help-btn-remove">Delete</a> button to delete the corresponding row.<br><br>
-                In order to avoid loading too much data when entering for the first time, relevant data will be loaded only after clicking <a id="help-btn-filter">Filter</a>. <br>
-                If you want to load all the data in the database, click <a id="help-btn-filter">Filter</a> directly without entering or selecting any keywords in the filter.<br>
-            </div>
-        </details>
-        <form method="get" id="filterForm">
-            {{ filter.form.as_p }}
-            <button type="submit" id="btnf1" name="filter">Filter</button>
-            <button type="reset" id="resetButton" class="btnf2">Reset</button>
-            
-        </form>
-        <!-- <table id="transposedTable"></table> -->
-
-        {% if parts %}
-            <table class="table table-bordered" id="normalTable" style=" font-size: 12px; ">
-                <thead>
+    </details>
+    <form method="get" id="filterForm">
+        {{ filter.form.as_p }}
+        <button type="submit" id="btnf1" name="filter">Filter</button>
+        <button type="reset" id="resetButton" class="btnf2">Reset</button>
+        
+    </form>
+    
+    <div id="loading" class="loading-overlay">
+        <div class="spinner"></div>
+        <a id="loadingtext"> Loading </a>
+    </div>
+    {% if parts %}
+        <table class="table table-bordered" id="normalTable" style=" font-size: 12px; ">
+            <thead>
                 <tr>
                     <th>ID</th>
                     <th>Part Name</th>
@@ -68,167 +67,140 @@
                     <th>Total Fiber Mass [kg]</th>
                     <th>Total Resin Mass [g]</th>
                     <th>Project Image</th>
-                    <!-- <th>.gh</th>
-                    <th>.mod</th>
-                    <th>.csv</th>
-                    <th>.rs</th>
-                    <th>.log</th>
-                    <th>.mp4</th>
-                    <th>.jpg</th> -->
                     <th>Operations</th>
-
-
                 </tr>
-                </thead>
-                <tbody>
+            </thead>
+            <tbody>
                 {% for row in parts %}
                     {% if row.valid %} 
-                    <tr style="background-color: #67fafa70;">
+                        <tr style="background-color: #67fafa70;">
                     {% else %}
-                    <tr>
-                        {% endif %}
-                        <td>{{ row.id }}</td>
-                        <td>{{ row.partName }}</td>
-                        <td>{{ row.resin|default_if_none:"" }}</td>
-                        <td>{{ row.resinDensity|default_if_none:"" }}</td>
-                        <td>{{ row.fiber|default_if_none:"" }}</td>
-                        <td>{{ row.fiberDensity|default_if_none:"" }}</td>
-                        <td>{{ row.totalTowNumber|default_if_none:"" }}</td>
-                        <td>{{ row.fiberVolumeRatio|default_if_none:"" }}</td>
-                        <td>{{ row.windingDensity|default_if_none:"" }}</td>
-                        <td>{{ row.fiberSectionCalc|default_if_none:"" }}</td>
-                        <td>{{ row.fiberSectionAcc|default_if_none:"" }}</td>
-                        <td>{{ row.defaultInterfaceHeight|default_if_none:"" }}</td>
-                        <td>{{ row.defaultInterfaceIntDiam|default_if_none:"" }}</td>
-                        <td>{{ row.defaultLinkType|default_if_none:"" }}</td>
-                        <td>{{ row.defaultLinkDefined|default_if_none:"" }}</td>
-                        <td>{{ row.numberLink|default_if_none:"0" }}</td>
-                        <td>{{ row.numberBushing|default_if_none:"0" }}</td>
-                        <td>{{ row.totalMassLink|default_if_none:"" }}</td>
-                        <td>{{ row.totalMassAccumulation|default_if_none:"" }}</td>
-                        <td>{{ row.totalMassWinding|default_if_none:"" }}</td>
-                        <td>{{ row.totalMassBushing|default_if_none:"" }}</td>
-                        <td>{{ row.additionalMass|default_if_none:"" }}</td>
-                        <td>{{ row.totalMassStructure|default_if_none:"" }}</td>
-                        <td>{{ row.totalFiberLength|default_if_none:"" }}</td>
-                        <td>{{ row.totalFiberMass|default_if_none:"" }}</td>
-                        <td>{{ row.totalResinMass|default_if_none:"" }}</td>
-                        <td>{% if row.projectImage %}
-                        
-                            <img src="{{ row.projectImage.url }}" alt="Project Image" class="thumbnail" onclick="showModal('{{ row.projectImage.url }}')">
-                        {% else %}
-                            No image
-                        {% endif %}</td>
-                        
-                        <td>
-                            <a class="btn btn-primary btn-xs" href="/part/edit/{{ row.id }}/" style="width: 70px; text-align: center; margin-bottom: 5px;"> Edit </a>
-                            <br>
-                            <input type="button" value="Delete" class="btn btn-danger btn-xs" style="width: 70px; text-align: center;"
-                                onclick="deleteAction({{ row.id }});"/>
-                        </td>
-                    </tr>
-                    
-                    {% empty %}
+                        <tr>
+                    {% endif %}
+                            <td>{{ row.id }}</td>
+                            <td>{{ row.partName }}</td>
+                            <td>{{ row.resin|default_if_none:"" }}</td>
+                            <td>{{ row.resinDensity|default_if_none:"" }}</td>
+                            <td>{{ row.fiber|default_if_none:"" }}</td>
+                            <td>{{ row.fiberDensity|default_if_none:"" }}</td>
+                            <td>{{ row.totalTowNumber|default_if_none:"" }}</td>
+                            <td>{{ row.fiberVolumeRatio|default_if_none:"" }}</td>
+                            <td>{{ row.windingDensity|default_if_none:"" }}</td>
+                            <td>{{ row.fiberSectionCalc|default_if_none:"" }}</td>
+                            <td>{{ row.fiberSectionAcc|default_if_none:"" }}</td>
+                            <td>{{ row.defaultInterfaceHeight|default_if_none:"" }}</td>
+                            <td>{{ row.defaultInterfaceIntDiam|default_if_none:"" }}</td>
+                            <td>{{ row.defaultLinkType|default_if_none:"" }}</td>
+                            <td>{{ row.defaultLinkDefined|default_if_none:"" }}</td>
+                            <td>{{ row.numberLink|default_if_none:"0" }}</td>
+                            <td>{{ row.numberBushing|default_if_none:"0" }}</td>
+                            <td>{{ row.totalMassLink|default_if_none:"" }}</td>
+                            <td>{{ row.totalMassAccumulation|default_if_none:"" }}</td>
+                            <td>{{ row.totalMassWinding|default_if_none:"" }}</td>
+                            <td>{{ row.totalMassBushing|default_if_none:"" }}</td>
+                            <td>{{ row.additionalMass|default_if_none:"" }}</td>
+                            <td>{{ row.totalMassStructure|default_if_none:"" }}</td>
+                            <td>{{ row.totalFiberLength|default_if_none:"" }}</td>
+                            <td>{{ row.totalFiberMass|default_if_none:"" }}</td>
+                            <td>{{ row.totalResinMass|default_if_none:"" }}</td>
+                            <td>{% if row.projectImage %}
+                            
+                                <img src="{{ row.projectImage.url }}" alt="Project Image" class="thumbnail" onclick="showModal('{{ row.projectImage.url }}')">
+                            {% else %}
+                                No image
+                            {% endif %}</td>
+                            
+                            <td>
+                                <a class="btn btn-primary btn-xs" href="/part/edit/{{ row.id }}/" style="width: 70px; text-align: center; margin-bottom: 5px;"> Edit </a>
+                                <br>
+                                <input type="button" value="Delete" class="btn btn-danger btn-xs" style="width: 70px; text-align: center;"
+                                    onclick="deleteAction({{ row.id }});"/>
+                            </td>
+                        </tr>
+                {% empty %}
                     <tr>
                         <td colspan="28" class="text-center" style="font-size: large;">{{ message }}</td>
                     </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        {% else %}
-            <h3 class="text-center">{{ message }}</h3>
-        {% endif %}
-        </div>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <h3 class="text-center" id="NoMessage">{{ message }}</h3>
+    {% endif %}
+</div>
     
 
-    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-        <div class="modal-dialog" role="document">
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
 
 
-            <div class="alert alert-danger alert-dismissible fade in" role="alert">
-                <button type="button" class="close"></button>
-                <h4>Are you sure you want to delete it?</h4>
-                <p style="margin: 20px 0;">After deletion, all related data associated with it will be deleted. Are you sure you want to continue?</p>
-                <p>
-                    <button type="button" class="btn btn-danger" onclick="confirmDelete()">Confirm</button>
-                    <button type="button" class="btn btn-default" onclick="cancelDelete()">Cancel</button>
-                </p>
-            </div>
+        <div class="alert alert-danger alert-dismissible fade in" role="alert">
+            <button type="button" class="close"></button>
+            <h4>Are you sure you want to delete it?</h4>
+            <p style="margin: 20px 0;">After deletion, all related data associated with it will be deleted. Are you sure you want to continue?</p>
+            <p>
+                <button type="button" class="btn btn-danger" onclick="confirmDelete()">Confirm</button>
+                <button type="button" class="btn btn-default" onclick="cancelDelete()">Cancel</button>
+            </p>
         </div>
-
     </div>
 
-    <div id="myModalImage" class="modalIamge">
-        <span class="close" onclick="closeModal()">&times;</span>
-        <img class="modal-content" id="modalImage">
-    </div>
+</div>
+
+<div id="myModalImage" class="modalIamge">
+    <span class="close" onclick="closeModal()">&times;</span>
+    <img class="modal-content" id="modalImage">
+</div>
 
 {% endblock %}
 
 {% block js %}
-    <script>
-       
+<script>
+        
+    // ID currently to be deleted
+    DELETE_ID = 0;
+    function deleteAction(id) {
+        DELETE_ID = id;
+        $('#myModal').modal('show');
+    }
 
-        $('#resetButton').click(function() {
-        window.location.href = window.location.pathname;  
-        });
-
-        // ID currently to be deleted
-        DELETE_ID = 0;
-        function deleteAction(id) {
-            DELETE_ID = id;
-            $('#myModal').modal('show');
-        }
-
-        function confirmDelete() {
-            // Send request to backend DELETE_ID -> Delete
-            // Page refresh
-            // /part/delete/?aid=12
-            $.ajax({
-                url: "/part/delete/",
-                type: "GET",
-                data: {
-                    aid: DELETE_ID
-                },
-                dataType: "JSON",
-                success: function (res) {
-                    // {status: true} -> obj
-                    if (res.status) {
-                        // Deletion successful, refresh the page
-                        location.reload()
-                    } else {
-                        alert(res.error);
-                    }
+    function confirmDelete() {
+        $.ajax({
+            url: "/part/delete/",
+            type: "GET",
+            data: {
+                aid: DELETE_ID
+            },
+            dataType: "JSON",
+            success: function (res) {
+                // {status: true} -> obj
+                if (res.status) {
+                    // Deletion successful, refresh the page
+                    location.reload()
+                } else {
+                    alert(res.error);
                 }
-            })
-        }
+            }
+        })
+    }
 
-        function cancelDelete() {
-            DELETE_ID = 0;
-            $('#myModal').modal('hide');
-        }
+    function cancelDelete() {
+        DELETE_ID = 0;
+        $('#myModal').modal('hide');
+    }
 
-        // $(function() {
-        //     $("#id_project").autocomplete({
-        //         source: "/part/list/",   
-        //         minLength: 2,  
-        //         select: function(event, ui) {
-        //             $('#id_project').val(ui.item.value);   
-        //         }
-        //     });
-        // });
-        function showModal(src) {
-            var modal = document.getElementById("myModalImage");
-            var modalImg = document.getElementById("modalImage");
-            modal.style.display = "block";
-            modalImg.src = src;
-        }
+    function showModal(src) {
+        var modal = document.getElementById("myModalImage");
+        var modalImg = document.getElementById("modalImage");
+        modal.style.display = "block";
+        modalImg.src = src;
+    }
 
-        function closeModal() {
-            var modal = document.getElementById("myModalImage");
-            modal.style.display = "none";
-        }
-    </script>
+    function closeModal() {
+        var modal = document.getElementById("myModalImage");
+        modal.style.display = "none";
+    }
+</script>
 {% endblock %}
 
 {% block css %}
@@ -291,5 +263,8 @@
         text-decoration: none;
         cursor: pointer;
     }
+
+    
+   
 </style>
 {% endblock %}

@@ -33,6 +33,10 @@
             <span class="glyphicon glyphicon-search" aria-hidden="true" id="pic"></span> Read Thermophysical Toughness Properties of Resin List
         </a>
     </form>
+    <div id="loading" class="loading-overlay">
+        <div class="spinner"></div>
+        <a id="loadingtext"> Loading </a>
+    </div>
     {% if resins %}
     <table class="table table-bordered">
         <thead>
@@ -104,7 +108,7 @@
         </tbody>
     </table>
     {% else %}
-        <h3 class="text-center">{{ message }}</h3>
+        <h3 class="text-center" id="NoMessage">{{ message }}</h3>
     {% endif %}
 </div>
 
@@ -113,12 +117,7 @@
 
 {% block js %}
     <script>
-        $('#resetButton').click(function() {
-        window.location.href = window.location.pathname; 
-        });
-
-     
-
+         
     </script>
 {% endblock %}
 

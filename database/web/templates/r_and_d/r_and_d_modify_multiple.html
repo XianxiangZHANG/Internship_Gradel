@@ -192,9 +192,7 @@
 {% block js %}
 <script>
 $(document).ready(function() {
-    $('#resetButton').click(function() {
-        window.location.href = window.location.pathname;  
-    });
+    
 
     // Fetch fiber details on page load if fiber is already selected
     $('select[name^="fiber"]').each(function() {

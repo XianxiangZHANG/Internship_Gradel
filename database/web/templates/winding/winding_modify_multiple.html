@@ -25,6 +25,10 @@
         <button type="submit" id="btnf1" name="filter">Filter</button>
         <button type="reset" id="resetButton" class="btnf2">Reset</button>
     </form>
+    <div id="loading" class="loading-overlay">
+        <div class="spinner"></div>
+        <a id="loadingtext"> Loading </a>
+    </div>
     {% if formset.total_form_count > 0 %}
     <form method="post">
         {% csrf_token %}
@@ -83,6 +87,7 @@
         </table>
         <button type="submit" class="btn btn-primary" id="btns">Save</button>
     </form>
+    
     {% else %}
         <h2>This table is empty.</h2>
     {% endif %}
@@ -133,10 +138,7 @@
 {% block js %}
 <script>
 $(document).ready(function() {
-    $('#resetButton').click(function() {
-        window.location.href = window.location.pathname;  
-    });
-
+    
     let DELETE_ID = 0;
 
     

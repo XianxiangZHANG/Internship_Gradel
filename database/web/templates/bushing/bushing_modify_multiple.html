@@ -25,6 +25,10 @@
         <button type="submit" id="btnf1" name="filter">Filter</button>
         <button type="reset" id="resetButton" class="btnf2">Reset</button>
     </form>
+    <div id="loading" class="loading-overlay">
+        <div class="spinner"></div>
+        <a id="loadingtext"> Loading </a>
+    </div>
     {% if formset.total_form_count > 0 %}
     <form method="post">
         {% csrf_token %}
@@ -63,7 +67,7 @@
         <button type="submit" class="btn btn-primary" id="btns">Save</button>
     </form>
     {% else %}
-        <h3 class="text-center">{{ message }}</h3>
+        <h3 class="text-center" id="NoMessage">{{ message }}</h3>
     {% endif %}
 </div>
 
@@ -109,85 +113,82 @@
 
 {% block js %}
 <script>
-$(document).ready(function() {
-    $('#resetButton').click(function() {
-        window.location.href = window.location.pathname; 
-    });
+    $(document).ready(function() {
+        
+        let DELETE_ID = 0;
 
-    let DELETE_ID = 0;
-
-    
-    function deleteAction(id) {
-        DELETE_ID = id;
-        $('#myModal').modal('show');
-    }
-
-   
-    function confirmDelete() {
-        $.ajax({
-            url: "/bushing/delete/",
-            type: "GET",
-            data: { aid: DELETE_ID },
-            dataType: "JSON",
-            success: function(res) {
-                if (res.status) {
-                    location.reload();
-                } else {
-                    alert(res.error);
-                }
-            }
-        });
-    }
-
-    
-    function cancelDelete() {
-        DELETE_ID = 0;
-        $('#myModal').modal('hide');
-    }
-
-   
-    $(document).on('click', '.remove-form', function() {
-        let row = $(this).closest('tr');
-        let bushingId = row.find('input[name$="-id"]').val();
-        if (bushingId) {
-            deleteAction(bushingId);
-        } else {
-            row.remove();
+        
+        function deleteAction(id) {
+            DELETE_ID = id;
+            $('#myModal').modal('show');
         }
-    });
 
-    $('#confirmDeleteBtn').click(function() {
-        confirmDelete();
-    });
-
-    $('#cancelDeleteBtn').click(function() {
-        cancelDelete();
-    });
     
-    // Handle paste event to populate table cells
-    $('#bushing-table tbody').on('paste', 'td', function(e) {
-        e.preventDefault();
-        var text = (e.originalEvent || e).clipboardData.getData('text/plain');
-        var rows = text.split('\n');
-        var $currentRow = $(this).closest('tr');
-        var startRowIndex = $currentRow.index();
-        var startColIndex = $(this).index();
-
-        rows.forEach(function(row, rowIndex) {
-            if (row.trim() !== '') {
-                var cols = row.split('\t');
-                var $row = $('#bushing-table tbody tr').eq(startRowIndex + rowIndex);
-                if ($row.length === 0) {
-                    $('#add-bushing').click();
-                    $row = $('#bushing-table tbody tr').last();
+        function confirmDelete() {
+            $.ajax({
+                url: "/bushing/delete/",
+                type: "GET",
+                data: { aid: DELETE_ID },
+                dataType: "JSON",
+                success: function(res) {
+                    if (res.status) {
+                        location.reload();
+                    } else {
+                        alert(res.error);
+                    }
                 }
-                cols.forEach(function(col, colIndex) {
-                    var $cell = $row.find('td').eq(startColIndex + colIndex);
-                    $cell.find('input').val(col.trim() || '');
-                });
+            });
+        }
+
+        
+        function cancelDelete() {
+            DELETE_ID = 0;
+            $('#myModal').modal('hide');
+        }
+
+    
+        $(document).on('click', '.remove-form', function() {
+            let row = $(this).closest('tr');
+            let bushingId = row.find('input[name$="-id"]').val();
+            if (bushingId) {
+                deleteAction(bushingId);
+            } else {
+                row.remove();
             }
         });
+
+        $('#confirmDeleteBtn').click(function() {
+            confirmDelete();
+        });
+
+        $('#cancelDeleteBtn').click(function() {
+            cancelDelete();
+        });
+        
+        // Handle paste event to populate table cells
+        $('#bushing-table tbody').on('paste', 'td', function(e) {
+            e.preventDefault();
+            var text = (e.originalEvent || e).clipboardData.getData('text/plain');
+            var rows = text.split('\n');
+            var $currentRow = $(this).closest('tr');
+            var startRowIndex = $currentRow.index();
+            var startColIndex = $(this).index();
+
+            rows.forEach(function(row, rowIndex) {
+                if (row.trim() !== '') {
+                    var cols = row.split('\t');
+                    var $row = $('#bushing-table tbody tr').eq(startRowIndex + rowIndex);
+                    if ($row.length === 0) {
+                        $('#add-bushing').click();
+                        $row = $('#bushing-table tbody tr').last();
+                    }
+                    cols.forEach(function(col, colIndex) {
+                        var $cell = $row.find('td').eq(startColIndex + colIndex);
+                        $cell.find('input').val(col.trim() || '');
+                    });
+                }
+            });
+        });
     });
-});
 </script>
 {% endblock %}

@@ -46,6 +46,10 @@
             <span class="glyphicon glyphicon-pencil" aria-hidden="true" id="pic"></span> Modify Mechanical Properties of Resin List
         </a>
     </form>
+    <div id="loading" class="loading-overlay">
+        <div class="spinner"></div>
+        <a id="loadingtext"> Loading </a>
+    </div>
     {% if resins %}
     <table class="table table-bordered">
         <thead>
@@ -117,7 +121,7 @@
         </tbody>
     </table>
     {% else %}
-        <h3 class="text-center">{{ message }}</h3>
+        <h3 class="text-center" id="NoMessage">{{ message }}</h3>
     {% endif %}
     </div>
 
@@ -142,9 +146,7 @@
 
 {% block js %}
     <script>
-        $('#resetButton').click(function() {
-        window.location.href = window.location.pathname; 
-        });
+        
 
         // ID currently to be deleted
         DELETE_ID = 0;

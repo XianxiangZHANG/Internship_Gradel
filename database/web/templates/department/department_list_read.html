@@ -2,62 +2,55 @@
 
 
 {% block content %}
-
-    
-    
     <div id="cont">
-        
-    <h3>Department List:</h3>
-    <details>
-        <summary>
-          <span class="glyphicon glyphicon-question-sign" aria-hidden="true" id="help-title">
-            Help
-          </span>
-        </summary>        
-        <div id="help-content">
-            Here, we can read the value of each record. <br>
-            We can read the name and the number of members of each department.<br>
-            <!-- Click the Download PDF button to download the displayed data(after filtering) as a pdf document.<br> -->
-        </div>
-    </details>
-    <table class="table table-bordered">
-        <thead>
-        <tr>
-            <th>ID</th>
-            <th style="width: 45%;">Department</th>
-            <th style="width: 45%;">Number of members</th>
-            <!-- <a id="download" href="{% url 'download_projects_pdf' %}?{{ request.GET.urlencode }}">Download PDF</a> -->
-            
-        </tr>
-        </thead>
-        <tbody>
-        
-        {% for row in departments %}
+        <h3>Department List:</h3>
+        <details>
+            <summary>
+            <span class="glyphicon glyphicon-question-sign" aria-hidden="true" id="help-title">
+                Help
+            </span>
+            </summary>        
+            <div id="help-content">
+                Here, we can read the value of each record. <br>
+                We can read the name and the number of members of each department.<br>
+                <!-- Click the Download PDF button to download the displayed data(after filtering) as a pdf document.<br> -->
+            </div>
+        </details>
+        <table class="table table-bordered">
+            <thead>
             <tr>
-                <td>{{ row.id }}</td>
-                <td>{{ row.title|default_if_none:"" }}</td>
-                <td>{{ row.employee_count }}</td>
+                <th>ID</th>
+                <th style="width: 45%;">Department</th>
+                <th style="width: 45%;">Number of members</th>
+                <!-- <a id="download" href="{% url 'download_projects_pdf' %}?{{ request.GET.urlencode }}">Download PDF</a> -->
                 
             </tr>
-            {% empty %}
-            <tr>
-                <td colspan="3" class="text-center" style="font-size: large;">No data found.</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table></div>
+            </thead>
+            <tbody>
+            
+            {% for row in departments %}
+                <tr>
+                    <td>{{ row.id }}</td>
+                    <td>{{ row.title|default_if_none:"" }}</td>
+                    <td>{{ row.employee_count }}</td>
+                    
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="3" class="text-center" style="font-size: large;">No data found.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 
 
 {% endblock %}
 
 {% block js %}
-    <script>
-        $('#resetButton').click(function() {
-        window.location.href = window.location.pathname; 
-        });
-
-      
-    </script>
+<script>
+    
+</script>
 {% endblock %}
 
 {% block css %}

@@ -1,3 +1,4 @@
+import re
 from django.db import models
 from django.db.models import Sum
 import math
@@ -713,7 +714,7 @@ class Link(models.Model):
 
     cycle = models.IntegerField(verbose_name="Cycle", null=True, blank=True)
     sequence = models.CharField(verbose_name="Sequence", max_length=50, null=True, blank=True)
-    ratio = models.FloatField(verbose_name="Ratio", null=True, blank=True)
+    # ratio = models.FloatField(verbose_name="Ratio", null=True, blank=True)
     # finArmSection = models.FloatField(verbose_name="Fin. Arm Section[mm²]", null=True, blank=True, editable=False)
     # finArmDiam = models.FloatField(verbose_name="Fin. Arm Diam.[mm]", null=True, blank=True, editable=False)
     # finArmRadius = models.FloatField(verbose_name="Fin. Arm Radius[m]", null=True, blank=True, editable=False)
@@ -748,6 +749,10 @@ class Link(models.Model):
         return self.calculate_finArmRadius()
 
     @property
+    def ratio(self):
+        return self.calculate_ratio()
+    
+    @property
     def mass(self):
         return self.calculate_mass()
     
@@ -770,6 +775,8 @@ class Link(models.Model):
     @property
     def massShow(self):
         return round(self.mass,2)
+    
+    
 
     def calculate_length(self):
         if self.interface1 and self.interface2:
@@ -809,6 +816,33 @@ class Link(models.Model):
                 
             return mass
         return 0.0
+    
+    def calculate_ratio(self):
+        sequence = self.sequence.replace('B', 'C1')
+
+        if sequence.startswith('[') and sequence.endswith(']'):
+            sequence = sequence[1:-1]
+    
+        def expand_sequence(seq):
+            pattern = re.compile(r'\[(.*?)\](\d+)')
+            while pattern.search(seq):
+                seq = re.sub(pattern, lambda m: (m.group(1) + ',') * int(m.group(2)), seq)
+            return seq
+
+        expanded_sequence = expand_sequence(sequence)
+        # print(expanded_sequence)
+        substrings = ['C1X', 'C1', 'C0X', 'C0']
+        counts = {substring: len(re.findall(substring, expanded_sequence)) for substring in substrings}
+        
+        total_c1_c1x = counts['C1X'] + counts['C1']
+        
+        total_target = counts['C1X'] + counts['C1'] + counts['C0X'] + counts['C0']
+        
+        ratio = total_c1_c1x / total_target if total_target > 0 else 0
+
+        ratio = round(ratio, 2)
+
+        return ratio
                                      
 class SequenceType(models.Model):
     """ SequenceTypeTable """

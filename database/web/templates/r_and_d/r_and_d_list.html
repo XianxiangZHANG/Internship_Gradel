@@ -35,6 +35,10 @@
             <button type="submit" id="btnf1" name="filter">Filter</button>
             <button type="reset" id="resetButton" class="btnf2">Reset</button>
         </form>
+        <div id="loading" class="loading-overlay">
+            <div class="spinner"></div>
+            <a id="loadingtext"> Loading </a>
+        </div>
         {% if r_and_ds %}
     <table class="table table-bordered">
         
@@ -281,7 +285,7 @@
         
     </table>
     {% else %}
-        <h3 class="text-center">{{ message }}</h3>
+        <h3 class="text-center" id="NoMessage">{{ message }}</h3>
     {% endif %}
     </div>
 
@@ -306,9 +310,7 @@
 
 {% block js %}
     <script>
-        $('#resetButton').click(function() {
-        window.location.href = window.location.pathname; 
-        });
+        
 
         // ID currently to be deleted
         DELETE_ID = 0;

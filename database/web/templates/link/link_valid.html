@@ -1,107 +1,96 @@
 {% extends 'layout.html' %}
-
-
 {% block content %}
-
- 
-    <div  style="margin-bottom: 100px;">
-        <h3>Link List:</h3>
-        <details>
-            <summary>
-              <span class="glyphicon glyphicon-question-sign" aria-hidden="true" id="help-title">
-                Help
-              </span>
-            </summary>        
-            <div id="help-content">
-                Here, we can read the value of each record. <br>
-                We can use <a id="help-btn-filter">Filter</a> to select some specific records.<br>
-                Click the <a id="help-btn-filter">Reset</a> button to reset the filter to the original state.<br>
-                Click the <a id="help-btn-download">Download PDF</a> button to download the displayed data(after filtering) as a pdf document.<br><br>
-                In order to avoid loading too much data when entering for the first time, relevant data will be loaded only after clicking <a id="help-btn-filter">Filter</a>. <br>
-                If you want to load all the data in the database, click <a id="help-btn-filter">Filter</a> directly without entering or selecting any keywords in the filter.<br>
-            </div>
-        </details>
-        <form method="get" id="filterForm">
-            {{ filter.form.as_p }}
-            <button type="submit" id="btnf1" name="filter">Filter</button>
-            <button type="reset" id="resetButton" class="btnf2">Reset</button>
-            <a id="download" href="{% url 'download_links_pdf' %}?{{ request.GET.urlencode }}">Download PDF</a>
-        </form>
-        {% if links %}
-    <table class="table table-bordered" id="normalTable">
-        <thead>
-        <tr>
-            <th>ID</th>
-            <th>Part Name</th>
-            <th style="width: 90px;">Link Name</th> 
-            <th style="width: 80px;">Interface1 Name</th>
-            <th style="width: 80px;">Interface2 Name</th>
-            <th style="width: 100px;">Length[mm]</th>
-            <th style="width: 400px;">Sequence</th>
-            <th style="width: 80px;">Ratio</th>
-            <!-- <th>Link Type</th> -->
-            <th style="width: 100px;">Arm Diam.[mm]</th>
-            <th style="width: 100px;">Arm Section[mm²]</th>
-            <th>Cycle #</th>
-            <th>Fin. Arm Sec. [mm²]</th>
-            <th>Fin. Arm diam. [mm]</th>
-            <th>Fin. Arm radius [m]</th>
-            <th>Mass [g]</th>
-            <th>*Angle*</th>
-            
-        </tr>
-        </thead>
-        <tbody>
-        {% for row in links %}
-           
-            <tr>
-                <td>{{ row.id }}</td>
-                <td>{{ row.part.partName }}</td>
-                <td>{{ row.linkName }}</td>
-                <td>{{ row.interface1 }}</td>
-                <td>{{ row.interface2 }}</td>
-                <td>{{ row.lengthShow|default_if_none:"" }}</td>
-                <td>{{ row.sequence|default_if_none:"" }}</td>
-                <td>{{ row.ratio|default_if_none:"" }}</td>
-                <!-- <td>{{ row.linkType|default_if_none:"" }}</td> -->
-                <td>{{ row.armDiam|default_if_none:"" }}</td>
-                <td>{{ row.armSection|default_if_none:"" }}</td>
-                <td>{{ row.cycle|default_if_none:"" }}</td>
-                
-                <td>{{ row.finArmSectionShow|default_if_none:"" }}</td>
-                <td>{{ row.finArmDiamShow|default_if_none:"" }}</td>
-                <td>{{ row.finArmRadiusShow|default_if_none:"" }}</td>
-                <td>{{ row.massShow|default_if_none:"" }}</td>
-                <td>{{ row.angle|default_if_none:"" }}</td>
-               
-            </tr>
-            {% empty %}
-            <tr>
-                <td colspan="16" class="text-center" style="font-size: large;">{{ message }}</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-    {% else %}
-        <h3 class="text-center">{{ message }}</h3>
-    {% endif %}
+<div  style="margin-bottom: 100px;">
+    <h3>Link List:</h3>
+    <details>
+        <summary>
+            <span class="glyphicon glyphicon-question-sign" aria-hidden="true" id="help-title">
+            Help
+            </span>
+        </summary>        
+        <div id="help-content">
+            Here, we can read the value of each record. <br>
+            We can use <a id="help-btn-filter">Filter</a> to select some specific records.<br>
+            Click the <a id="help-btn-filter">Reset</a> button to reset the filter to the original state.<br>
+            Click the <a id="help-btn-download">Download PDF</a> button to download the displayed data(after filtering) as a pdf document.<br><br>
+            In order to avoid loading too much data when entering for the first time, relevant data will be loaded only after clicking <a id="help-btn-filter">Filter</a>. <br>
+            If you want to load all the data in the database, click <a id="help-btn-filter">Filter</a> directly without entering or selecting any keywords in the filter.<br>
+        </div>
+    </details>
+    <form method="get" id="filterForm">
+        {{ filter.form.as_p }}
+        <button type="submit" id="btnf1" name="filter">Filter</button>
+        <button type="reset" id="resetButton" class="btnf2">Reset</button>
+        <a id="download" href="{% url 'download_links_pdf' %}?{{ request.GET.urlencode }}">Download PDF</a>
+    </form>
+    <div id="loading" class="loading-overlay">
+        <div class="spinner"></div>
+        <a id="loadingtext"> Loading </a>
     </div>
+    {% if links %}
+        <table class="table table-bordered" id="normalTable">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Part Name</th>
+                <th style="width: 90px;">Link Name</th> 
+                <th style="width: 80px;">Interface1 Name</th>
+                <th style="width: 80px;">Interface2 Name</th>
+                <th style="width: 100px;">Length[mm]</th>
+                <th style="width: 400px;">Sequence</th>
+                <th style="width: 80px;">Ratio</th>
+                <th style="width: 100px;">Arm Diam.[mm]</th>
+                <th style="width: 100px;">Arm Section[mm²]</th>
+                <th>Cycle #</th>
+                <th>Fin. Arm Sec. [mm²]</th>
+                <th>Fin. Arm diam. [mm]</th>
+                <th>Fin. Arm radius [m]</th>
+                <th>Mass [g]</th>
+                <th>*Angle*</th>
+                
+            </tr>
+            </thead>
+            <tbody>
+            {% for row in links %}
+                <tr>
+                    <td>{{ row.id }}</td>
+                    <td>{{ row.part.partName }}</td>
+                    <td>{{ row.linkName }}</td>
+                    <td>{{ row.interface1 }}</td>
+                    <td>{{ row.interface2 }}</td>
+                    <td>{{ row.lengthShow|default_if_none:"" }}</td>
+                    <td>{{ row.sequence|default_if_none:"" }}</td>
+                    <td>{{ row.ratio|default_if_none:"" }}</td>
+                    <td>{{ row.armDiam|default_if_none:"" }}</td>
+                    <td>{{ row.armSection|default_if_none:"" }}</td>
+                    <td>{{ row.cycle|default_if_none:"" }}</td>
+                    <td>{{ row.finArmSectionShow|default_if_none:"" }}</td>
+                    <td>{{ row.finArmDiamShow|default_if_none:"" }}</td>
+                    <td>{{ row.finArmRadiusShow|default_if_none:"" }}</td>
+                    <td>{{ row.massShow|default_if_none:"" }}</td>
+                    <td>{{ row.angle|default_if_none:"" }}</td>
+                
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="16" class="text-center" style="font-size: large;">{{ message }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <h3 class="text-center" id="NoMessage">{{ message }}</h3>
+    {% endif %}
+</div>
     
 
     
 {% endblock %}
 
 {% block js %}
-        <script>
-        
-
-        $('#resetButton').click(function() {
-        window.location.href = window.location.pathname;  
-        });
-
-     
-      
-    </script>
+<script>
+    
+</script>
     
 {% endblock %}
 
