@@ -7,3 +7,4 @@ class WebConfig(AppConfig):
 
     def ready(self):
         import web.signals
+        import web.templatetags.custom_filters

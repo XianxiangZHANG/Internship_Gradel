@@ -10,6 +10,7 @@ from reportlab.lib.styles import getSampleStyleSheet
 from reportlab.platypus import Paragraph, Frame
 from django import forms
 
+from .calculator import PartCalculator, BushingCalculator, InterfaceCalculator, LinkCalculator
 from web import models
 import django_filters
 
@@ -25,39 +26,46 @@ class LinkFilter(django_filters.FilterSet):
             'linkName': ['icontains'],
         }
 
-def link_list(request):
-    """ list of link """
+def get_filtered_links(filter_class, request, valid=None):
     links = None
-    link_filter = LinkFilter(request.GET, queryset=models.Link.objects.all())
+    message = "No link to display. Please use the filter to load data."
 
-    message = "No interface to display. Please use the filter to load data."
+    if valid is not None:
+        queryset = models.Link.objects.filter(part__valid=valid)
+    else:
+        queryset = models.Link.objects.all()
 
+    link_filter = filter_class(request.GET, queryset=queryset)
     if any(request.GET.values()):
         links = link_filter.qs
-        message = "No data found."
+        if not links.exists():
+            message = "No data found."
     elif 'filter' in request.GET:
         links = link_filter.qs
-        message = "No data found."
-    
-    return render(request, 'link/link_list.html', {'filter': link_filter, 'links': links, 'message':message})
+        if not links.exists():
+            message = "No data found."
 
+    if links:
+        for link in links:
+            calculator = LinkCalculator(link)
+            link.calculated_properties = {
+                'length': calculator.length(),
+                'finArmSection': calculator.fin_arm_section(),
+                'finArmDiam': calculator.fin_arm_diam(),
+                'finArmRadius': calculator.fin_arm_radius(),
+                'mass': calculator.mass(),
+                'ratio': calculator.ratio(),
+            }
 
+    return link_filter, links, message
+
+def link_list(request):
+    link_filter, links, message = get_filtered_links(LinkFilter, request)
+    return render(request, 'link/link_list.html', {'filter': link_filter, 'links': links, 'message': message})
 
 def link_valid(request):
-    """ list of link """
-    links = None
-    link_filter = LinkFilter(request.GET, queryset=models.Link.objects.filter(part__valid=True))
-
-    message = "No interface to display. Please use the filter to load data."
-
-    if any(request.GET.values()):
-        links = link_filter.qs
-        message = "No data found."
-    elif 'filter' in request.GET:
-        links = link_filter.qs
-        message = "No data found."
-    
-    return render(request, 'link/link_valid.html', {'filter': link_filter, 'links': links, 'message':message})
+    link_filter, links, message = get_filtered_links(LinkFilter, request, valid=True)
+    return render(request, 'link/link_valid.html', {'filter': link_filter, 'links': links, 'message': message})
 
 
 def link_input(request):

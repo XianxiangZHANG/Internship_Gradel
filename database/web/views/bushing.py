@@ -10,6 +10,7 @@ from reportlab.lib.styles import getSampleStyleSheet
 from reportlab.platypus import Paragraph, Frame
 from reportlab.lib import colors
 
+from .calculator import PartCalculator, BushingCalculator, InterfaceCalculator, LinkCalculator
 from web import models
 import django_filters
 
@@ -23,38 +24,76 @@ class BushingFilter(django_filters.FilterSet):
         fields = ['project', 'part', 'bushingName']
 
 
-def bushing_list(request):
-    """ list of bushing """
+def get_filtered_bushings(filter_class, request, valid=None):
     bushings = None
-    bushing_filter = BushingFilter(request.GET, queryset=models.Bushing.objects.all())
-
     message = "No bushing to display. Please use the filter to load data."
 
+    if valid is not None:
+        queryset = models.Bushing.objects.filter(part__valid=valid)
+    else:
+        queryset = models.Bushing.objects.all()
+
+    bushing_filter = filter_class(request.GET, queryset=queryset)
     if any(request.GET.values()):
         bushings = bushing_filter.qs
-        message = "No data found."
+        if not bushings.exists():
+            message = "No data found."
     elif 'filter' in request.GET:
         bushings = bushing_filter.qs
-        message = "No data found."
-    
-    return render(request, 'bushing/bushing_list.html', {'filter': bushing_filter, 'bushings': bushings, 'message':message})
+        if not bushings.exists():
+            message = "No data found."
 
+    if bushings:
+        for bushing in bushings:
+            calculator = BushingCalculator(bushing)
+            bushing.calculated_properties = {
+                'accOnBushing': calculator.acc_on_bushing(),
+                'totalBushingMass': calculator.total_bushing_mass(),
+            }
+
+    return bushing_filter, bushings, message
+
+def bushing_list(request):
+    bushing_filter, bushings, message = get_filtered_bushings(BushingFilter, request)
+    return render(request, 'bushing/bushing_list.html', {'filter': bushing_filter, 'bushings': bushings, 'message': message})
 
 def bushing_valid(request):
-    """ list of bushing """
-    bushings = None
-    bushing_filter = BushingFilter(request.GET, queryset=models.Bushing.objects.filter(part__valid=True))
+    bushing_filter, bushings, message = get_filtered_bushings(BushingFilter, request, valid=True)
+    return render(request, 'bushing/bushing_valid.html', {'filter': bushing_filter, 'bushings': bushings, 'message': message})
 
-    message = "No bushing to display. Please use the filter to load data."
 
-    if any(request.GET.values()):
-        bushings = bushing_filter.qs
-        message = "No data found."
-    elif 'filter' in request.GET:
-        bushings = bushing_filter.qs
-        message = "No data found."
+# def bushing_list(request):
+#     """ list of bushing """
+#     bushings = None
+#     bushing_filter = BushingFilter(request.GET, queryset=models.Bushing.objects.all())
+
+#     message = "No bushing to display. Please use the filter to load data."
+
+#     if any(request.GET.values()):
+#         bushings = bushing_filter.qs
+#         message = "No data found."
+#     elif 'filter' in request.GET:
+#         bushings = bushing_filter.qs
+#         message = "No data found."
     
-    return render(request, 'bushing/bushing_valid.html', {'filter': bushing_filter, 'bushings': bushings, 'message':message})
+#     return render(request, 'bushing/bushing_list.html', {'filter': bushing_filter, 'bushings': bushings, 'message':message})
+
+
+# def bushing_valid(request):
+#     """ list of bushing """
+#     bushings = None
+#     bushing_filter = BushingFilter(request.GET, queryset=models.Bushing.objects.filter(part__valid=True))
+
+#     message = "No bushing to display. Please use the filter to load data."
+
+#     if any(request.GET.values()):
+#         bushings = bushing_filter.qs
+#         message = "No data found."
+#     elif 'filter' in request.GET:
+#         bushings = bushing_filter.qs
+#         message = "No data found."
+    
+#     return render(request, 'bushing/bushing_valid.html', {'filter': bushing_filter, 'bushings': bushings, 'message':message})
 
 
 

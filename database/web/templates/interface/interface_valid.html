@@ -1,5 +1,5 @@
 {% extends 'layout.html' %}
-
+{% load custom_filters %}
 
 {% block content %}
 <div  style="margin-bottom: 100px;">
@@ -67,14 +67,14 @@
                         <td>{{ row.interfaceName }}</td>
                         <td>{{ row.height|default_if_none:"" }}</td>
                         <td>{{ row.intDiameter|default_if_none:"" }}</td>
-                        <td>{{ row.totalLink|default_if_none:"" }}</td>
-                        <td>{{ row.totalArm|default_if_none:"" }}</td>
-                        <td>{{ row.totalSectionShow|default_if_none:"" }}</td>
-                        <td>{{ row.extDiameterShow|default_if_none:"" }}</td>
-                        <td>{{ row.accMassShow|default_if_none:"" }}</td>
+                        <td>{{ row.calculated_properties.totalLink|default_if_none:"" }}</td>
+                        <td>{{ row.calculated_properties.totalArm|default_if_none:"" }}</td>
+                        <td>{{ row.calculated_properties.totalSection|format_decimal:2|default_if_none:"" }}</td>
+                        <td>{{ row.calculated_properties.extDiameter|format_decimal:2|default_if_none:"" }}</td>
+                        <td>{{ row.calculated_properties.accMass|format_decimal:2|default_if_none:"" }}</td>
                         <td>{{ row.finODiam|default_if_none:"" }}</td>
                         <td>{{ row.finAccSection|default_if_none:"" }}</td>
-                        <td>{{ row.safetyFactor|default_if_none:"" }}</td>
+                        <td>{{ row.calculated_properties.safetyFactor|default_if_none:"" }}</td>
                         <td>{{ row.interfaceCenterX|default_if_none:"" }}</td>
                         <td>{{ row.interfaceCenterY|default_if_none:"" }}</td>
                         <td>{{ row.interfaceCenterZ|default_if_none:"" }}</td>

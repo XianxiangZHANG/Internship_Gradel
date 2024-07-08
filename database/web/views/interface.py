@@ -8,7 +8,7 @@ from reportlab.pdfgen import canvas
 from reportlab.lib.styles import getSampleStyleSheet
 from reportlab.platypus import Paragraph
 
-
+from .calculator import PartCalculator, BushingCalculator, InterfaceCalculator, LinkCalculator
 from web import models
 import django_filters
 
@@ -21,39 +21,80 @@ class InterfaceFilter(django_filters.FilterSet):
             'interfaceName': ['icontains'],
         }
 
-def interface_list(request):
-    """ list of interface """
+def get_filtered_interfaces(filter_class, request, valid=None):
     interfaces = None
-    interface_filter = InterfaceFilter(request.GET, queryset=models.Interface.objects.all())
-
     message = "No interface to display. Please use the filter to load data."
 
+    if valid is not None:
+        queryset = models.Interface.objects.filter(part__valid=valid)
+    else:
+        queryset = models.Interface.objects.all()
+
+    interface_filter = filter_class(request.GET, queryset=queryset)
     if any(request.GET.values()):
         interfaces = interface_filter.qs
-        message = "No data found."
+        if not interfaces.exists():
+            message = "No data found."
     elif 'filter' in request.GET:
         interfaces = interface_filter.qs
-        message = "No data found."
-    
-    return render(request, 'interface/interface_list.html', {'filter': interface_filter, 'interfaces': interfaces, 'message':message})
+        if not interfaces.exists():
+            message = "No data found."
 
+    if interfaces:
+        for interface in interfaces:
+            calculator = InterfaceCalculator(interface)
+            interface.calculated_properties = {
+                'totalLink': calculator.total_link(),
+                'totalArm': calculator.total_arm(),
+                'totalSection': calculator.total_section(),
+                'extDiameter': calculator.ext_diameter(),
+                'accMass': calculator.acc_mass(),
+                'safetyFactor': calculator.safety_factor(),
+            }
 
+    return interface_filter, interfaces, message
+
+def interface_list(request):
+    interface_filter, interfaces, message = get_filtered_interfaces(InterfaceFilter, request)
+    return render(request, 'interface/interface_list.html', {'filter': interface_filter, 'interfaces': interfaces, 'message': message})
 
 def interface_valid(request):
-    """ list of interface """
-    interfaces = None
-    interface_filter = InterfaceFilter(request.GET, queryset=models.Interface.objects.filter(part__valid=True))
+    interface_filter, interfaces, message = get_filtered_interfaces(InterfaceFilter, request, valid=True)
+    return render(request, 'interface/interface_valid.html', {'filter': interface_filter, 'interfaces': interfaces, 'message': message})
 
-    message = "No interface to display. Please use the filter to load data."
+# def interface_list(request):
+#     """ list of interface """
+#     interfaces = None
+#     interface_filter = InterfaceFilter(request.GET, queryset=models.Interface.objects.all())
 
-    if any(request.GET.values()):
-        interfaces = interface_filter.qs
-        message = "No data found."
-    elif 'filter' in request.GET:
-        interfaces = interface_filter.qs
-        message = "No data found."
+#     message = "No interface to display. Please use the filter to load data."
+
+#     if any(request.GET.values()):
+#         interfaces = interface_filter.qs
+#         message = "No data found."
+#     elif 'filter' in request.GET:
+#         interfaces = interface_filter.qs
+#         message = "No data found."
     
-    return render(request, 'interface/interface_valid.html', {'filter': interface_filter, 'interfaces': interfaces, 'message':message})
+#     return render(request, 'interface/interface_list.html', {'filter': interface_filter, 'interfaces': interfaces, 'message':message})
+
+
+
+# def interface_valid(request):
+#     """ list of interface """
+#     interfaces = None
+#     interface_filter = InterfaceFilter(request.GET, queryset=models.Interface.objects.filter(part__valid=True))
+
+#     message = "No interface to display. Please use the filter to load data."
+
+#     if any(request.GET.values()):
+#         interfaces = interface_filter.qs
+#         message = "No data found."
+#     elif 'filter' in request.GET:
+#         interfaces = interface_filter.qs
+#         message = "No data found."
+    
+#     return render(request, 'interface/interface_valid.html', {'filter': interface_filter, 'interfaces': interfaces, 'message':message})
 
 def interface_input(request):
     """ list of interface """

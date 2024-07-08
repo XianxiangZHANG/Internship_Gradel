@@ -1,5 +1,5 @@
 {% extends 'layout.html' %}
-
+{% load custom_filters %}
 
 {% block content %}
 <div  style="margin-bottom: 100px;">
@@ -75,17 +75,17 @@
                         <td>{{ row.linkName }}</td>
                         <td>{{ row.interface1 }}</td>
                         <td>{{ row.interface2 }}</td>
-                        <td>{{ row.lengthShow|default_if_none:"" }}</td>
+                        <td>{{ row.calculated_properties.length|format_decimal:2|default_if_none:"" }}</td>
                         <td>{{ row.sequence|default_if_none:"" }}</td>
-                        <td>{{ row.ratio|default_if_none:"" }}</td>
+                        <td>{{ row.calculated_properties.ratio|format_decimal:2|default_if_none:"" }}</td>
                         <td>{{ row.armDiam|default_if_none:"" }}</td>
                         <td>{{ row.armSection|default_if_none:"" }}</td>
                         <td>{{ row.cycle|default_if_none:"" }}</td>
                         
-                        <td>{{ row.finArmSectionShow|default_if_none:"" }}</td>
-                        <td>{{ row.finArmDiamShow|default_if_none:"" }}</td>
-                        <td>{{ row.finArmRadiusShow|default_if_none:"" }}</td>
-                        <td>{{ row.massShow|default_if_none:"" }}</td>
+                        <td>{{ row.calculated_properties.finArmSection|format_decimal:2|default_if_none:"" }}</td>
+                        <td>{{ row.calculated_properties.finArmDiam|format_decimal:2|default_if_none:"" }}</td>
+                        <td>{{ row.calculated_properties.finArmRadius|format_decimal:6|default_if_none:"" }}</td>
+                        <td>{{ row.calculated_properties.mass|format_decimal:2|default_if_none:"" }}</td>
                         <td>{{ row.angle|default_if_none:"" }}</td>
                         <td>
                             <a class="btn btn-primary btn-xs" href="/link/edit/{{ row.id }}/" style="width: 70px; text-align: center; margin-bottom: 5px;"> Edit </a>

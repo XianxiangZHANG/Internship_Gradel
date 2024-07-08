@@ -1,5 +1,5 @@
 {% extends 'layout.html' %}
-
+{% load custom_filters %}
 
 {% block content %}
     <div  style="margin-bottom: 100px;">
@@ -55,9 +55,9 @@
                     <td>{{ row.bushingName|default_if_none:"" }}</td>
                     <td>{{ row.numberInterface|default_if_none:"" }}</td>
                     <td>{{ row.bushingDrawNb|default_if_none:"" }}</td>
-                    <td>{{ row.AccOnBushing|default_if_none:"" }}</td>
-                    <td>{{ row.bushingMass|default_if_none:"" }}</td>
-                    <td>{{ row.totalBushingMass|default_if_none:"" }}</td>
+                    <td>{{ row.calculated_properties.accOnBushing|format_decimal:2|default_if_none:"" }}</td>
+                    <td>{{ row.bushingMass|format_decimal:2|default_if_none:"" }}</td>
+                    <td>{{ row.calculated_properties.totalBushingMass|format_decimal:2|default_if_none:"" }}</td>
                 
                 </tr>
             
