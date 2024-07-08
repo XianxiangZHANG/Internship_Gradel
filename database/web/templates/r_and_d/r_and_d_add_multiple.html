@@ -23,11 +23,8 @@
             <div class="row">
                 {{ formset.management_form}}
                 <table class="table table-bordered" id="r_and_d-table">
-
-                    <!-- <thead> -->
-                        
-                        <tr>
-                            {% for field in formset %}
+                    <tr>
+                        {% for field in formset %}
                             <tr><th colspan="2" style="background-color: #4CAF50;">Program :</th><td colspan="2"  contenteditable="true">{{ field.program }}</td><span style="color: red;">{{ formset.errors.0 }}</span></tr>
                             <tr><th colspan="2" style="background-color: #4CAF50;">Project Nr. :</th><td colspan="2"  contenteditable="true">{{ field.projectNr }}</td></tr>
 
@@ -37,7 +34,6 @@
                             <tr><th colspan="2" style="background-color: #4CAF50;">Approved by :</th><td colspan="2"  contenteditable="true">{{ field.approvedBy }}</td>
                     
                             <tr style="background-color: #4CAF50;"><th colspan="2" style="background-color: #4CAF50; font-size: large; color: #000;">Materials references</th><td id="vc">Value</td><td id="vc">Comments</td></tr>
-                            <!-- <tr><th colspan="2">Fiber</th><td>{{ field.fiber }}</td><td>{{ field.fiberC }}</td></tr> -->
                             <tr><th colspan="2">Fiber</th><td>
                                 <select id="id_fiber" name="fiber" onchange="fetchFiberDetails(this.value)">
                                     <option value=""> - - - - Please select one - - - - </option>
@@ -48,7 +44,7 @@
                                 <span style="color: red;">{{ fiber_resin_from.fiber.errors.0 }}</span>
                             </td><td>{{ field.fiberC }}</td></tr>
                             <tr><th colspan="2">Number of bobbins</th><td  contenteditable="true">{{ field.numberOfBobbins }}</td><td  contenteditable="true">{{ field.numberOfBobbinsC }}</td></tr>
-                            <!-- <tr><th colspan="2">Resin</th><td>{{ field.resin }}</td><td>{{ field.resinC }}</td></tr> -->
+                            
                             <tr><th colspan="2">Resin</th><td>
                                 <select id="id_resin" name="resin" onchange="fetchResinDetails(this.value)">
                                     <option value=""> - - - - Please select one - - - - </option>
@@ -68,19 +64,6 @@
                             <tr><th colspan="2">Fibre tex (g/1000m) :</th><td><input type="text" id="fiber_tex" readonly></td><td  contenteditable="true">{{ field.texC }}</td></tr>
                             <tr><th colspan="2">Fibre density (g/cm3) :</th><td><input type="text" id="fiber_density" readonly></td><td  contenteditable="true">{{ field.fiberDensityC }}</td></tr>
                             <tr><th colspan="2">Matrix density (g/cm3) :</th><td><input type="text" id="resin_density" readonly></td><td  contenteditable="true">{{ field.resinDensityC }}</td></tr>
-
-
-                            <!-- <tr><th colspan="2">Hardener</th><td>{{ field.fiber }}</td><td>{{ field.hardenerC }}</td></tr>
-                            <tr><th colspan="2">Curing cycle (+ ramp) (°C) :</th><td>{{ field.numberOfBobbins }}</td><td>{{ field.curingCycleC }}</td></tr>
-                            
-
-                            <tr style=" border-bottom: 1px solid black;"><td colspan="10"></td></tr>
-                            <tr style="background-color: #4CAF50;"><th colspan="2" style="background-color: #4CAF50; font-size: large; color: #000;">Materials individual properties</th><td id="vc">Value</td><td id="vc">Comments</td></tr>
-                            <tr><th colspan="2">Fibre tow :</th><td>{{ field.fiber.tow }}</td><td>{{ field.towC }}</td></tr>
-                            <tr><th colspan="2">Fibre tex (g/1000m) :</th><td>{{ field.fiber.tex }}</td><td>{{ field.texC }}</td></tr>
-                            <tr><th colspan="2">Fibre density (g/cm3) :</th><td>{{ field.fiber.density }}</td><td>{{ field.fiberDensityC }}</td></tr>
-                            <tr><th colspan="2">Matrix density (g/cm3) :</th><td>{{ field.resin.densityR }}</td><td>{{ field.resinDensityC }}</td></tr> -->
-
 
                             <tr style="background-color: #4CAF50;"><th colspan="2" style="background-color: #4CAF50; font-size: large; color: #000;">Tools / Parts references</th><td id="vc">Value</td><td id="vc">Comments</td></tr>
                             <tr><th colspan="2">End-effector N°</th><td  contenteditable="true">{{ field.endEffector }}</td><td  contenteditable="true">{{ field.endEffectorC }}</td></tr>
@@ -162,28 +145,15 @@
                             <tr><th>Yield angle (°)</th><td contenteditable="true">{{ field.yieldAngle }}</td><td contenteditable="true">{{ field.yieldAngleC }}</td></tr>
                             <tr><th>Maxi Twisted Angle (°)</th><td contenteditable="true">{{ field.maxiTwistedAngle }}</td><td contenteditable="true">{{ field.maxiTwistedAngleC }}</td></tr>
                         </tr>
-                        
+                            
                             
                         {% endfor %}
-                    <!-- </thead>
-                    <tbody contenteditable="true">
-                        {% for form in formset %}
-                        <tr class="r_and_d-form">
-                            {% for field in form %}
-                            <td contenteditable="true">{{ field }}</td>
-                            <span style="color: red;">{{ field.errors.0 }}</span>
-                            {% endfor %}
-                            <td class="text-center">{% if not forloop.first %}<button type="button" class="btn btn-danger remove-form">Remove</button>{% endif %}</td>
-                        </tr>
-                        {% endfor %}
-                    </tbody> -->
                 </table>
             </div>
             <div class="row">
                 <div class="form-group">
                     <div class="col-xs-12">
                         <div class="col-sm-offset-9 col-sm-12">
-                            <!-- <button type="button" id="add-r_and_d" class="btn btn-secondary" style="width: 14%;">Add R&D</button> -->
                             <button type="submit" class="btn btn-primary" style="width: 15%; margin-left: 3%;">Save</button>
                         </div>
                     </div>
@@ -196,35 +166,35 @@
 
 {% block js %}
 <script type="text/javascript">
-    $(document).ready(function() {
+$(document).ready(function() {
 
-        // Handle paste event to populate table cells
-        $('#r_and_d-table tbody').on('paste', 'td', function(e) {
-            e.preventDefault();
-            var text = (e.originalEvent || e).clipboardData.getData('text/plain');
-            var rows = text.split('\n');
-            var $currentRow = $(this).closest('tr');
-            var startRowIndex = $currentRow.index();
-            var startColIndex = $(this).index()-1;
+    // Handle paste event to populate table cells
+    $('#r_and_d-table tbody').on('paste', 'td', function(e) {
+        e.preventDefault();
+        var text = (e.originalEvent || e).clipboardData.getData('text/plain');
+        var rows = text.split('\n');
+        var $currentRow = $(this).closest('tr');
+        var startRowIndex = $currentRow.index();
+        var startColIndex = $(this).index()-1;
 
-            rows.forEach(function(row, rowIndex) {
-                if (row.trim() !== '') {
-                    var cols = row.split('\t');
-                    var $row = $('#r_and_d-table tbody tr').eq(startRowIndex + rowIndex);
-                    if ($row.length === 0) {
-                        $('#add-r_and_d').click();
-                        $row = $('#r_and_d-table tbody tr').last();
-                    }
-                    cols.forEach(function(col, colIndex) {
-                        var $cell = $row.find('td').eq(startColIndex + colIndex);
-                        $cell.find('input').val(col.trim() || '');
-                    });
+        rows.forEach(function(row, rowIndex) {
+            if (row.trim() !== '') {
+                var cols = row.split('\t');
+                var $row = $('#r_and_d-table tbody tr').eq(startRowIndex + rowIndex);
+                if ($row.length === 0) {
+                    $('#add-r_and_d').click();
+                    $row = $('#r_and_d-table tbody tr').last();
                 }
-            });
+                cols.forEach(function(col, colIndex) {
+                    var $cell = $row.find('td').eq(startColIndex + colIndex);
+                    $cell.find('input').val(col.trim() || '');
+                });
+            }
         });
-        
-        
     });
+    
+    
+});
 
     function fetchFiberDetails(fiber_id) {
             if (fiber_id) {

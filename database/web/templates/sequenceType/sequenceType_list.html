@@ -1,22 +1,17 @@
 {% extends 'layout.html' %}
-
-
 {% block content %}
-
-    
-    
-    <div id="cont">
-        <div style="margin-bottom: 10px">
-            <a class="btn btn-success" href="/sequenceType/add-multiple/">
-                <span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span> New Sequence
-            </a>
-        </div>
+<div id="cont">
+    <div style="margin-bottom: 10px">
+        <a class="btn btn-success" href="/sequenceType/add-multiple/">
+            <span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span> New Sequence
+        </a>
+    </div>
     <h3>Sequence List:</h3>
     <details>
         <summary>
-          <span class="glyphicon glyphicon-question-sign" aria-hidden="true" id="help-title">
-            Help
-          </span>
+            <span class="glyphicon glyphicon-question-sign" aria-hidden="true" id="help-title">
+                Help
+            </span>
         </summary>        
         <div id="help-content">
             Here, we can check the value of each record. <br>
@@ -42,94 +37,93 @@
     </div>
     <table class="table table-bordered">
         <thead>
-        <tr>
-            <th>ID</th>
-            <th style="width: 20%;">Sequence</th>
-            <th style="width: 70%;">Description</th>
-            <th style="width: 10%;">Operations</th>
-        </tr>
+            <tr>
+                <th>ID</th>
+                <th style="width: 20%;">Sequence</th>
+                <th style="width: 70%;">Description</th>
+                <th style="width: 10%;">Operations</th>
+            </tr>
         </thead>
         <tbody>
-        {% for row in filter.qs %}
-            {% if row.valid %}
-            <tr style="background-color: #67fafa70;">
-            {% else %}
-            <tr>
-            {% endif %}
-                <td>{{ row.id }}</td>
-                <td>{{ row.sequenceType }}</td>
-                <td>{{ row.description|default_if_none:"" }}</td>
-                <td>
-                    <a class="btn btn-primary btn-xs" href="/sequenceType/edit/{{ row.id }}/" style="width: 70px; text-align: center; margin-bottom: 5px;"> Edit </a>
-                
-                    <input type="button" value="Delete" class="btn btn-danger btn-xs" style="width: 70px; text-align: center; margin-bottom: 5px;"
-                           onclick="deleteAction({{ row.id }});"/>
-                </td>
-            </tr>
-            
+            {% for row in filter.qs %}
+                {% if row.valid %}
+                    <tr style="background-color: #67fafa70;">
+                {% else %}
+                    <tr>
+                {% endif %}
+                        <td>{{ row.id }}</td>
+                        <td>{{ row.sequenceType }}</td>
+                        <td>{{ row.description|default_if_none:"" }}</td>
+                        <td>
+                            <a class="btn btn-primary btn-xs" href="/sequenceType/edit/{{ row.id }}/" style="width: 70px; text-align: center; margin-bottom: 5px;"> Edit </a>
+                        
+                            <input type="button" value="Delete" class="btn btn-danger btn-xs" style="width: 70px; text-align: center; margin-bottom: 5px;"
+                                onclick="deleteAction({{ row.id }});"/>
+                        </td>
+                    </tr>
             {% empty %}
             <tr>
                 <td colspan="4" class="text-center" style="font-size: large;">No data found.</td>
             </tr>
             {% endfor %}
         </tbody>
-    </table></div>
+    </table>
+</div>
 
 
-    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-        <div class="modal-dialog" role="document">
-            <div class="alert alert-danger alert-dismissible fade in" role="alert">
-                <button type="button" class="close"></button>
-                <h4>Are you sure you want to delete it?</h4>
-                <p style="margin: 20px 0;">After deletion, all related data associated with it will be deleted. Are you sure you want to continue?</p>
-                <p>
-                    <button type="button" class="btn btn-danger" onclick="confirmDelete()">Confirm</button>
-                    <button type="button" class="btn btn-default" onclick="cancelDelete()">Cancel</button>
-                </p>
-            </div>
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="alert alert-danger alert-dismissible fade in" role="alert">
+            <button type="button" class="close"></button>
+            <h4>Are you sure you want to delete it?</h4>
+            <p style="margin: 20px 0;">After deletion, all related data associated with it will be deleted. Are you sure you want to continue?</p>
+            <p>
+                <button type="button" class="btn btn-danger" onclick="confirmDelete()">Confirm</button>
+                <button type="button" class="btn btn-default" onclick="cancelDelete()">Cancel</button>
+            </p>
         </div>
-
     </div>
+</div>
 {% endblock %}
 
 {% block js %}
-    <script>
-         
-        // ID currently to be deleted
-        DELETE_ID = 0;
-        function deleteAction(id) {
-            DELETE_ID = id;
-            $('#myModal').modal('show');
-        }
+<script>
+        
+    // ID currently to be deleted
+    DELETE_ID = 0;
+    function deleteAction(id) {
+        DELETE_ID = id;
+        $('#myModal').modal('show');
+    }
 
-        function confirmDelete() {
-            // Send request to backend DELETE_ID -> Delete
-            // Page refresh
-            // /project/delete/?aid=12
-            $.ajax({
-                url: "/sequenceType/delete/",
-                type: "GET",
-                data: {
-                    aid: DELETE_ID
-                },
-                dataType: "JSON",
-                success: function (res) {
-                    // {status: true} -> obj
-                    if (res.status) {
-                        // Deletion successful, refresh the page
-                        location.reload()
-                    } else {
-                        alert(res.error);
-                    }
+    function confirmDelete() {
+        // Send request to backend DELETE_ID -> Delete
+        // Page refresh
+        // /project/delete/?aid=12
+        $.ajax({
+            url: "/sequenceType/delete/",
+            type: "GET",
+            data: {
+                aid: DELETE_ID
+            },
+            dataType: "JSON",
+            success: function (res) {
+                // {status: true} -> obj
+                if (res.status) {
+                    // Deletion successful, refresh the page
+                    location.reload()
+                } else {
+                    alert(res.error);
                 }
-            })
-        }
+            }
+        })
+    }
 
-        function cancelDelete() {
-            DELETE_ID = 0;
-            $('#myModal').modal('hide');
-        }
-    </script>
+    function cancelDelete() {
+        DELETE_ID = 0;
+        $('#myModal').modal('hide');
+    }
+</script>
 {% endblock %}
 
 {% block css %}

@@ -1,16 +1,11 @@
 {% extends 'layout.html' %}
-
-
 {% block content %}
-
-    
-    
-    <div  style="margin-bottom: 100px;">
-        <div style="margin-bottom: 10px">
-            <a class="btn btn-success" href="/project/add/">
-                <span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span> New project
-            </a>
-        </div>
+<div  style="margin-bottom: 100px;">
+    <div style="margin-bottom: 10px">
+        <a class="btn btn-success" href="/project/add/">
+            <span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span> New project
+        </a>
+    </div>
     <h3>Project List:</h3>
     <details>
         <summary>
@@ -86,8 +81,6 @@
                            onclick="deleteAction({{ row.id }});"/>
                 </td>
             </tr>
-            
-           
         {% empty %}
         <tr>
             <td colspan="12" class="text-center" style="font-size: large;">{{ message }}</td>
@@ -98,65 +91,61 @@
     {% else %}
         <h3 class="text-center" id="NoMessage">{{ message }}</h3>
     {% endif %}
-    </div>
-
-
-    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-        <div class="modal-dialog" role="document">
-
-
-            <div class="alert alert-danger alert-dismissible fade in" role="alert">
-                <button type="button" class="close"></button>
-                <h4>Are you sure you want to delete it?</h4>
-                <p style="margin: 20px 0;">After deletion, all related data associated with it will be deleted. Are you sure you want to continue?</p>
-                <p>
-                    <button type="button" class="btn btn-danger" onclick="confirmDelete()">Confirm</button>
-                    <button type="button" class="btn btn-default" onclick="cancelDelete()">Cancel</button>
-                </p>
-            </div>
+</div>
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="alert alert-danger alert-dismissible fade in" role="alert">
+            <button type="button" class="close"></button>
+            <h4>Are you sure you want to delete it?</h4>
+            <p style="margin: 20px 0;">After deletion, all related data associated with it will be deleted. Are you sure you want to continue?</p>
+            <p>
+                <button type="button" class="btn btn-danger" onclick="confirmDelete()">Confirm</button>
+                <button type="button" class="btn btn-default" onclick="cancelDelete()">Cancel</button>
+            </p>
         </div>
-
     </div>
+
+</div>
 {% endblock %}
 
 {% block js %}
-    <script>
+<script>
         
-        // ID currently to be deleted
-        DELETE_ID = 0;
-        function deleteAction(id) {
-            DELETE_ID = id;
-            $('#myModal').modal('show');
-        }
+    // ID currently to be deleted
+    DELETE_ID = 0;
+    function deleteAction(id) {
+        DELETE_ID = id;
+        $('#myModal').modal('show');
+    }
 
-        function confirmDelete() {
-            // Send request to backend DELETE_ID -> Delete
-            // Page refresh
-            // /project/delete/?aid=12
-            $.ajax({
-                url: "/project/delete/",
-                type: "GET",
-                data: {
-                    aid: DELETE_ID
-                },
-                dataType: "JSON",
-                success: function (res) {
-                    // {status: true} -> obj
-                    if (res.status) {
-                        // Deletion successful, refresh the page
-                        location.reload()
-                    } else {
-                        alert(res.error);
-                    }
+    function confirmDelete() {
+        // Send request to backend DELETE_ID -> Delete
+        // Page refresh
+        // /project/delete/?aid=12
+        $.ajax({
+            url: "/project/delete/",
+            type: "GET",
+            data: {
+                aid: DELETE_ID
+            },
+            dataType: "JSON",
+            success: function (res) {
+                // {status: true} -> obj
+                if (res.status) {
+                    // Deletion successful, refresh the page
+                    location.reload()
+                } else {
+                    alert(res.error);
                 }
-            })
-        }
+            }
+        })
+    }
 
-        function cancelDelete() {
-            DELETE_ID = 0;
-            $('#myModal').modal('hide');
-        }
-    </script>
+    function cancelDelete() {
+        DELETE_ID = 0;
+        $('#myModal').modal('hide');
+    }
+</script>
 {% endblock %}
 
 {% block css %}

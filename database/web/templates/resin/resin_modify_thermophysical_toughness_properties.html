@@ -31,56 +31,51 @@
         <a class="btn btn-success" href="/resin/modify-mechanical-properties/" id="btnmore">
             <span class="glyphicon glyphicon-pencil" aria-hidden="true" id="pic"></span> Modify Mechanical Properties of Resin List
         </a>
-   
-        
     </form>
     <div id="loading" class="loading-overlay">
         <div class="spinner"></div>
         <a id="loadingtext"> Loading </a>
     </div>
     {% if formset.total_form_count > 0 %}
-    <form method="post">
-        {% csrf_token %}
-        {{ formset.management_form }}
-        <table class="table table-bordered" id="resin-table">
-            <thead>
-                <tr>
+        <form method="post">
+            {% csrf_token %}
+            {{ formset.management_form }}
+            <table class="table table-bordered" id="resin-table">
+                <thead>
                     <tr>
-                        <th rowspan="2">Manufacturer</th>
-                        <th colspan="3">Resin system</th>
-                        
-
-                        <th rowspan="2">Thermal expansion coefficient (ppm/K)</th>
-                        <th rowspan="2">Charpy impact at RT (mJ/mm²)</th>
-                        <th rowspan="2">Fracture toughness K1C (Mpa.m1/2)</th>
-                        <th rowspan="2">Fracture energy G1C (J/m²)</th>
-                        <th rowspan="2">Total shrinkage at RT (Vol%)</th>
-                        <th rowspan="2">Hardness at RT</th>
-                        <th rowspan="2">Water absorption (7d at 23°C)</th>
-                        <th colspan="2" rowspan="2" style="width: 100px;">Operation</th>
+                        <tr>
+                            <th rowspan="2">Manufacturer</th>
+                            <th colspan="3">Resin system</th>
+                            <th rowspan="2">Thermal expansion coefficient (ppm/K)</th>
+                            <th rowspan="2">Charpy impact at RT (mJ/mm²)</th>
+                            <th rowspan="2">Fracture toughness K1C (Mpa.m1/2)</th>
+                            <th rowspan="2">Fracture energy G1C (J/m²)</th>
+                            <th rowspan="2">Total shrinkage at RT (Vol%)</th>
+                            <th rowspan="2">Hardness at RT</th>
+                            <th rowspan="2">Water absorption (7d at 23°C)</th>
+                            <th colspan="2" rowspan="2" style="width: 100px;">Operation</th>
+                        </tr>
+                        <tr>
+                            <th id="resinl">Resin</th>
+                            <th id="resinl">Hardener</th>
+                            <th id="resinl">Accelerator</th>
+                        </tr>
                     </tr>
-                    <tr>
-                        <th id="resinl">Resin</th>
-                        <th id="resinl">Hardener</th>
-                        <th id="resinl">Accelerator</th>
-                       
+                </thead>
+                <tbody>
+                    {% for form in formset %}
+                    <tr class="resin-form">
+                        {% for field in form %}
+                        <td contenteditable="true">{{ field }}</td>
+                        <span style="color: red;">{{ field.errors.0 }}</span>
+                        {% endfor %}
+                        <td class="text-center"><button type="button" class="btn btn-danger remove-form">Delete</button></td>
                     </tr>
-                </tr>
-            </thead>
-            <tbody>
-                {% for form in formset %}
-                <tr class="resin-form">
-                    {% for field in form %}
-                    <td contenteditable="true">{{ field }}</td>
-                    <span style="color: red;">{{ field.errors.0 }}</span>
                     {% endfor %}
-                    <td class="text-center"><button type="button" class="btn btn-danger remove-form">Delete</button></td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-        <button type="submit" class="btn btn-primary" id="btns">Save</button>
-    </form>
+                </tbody>
+            </table>
+            <button type="submit" class="btn btn-primary" id="btns">Save</button>
+        </form>
     {% else %}
         <h3 class="text-center" id="NoMessage">{{ message }}</h3>
     {% endif %}

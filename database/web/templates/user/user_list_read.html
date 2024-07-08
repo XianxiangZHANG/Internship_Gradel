@@ -1,15 +1,12 @@
 {% extends 'layout.html' %}
-
-
 {% block content %}
-
-    <div id="cont">
+<div id="cont">
     <h3>User List:</h3>
     <details>
         <summary>
-          <span class="glyphicon glyphicon-question-sign" aria-hidden="true" id="help-title">
-            Help
-          </span>
+            <span class="glyphicon glyphicon-question-sign" aria-hidden="true" id="help-title">
+                Help
+            </span>
         </summary>        
         <div id="help-content">
             Here, we can read the value of each record. <br>
@@ -26,36 +23,33 @@
     </form>
     <table class="table table-bordered">
         <thead>
-        <tr>
-            <!-- <th>Project ID</th> -->
-            <th style="width: 50%;">User Name</th>
-            <th style="width: 50%;">Department</th>
-            
-        </tr>
+            <tr>
+                <th style="width: 50%;">User Name</th>
+                <th style="width: 50%;">Department</th>
+            </tr>
         </thead>
         <tbody>
-        {% for row in filter.qs %}
-            <tr>
-                <!-- <td>{{ row.id }}</td> -->
-                <td>{{ row.username }}</td>
-                <td>{{ row.depart }}</td>
-              
-            </tr>
+            {% for row in filter.qs %}
+                <tr>
+                    <td>{{ row.username }}</td>
+                    <td>{{ row.depart }}</td>
+                </tr>
             {% empty %}
-            <tr>
-                <td colspan="2" class="text-center" style="font-size: large;">No data found.</td>
-            </tr>
+                <tr>
+                    <td colspan="2" class="text-center" style="font-size: large;">No data found.</td>
+                </tr>
             {% endfor %}
         </tbody>
-    </table></div>
+    </table>
+</div>
 
 
 {% endblock %}
 
 {% block js %}
-    <script>
-        
-    </script>
+<script>
+    
+</script>
 {% endblock %}
 
 {% block css %}

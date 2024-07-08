@@ -18,26 +18,26 @@
             </div>
         </details>
     </div>
-        <div class="panel-body">
-            <form id="upload-form" method="post" enctype="multipart/form-data" class="form-horizontal"  novalidate>
-                {% csrf_token %}
-                <div class="col-xs-12">
-                    <div class="form-group" style="margin-bottom: 25px;">
-                        <label for="file"  class="col-sm-2 control-label">Upload Excel File</label>
-                        <div class="col-sm-10">
-                            <div class="file-upload-container">
-                                <input type="file" id="file" name="file" class="form-control">
-                                <span style="color: red;position: absolute;">{{ file.errors.0 }}</span>
-                                <button type="submit" id="uploadbtn" class="btn btn-primary">Upload</button>
-                            </div>
+    <div class="panel-body">
+        <form id="upload-form" method="post" enctype="multipart/form-data" class="form-horizontal"  novalidate>
+            {% csrf_token %}
+            <div class="col-xs-12">
+                <div class="form-group" style="margin-bottom: 25px;">
+                    <label for="file"  class="col-sm-2 control-label">Upload Excel File</label>
+                    <div class="col-sm-10">
+                        <div class="file-upload-container">
+                            <input type="file" id="file" name="file" class="form-control">
+                            <span style="color: red;position: absolute;">{{ file.errors.0 }}</span>
+                            <button type="submit" id="uploadbtn" class="btn btn-primary">Upload</button>
                         </div>
-                       
                     </div>
+                    
                 </div>
-               
-            </form>
-        </div>
-        <div class="panel-body">
+            </div>
+            
+        </form>
+    </div>
+    <div class="panel-body">
         <form id="project-form" method="post"  class="form-horizontal" novalidate>
             {% csrf_token %}
             {% for field in form %}
@@ -84,13 +84,11 @@
                         alert(data.error);
                         return;
                     }
-                    // 填充项目表单
                     $('#id_projectName').val(data.projectName);
                     $('#id_program').val(data.program);
                     $('#id_equipment').val(data.equipment);
                     $('#id_customer').val(data.customer);
                     $('#id_projectNo').val(data.projectNo);
-                    // $('#id_partsNumber').val(data.partsNumber);
                     $('#id_relativeDesign').val(data.relativeDesign);
                     $('#id_structureDrawingNb').val(data.structureDrawingNb);
                     $('#id_documentNb').val(data.documentNb);

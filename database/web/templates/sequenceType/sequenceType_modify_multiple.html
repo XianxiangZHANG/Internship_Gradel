@@ -1,13 +1,12 @@
 {% extends 'layout.html' %}
-
 {% block content %}
 <div id="cont">
     <h3>Sequence List:</h3>
     <details>
         <summary>
-          <span class="glyphicon glyphicon-question-sign" aria-hidden="true" id="help-title">
-            Help
-          </span>
+            <span class="glyphicon glyphicon-question-sign" aria-hidden="true" id="help-title">
+                Help
+            </span>
         </summary>        
         <div id="help-content">
             Here, we can modify the value of each record. <br>
@@ -27,32 +26,32 @@
         <a id="loadingtext"> Loading </a>
     </div>
     {% if formset.total_form_count > 0 %}
-    <form method="post">
-        {% csrf_token %}
-        {{ formset.management_form }}
-        <table class="table table-bordered" id="sequenceType-table">
-            <thead>
-                <tr>
-                    <th style="width: 20%;">Sequence</th>
-                    <th style="width: 70%;">Description</th>
-                    <th style="width: 10%;">Validation</th>
-                    <th colspan="2">Operation</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for form in formset %}
-                <tr class="sequenceType-form">
-                    {% for field in form %}
-                    <td contenteditable="true">{{ field }}</td>
-                    <span style="color: red;">{{ field.errors.0 }}</span>
+        <form method="post">
+            {% csrf_token %}
+            {{ formset.management_form }}
+            <table class="table table-bordered" id="sequenceType-table">
+                <thead>
+                    <tr>
+                        <th style="width: 20%;">Sequence</th>
+                        <th style="width: 70%;">Description</th>
+                        <th style="width: 10%;">Validation</th>
+                        <th colspan="2">Operation</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for form in formset %}
+                        <tr class="sequenceType-form">
+                            {% for field in form %}
+                                <td contenteditable="true">{{ field }}</td>
+                                <span style="color: red;">{{ field.errors.0 }}</span>
+                            {% endfor %}
+                            <td class="text-center" ><button type="button" class="btn btn-danger remove-form" >Delete</button></td>
+                        </tr>
                     {% endfor %}
-                    <td class="text-center" ><button type="button" class="btn btn-danger remove-form" >Delete</button></td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-        <button type="submit" class="btn btn-primary" id="btns">Save</button>
-    </form>
+                </tbody>
+            </table>
+            <button type="submit" class="btn btn-primary" id="btns">Save</button>
+        </form>
     {% else %}
         <h3 class="text-center" id="NoMessage">This table is empty.</h3>
     {% endif %}

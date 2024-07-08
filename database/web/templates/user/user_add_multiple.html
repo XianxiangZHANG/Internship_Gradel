@@ -5,9 +5,9 @@
     <div class="panel-heading"><span class="glyphicon glyphicon-indent-right" aria-hidden="true"></span> Add Multiple Users
         <details>
             <summary>
-              <span class="glyphicon glyphicon-question-sign" aria-hidden="true" id="help-title">
-                Help
-              </span>
+                <span class="glyphicon glyphicon-question-sign" aria-hidden="true" id="help-title">
+                    Help
+                </span>
             </summary>        
             <div id="help-content">
                 Here, we can enter the value of each attribute manually or by batch copying and pasting. <br>
@@ -32,13 +32,11 @@
                     </thead>
                     <tbody>
                         {% for field in formset %}
-                        <tr class="user-form">
-                            <td contenteditable="true">{{ field.username }}<span style="color: red;">{{ field.errors.0 }}</span></td>
-                            <td contenteditable="true">{{ field.depart }}<span style="color: red;">{{ field.errors.0 }}</span></td>
-                            
-
-                            <td class="text-center"> <button type="button" class="btn btn-danger remove-form">Remove</button> </td>
-                        </tr>
+                            <tr class="user-form">
+                                <td contenteditable="true">{{ field.username }}<span style="color: red;">{{ field.errors.0 }}</span></td>
+                                <td contenteditable="true">{{ field.depart }}<span style="color: red;">{{ field.errors.0 }}</span></td>
+                                <td class="text-center"> <button type="button" class="btn btn-danger remove-form">Remove</button> </td>
+                            </tr>
                         {% endfor %}
                     </tbody>
                 </table>

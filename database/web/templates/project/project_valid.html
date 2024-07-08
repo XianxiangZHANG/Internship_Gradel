@@ -1,12 +1,6 @@
 {% extends 'layout.html' %}
-
-
 {% block content %}
-
-    
-    
-    <div  style="margin-bottom: 100px;">
-        
+<div style="margin-bottom: 100px;">
     <h3>Project List:</h3>
     <details>
         <summary>
@@ -37,20 +31,20 @@
     {% if projects %}
     <table class="table table-bordered">
         <thead>
-        <tr>
-            <th>ID</th>
-            <th>Project Name</th>
-            <th>Program</th>
-            <th>Equipment</th>
-            <th>Customer</th>
-            <th>Project No.</th>
-            <!-- <th>Number Of Parts</th> -->
-            <th>Relative Design</th>
-            <th>Structure Drawing Nb</th>
-            <th>Document No.</th>
-            <th>Revision</th>
-            <th>Last Update</th>
-        </tr>
+            <tr>
+                <th>ID</th>
+                <th>Project Name</th>
+                <th>Program</th>
+                <th>Equipment</th>
+                <th>Customer</th>
+                <th>Project No.</th>
+                <!-- <th>Number Of Parts</th> -->
+                <th>Relative Design</th>
+                <th>Structure Drawing Nb</th>
+                <th>Document No.</th>
+                <th>Revision</th>
+                <th>Last Update</th>
+            </tr>
         </thead>
         <tbody>
         {% for row in projects %}
@@ -81,15 +75,15 @@
     {% else %}
         <h3 class="text-center" id="NoMessage">{{ message }}</h3>
     {% endif %}
-    </div>
+</div>
 
 
 {% endblock %}
 
 {% block js %}
-    <script>
-       
-    </script>
+<script>
+    
+</script>
 {% endblock %}
 
 {% block css %}
@@ -104,10 +98,5 @@
         border-radius: 4px; 
         box-sizing: border-box; 
     }
-  
-
-    
-    
-   
 </style>
 {% endblock %}

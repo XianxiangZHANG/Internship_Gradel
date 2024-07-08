@@ -38,57 +38,54 @@
         <a id="loadingtext"> Loading </a>
     </div>
     {% if formset.total_form_count > 0 %}
-    <form method="post">
-        {% csrf_token %}
-        {{ formset.management_form }}
-        <table class="table table-bordered" id="resin-table">
-            <thead>
-                <tr>
+        <form method="post">
+            {% csrf_token %}
+            {{ formset.management_form }}
+            <table class="table table-bordered" id="resin-table">
+                <thead>
                     <tr>
-                        <th rowspan="2">Manufacturer</th>
-                        <th colspan="3">Resin system</th>
-                        <th colspan="3">Ratio(weight)</th>
-                        <th colspan="3">Ratio(volume)</th>
-                        <th rowspan="2">Pot life (Process T°;h)</th>
-                        <th rowspan="2">Process T (°C)</th>
-                        <th rowspan="2">Curing cycle</th>
-                        <th rowspan="2">Tg (°C)</th>
-                        <th rowspan="2">Price resin</th>
-                        <th rowspan="2">Price hardener</th>
-                        <th rowspan="2">Density (g/cm³)</th>
-                        <th rowspan="2">Validation</th>
-
-
-                        <th colspan="2" rowspan="2" style="width: 100px;">Operation</th>
+                        <tr>
+                            <th rowspan="2">Manufacturer</th>
+                            <th colspan="3">Resin system</th>
+                            <th colspan="3">Ratio(weight)</th>
+                            <th colspan="3">Ratio(volume)</th>
+                            <th rowspan="2">Pot life (Process T°;h)</th>
+                            <th rowspan="2">Process T (°C)</th>
+                            <th rowspan="2">Curing cycle</th>
+                            <th rowspan="2">Tg (°C)</th>
+                            <th rowspan="2">Price resin</th>
+                            <th rowspan="2">Price hardener</th>
+                            <th rowspan="2">Density (g/cm³)</th>
+                            <th rowspan="2">Validation</th>
+                            <th colspan="2" rowspan="2" style="width: 100px;">Operation</th>
+                        </tr>
+                        <tr>
+                            <th>Resin</th>
+                            <th>Hardener</th>
+                            <th>Accelerator</th>
+                            <th id="RHA">R</th>
+                            <th id="RHA">H</th>
+                            <th id="RHA">A</th>
+                            <th id="RHA">R</th>
+                            <th id="RHA">H</th>
+                            <th id="RHA">A</th>
+                        </tr>
                     </tr>
-                    <tr>
-                        <th>Resin</th>
-                        <th>Hardener</th>
-                        <th>Accelerator</th>
-                        <th id="RHA">R</th>
-                        <th id="RHA">H</th>
-                        <th id="RHA">A</th>
-                        <th id="RHA">R</th>
-                        <th id="RHA">H</th>
-                        <th id="RHA">A</th>
-                        
+                </thead>
+                <tbody>
+                    {% for form in formset %}
+                    <tr class="resin-form">
+                        {% for field in form %}
+                        <td contenteditable="true">{{ field }}</td>
+                        <span style="color: red;">{{ field.errors.0 }}</span>
+                        {% endfor %}
+                        <td class="text-center"><button type="button" class="btn btn-danger remove-form">Delete</button></td>
                     </tr>
-                </tr>
-            </thead>
-            <tbody>
-                {% for form in formset %}
-                <tr class="resin-form">
-                    {% for field in form %}
-                    <td contenteditable="true">{{ field }}</td>
-                    <span style="color: red;">{{ field.errors.0 }}</span>
                     {% endfor %}
-                    <td class="text-center"><button type="button" class="btn btn-danger remove-form">Delete</button></td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-        <button type="submit" class="btn btn-primary" id="btns">Save</button>
-    </form>
+                </tbody>
+            </table>
+            <button type="submit" class="btn btn-primary" id="btns">Save</button>
+        </form>
     {% else %}
         <h3 class="text-center" id="NoMessage">{{ message }}</h3>
     {% endif %}

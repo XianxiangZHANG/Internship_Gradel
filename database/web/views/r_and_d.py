@@ -189,7 +189,7 @@ class FiberResinForm(forms.Form):
     fiber = forms.ModelChoiceField(queryset=models.Fiber.objects.all(), required=True)
     resin = forms.ModelChoiceField(queryset=models.Resin.objects.all(), required=True)
 
-def r_and_d_add_multiple(request):
+def r_and_d_add(request):
     fibers = models.Fiber.objects.all()
     resins = models.Resin.objects.all()
     # print(fibers)
@@ -225,77 +225,6 @@ def r_and_d_add_multiple(request):
         'formset': formset,
     })
 
-
-def r_and_d_modify_multiple(request):
-   
-    fibers = models.Fiber.objects.all()
-    resins = models.Resin.objects.all()
-
-    # Get filtered data
-    r_and_d_filter = R_and_DFilterModify(request.GET, queryset=models.R_and_D.objects.all())
-    
-    # Define form set
-    R_and_DMultFormSet = modelformset_factory(models.R_and_D, form=R_and_DModelForm, extra=0)
-    
-    formset = None
-    message = "No R&D data to display. Please use the filter to load data."
-
-    if request.method == 'POST':
-        # print("try")
-        formset = R_and_DMultFormSet(request.POST)
-        if formset.is_valid():
-            instances = formset.save(commit=False)
-            for instance in instances:
-                instance.user = models.User.objects.filter(id=request.info_dict['id']).first()  
-                # Get fiber and resin from POST data
-                fiber_id = request.POST.get(f'fiber_{instance.id}')
-                resin_id = request.POST.get(f'resin_{instance.id}')
-                if fiber_id:
-                    instance.fiber_id = fiber_id
-                if resin_id:
-                    instance.resin_id = resin_id
-                instance.save()
-            return redirect('/r_and_d/list/')
-        else:
-            print(formset.errors)  # Print formset errors for debugging
-        
-    else:
-        # print("try else")
-        # formset = R_and_DMultFormSet(queryset=r_and_d_filter.qs)
-        # fiber_resin_form = FiberResinForm()
-        if any(request.GET.values()):
-            formset = R_and_DMultFormSet(queryset=r_and_d_filter.qs)
-            if not r_and_d_filter.qs.exists():
-                message = "No data found."
-        elif 'filter' in request.GET:
-            formset = R_and_DMultFormSet(queryset=r_and_d_filter.qs)
-            if not r_and_d_filter.qs.exists():
-                message = "No data found."
-
-    return render(request, 'r_and_d/r_and_d_modify_multiple.html', {
-        'filter': r_and_d_filter,
-        'formset': formset,
-        # 'fiber_resin_from': fiber_resin_form,
-        'fibers':fibers,
-        'resins': resins,
-        'message': message,
-    })
-
-
-def r_and_d_add(request):
-    if request.method == "GET":
-        form = R_and_DModelForm()
-        return render(request, 'r_and_d/r_and_d_add.html', {"form": form})
-
-    form = R_and_DModelForm(data=request.POST)
-    if not form.is_valid():
-        return render(request, 'r_and_d/r_and_d_add.html', {"form": form})
-
-    # form.save()
-    r_and_d = form.save(commit=False)
-    r_and_d.user = models.User.objects.filter(id=request.info_dict['id']).first()  
-    r_and_d.save()
-    return redirect('/r_and_d/list/')
 
 
 class R_and_DEditModelForm(forms.ModelForm):

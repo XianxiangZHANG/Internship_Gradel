@@ -1,18 +1,12 @@
 {% extends 'layout.html' %}
-
-
 {% block content %}
-
-    
-    
-    <div id="cont">
-        
+<div id="cont">
     <h3>Sequence List:</h3>
     <details>
         <summary>
-          <span class="glyphicon glyphicon-question-sign" aria-hidden="true" id="help-title">
-            Help
-          </span>
+            <span class="glyphicon glyphicon-question-sign" aria-hidden="true" id="help-title">
+                Help
+            </span>
         </summary>        
         <div id="help-content">
             Here, we can read the value of each record. <br>
@@ -33,36 +27,35 @@
     </div>
     <table class="table table-bordered">
         <thead>
-        <tr>
-            <th>ID</th>
-            <th style="width: 20%;">Sequence</th>
-            <th style="width: 70%;">Description</th>
-        </tr>
+            <tr>
+                <th>ID</th>
+                <th style="width: 20%;">Sequence</th>
+                <th style="width: 70%;">Description</th>
+            </tr>
         </thead>
         <tbody>
-        {% for row in filter.qs %}
-          
-            <tr>
-                <td>{{ row.id }}</td>
-                <td>{{ row.sequenceType }}</td>
-                <td>{{ row.description|default_if_none:"" }}</td>
-                
-            </tr>
+            {% for row in filter.qs %}
+                <tr>
+                    <td>{{ row.id }}</td>
+                    <td>{{ row.sequenceType }}</td>
+                    <td>{{ row.description|default_if_none:"" }}</td>
+                </tr>
             {% empty %}
-            <tr>
-                <td colspan="3" class="text-center" style="font-size: large;">No data found.</td>
-            </tr>
+                <tr>
+                    <td colspan="3" class="text-center" style="font-size: large;">No data found.</td>
+                </tr>
             {% endfor %}
         </tbody>
-    </table></div>
+    </table>
+</div>
 
 
 {% endblock %}
 
 {% block js %}
-    <script>
-        
-    </script>
+<script>
+    
+</script>
 {% endblock %}
 
 {% block css %}

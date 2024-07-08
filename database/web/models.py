@@ -6,7 +6,6 @@ import math
 class Department(models.Model):
     """ DepartmentTable """
     title = models.CharField(verbose_name="Title", max_length=30)
-    # number = models.IntegerField(verbose_name="Number of members", null=True, blank=True)
 
     def __str__(self):
         return self.title
@@ -99,7 +98,6 @@ class Fiber(models.Model):
     price23 = models.CharField(verbose_name="Price euros/kg (after 02/2023)", max_length=30, null=True, blank=True)
     price24 = models.CharField(verbose_name="Price euros/kg (after 01/2024)", max_length=30, null=True, blank=True)
     valid = models.BooleanField(verbose_name="Validation", default=False)
-
     
     def __str__(self):
         return self.grade
@@ -264,13 +262,9 @@ class R_and_D(models.Model):
     yieldAngleC = models.TextField(default="Samples number: ", null=True, blank=True)
     maxiTwistedAngleC = models.TextField(default="Samples number: ", null=True, blank=True)
     valid = models.BooleanField(verbose_name="Validation", default=False)
-    # def __str__(self):
-    #     return f"{self.program} / {self.projectNr} / {self.ERMDS}" 
+
     def __str__(self):
         return self.ERMDS 
-
-    
-
 
 class Project(models.Model):
     """ ProjectTable """
@@ -279,8 +273,6 @@ class Project(models.Model):
     equipment = models.CharField(verbose_name="Equipment", max_length=128, null=True, blank=True)
     customer = models.CharField(verbose_name="Customer", max_length=128, null=True, blank=True)
     projectNo = models.CharField(verbose_name="Project No", max_length=128, null=True, blank=True)
-    # partsNumber = models.PositiveIntegerField(verbose_name="Number of Parts", default=0, null=True, blank=True)
-
 
     relativeDesign = models.CharField(verbose_name="Relative Design", max_length=50, null=True, blank=True)
     structureDrawingNb = models.CharField(verbose_name="Structure Drawing Nb", max_length=50, null=True, blank=True)
@@ -294,48 +286,20 @@ class Project(models.Model):
 
 class Part(models.Model):
     """ PartTable """
-    ########   1   ########
     partName = models.CharField(verbose_name="Part Name", max_length=128, unique= True)
     fiber = models.ForeignKey(verbose_name="Fiber Name", to=Fiber, on_delete=models.CASCADE, to_field='id')
-
     resin = models.ForeignKey(verbose_name="Resin Name", to=Resin, on_delete=models.CASCADE, to_field='id')
-    # resinName = models.CharField(verbose_name="Resin Name", max_length=50, null=True, blank=True)
-    # resinDensity = models.FloatField(verbose_name="", null=True, blank=True)
-    # fiberName = models.CharField(verbose_name="FiberName", max_length=50, null=True, blank=True)
     totalTowNumber = models.IntegerField(verbose_name="Number of Spools", null=True, blank=True)
-    # fiberDensity = models.FloatField(verbose_name="Fiber Density[kg/m^3]", null=True, blank=True)
-
     fiberVolumeRatio = models.FloatField(verbose_name="Fiber Volume Ratio[%]", null=True, blank=True)
-
-    # windingDensity = models.FloatField(verbose_name="Winding Density[kg/m^3]", null=True, blank=True)
     fiberSectionCalc = models.FloatField(verbose_name="Fiber Section calc.[mm²]", null=True, blank=True)
     fiberSectionAcc = models.FloatField(verbose_name="Fiber Section acc.[mm²]", null=True, blank=True)
-
     defaultInterfaceHeight = models.IntegerField(verbose_name="Default Interface Height[mm]", null=True, blank=True)
     defaultInterfaceIntDiam = models.IntegerField(verbose_name="Default Interface Int. Diam.[mm]", null=True, blank=True)
     defaultLinkType = models.CharField(verbose_name="Default Link(Element) Type", max_length=30, null=True, blank=True)
     defaultLinkDefined = models.CharField(verbose_name="Default Link defined by", max_length=30, null=True, blank=True)
-
-
-    ########   2   ########
-    # numberLink = models.IntegerField(verbose_name="Number of Links", null=True, blank=True)
-    # numberBushing = models.IntegerField(verbose_name="Number of Bushings", null=True, blank=True)
-
-    # totalMassLink = models.FloatField(verbose_name="Total Mass of Links[g]", null=True, blank=True)
-    # totalMassAccumulation = models.FloatField(verbose_name="Total Mass of Accumulation[g]", null=True, blank=True)
-    # totalMassWinding = models.FloatField(verbose_name="Total Mass of Winding[g]", null=True, blank=True)
-    # totalMassBushing = models.FloatField(verbose_name="Total Mass of Bushings[g]", null=True, blank=True)
     additionalMass = models.FloatField(verbose_name="Additional Masses[g]", null=True, blank=True)
-    # totalMassStructure = models.FloatField(verbose_name="Total Mass of Structure[g]", null=True, blank=True)
-
-    # totalFiberLength = models.FloatField(verbose_name="Total Fiber Length[m]", null=True, blank=True)
-    # totalFiberMass = models.FloatField(verbose_name="Total Fiber Mass[kg]", null=True, blank=True)
-    # totalResinMass = models.FloatField(verbose_name="Total Resin Mass[g]", null=True, blank=True)
-
     projectImage = models.ImageField(upload_to='images/', verbose_name="Project Image", null=True, blank=True)
 
-
-    ########   3   ########
     part_gh = models.CharField(verbose_name="Document.gh", max_length=50, null=True, blank=True)
     part_mod = models.CharField(verbose_name="Document.mod", max_length=50, null=True, blank=True)
     part_csv = models.CharField(verbose_name="Document.csv", max_length=50, null=True, blank=True)
@@ -343,10 +307,7 @@ class Part(models.Model):
     part_log = models.CharField(verbose_name="Document.log", max_length=50, null=True, blank=True)
     part_mp4 = models.CharField(verbose_name="Document.mp4", max_length=50, null=True, blank=True)
     part_jpg = models.CharField(verbose_name="Document.jpg", max_length=50, null=True, blank=True)
-
-
     project = models.ForeignKey(verbose_name="Project Name", to=Project, on_delete=models.CASCADE, to_field='id')
-    # project = models.ForeignKey(verbose_name="Project Name", to=Project, on_delete=models.CASCADE)
     valid = models.BooleanField(verbose_name="Validation", default=False)
 
     def __str__(self):
@@ -429,25 +390,11 @@ class Part(models.Model):
         links = Link.objects.filter(part=self)
         total_mass = sum(link.mass for link in links)
         return round(total_mass, 2)
-        # total_mass = 0
-        # if Link.objects.filter(part=self):
-        #     links = Link.objects.filter(part=self)
-        #     for link in links:
-        #         total_mass += link.mass
-        # return round(total_mass,2)
 
     def calculate_totalMassAccumulation(self):
         interfaces = Interface.objects.filter(part=self)
         total_accumulation = sum(interface.accMass for interface in interfaces if interface.accMass is not None)
         return round(total_accumulation, 2)
-        # total_accumulation = 0
-        # if Interface.objects.filter(part=self):
-        #     interfaces = Interface.objects.filter(part=self)
-        #     # print(interfaces)
-        #     for interface in interfaces:
-        #         total_accumulation += interface.accMass
-        #         # print(total_accumulation)
-        # return round(total_accumulation,2)
 
     def calculate_totalMassWinding(self):
         if self.totalMassLink and self.totalMassAccumulation:
@@ -458,13 +405,6 @@ class Part(models.Model):
         bushings = Bushing.objects.filter(part=self)
         total_mass = sum(bushing.bushingMass for bushing in bushings if bushing.bushingMass is not None)
         return round(total_mass, 2)
-        # total_mass = 0
-        # if Bushing.objects.filter(part=self):
-        #     bushings = Bushing.objects.filter(part=self)
-        #     for bushing in bushings:
-        #         if bushing.bushingMass:
-        #             total_mass += bushing.bushingMass
-        # return round(total_mass,2)
 
     def calculate_totalMassStructure(self):
         totalMassStructure = 0
@@ -497,19 +437,13 @@ class Part(models.Model):
 
 class Bushing(models.Model):
     """ BushingTable """
-    ########   1   ########
     bushingName = models.CharField(verbose_name="Bushing Name", max_length=30)
-
     numberInterface = models.IntegerField(verbose_name="Number of Interface", null=True, blank=True)
-
     bushingDrawNb = models.CharField(verbose_name="Bushing Draw. Nb", max_length=30, null=True, blank=True)
-    # AccOnBushing = models.FloatField(verbose_name="Acc. On Bushing[g]", null=True, blank=True)
     bushingMass = models.FloatField(verbose_name="Bushing Mass[g]", null=True, blank=True)
-    # totalBushingMass = models.FloatField(verbose_name="Total Bushing Mass[g]", null=True, blank=True)
 
     project = models.ForeignKey(verbose_name="Project Name", to=Project, on_delete=models.CASCADE, to_field='id')
     part = models.ForeignKey(verbose_name="Part Name", to=Part, on_delete=models.CASCADE,  to_field='id')
-    # valid = models.BooleanField(verbose_name="Validation", default=False)
 
     def __str__(self):
         return self.bushingName
@@ -537,22 +471,12 @@ class Bushing(models.Model):
 
 class Interface(models.Model):
     """ InterfaceTable """
-    ########   2   ########
     interfaceName = models.CharField(verbose_name="Interface Name", max_length=30)
 
     height = models.IntegerField(verbose_name="Height[mm]", null=True, blank=True)
     intDiameter = models.IntegerField(verbose_name="Int. Diameter[mm]", null=True, blank=True)
-    # totalLink = models.IntegerField(verbose_name="Total Link", null=True, blank=True)
-    # totalArm = models.IntegerField(verbose_name="Total Arm", null=True, blank=True)
-
-    # totalSection = models.FloatField(verbose_name="Total Section[mm²]", null=True, blank=True)
-    # extDiameter = models.FloatField(verbose_name="Ext. Diameter[mm]", null=True, blank=True)
-    # theoHeight = models.FloatField(verbose_name="Theo. Height[mm]", null=True, blank=True)
-    # accMass = models.FloatField(verbose_name="Acc. Mass[g]", null=True, blank=True)
     finODiam = models.FloatField(verbose_name="Fin. O. Diam.[mm]", null=True, blank=True)
     finAccSection = models.FloatField(verbose_name="Fin. Acc. Section[mm²]", null=True, blank=True)
-
-    # safetyFactor = models.IntegerField(verbose_name="Safety Factor[%]", null=True, blank=True)
 
     interfaceCenterX = models.FloatField(verbose_name="Interface Center X", null=True, blank=True)
     interfaceCenterY = models.FloatField(verbose_name="Interface Center Y", null=True, blank=True)
@@ -560,15 +484,10 @@ class Interface(models.Model):
     directionVectorX = models.FloatField(verbose_name="Direction Vector X", null=True, blank=True)
     directionVectorY = models.FloatField(verbose_name="Direction Vector Y", null=True, blank=True)
     directionVectorZ = models.FloatField(verbose_name="Direction Vector Z", null=True, blank=True)
-
-    ########   3   ########
     divisionStep = models.IntegerField(verbose_name="Division Step", null=True, blank=True)
-    # valid = models.BooleanField(verbose_name="Validation", default=False)
 
     project = models.ForeignKey(verbose_name="Project Name", to=Project, on_delete=models.CASCADE, to_field='id')
     part = models.ForeignKey(verbose_name="Part Name", to=Part, on_delete=models.CASCADE,  to_field='id')
-    # bushing = models.ForeignKey(verbose_name="Bushing Name", to=Bushing, on_delete=models.CASCADE, to_field='id')
-
     def __str__(self):
         return self.interfaceName
     
@@ -682,12 +601,8 @@ class Interface(models.Model):
             total_sec = self.totalSection
             
             if total_sec!=0 and self.part.windingDensity :
-                diam_acc_max = self.intDiameter + 2 * total_sec / self.height
-                diam_acc_min = self.intDiameter + 2 * total_sec_acc / self.height
                 diam_acc_mass_max = self.intDiameter + 2 * (total_sec / self.part.fiberSectionAcc * ((self.part.fiberSectionAcc+self.part.fiberSectionCalc) / 2)) / self.height
-                # print(diam_acc_mass_max)
                 diam_acc_mass_min = self.intDiameter + 2 * (total_sec_acc / self.part.fiberSectionAcc * ((self.part.fiberSectionAcc+self.part.fiberSectionCalc) / 2 ))/ self.height 
-                # print(diam_acc_mass_min)
                 acc_mass = ((diam_acc_mass_max ** 2) / 8 + (diam_acc_mass_min ** 2) / 8 - (self.intDiameter ** 2)/4) * math.pi * self.height * self.part.windingDensity / 1000000
                 return acc_mass
         return 0.0
@@ -703,31 +618,18 @@ class Interface(models.Model):
     
 class Link(models.Model):
     """ InterfaceTable """
-    ########   2   ########
     linkName = models.CharField(verbose_name="Link Name", max_length=30)
     interface1 = models.ForeignKey(Interface, related_name='link_interface1', on_delete=models.CASCADE)
     interface2 = models.ForeignKey(Interface, related_name='link_interface2', on_delete=models.CASCADE)
-    # length = models.FloatField(verbose_name="Length[mm]", null=True, blank=True, editable=False)
-    # linkType = models.CharField(verbose_name="Link Type", max_length=30, null=True, blank=True)
     armDiam = models.FloatField(verbose_name="Arm Diam.[mm]", null=True, blank=True)
     armSection = models.FloatField(verbose_name="Arm Section[mm²]", max_length=30, null=True, blank=True)
 
     cycle = models.IntegerField(verbose_name="Cycle", null=True, blank=True)
     sequence = models.CharField(verbose_name="Sequence", max_length=50, null=True, blank=True)
-    # ratio = models.FloatField(verbose_name="Ratio", null=True, blank=True)
-    # finArmSection = models.FloatField(verbose_name="Fin. Arm Section[mm²]", null=True, blank=True, editable=False)
-    # finArmDiam = models.FloatField(verbose_name="Fin. Arm Diam.[mm]", null=True, blank=True, editable=False)
-    # finArmRadius = models.FloatField(verbose_name="Fin. Arm Radius[m]", null=True, blank=True, editable=False)
-    # mass = models.FloatField(verbose_name="Mass[g]", null=True, blank=True, editable=False)
     angle = models.FloatField(verbose_name="Angle", null=True, blank=True)
-    # valid = models.BooleanField(verbose_name="Validation", default=False)
 
     project = models.ForeignKey(verbose_name="Project Name", to=Project, on_delete=models.CASCADE, to_field='id')
     part = models.ForeignKey(verbose_name="Part Name", to=Part, on_delete=models.CASCADE, to_field='id')
-    # interface = models.ForeignKey(verbose_name="Interface Name", to=Interface, on_delete=models.CASCADE, to_field='id')
-
-    # interface1 = models.ForeignKey(Interface,related_name='link_interface1', on_delete=models.CASCADE)
-    # interface2 = models.ForeignKey(Interface,related_name='link_interface2', on_delete=models.CASCADE)
 
     def __str__(self):
         return self.linkName
@@ -830,18 +732,12 @@ class Link(models.Model):
             return seq
 
         expanded_sequence = expand_sequence(sequence)
-        # print(expanded_sequence)
         substrings = ['C1X', 'C1', 'C0X', 'C0']
         counts = {substring: len(re.findall(substring, expanded_sequence)) for substring in substrings}
-        
         total_c1_c1x = counts['C1X'] + counts['C1']
-        
         total_target = counts['C1X'] + counts['C1'] + counts['C0X'] + counts['C0']
-        
         ratio = total_c1_c1x / total_target if total_target > 0 else 0
-
         ratio = round(ratio, 2)
-
         return ratio
                                      
 class SequenceType(models.Model):
@@ -867,7 +763,6 @@ class Winding(models.Model):
     interface1 = models.CharField(verbose_name="Interface Start", max_length=30)
     interface2 = models.CharField(verbose_name="Interface Transition", max_length=30)
     interface3 = models.CharField(verbose_name="Interface End", max_length=30)
-    # sequence = models.ForeignKey(verbose_name="WindingType Description", to=SequenceType, on_delete=models.CASCADE, to_field='id')
-    # valid = models.BooleanField(verbose_name="Validation", default=False)
+
     def __str__(self):
         return self.link
