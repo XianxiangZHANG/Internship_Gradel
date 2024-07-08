@@ -30,12 +30,6 @@ def department_list_read(request):
     departments = models.Department.objects.annotate(employee_count=Count('user'))
     return render(request, 'department/department_list_read.html', {'departments': departments})
 
-# def department_list(request):
-#     """ list of department """
-
-#     department_filter = DepartmentFilter(request.GET, queryset=models.Department.objects.all())
-#     return render(request, 'department/department_list.html', {'filter': department_filter})
-
 class DepartmentModelForm(forms.ModelForm):
     class Meta:
         model = models.Department

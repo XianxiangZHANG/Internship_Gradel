@@ -62,39 +62,6 @@ def interface_valid(request):
     interface_filter, interfaces, message = get_filtered_interfaces(InterfaceFilter, request, valid=True)
     return render(request, 'interface/interface_valid.html', {'filter': interface_filter, 'interfaces': interfaces, 'message': message})
 
-# def interface_list(request):
-#     """ list of interface """
-#     interfaces = None
-#     interface_filter = InterfaceFilter(request.GET, queryset=models.Interface.objects.all())
-
-#     message = "No interface to display. Please use the filter to load data."
-
-#     if any(request.GET.values()):
-#         interfaces = interface_filter.qs
-#         message = "No data found."
-#     elif 'filter' in request.GET:
-#         interfaces = interface_filter.qs
-#         message = "No data found."
-    
-#     return render(request, 'interface/interface_list.html', {'filter': interface_filter, 'interfaces': interfaces, 'message':message})
-
-
-
-# def interface_valid(request):
-#     """ list of interface """
-#     interfaces = None
-#     interface_filter = InterfaceFilter(request.GET, queryset=models.Interface.objects.filter(part__valid=True))
-
-#     message = "No interface to display. Please use the filter to load data."
-
-#     if any(request.GET.values()):
-#         interfaces = interface_filter.qs
-#         message = "No data found."
-#     elif 'filter' in request.GET:
-#         interfaces = interface_filter.qs
-#         message = "No data found."
-    
-#     return render(request, 'interface/interface_valid.html', {'filter': interface_filter, 'interfaces': interfaces, 'message':message})
 
 def interface_input(request):
     """ list of interface """

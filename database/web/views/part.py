@@ -24,38 +24,6 @@ class PartFilter(django_filters.FilterSet):
         model = models.Part
         fields = ['project', 'partName', 'resin', 'fiber', 'valid']
    
-# def part_list(request):
-#     """ list of part """
-#     parts = None
-#     part_filter = PartFilter(request.GET, queryset=models.Part.objects.all())
-
-#     message = "No part to display. Please use the filter to load data."
-
-#     if any(request.GET.values()):
-#         parts = part_filter.qs.select_related('fiber', 'resin', 'project').prefetch_related('link_set', 'bushing_set', 'interface_set')
-#         message = "No data found."
-#     elif 'filter' in request.GET:
-#         parts = part_filter.qs.select_related('fiber', 'resin', 'project').prefetch_related('link_set', 'bushing_set', 'interface_set')
-#         message = "No data found."
-    
-#     return render(request, 'part/part_list.html', {'filter': part_filter, 'parts': parts, 'message':message})
-    
-
-# def part_list_doc(request):
-#     """ list of part """
-#     parts = None
-#     part_filter = PartFilter(request.GET, queryset=models.Part.objects.all())
-
-#     message = "No part to display. Please use the filter to load data."
-
-#     if any(request.GET.values()):
-#         parts = part_filter.qs.select_related('fiber', 'resin', 'project').prefetch_related('link_set', 'bushing_set', 'interface_set')
-#         message = "No data found."
-#     elif 'filter' in request.GET:
-#         parts = part_filter.qs.select_related('fiber', 'resin', 'project').prefetch_related('link_set', 'bushing_set', 'interface_set')
-#         message = "No data found."
-    
-#     return render(request, 'part/part_list_doc.html', {'filter': part_filter, 'parts': parts, 'message':message})
 
 class PartFilterValid(django_filters.FilterSet):
     project = django_filters.ModelChoiceFilter(queryset=models.Project.objects.all())
@@ -68,91 +36,6 @@ class PartFilterValid(django_filters.FilterSet):
         model = models.Part
         fields = ['project', 'partName', 'resin', 'fiber']
    
-
-# def calculate_properties(part):
-#     # Calculations previously in model properties
-#     def fiber_density(part):
-#         return part.fiber.density * 1000 if part.fiber.density else 0.0
-
-#     def resin_density(part):
-#         return part.resin.densityR * 1000 if part.resin.densityR else 0.0
-
-#     def winding_density(part):
-#         if part.fiberDensity and part.fiberVolumeRatio and part.resinDensity:
-#             return part.fiberDensity * part.fiberVolumeRatio + part.resinDensity * (1 - part.fiberVolumeRatio)
-#         return 0.0
-#     def calculate_numberLink(part):
-#         return models.Link.objects.filter(part=part).count()
-
-#     def calculate_numberBushing(part):
-#         return models.Bushing.objects.filter(part=part).count()
-
-#     def calculate_totalMassLink(part):
-#         links = models.Link.objects.filter(part=part)
-#         total_mass = sum(link.mass for link in links)
-#         return round(total_mass, 2)
-
-#     def calculate_totalMassAccumulation(part):
-#         interfaces = models.Interface.objects.filter(part=part)
-#         total_accumulation = sum(interface.accMass for interface in interfaces if interface.accMass is not None)
-#         return round(total_accumulation, 2)
-
-#     def calculate_totalMassWinding(part):
-#         if part.totalMassLink and part.totalMassAccumulation:
-#             return round(part.totalMassLink + part.totalMassAccumulation,2)
-#         return 0
-
-#     def calculate_totalMassBushing(part):
-#         bushings = models.Bushing.objects.filter(part=part)
-#         total_mass = sum(bushing.bushingMass for bushing in bushings if bushing.bushingMass is not None)
-#         return round(total_mass, 2)
-
-#     def calculate_totalMassStructure(part):
-#         totalMassStructure = 0
-#         if part.totalMassWinding and part.totalMassBushing and part.additionalMass:
-#             totalMassStructure = part.totalMassWinding + part.totalMassBushing + part.additionalMass
-#         elif part.totalMassWinding and part.totalMassBushing:
-#             totalMassStructure = part.totalMassWinding + part.totalMassBushing
-#         return round(totalMassStructure,2)
-
-#     def calculate_totalFiberLength(part):
-#         total_length = 0
-#         if part.totalMassAccumulation and part.totalMassLink and part.windingDensity and part.fiberSectionAcc and part.fiberSectionCalc:
-#             mass = part.totalMassAccumulation + part.totalMassLink
-#             total_length = mass / (part.windingDensity * (part.fiberSectionAcc + part.fiberSectionCalc)/2)*1000
-#         return round(total_length,2)
-
-#     def calculate_totalFiberMass(part):
-#         fiber_mass = 0
-#         if part.totalMassAccumulation and part.totalMassLink and part.windingDensity and part.fiberVolumeRatio and part.fiberDensity:
-#             mass = part.totalMassAccumulation + part.totalMassLink
-#             fiber_mass = mass / part.windingDensity * part.fiberVolumeRatio * part.fiberDensity / 1000
-#         return round(fiber_mass,3)
-
-#     def calculate_totalResinMass(part):
-#         resin_mass = 0
-#         if part.totalMassAccumulation and part.totalMassLink and part.windingDensity and part.fiberVolumeRatio and part.resinDensity:
-#             mass = part.totalMassAccumulation + part.totalMassLink
-#             resin_mass = mass / part.windingDensity * (1 - part.fiberVolumeRatio) * part.resinDensity
-#         return round(resin_mass,2)
-
-#     # Perform calculations and return a dictionary of results
-#     results = {
-#         'fiberDensity': fiber_density(part),
-#         'resinDensity': resin_density(part),
-#         'windingDensity': winding_density(part),
-#         'numberLink': calculate_numberLink(part),
-#         'numberBushing': calculate_numberBushing(part),
-#         'totalMassLink': calculate_totalMassLink(part),
-#         'totalMassAccumulation': calculate_totalMassAccumulation(part),
-#         'totalMassWinding': calculate_totalMassWinding(part),
-#         'totalMassBushing': calculate_totalMassBushing(part),
-#         'totalMassStructure': calculate_totalMassStructure(part),
-#         'totalFiberLength': calculate_totalFiberLength(part),
-#         'totalFiberMass': calculate_totalFiberMass(part),
-#         'totalResinMass': calculate_totalResinMass(part),
-#     }
-#     return results
 
 def get_filtered_parts(filter_class, request, valid=None):
     parts = None
@@ -190,7 +73,6 @@ def get_filtered_parts(filter_class, request, valid=None):
                 'totalResinMass': calculator.total_resin_mass(),
             }
 
-    
     return part_filter, parts, message
 
 def part_list(request):
@@ -210,38 +92,6 @@ def part_valid_doc(request):
     return render(request, 'part/part_valid_doc.html', {'filter': part_filter, 'parts': parts, 'message':message})
 
 
-# def part_valid(request):
-#     """ list of part """
-#     parts = None
-#     part_filter = PartFilterValid(request.GET, queryset=models.Part.objects.filter(valid=True))
-
-#     message = "No part to display. Please use the filter to load data."
-
-#     if any(request.GET.values()):
-#         parts = part_filter.qs.select_related('fiber', 'resin', 'project').prefetch_related('link_set', 'bushing_set', 'interface_set')
-#         message = "No data found."
-#     elif 'filter' in request.GET:
-#         parts = part_filter.qs.select_related('fiber', 'resin', 'project').prefetch_related('link_set', 'bushing_set', 'interface_set')
-#         message = "No data found."
-    
-#     return render(request, 'part/part_valid.html', {'filter': part_filter, 'parts': parts, 'message':message})
-
-
-# def part_valid_doc(request):
-#     """ list of part """
-#     parts = None
-#     part_filter = PartFilterValid(request.GET, queryset=models.Part.objects.filter(valid=True))
-
-#     message = "No part to display. Please use the filter to load data."
-
-#     if any(request.GET.values()):
-#         parts = part_filter.qs.select_related('fiber', 'resin', 'project').prefetch_related('link_set', 'bushing_set', 'interface_set')
-#         message = "No data found."
-#     elif 'filter' in request.GET:
-#         parts = part_filter.qs.select_related('fiber', 'resin', 'project').prefetch_related('link_set', 'bushing_set', 'interface_set')
-#         message = "No data found."
-    
-#     return render(request, 'part/part_valid_doc.html', {'filter': part_filter, 'parts': parts, 'message':message})
 
 def part_input(request):
     """ list of part """

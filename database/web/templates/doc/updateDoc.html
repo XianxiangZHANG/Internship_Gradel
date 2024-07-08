@@ -1,0 +1,321 @@
+
+{% extends 'layout.html' %}
+{% load static %}
+{% block content %}
+<div id="cont">
+    <form method="post" enctype="multipart/form-data" action="{% url 'updateDoc' %}" onsubmit="uploadFiles(event)"  class="dropzone-box">
+        <h2>Upload a ZIP file</h2>
+        <div class="dropzone-area">
+            <div class="file-upload-icon">
+                <img src="{% static 'images/update.png' %}" alt="Upload Icon" width="60" height="60" style="margin-top: 10px;">
+            </div>
+            <p>Click to upload or drag and drop</p>
+            <input type="file" name="zip_file" accept=".zip" required>
+            <p class="message">No Files Selected</p>
+        </div>
+        <div class="dropzone-actions">
+            <button type="reset">
+                Cancel
+            </button>
+            <button id="submit-button" type="submit">
+                Save
+            </button>
+        </div>
+        
+    </form>
+</div>
+
+<div id="myModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <p id="modalMessage"></p>
+        <button id="modalButton">OK</button>
+    </div>
+</div>
+{% endblock %}
+{% block js %}
+<script>
+    async function uploadFiles(event) {
+        event.preventDefault();
+        const form = event.target;
+        const formData = new FormData(form);
+
+        try {
+            const response = await fetch(form.action, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}'
+                }
+            });
+
+            const result = await response.json();
+
+            const modal = document.getElementById('myModal');
+            const modalMessage = document.getElementById('modalMessage');
+            const modalButton = document.getElementById('modalButton');
+
+            if (result.status === 'success') {
+                modalMessage.innerText = result.message;
+                modalButton.onclick = function() {
+                    window.location.href = '/check/';
+                };
+            } else {
+                modalMessage.innerText = 'Error: ' + result.message;
+                modalButton.onclick = function() {
+                    modal.style.display = 'none';
+                };
+            }
+
+            modal.style.display = 'block';
+        } catch (error) {
+            console.error('Error uploading files:', error);
+            alert('Error uploading files');
+        }
+    }
+
+    // 关闭模态框
+    function closeModal() {
+        const modal = document.getElementById('myModal');
+        modal.style.display = 'none';
+    }
+
+    // 点击模态框外部关闭模态框
+    window.onclick = function(event) {
+        const modal = document.getElementById('myModal');
+        if (event.target == modal) {
+            modal.style.display = 'none';
+        }
+    }
+
+    const dropzoneBox = document.getElementsByClassName("dropzone-box")[0];
+
+    const inputFiles = document.querySelectorAll(
+    ".dropzone-area input[type='file']"
+    );
+
+    const inputElement = inputFiles[0];
+
+    const dropZoneElement = inputElement.closest(".dropzone-area");
+
+    inputElement.addEventListener("change", (e) => {
+    if (inputElement.files.length) {
+        updateDropzoneFileList(dropZoneElement, inputElement.files[0]);
+    }
+    });
+
+    dropZoneElement.addEventListener("dragover", (e) => {
+    e.preventDefault();
+    dropZoneElement.classList.add("dropzone--over");
+    });
+
+    ["dragleave", "dragend"].forEach((type) => {
+    dropZoneElement.addEventListener(type, (e) => {
+        dropZoneElement.classList.remove("dropzone--over");
+    });
+    });
+
+    dropZoneElement.addEventListener("drop", (e) => {
+    e.preventDefault();
+
+    if (e.dataTransfer.files.length) {
+        inputElement.files = e.dataTransfer.files;
+
+        updateDropzoneFileList(dropZoneElement, e.dataTransfer.files[0]);
+    }
+
+    dropZoneElement.classList.remove("dropzone--over");
+    });
+
+    const updateDropzoneFileList = (dropzoneElement, file) => {
+    let dropzoneFileMessage = dropzoneElement.querySelector(".message");
+
+    dropzoneFileMessage.innerHTML = `
+            ${file.name}, ${file.size} bytes
+        `;
+    };
+
+    dropzoneBox.addEventListener("reset", (e) => {
+    let dropzoneFileMessage = dropZoneElement.querySelector(".message");
+
+    dropzoneFileMessage.innerHTML = `No Files Selected`;
+    });
+
+    dropzoneBox.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const myFiled = document.getElementById("upload-file");
+    console.log(myFiled.files[0]);
+    });
+
+</script>
+{% endblock %}
+{% block css %}
+<style>
+    #cont {
+        text-align: center;
+        width: 60%;
+        margin: auto;
+        margin-top: 10%;
+        background-color: var(--background);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 1rem;
+        box-sizing: border-box;
+        padding: 0;
+        --primary: #111926;
+        --white: #fff;
+        --gray: #D3D3D3;
+    }
+
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 1;
+        left: 0;
+        top: 0;
+        overflow: auto;
+        background-color: rgb(0,0,0);
+        background-color: rgba(0,0,0,0.4);
+    }
+
+    .modal-content {
+        background-color: #fefefe;
+        margin: 15% auto;
+        padding: 20px;
+        border: 1px solid #888;
+        width: 30%;
+        height: 200px;
+        text-align: center;
+        align-items: center;
+        font-size:2rem;
+    }
+
+    #modalMessage {
+        margin-top: 20px;
+        margin-bottom: 10px;
+        max-width: 100%;
+        font-weight: bold;
+    }
+
+    #modalButton {
+        margin-top: 20px;
+        margin-bottom: 10px;
+        max-width: 100%;
+        width: 30%;
+        background: #F6FAFF;
+        border-radius: 0.5rem;
+        border: 1px solid #C3DEFF;
+        transition: all 0.3s ease-in-out;
+        font-weight: bold;
+    }
+
+    .close {
+        color: #aaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+    }
+
+    .close:hover,
+    .close:focus {
+        color: black;
+        text-decoration: none;
+        cursor: pointer;
+    }
+
+    .dropzone-box {
+        border-radius: 2rem;
+        padding: 2rem;
+        box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+        max-width: 36rem;
+        width: 100%;
+        background-color: var(--white);
+    }
+    
+    .dropzone-box h2 {
+        font-size: 2rem;
+        margin-bottom: 0.5rem;
+    }
+    
+    .dropzone-area {
+        padding: 1rem;
+        position: relative;
+        margin-top: 1rem;
+        min-height: 16rem;
+        display: flex;
+        text-align: center;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        border: 2px dashed var(--primary);
+        border-radius: 1rem;
+        color: var(--primary);
+        cursor: pointer;
+    }
+    
+    .dropzone-area [type="file"] {
+        cursor: pointer;
+        position: absolute;
+        opacity: 0;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+    }
+    
+    .dropzone-area .file-upload-icon {
+        height: 100px;
+        width: 100px;
+        margin-bottom: 0.5rem;
+        stroke: var(--primary);
+    }
+    
+    .dropzone--over {
+        border-style: solid;
+        background-color: var(--background);
+    }
+    
+    .dropzone-actions {
+        display: flex;
+        justify-content: space-between;
+        padding-top: 1.5rem;
+        margin-top: 1.5rem;
+        border-top: 1px solid var(--gray);
+        gap: 1rem;
+        flex-wrap: wrap;
+    }
+    
+    .dropzone-actions button {
+        flex-grow: 1;
+        min-height: 3rem;
+        font-size: 2rem;
+    }
+    
+    .dropzone-actions button:hover {
+        text-decoration: underline;
+    }
+    
+    .dropzone-actions button[type='reset'] {
+        background-color: transparent;
+        border: 1px solid var(--gray);
+        border-radius: 0.5rem;
+        padding: 0.5rem 1rem;
+        color: var(--primary);
+        cursor: pointer;
+    }
+    
+    .dropzone-actions button[type='submit'] {
+        background-color: var(--primary);
+        border: 1px solid var(--primary);
+        border-radius: 0.5rem;
+        padding: 0.5rem 1rem;
+        color: var(--white);
+        cursor: pointer;
+    }
+
+</style>
+{% endblock %}

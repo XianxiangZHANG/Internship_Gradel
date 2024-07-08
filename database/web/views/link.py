@@ -99,9 +99,6 @@ class ProjectPartForm(forms.Form):
     project = forms.ModelChoiceField(queryset=models.Project.objects.all(), required=True)
     part = forms.ModelChoiceField(queryset=models.Part.objects.all(), required=True)
     
-# class InterfaceForm(forms.Form):
-#     interface1 = forms.ModelChoiceField(queryset=models.Interface.objects.all(), required=True)
-#     interface2 = forms.ModelChoiceField(queryset=models.Interface.objects.all(), required=True)
 
 LinkFormSet = modelformset_factory(
     models.Link,

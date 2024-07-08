@@ -62,40 +62,6 @@ def bushing_valid(request):
     return render(request, 'bushing/bushing_valid.html', {'filter': bushing_filter, 'bushings': bushings, 'message': message})
 
 
-# def bushing_list(request):
-#     """ list of bushing """
-#     bushings = None
-#     bushing_filter = BushingFilter(request.GET, queryset=models.Bushing.objects.all())
-
-#     message = "No bushing to display. Please use the filter to load data."
-
-#     if any(request.GET.values()):
-#         bushings = bushing_filter.qs
-#         message = "No data found."
-#     elif 'filter' in request.GET:
-#         bushings = bushing_filter.qs
-#         message = "No data found."
-    
-#     return render(request, 'bushing/bushing_list.html', {'filter': bushing_filter, 'bushings': bushings, 'message':message})
-
-
-# def bushing_valid(request):
-#     """ list of bushing """
-#     bushings = None
-#     bushing_filter = BushingFilter(request.GET, queryset=models.Bushing.objects.filter(part__valid=True))
-
-#     message = "No bushing to display. Please use the filter to load data."
-
-#     if any(request.GET.values()):
-#         bushings = bushing_filter.qs
-#         message = "No data found."
-#     elif 'filter' in request.GET:
-#         bushings = bushing_filter.qs
-#         message = "No data found."
-    
-#     return render(request, 'bushing/bushing_valid.html', {'filter': bushing_filter, 'bushings': bushings, 'message':message})
-
-
 
 def bushing_input(request):
     """ list of bushing """

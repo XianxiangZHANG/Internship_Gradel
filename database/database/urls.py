@@ -29,6 +29,7 @@ import os
 
 urlpatterns = [
     re_path(r'^documentation/(?P<path>.*)$', docs.serve_docs, name='documentation'),
+    path('updateDoc/', docs.upload_docs, name='updateDoc'),
 
     path('', account.home),
     # path('accounts/login/', account.loginA),
