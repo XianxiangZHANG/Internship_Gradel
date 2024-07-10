@@ -122,7 +122,7 @@
             </div>
         </nav>
 
-        <button onclick="goBack()" id="backBtn" title="Go back"><span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span>Back</button>
+        <button onclick="goBack()" id="backBtn" title="Go back"><span class="glyphicon glyphicon-circle-arrow-left" aria-hidden="true" style="margin-top:5px;margin-right:10px;"></span>Back</button>
 
         <div class="container" style="width: 98%;">
             {% block content %}{% endblock %}
@@ -133,12 +133,11 @@
         <script src="{% static 'js/jquery-3.6.0.min.js' %}"></script>
         <script src="{% static 'js/select2.min.js' %}"></script>
         <script src="{% static 'plugins/bootstrap-3.4.1/js/bootstrap.min.js' %}"></script>
+        
         {% block js %}{% endblock %}
         <script>
-            
             var mybutton = document.getElementById("topBtn");
 
-            
             window.onscroll = function() {
                 scrollFunction();
             };
@@ -151,25 +150,17 @@
                 }
             }
 
-            
+
             function topFunction() {
                 window.scrollTo({ top: 0, behavior: 'smooth' });
             }
 
-            
+
             function goBack() {
                 window.history.back();
             }
+
             
-            document.getElementById("filterForm").addEventListener("submit", function() {
-                document.getElementById("loading").style.display = "block";
-                document.getElementById("NoMessage").style.display = "none";
-            });
-
-
-            document.getElementById("resetButton").addEventListener("click", function() {
-                window.location.href = window.location.pathname;
-            });
         </script>
     </body>
 </html>

@@ -30,15 +30,14 @@
         {{ filter.form.as_p }}
         <button type="submit" id="btnf1" name="filter">Filter</button>
         <button type="reset" id="resetButton" class="btnf2">Reset</button>
-        
     </form>
-    
     <div id="loading" class="loading-overlay">
         <div class="spinner"></div>
         <a id="loadingtext"> Loading </a>
     </div>
     {% if parts %}
-        <table class="table table-bordered" id="normalTable" style=" font-size: 12px; ">
+    <div id="tableContainer" style="display: block;">
+        <table class="table table-bordered" id="normalTable" style=" font-size: 12px;">
             <thead>
                 <tr>
                     <th>ID</th>
@@ -125,9 +124,11 @@
                 {% endfor %}
             </tbody>
         </table>
+    
     {% else %}
         <h3 class="text-center" id="NoMessage">{{ message }}</h3>
     {% endif %}
+    </div>
 </div>
     
 
@@ -201,6 +202,19 @@
         var modal = document.getElementById("myModalImage");
         modal.style.display = "none";
     }
+
+    document.getElementById("filterForm").addEventListener("submit", function() {
+        document.getElementById("loading").style.display = "block";
+        document.getElementById("NoMessage").style.display = "none";
+        document.getElementById('normalTable').style.display = 'none';
+    });
+
+
+    document.getElementById("resetButton").addEventListener("click", function() {
+        window.location.href = window.location.pathname;
+    });
+
+    
 </script>
 {% endblock %}
 

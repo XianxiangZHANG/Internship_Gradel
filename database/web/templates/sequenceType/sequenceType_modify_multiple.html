@@ -29,7 +29,7 @@
         <form method="post">
             {% csrf_token %}
             {{ formset.management_form }}
-            <table class="table table-bordered" id="sequenceType-table">
+            <table class="table table-bordered" id="sequenceType-table" id="normalTable">
                 <thead>
                     <tr>
                         <th style="width: 20%;">Sequence</th>
@@ -176,6 +176,17 @@ $(document).ready(function() {
                 });
             }
         });
+    });
+
+    document.getElementById("filterForm").addEventListener("submit", function() {
+        document.getElementById("loading").style.display = "block";
+        document.getElementById("NoMessage").style.display = "none";
+        document.getElementById('normalTable').style.display = 'none';
+    });
+
+
+    document.getElementById("resetButton").addEventListener("click", function() {
+        window.location.href = window.location.pathname;
     });
 });
 </script>

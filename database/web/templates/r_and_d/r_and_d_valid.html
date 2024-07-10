@@ -28,7 +28,7 @@
         <a id="loadingtext"> Loading </a>
     </div>
     {% if r_and_ds %}
-        <table class="table table-bordered">
+        <table class="table table-bordered" id="normalTable">
             {% for field in filter.qs %}
                 <tr>
                     <tr><th colspan="2" style="background-color: #4CAF50;">Program :</th><td colspan="2" >{{ field.program|default_if_none:"" }}</td></tr>
@@ -150,7 +150,16 @@
 
 {% block js %}
 <script>
-    
+    document.getElementById("filterForm").addEventListener("submit", function() {
+        document.getElementById("loading").style.display = "block";
+        document.getElementById("NoMessage").style.display = "none";
+        document.getElementById('normalTable').style.display = 'none';
+    });
+
+
+    document.getElementById("resetButton").addEventListener("click", function() {
+        window.location.href = window.location.pathname;
+    });
 </script>
 {% endblock %}
 

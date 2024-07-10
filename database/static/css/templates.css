@@ -1,0 +1,160 @@
+#btnf1, .btnf2{
+    width: 100px; 
+    height: 30px;
+    background-color: #49b7be; 
+    color: white; 
+    margin: 8px;
+    margin-right: 0px;
+    border: none; 
+    border-radius: 4px;
+    cursor: pointer; 
+    font-size: large;
+}
+#btnf1:hover, .btnf2:hover {
+    background-color: #378488;
+}
+
+#download {
+    width: 200px; 
+    height: 30px;
+    background-color: #6ebe49; 
+    color: white; 
+    padding: 5px 10px; 
+    margin: 8px;
+    margin-right: 0px;
+    border: none; 
+    border-radius: 4px;
+    cursor: pointer; 
+    font-size: large;
+}
+#download:hover {
+    background-color: #4d8134; 
+}
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+    margin-bottom: 100px;
+}
+th, td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: center;
+}
+tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+th {
+    background-color: #4CAF50;
+    color: white;
+}
+details {
+    margin-top: 20px;
+    margin-bottom: 10px;
+    max-width: 100%;
+    background: #F6FAFF;
+    border-radius: 0.5rem;
+    border: 1px solid #C3DEFF;
+    transition: all 0.3s ease-in-out;
+    font-weight: bold;
+}
+
+details:hover {
+    border: 1px solid #A4A1FF;
+}
+summary {
+    user-select: none;
+    cursor: pointer;
+    font-size: 18px;
+    display: flex;
+    list-style: none;
+    padding: 1rem;
+}
+
+summary:hover .help-title {
+    opacity: 1;
+}
+
+summary::-webkit-details-marker {
+    display: none;
+}
+
+summary:focus {
+    outline: none;
+}
+
+#help-title {
+    color: #0026ff;
+    opacity: 0.65;
+    transition: all 250ms ease-in-out;
+}
+
+#help-content {
+    color: #303651;
+    padding: 0.2rem 1rem 1rem 1rem;
+    line-height: 1.5;
+}
+
+#help-btn-add {
+    color: rgb(163, 163, 163);
+}
+#help-btn-remove {
+    color: rgb(255, 0, 0);
+}
+#help-btn-filter {
+    color: rgb(125, 202, 233);
+}
+#help-btn-save {
+    color: rgb(110, 147, 216);
+}
+#help-btn-edit {
+    color: rgb(0, 81, 255);
+}
+#help-btn-upload {
+    color: #2f7a30;
+}
+#help-btn-file {
+    color: rgb(114, 114, 114);
+}
+#help-btn-download{
+    color: #6ebe49;
+}
+
+#loading {
+    font-size: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100px;
+    display:none;
+    margin-left:48%;
+    margin-top:50px;
+}
+#loadingtext {
+    color: #00a2ff;
+}
+
+
+
+.loading-overlay {
+    background: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.spinner {
+    width: 50px;
+    height: 50px;
+    margin-left:30px;
+    border: 8px solid rgba(0, 0, 0, 0);
+    border-top-color: #3498db;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}

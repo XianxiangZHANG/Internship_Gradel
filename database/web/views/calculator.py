@@ -19,6 +19,12 @@ class PartCalculator:
             return self.fiber_density * self.part.fiberVolumeRatio + self.resin_density * (1 - self.part.fiberVolumeRatio)
         return 0.0
 
+    def number_link(self):
+        return self.part.link_set.count()
+    
+    def number_bushing(self):
+        return self.part.bushing_set.count()
+
     def total_mass_link(self):
         links = self.part.link_set.all()
         total_mass = sum(LinkCalculator(link).mass() for link in links)

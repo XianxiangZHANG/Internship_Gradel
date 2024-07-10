@@ -36,7 +36,7 @@
         <a id="loadingtext"> Loading </a>
     </div>
     {% if resins %}
-        <table class="table table-bordered">
+        <table class="table table-bordered" id="normalTable">
             <thead>
                 <tr>
                     <tr>
@@ -108,7 +108,16 @@
 
 {% block js %}
 <script>
-        
+    document.getElementById("filterForm").addEventListener("submit", function() {
+        document.getElementById("loading").style.display = "block";
+        document.getElementById("NoMessage").style.display = "none";
+        document.getElementById('normalTable').style.display = 'none';
+    });
+
+
+    document.getElementById("resetButton").addEventListener("click", function() {
+        window.location.href = window.location.pathname;
+    });
 </script>
 {% endblock %}
 

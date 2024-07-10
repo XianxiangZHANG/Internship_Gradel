@@ -63,6 +63,8 @@ def get_filtered_parts(filter_class, request, valid=None):
                 'fiberDensity': calculator.fiber_density,
                 'resinDensity': calculator.resin_density,
                 'windingDensity': calculator.winding_density,
+                'numberLink': calculator.number_link(),
+                'numberBushing': calculator.number_bushing(),
                 'totalMassLink': calculator.total_mass_link(),
                 'totalMassAccumulation': calculator.total_mass_accumulation(),
                 'totalMassWinding': calculator.total_mass_winding(),

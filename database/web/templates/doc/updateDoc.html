@@ -73,14 +73,12 @@
             alert('Error uploading files');
         }
     }
-
-    // 关闭模态框
+ 
     function closeModal() {
         const modal = document.getElementById('myModal');
         modal.style.display = 'none';
     }
-
-    // 点击模态框外部关闭模态框
+ 
     window.onclick = function(event) {
         const modal = document.getElementById('myModal');
         if (event.target == modal) {

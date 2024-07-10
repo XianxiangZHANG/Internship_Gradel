@@ -19,6 +19,11 @@
         <button type="reset" id="resetButton" class="btnf2">Reset</button>
     </form>
 
+    <div id="loading" class="loading-overlay">
+        <div class="spinner"></div>
+        <a id="loadingtext"> Loading </a>
+    </div>
+
     <table id="normalTable">
         <thead>
             <tr>
@@ -112,11 +117,16 @@
         return string.charAt(0).toUpperCase() + string.slice(1);
     }
 
-    document.getElementById('btnf1').addEventListener('click', function() {
-        document.getElementById('filterForm').submit();
+  
+
+    document.getElementById("filterForm").addEventListener("submit", function() {
+        document.getElementById("loading").style.display = "block";
+        document.getElementById("NoMessage").style.display = "none";
+        document.getElementById('normalTable').style.display = 'none';
     });
 
-    document.getElementById('resetButton').addEventListener('click', function() {
+
+    document.getElementById("resetButton").addEventListener("click", function() {
         window.location.href = window.location.pathname;
     });
 
