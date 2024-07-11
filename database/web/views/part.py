@@ -114,7 +114,6 @@ class PartModelForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-
         for name, filed_object in self.fields.items():
             filed_object.widget.attrs = {"class": "form-control"}
 
@@ -129,6 +128,9 @@ class PartModelAddForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self.fields['fiber'].queryset = models.Fiber.objects.filter(valid=True)
+        self.fields['resin'].queryset = models.Resin.objects.filter(valid=True)
+
 
         for name, filed_object in self.fields.items():
             filed_object.widget.attrs = {"class": "form-control"}
