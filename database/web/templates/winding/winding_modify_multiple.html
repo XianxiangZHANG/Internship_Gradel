@@ -29,68 +29,70 @@
         <div class="spinner"></div>
         <a id="loadingtext"> Loading </a>
     </div>
-    {% if formset.total_form_count > 0 %}
-    <form method="post">
-        {% csrf_token %}
-        {{ formset.management_form }}
-        <table class="table table-bordered" id="winding-table" id="normalTable">
-            <thead>
+    <div id="tableContainer" >
+        {% if formset.total_form_count > 0 %}
+        <form method="post">
+            {% csrf_token %}
+            {{ formset.management_form }}
+            <table class="table table-bordered" id="winding-table" id="normalTable">
                 <thead>
-                    <tr>
-                        <th style="width: 20%;">Link</th>
-                        <th style="width: 20%;">Interface Start</th>
-                        <th style="width: 20%;">Interface Transition</th>
-                        <th style="width: 20%;">Interface End</th>
-                        <!-- <th style="width: 10%;">Winding Type</th> -->
-                        <th colspan="2" style="width: 100px;">Operation</th>
-                    </tr>
+                    <thead>
+                        <tr>
+                            <th style="width: 20%;">Link</th>
+                            <th style="width: 20%;">Interface Start</th>
+                            <th style="width: 20%;">Interface Transition</th>
+                            <th style="width: 20%;">Interface End</th>
+                            <!-- <th style="width: 10%;">Winding Type</th> -->
+                            <th colspan="2" style="width: 100px;">Operation</th>
+                        </tr>
+                    </thead>
                 </thead>
-            </thead>
-            <tbody>
-                {% for field in formset %}
-                <tr class="winding-form">
+                <tbody>
+                    {% for field in formset %}
+                    <tr class="winding-form">
+                                
+                        <!-- <td><select id="id_link" name="link" class="form-control">
+                            <option value=""> - - Please select one - -</option>
+                        </select><span style="color: red;">{{ project_part_form.part.errors.0 }}</span>
+                        </td> -->
+                        <td contenteditable="true">{{ field.link }}
+                            {% if field.interface1.value or field.interface2.value or field.interface3.value %}
+                            {% if not field.link.value %}
+                                <span style="color: red;">{{ linkError }}</span>
+                            {% endif %}{% endif %}</td>
+                        <!-- <td contenteditable="true">{{ field.link }}<span style="color: red;">{{ field.errors.0 }}</span></td> -->
+                        <td contenteditable="true">{{ field.interface1 }}<span style="color: red;">{{ field.errors.0 }}</span></td>
+                        <td contenteditable="true">{{ field.interface2 }}<span style="color: red;">{{ field.errors.0 }}</span></td>
+                        <td contenteditable="true">{{ field.interface3 }}<span style="color: red;">{{ field.errors.0 }}</span></td>
+                        <!-- <td><select id="id_interface1" name="interface" class="form-control">
+                            <option value=""> - - Please select one - -</option>
                             
-                    <!-- <td><select id="id_link" name="link" class="form-control">
-                        <option value=""> - - Please select one - -</option>
-                    </select><span style="color: red;">{{ project_part_form.part.errors.0 }}</span>
-                    </td> -->
-                    <td contenteditable="true">{{ field.link }}
-                        {% if field.interface1.value or field.interface2.value or field.interface3.value %}
-                        {% if not field.link.value %}
-                            <span style="color: red;">{{ linkError }}</span>
-                        {% endif %}{% endif %}</td>
-                    <!-- <td contenteditable="true">{{ field.link }}<span style="color: red;">{{ field.errors.0 }}</span></td> -->
-                    <td contenteditable="true">{{ field.interface1 }}<span style="color: red;">{{ field.errors.0 }}</span></td>
-                    <td contenteditable="true">{{ field.interface2 }}<span style="color: red;">{{ field.errors.0 }}</span></td>
-                    <td contenteditable="true">{{ field.interface3 }}<span style="color: red;">{{ field.errors.0 }}</span></td>
-                    <!-- <td><select id="id_interface1" name="interface" class="form-control">
-                        <option value=""> - - Please select one - -</option>
-                        
-                    </select><span style="color: red;">{{ field.errors.0 }}</span>
-                    </td>
-                    <td><select id="id_interface2" name="interface" class="form-control">
-                        <option value=""> - - Please select one - -</option>
-                        
-                    </select><span style="color: red;">{{ field.errors.0 }}</span>
-                    </td>
-                    <td><select id="id_interface3" name="interface" class="form-control">
-                        <option value=""> - - Please select one - -</option>
-                        
-                    </select><span style="color: red;">{{ field.errors.0 }}</span>
-                    </td> -->
-                    <!-- <td>{{ field.sequence }}<span style="color: red;">{{ field.errors.0 }}</span></td> -->
-                   
-                    <td class="text-center"><button type="button" class="btn btn-danger remove-form">Delete</button></td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-        <button type="submit" class="btn btn-primary" id="btns">Save</button>
-    </form>
-    
-    {% else %}
-        <h2>This table is empty.</h2>
-    {% endif %}
+                        </select><span style="color: red;">{{ field.errors.0 }}</span>
+                        </td>
+                        <td><select id="id_interface2" name="interface" class="form-control">
+                            <option value=""> - - Please select one - -</option>
+                            
+                        </select><span style="color: red;">{{ field.errors.0 }}</span>
+                        </td>
+                        <td><select id="id_interface3" name="interface" class="form-control">
+                            <option value=""> - - Please select one - -</option>
+                            
+                        </select><span style="color: red;">{{ field.errors.0 }}</span>
+                        </td> -->
+                        <!-- <td>{{ field.sequence }}<span style="color: red;">{{ field.errors.0 }}</span></td> -->
+                    
+                        <td class="text-center"><button type="button" class="btn btn-danger remove-form">Delete</button></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <button type="submit" class="btn btn-primary" id="btns">Save</button>
+        </form>
+        
+        {% else %}
+            <h2>This table is empty.</h2>
+        {% endif %}
+    </div>
 
 </div>
 

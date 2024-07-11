@@ -35,72 +35,74 @@
         <div class="spinner"></div>
         <a id="loadingtext"> Loading </a>
     </div>
-    {% if resins %}
-        <table class="table table-bordered" id="normalTable">
-            <thead>
-                <tr>
+    <div id="tableContainer" >
+        {% if resins %}
+            <table class="table table-bordered" id="normalTable">
+                <thead>
                     <tr>
-                        <th rowspan="2">ID</th>
-                        <th rowspan="2">Manufacturer</th>
-                        <th colspan="3">Resin system</th>
-                        <th colspan="3">Ratio(weight)</th>
-                        <th colspan="3">Ratio(volume)</th>
-                        <th rowspan="2">Pot life (Process T°;h)</th>
-                        <th rowspan="2">Process T (°C)</th>
-                        <th rowspan="2">Curing cycle</th>
-                        <th rowspan="2">Tg (°C)</th>
-                        <th rowspan="2">Price resin</th>
-                        <th rowspan="2">Price hardener</th>
-                        <th rowspan="2">Density (g/cm³)</th>
+                        <tr>
+                            <th rowspan="2">ID</th>
+                            <th rowspan="2">Manufacturer</th>
+                            <th colspan="3">Resin system</th>
+                            <th colspan="3">Ratio(weight)</th>
+                            <th colspan="3">Ratio(volume)</th>
+                            <th rowspan="2">Pot life (Process T°;h)</th>
+                            <th rowspan="2">Process T (°C)</th>
+                            <th rowspan="2">Curing cycle</th>
+                            <th rowspan="2">Tg (°C)</th>
+                            <th rowspan="2">Price resin</th>
+                            <th rowspan="2">Price hardener</th>
+                            <th rowspan="2">Density (g/cm³)</th>
+                        </tr>
+                        <tr>
+                            <th>Resin</th>
+                            <th>Hardener</th>
+                            <th>Accelerator</th>
+                            <th>R</th>
+                            <th>H</th>
+                            <th>A</th>
+                            <th>R</th>
+                            <th>H</th>
+                            <th>A</th>
+                        </tr>
                     </tr>
-                    <tr>
-                        <th>Resin</th>
-                        <th>Hardener</th>
-                        <th>Accelerator</th>
-                        <th>R</th>
-                        <th>H</th>
-                        <th>A</th>
-                        <th>R</th>
-                        <th>H</th>
-                        <th>A</th>
-                    </tr>
-                </tr>
-            </thead>
-            <tbody>
-                {% for row in resins %}
-                
-                    <tr>
-                        <td>{{ row.id }}</td>
-                        <td>{{ row.manufacturer|default_if_none:"" }}</td>
-                        <td>{{ row.resin|default_if_none:"" }}</td>
-                        <td>{{ row.hardener|default_if_none:"" }}</td>
-                        <td>{{ row.accelerator|default_if_none:"" }}</td>
+                </thead>
+                <tbody>
+                    {% for row in resins %}
+                    
+                        <tr>
+                            <td>{{ row.id }}</td>
+                            <td>{{ row.manufacturer|default_if_none:"" }}</td>
+                            <td>{{ row.resin|default_if_none:"" }}</td>
+                            <td>{{ row.hardener|default_if_none:"" }}</td>
+                            <td>{{ row.accelerator|default_if_none:"" }}</td>
 
-                        <td>{{ row.ratioWR|default_if_none:"" }}</td>
-                        <td>{{ row.ratioWH|default_if_none:"" }}</td>
-                        <td>{{ row.ratioWA|default_if_none:"" }}</td>
-                        <td>{{ row.ratioVR|default_if_none:"" }}</td>
-                        <td>{{ row.ratioVH|default_if_none:"" }}</td>
-                        <td>{{ row.ratioVA|default_if_none:"" }}</td>
+                            <td>{{ row.ratioWR|default_if_none:"" }}</td>
+                            <td>{{ row.ratioWH|default_if_none:"" }}</td>
+                            <td>{{ row.ratioWA|default_if_none:"" }}</td>
+                            <td>{{ row.ratioVR|default_if_none:"" }}</td>
+                            <td>{{ row.ratioVH|default_if_none:"" }}</td>
+                            <td>{{ row.ratioVA|default_if_none:"" }}</td>
 
-                        <td>{{ row.potLife|default_if_none:"" }}</td>
-                        <td>{{ row.processT|default_if_none:"" }}</td>
-                        <td>{{ row.curingCycle|default_if_none:"" }}</td>
-                        <td>{{ row.tg|default_if_none:"" }}</td>
-                        <td>{{ row.priceResin|default_if_none:"" }}</td>
-                        <td>{{ row.priceHardener|default_if_none:"" }}</td>
-                        <td>{{ row.densityR|default_if_none:"" }}</td>
-                    </tr>
-                {% empty %}
-                    <tr>
-                        <td colspan="18" class="text-center" style="font-size: large;">{{ message }}</td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    {% else %}
-        <h3 class="text-center" id="NoMessage">{{ message }}</h3>
-    {% endif %}
+                            <td>{{ row.potLife|default_if_none:"" }}</td>
+                            <td>{{ row.processT|default_if_none:"" }}</td>
+                            <td>{{ row.curingCycle|default_if_none:"" }}</td>
+                            <td>{{ row.tg|default_if_none:"" }}</td>
+                            <td>{{ row.priceResin|default_if_none:"" }}</td>
+                            <td>{{ row.priceHardener|default_if_none:"" }}</td>
+                            <td>{{ row.densityR|default_if_none:"" }}</td>
+                        </tr>
+                    {% empty %}
+                        <tr>
+                            <td colspan="18" class="text-center" style="font-size: large;">{{ message }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <h3 class="text-center" id="NoMessage">{{ message }}</h3>
+        {% endif %}
+    </div>
 </div>
 
 

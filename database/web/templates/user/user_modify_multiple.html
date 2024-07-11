@@ -26,35 +26,37 @@
         <div class="spinner"></div>
         <a id="loadingtext"> Loading </a>
     </div>
-    {% if formset.total_form_count > 0 %}
-        <form method="post">
-            {% csrf_token %}
-            {{ formset.management_form }}
-            <table class="table table-bordered" id="user-table" id="normalTable">
-                <thead>
-                    <tr>
-                        <th style="width: 50%;">User Name</th>
-                        <th style="width: 50%;">Department</th>
-                        <th colspan="2">Operation</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for form in formset %}
-                        <tr class="user-form">
-                            {% for field in form %}
-                                <td contenteditable="true">{{ field }}</td>
-                                <span style="color: red;">{{ field.errors.0 }}</span>
-                            {% endfor %}
-                            <td class="text-center" ><button type="button" class="btn btn-danger remove-form" >Delete</button></td>
+    <div id="tableContainer" >
+        {% if formset.total_form_count > 0 %}
+            <form method="post">
+                {% csrf_token %}
+                {{ formset.management_form }}
+                <table class="table table-bordered" id="user-table" id="normalTable">
+                    <thead>
+                        <tr>
+                            <th style="width: 50%;">User Name</th>
+                            <th style="width: 50%;">Department</th>
+                            <th colspan="2">Operation</th>
                         </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-            <button type="submit" class="btn btn-primary" id="btns">Save</button>
-        </form>
-    {% else %}
-        <h3 class="text-center" id="NoMessage">This table is empty.</h3>
-    {% endif %}
+                    </thead>
+                    <tbody>
+                        {% for form in formset %}
+                            <tr class="user-form">
+                                {% for field in form %}
+                                    <td contenteditable="true">{{ field }}</td>
+                                    <span style="color: red;">{{ field.errors.0 }}</span>
+                                {% endfor %}
+                                <td class="text-center" ><button type="button" class="btn btn-danger remove-form" >Delete</button></td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                <button type="submit" class="btn btn-primary" id="btns">Save</button>
+            </form>
+        {% else %}
+            <h3 class="text-center" id="NoMessage">This table is empty.</h3>
+        {% endif %}
+    </div>
 </div>
 
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">

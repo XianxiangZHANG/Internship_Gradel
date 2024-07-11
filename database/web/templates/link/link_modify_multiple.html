@@ -29,55 +29,57 @@
         <div class="spinner"></div>
         <a id="loadingtext"> Loading </a>
     </div>
-    {% if formset.total_form_count > 0 %}
-        <form method="post">
-            {% csrf_token %}
-            {{ formset.management_form }}
-            <table class="table table-bordered" id="link-table" id="normalTable">
-                <thead>
+    <div id="tableContainer" >
+        {% if formset.total_form_count > 0 %}
+            <form method="post">
+                {% csrf_token %}
+                {{ formset.management_form }}
+                <table class="table table-bordered" id="link-table" id="normalTable">
                     <thead>
-                        <tr>
-                            <th style="width: 120px;">Link Name</th> 
-                            <th style="width: 100px;">Interface1 Name</th>
-                            <th style="width: 100px;">Interface2 Name</th>
-                            <th >Sequence</th>
-                            <th style="width: 100px;">Arm Diam.[mm]</th>
-                            <th style="width: 100px;">Arm Section[mm²]</th>
-                            <th style="width: 100px;">Cycle #</th>
-                            <th style="width: 100px;">*Angle*</th>
-                            <th style="width: 100px;">Operation</th>
-                        </tr>
+                        <thead>
+                            <tr>
+                                <th style="width: 120px;">Link Name</th> 
+                                <th style="width: 100px;">Interface1 Name</th>
+                                <th style="width: 100px;">Interface2 Name</th>
+                                <th >Sequence</th>
+                                <th style="width: 100px;">Arm Diam.[mm]</th>
+                                <th style="width: 100px;">Arm Section[mm²]</th>
+                                <th style="width: 100px;">Cycle #</th>
+                                <th style="width: 100px;">*Angle*</th>
+                                <th style="width: 100px;">Operation</th>
+                            </tr>
+                        </thead>
                     </thead>
-                </thead>
-                <tbody>
-                    {% for field in formset %}
-                    <tr class="link-form">
-                        {{ field.id }}
-                        <td contenteditable="true">{{ field.linkName }}
-                            {% if field.interface1.value or field.interface2.value or field.length.value or field.sequence.value or field.armDiam.value or field.armSection.value or field.cycle.value or field.finArmSection.value or field.finArmDiam.value or field.finArmRadius.value or field..value or field.mass.value or field.angle.value %}
-                            {% if not field.linkName.value %}
-                                <span style="color: red;">{{ linkError }}</span>
-                            {% endif %}{% endif %}</td>
+                    <tbody>
+                        {% for field in formset %}
+                        <tr class="link-form">
+                            {{ field.id }}
+                            <td contenteditable="true">{{ field.linkName }}
+                                {% if field.interface1.value or field.interface2.value or field.length.value or field.sequence.value or field.armDiam.value or field.armSection.value or field.cycle.value or field.finArmSection.value or field.finArmDiam.value or field.finArmRadius.value or field..value or field.mass.value or field.angle.value %}
+                                {% if not field.linkName.value %}
+                                    <span style="color: red;">{{ linkError }}</span>
+                                {% endif %}{% endif %}</td>
 
-                        <td>{{ field.interface1 }}<span style="color: red;">{{ field.interface1.errors.0 }}</span></td>
-                        <td>{{ field.interface2 }}<span style="color: red;">{{ field.interface2.errors.0 }}</span></td>
-                        
-                        <td contenteditable="true">{{ field.sequence }}</td>
-                        <td contenteditable="true">{{ field.armDiam }}</td>
-                        <td contenteditable="true">{{ field.armSection }}</td>
-                        <td contenteditable="true">{{ field.cycle }}</td>
-                        <td contenteditable="true">{{ field.angle }}</td>
-                        <td class="text-center"><button type="button" class="btn btn-danger remove-form">Delete</button></td>
-                        <input type="hidden" name="{{ form.prefix }}-part" value="{{ form.instance.part_id }}">
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-            <button type="submit" class="btn btn-primary" id="btns">Save</button>
-        </form>
-    {% else %}
-        <h3 class="text-center" id="NoMessage">{{ message }}</h3>
-    {% endif %}
+                            <td>{{ field.interface1 }}<span style="color: red;">{{ field.interface1.errors.0 }}</span></td>
+                            <td>{{ field.interface2 }}<span style="color: red;">{{ field.interface2.errors.0 }}</span></td>
+                            
+                            <td contenteditable="true">{{ field.sequence }}</td>
+                            <td contenteditable="true">{{ field.armDiam }}</td>
+                            <td contenteditable="true">{{ field.armSection }}</td>
+                            <td contenteditable="true">{{ field.cycle }}</td>
+                            <td contenteditable="true">{{ field.angle }}</td>
+                            <td class="text-center"><button type="button" class="btn btn-danger remove-form">Delete</button></td>
+                            <input type="hidden" name="{{ form.prefix }}-part" value="{{ form.instance.part_id }}">
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                <button type="submit" class="btn btn-primary" id="btns">Save</button>
+            </form>
+        {% else %}
+            <h3 class="text-center" id="NoMessage">{{ message }}</h3>
+        {% endif %}
+    </div>
 </div>
 
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">

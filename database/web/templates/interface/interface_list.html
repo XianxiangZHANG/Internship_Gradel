@@ -38,82 +38,84 @@
         <div class="spinner"></div>
         <a id="loadingtext"> Loading </a>
     </div>
-    {% if interfaces %}
-        <table class="table table-bordered" id="normalTable">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Project Name</th>
-                    <th>Part Name</th>
-                    <th>Interface Name</th>
-                    <th>Height [mm]</th>
-                    <th>Int. Diameter [mm]</th>
-                    <th>Total Link</th>
-                    <th>Total Arm</th>
-                    <th>Total Section [mm²]</th>
-                    <th>Ext. Diameter [mm]</th>
-                    <th>Acc. Mass [g]</th>
-                    <th>Fin. O. Diam. [mm]</th>
-                    <th>Fin. Acc. section [mm²]</th>
-                    <th>Safety Factor [%]</th>
-                    <th>Interface's center X [mm]</th>
-                    <th>Interface's centerY [mm]</th>
-                    <th>Interface's centerZ [mm]</th>
-                    <th>Direction vectorX [mm]</th>
-                    <th>Direction vectorY [mm]</th>
-                    <th>Direction vectorZ [mm]</th>
-                    <th>Division Step</th>
-                    <th>Operations</th>
-                    
-                </tr>
-            </thead>
-            <tbody>
-                {% for row in interfaces %}
-                    {% if row.part.valid %} 
-                        <tr style="background-color: #67fafa70;">
-                    {% else %}
-                        <tr>
-                    {% endif %}
-                            <td>{{ row.id }}</td>
-                            <td>{{ row.project.projectName }}</td>
-                            <td>{{ row.part.partName }}</td>
+    <div id="tableContainer" >
+        {% if interfaces %}
+            <table class="table table-bordered" id="normalTable">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Project Name</th>
+                        <th>Part Name</th>
+                        <th>Interface Name</th>
+                        <th>Height [mm]</th>
+                        <th>Int. Diameter [mm]</th>
+                        <th>Total Link</th>
+                        <th>Total Arm</th>
+                        <th>Total Section [mm²]</th>
+                        <th>Ext. Diameter [mm]</th>
+                        <th>Acc. Mass [g]</th>
+                        <th>Fin. O. Diam. [mm]</th>
+                        <th>Fin. Acc. section [mm²]</th>
+                        <th>Safety Factor [%]</th>
+                        <th>Interface's center X [mm]</th>
+                        <th>Interface's centerY [mm]</th>
+                        <th>Interface's centerZ [mm]</th>
+                        <th>Direction vectorX [mm]</th>
+                        <th>Direction vectorY [mm]</th>
+                        <th>Direction vectorZ [mm]</th>
+                        <th>Division Step</th>
+                        <th>Operations</th>
+                        
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for row in interfaces %}
+                        {% if row.part.valid %} 
+                            <tr style="background-color: #67fafa70;">
+                        {% else %}
+                            <tr>
+                        {% endif %}
+                                <td>{{ row.id }}</td>
+                                <td>{{ row.project.projectName }}</td>
+                                <td>{{ row.part.partName }}</td>
 
-                            <td>{{ row.interfaceName }}</td>
-                            <td>{{ row.height|default_if_none:"" }}</td>
-                            <td>{{ row.intDiameter|default_if_none:"" }}</td>
-                            <td>{{ row.calculated_properties.totalLink|default_if_none:"" }}</td>
-                            <td>{{ row.calculated_properties.totalArm|default_if_none:"" }}</td>
-                            <td>{{ row.calculated_properties.totalSection|format_decimal:2|default_if_none:"" }}</td>
-                            <td>{{ row.calculated_properties.extDiameter|format_decimal:2|default_if_none:"" }}</td>
-                            <td>{{ row.calculated_properties.accMass|format_decimal:2|default_if_none:"" }}</td>
-                            <td>{{ row.finODiam|default_if_none:"" }}</td>
-                            <td>{{ row.finAccSection|default_if_none:"" }}</td>
-                            <td>{{ row.calculated_properties.safetyFactor|default_if_none:"" }}</td>
-                            <td>{{ row.interfaceCenterX|default_if_none:"" }}</td>
-                            <td>{{ row.interfaceCenterY|default_if_none:"" }}</td>
-                            <td>{{ row.interfaceCenterZ|default_if_none:"" }}</td>
-                            <td>{{ row.directionVectorX|default_if_none:"" }}</td>
-                            <td>{{ row.directionVectorY|default_if_none:"" }}</td>
-                            <td>{{ row.directionVectorZ|default_if_none:"" }}</td>
-                            <td>{{ row.divisionStep|default_if_none:"" }}</td>
-                            <td>
-                                <a class="btn btn-primary btn-xs" href="/interface/edit/{{ row.id }}/" style="width: 70px; text-align: center; margin-bottom: 5px;"> Edit </a>
-                                <br>
-                                <input type="button" value="Delete" class="btn btn-danger btn-xs" style="width: 70px; text-align: center;"
-                                    onclick="deleteAction({{ row.id }});"/>
-                            </td>
-                        </tr>
-                    
-                    {% empty %}
-                        <tr>
-                            <td colspan="22" class="text-center" style="font-size: large;">{{ message }}</td>
-                        </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    {% else %}
-        <h3 class="text-center" id="NoMessage">{{ message }}</h3>
-    {% endif %}
+                                <td>{{ row.interfaceName }}</td>
+                                <td>{{ row.height|default_if_none:"" }}</td>
+                                <td>{{ row.intDiameter|default_if_none:"" }}</td>
+                                <td>{{ row.calculated_properties.totalLink|default_if_none:"" }}</td>
+                                <td>{{ row.calculated_properties.totalArm|default_if_none:"" }}</td>
+                                <td>{{ row.calculated_properties.totalSection|format_decimal:2|default_if_none:"" }}</td>
+                                <td>{{ row.calculated_properties.extDiameter|format_decimal:2|default_if_none:"" }}</td>
+                                <td>{{ row.calculated_properties.accMass|format_decimal:2|default_if_none:"" }}</td>
+                                <td>{{ row.finODiam|default_if_none:"" }}</td>
+                                <td>{{ row.finAccSection|default_if_none:"" }}</td>
+                                <td>{{ row.calculated_properties.safetyFactor|default_if_none:"" }}</td>
+                                <td>{{ row.interfaceCenterX|default_if_none:"" }}</td>
+                                <td>{{ row.interfaceCenterY|default_if_none:"" }}</td>
+                                <td>{{ row.interfaceCenterZ|default_if_none:"" }}</td>
+                                <td>{{ row.directionVectorX|default_if_none:"" }}</td>
+                                <td>{{ row.directionVectorY|default_if_none:"" }}</td>
+                                <td>{{ row.directionVectorZ|default_if_none:"" }}</td>
+                                <td>{{ row.divisionStep|default_if_none:"" }}</td>
+                                <td>
+                                    <a class="btn btn-primary btn-xs" href="/interface/edit/{{ row.id }}/" style="width: 70px; text-align: center; margin-bottom: 5px;"> Edit </a>
+                                    <br>
+                                    <input type="button" value="Delete" class="btn btn-danger btn-xs" style="width: 70px; text-align: center;"
+                                        onclick="deleteAction({{ row.id }});"/>
+                                </td>
+                            </tr>
+                        
+                        {% empty %}
+                            <tr>
+                                <td colspan="22" class="text-center" style="font-size: large;">{{ message }}</td>
+                            </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <h3 class="text-center" id="NoMessage">{{ message }}</h3>
+        {% endif %}
+    </div>
 </div>
     
 

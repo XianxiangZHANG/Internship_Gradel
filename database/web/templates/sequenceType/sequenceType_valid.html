@@ -25,28 +25,30 @@
         <div class="spinner"></div>
         <a id="loadingtext"> Loading </a>
     </div>
-    <table class="table table-bordered" id="normalTable">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th style="width: 20%;">Sequence</th>
-                <th style="width: 70%;">Description</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for row in filter.qs %}
+    <div id="tableContainer" >
+        <table class="table table-bordered" id="normalTable">
+            <thead>
                 <tr>
-                    <td>{{ row.id }}</td>
-                    <td>{{ row.sequenceType }}</td>
-                    <td>{{ row.description|default_if_none:"" }}</td>
+                    <th>ID</th>
+                    <th style="width: 20%;">Sequence</th>
+                    <th style="width: 70%;">Description</th>
                 </tr>
-            {% empty %}
-                <tr>
-                    <td colspan="3" class="text-center" style="font-size: large;">No data found.</td>
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                {% for row in filter.qs %}
+                    <tr>
+                        <td>{{ row.id }}</td>
+                        <td>{{ row.sequenceType }}</td>
+                        <td>{{ row.description|default_if_none:"" }}</td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="3" class="text-center" style="font-size: large;">No data found.</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 </div>
 
 

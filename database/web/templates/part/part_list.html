@@ -35,99 +35,99 @@
         <div class="spinner"></div>
         <a id="loadingtext"> Loading </a>
     </div>
-    {% if parts %}
-    <div id="tableContainer" style="display: block;">
-        <table class="table table-bordered" id="normalTable" style=" font-size: 12px;">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Part Name</th>
-                    <th>Resin Name</th>
-                    <th>Resin Density [kg/m3]</th>
-                    <th>Fiber Name</th>
-                    <th>Fiber Density [kg/m3]</th>
-                    <th>Number of Spools</th>
-                    <th>Fiber Volume Ratio[%]</th>
-                    <th>Winding Density [kg/m3]</th>
-                    <th>Fiber Section calc.[mm²]</th>
-                    <th>Fiber Section acc.[mm²]</th>
-                    <th>Default Interface Height [mm]</th>
-                    <th>Default Interface Int Diam [mm]</th>
-                    <th>Default Link (Element) Type</th>
-                    <th>Default Link Defined by</th>
-                    <th>Number of Links</th>
-                    <th>Number of Bushings</th>
-                    <th>Total Mass of Links [g]</th>
-                    <th>Total Mass of Accumulation [g]</th>
-                    <th>Total Mass of Winding [g]</th>
-                    <th>Total Mass of Bushing [g]</th>
-                    <th>Additional Masses [g]</th>
-                    <th>Total Mass of Structure [g]</th>
-                    <th>Total Fiber Length [m]</th>
-                    <th>Total Fiber Mass [kg]</th>
-                    <th>Total Resin Mass [g]</th>
-                    <th>Project Image</th>
-                    <th>Operations</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for row in parts %}
-                    {% if row.valid %} 
-                        <tr style="background-color: #67fafa70;">
-                    {% else %}
-                        <tr>
-                    {% endif %}
-                            <td>{{ row.id }}</td>
-                            <td>{{ row.partName }}</td>
-                            <td>{{ row.resin|default_if_none:"" }}</td>
-                            <td>{{ row.calculated_properties.resinDensity|default_if_none:"" }}</td>
-                            <td>{{ row.fiber|default_if_none:"" }}</td>
-                            <td>{{ row.calculated_properties.fiberDensity|default_if_none:"" }}</td>
-                            <td>{{ row.totalTowNumber|default_if_none:"" }}</td>
-                            <td>{{ row.fiberVolumeRatio|default_if_none:"" }}</td>
-                            <td>{{ row.calculated_properties.windingDensity|default_if_none:"" }}</td>
-                            <td>{{ row.fiberSectionCalc|default_if_none:"" }}</td>
-                            <td>{{ row.fiberSectionAcc|default_if_none:"" }}</td>
-                            <td>{{ row.defaultInterfaceHeight|default_if_none:"" }}</td>
-                            <td>{{ row.defaultInterfaceIntDiam|default_if_none:"" }}</td>
-                            <td>{{ row.defaultLinkType|default_if_none:"" }}</td>
-                            <td>{{ row.defaultLinkDefined|default_if_none:"" }}</td>
-                            <td>{{ row.calculated_properties.numberLink|default_if_none:"0" }}</td>
-                            <td>{{ row.calculated_properties.numberBushing|default_if_none:"0" }}</td>
-                            <td>{{ row.calculated_properties.totalMassLink|default_if_none:"" }}</td>
-                            <td>{{ row.calculated_properties.totalMassAccumulation|default_if_none:"" }}</td>
-                            <td>{{ row.calculated_properties.totalMassWinding|default_if_none:"" }}</td>
-                            <td>{{ row.calculated_properties.totalMassBushing|default_if_none:"" }}</td>
-                            <td>{{ row.additionalMass|default_if_none:"" }}</td>
-                            <td>{{ row.calculated_properties.totalMassStructure|default_if_none:"" }}</td>
-                            <td>{{ row.calculated_properties.totalFiberLength|default_if_none:"" }}</td>
-                            <td>{{ row.calculated_properties.totalFiberMass|default_if_none:"" }}</td>
-                            <td>{{ row.calculated_properties.totalResinMass|default_if_none:"" }}</td>
-                            <td>{% if row.projectImage %}
-                            
-                                <img src="{{ row.projectImage.url }}" alt="Project Image" class="thumbnail" onclick="showModal('{{ row.projectImage.url }}')">
-                            {% else %}
-                                No image
-                            {% endif %}</td>
-                            
-                            <td>
-                                <a class="btn btn-primary btn-xs" href="/part/edit/{{ row.id }}/" style="width: 70px; text-align: center; margin-bottom: 5px;"> Edit </a>
-                                <br>
-                                <input type="button" value="Delete" class="btn btn-danger btn-xs" style="width: 70px; text-align: center;"
-                                    onclick="deleteAction({{ row.id }});"/>
-                            </td>
-                        </tr>
-                {% empty %}
+    <div id="tableContainer" >
+        {% if parts %}
+            <table class="table table-bordered" id="normalTable" style=" font-size: 12px; display: block;">
+                <thead>
                     <tr>
-                        <td colspan="28" class="text-center" style="font-size: large;">{{ message }}</td>
+                        <th>ID</th>
+                        <th>Part Name</th>
+                        <th>Resin Name</th>
+                        <th>Resin Density [kg/m3]</th>
+                        <th>Fiber Name</th>
+                        <th>Fiber Density [kg/m3]</th>
+                        <th>Number of Spools</th>
+                        <th>Fiber Volume Ratio[%]</th>
+                        <th>Winding Density [kg/m3]</th>
+                        <th>Fiber Section calc.[mm²]</th>
+                        <th>Fiber Section acc.[mm²]</th>
+                        <th>Default Interface Height [mm]</th>
+                        <th>Default Interface Int Diam [mm]</th>
+                        <th>Default Link (Element) Type</th>
+                        <th>Default Link Defined by</th>
+                        <th>Number of Links</th>
+                        <th>Number of Bushings</th>
+                        <th>Total Mass of Links [g]</th>
+                        <th>Total Mass of Accumulation [g]</th>
+                        <th>Total Mass of Winding [g]</th>
+                        <th>Total Mass of Bushing [g]</th>
+                        <th>Additional Masses [g]</th>
+                        <th>Total Mass of Structure [g]</th>
+                        <th>Total Fiber Length [m]</th>
+                        <th>Total Fiber Mass [kg]</th>
+                        <th>Total Resin Mass [g]</th>
+                        <th>Project Image</th>
+                        <th>Operations</th>
                     </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    
-    {% else %}
-        <h3 class="text-center" id="NoMessage">{{ message }}</h3>
-    {% endif %}
+                </thead>
+                <tbody>
+                    {% for row in parts %}
+                        {% if row.valid %} 
+                            <tr style="background-color: #67fafa70;">
+                        {% else %}
+                            <tr>
+                        {% endif %}
+                                <td>{{ row.id }}</td>
+                                <td>{{ row.partName }}</td>
+                                <td>{{ row.resin|default_if_none:"" }}</td>
+                                <td>{{ row.calculated_properties.resinDensity|default_if_none:"" }}</td>
+                                <td>{{ row.fiber|default_if_none:"" }}</td>
+                                <td>{{ row.calculated_properties.fiberDensity|default_if_none:"" }}</td>
+                                <td>{{ row.totalTowNumber|default_if_none:"" }}</td>
+                                <td>{{ row.fiberVolumeRatio|default_if_none:"" }}</td>
+                                <td>{{ row.calculated_properties.windingDensity|default_if_none:"" }}</td>
+                                <td>{{ row.fiberSectionCalc|default_if_none:"" }}</td>
+                                <td>{{ row.fiberSectionAcc|default_if_none:"" }}</td>
+                                <td>{{ row.defaultInterfaceHeight|default_if_none:"" }}</td>
+                                <td>{{ row.defaultInterfaceIntDiam|default_if_none:"" }}</td>
+                                <td>{{ row.defaultLinkType|default_if_none:"" }}</td>
+                                <td>{{ row.defaultLinkDefined|default_if_none:"" }}</td>
+                                <td>{{ row.calculated_properties.numberLink|default_if_none:"0" }}</td>
+                                <td>{{ row.calculated_properties.numberBushing|default_if_none:"0" }}</td>
+                                <td>{{ row.calculated_properties.totalMassLink|default_if_none:"" }}</td>
+                                <td>{{ row.calculated_properties.totalMassAccumulation|default_if_none:"" }}</td>
+                                <td>{{ row.calculated_properties.totalMassWinding|default_if_none:"" }}</td>
+                                <td>{{ row.calculated_properties.totalMassBushing|default_if_none:"" }}</td>
+                                <td>{{ row.additionalMass|default_if_none:"" }}</td>
+                                <td>{{ row.calculated_properties.totalMassStructure|default_if_none:"" }}</td>
+                                <td>{{ row.calculated_properties.totalFiberLength|default_if_none:"" }}</td>
+                                <td>{{ row.calculated_properties.totalFiberMass|default_if_none:"" }}</td>
+                                <td>{{ row.calculated_properties.totalResinMass|default_if_none:"" }}</td>
+                                <td>{% if row.projectImage %}
+                                
+                                    <img src="{{ row.projectImage.url }}" alt="Project Image" class="thumbnail" onclick="showModal('{{ row.projectImage.url }}')">
+                                {% else %}
+                                    No image
+                                {% endif %}</td>
+                                
+                                <td>
+                                    <a class="btn btn-primary btn-xs" href="/part/edit/{{ row.id }}/" style="width: 70px; text-align: center; margin-bottom: 5px;"> Edit </a>
+                                    <br>
+                                    <input type="button" value="Delete" class="btn btn-danger btn-xs" style="width: 70px; text-align: center;"
+                                        onclick="deleteAction({{ row.id }});"/>
+                                </td>
+                            </tr>
+                    {% empty %}
+                        <tr>
+                            <td colspan="28" class="text-center" style="font-size: large;">{{ message }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        
+        {% else %}
+            <h3 class="text-center" id="NoMessage">{{ message }}</h3>
+        {% endif %}
     </div>
 </div>
     
@@ -156,67 +156,7 @@
 
 {% endblock %}
 
-{% block js %}
-<script>
-        
-    // ID currently to be deleted
-    DELETE_ID = 0;
-    function deleteAction(id) {
-        DELETE_ID = id;
-        $('#myModal').modal('show');
-    }
 
-    function confirmDelete() {
-        $.ajax({
-            url: "/part/delete/",
-            type: "GET",
-            data: {
-                aid: DELETE_ID
-            },
-            dataType: "JSON",
-            success: function (res) {
-                // {status: true} -> obj
-                if (res.status) {
-                    // Deletion successful, refresh the page
-                    location.reload()
-                } else {
-                    alert(res.error);
-                }
-            }
-        })
-    }
-
-    function cancelDelete() {
-        DELETE_ID = 0;
-        $('#myModal').modal('hide');
-    }
-
-    function showModal(src) {
-        var modal = document.getElementById("myModalImage");
-        var modalImg = document.getElementById("modalImage");
-        modal.style.display = "block";
-        modalImg.src = src;
-    }
-
-    function closeModal() {
-        var modal = document.getElementById("myModalImage");
-        modal.style.display = "none";
-    }
-
-    document.getElementById("filterForm").addEventListener("submit", function() {
-        document.getElementById("loading").style.display = "block";
-        document.getElementById("NoMessage").style.display = "none";
-        document.getElementById('normalTable').style.display = 'none';
-    });
-
-
-    document.getElementById("resetButton").addEventListener("click", function() {
-        window.location.href = window.location.pathname;
-    });
-
-    
-</script>
-{% endblock %}
 
 {% block css %}
 <style>
@@ -282,4 +222,55 @@
     
    
 </style>
+{% endblock %}
+
+{% block js %}
+<script>
+        
+    // ID currently to be deleted
+    DELETE_ID = 0;
+    function deleteAction(id) {
+        DELETE_ID = id;
+        $('#myModal').modal('show');
+    }
+
+    function confirmDelete() {
+        $.ajax({
+            url: "/part/delete/",
+            type: "GET",
+            data: {
+                aid: DELETE_ID
+            },
+            dataType: "JSON",
+            success: function (res) {
+                // {status: true} -> obj
+                if (res.status) {
+                    // Deletion successful, refresh the page
+                    location.reload()
+                } else {
+                    alert(res.error);
+                }
+            }
+        })
+    }
+
+    function cancelDelete() {
+        DELETE_ID = 0;
+        $('#myModal').modal('hide');
+    }
+
+    function showModal(src) {
+        var modal = document.getElementById("myModalImage");
+        var modalImg = document.getElementById("modalImage");
+        modal.style.display = "block";
+        modalImg.src = src;
+    }
+
+    function closeModal() {
+        var modal = document.getElementById("myModalImage");
+        modal.style.display = "none";
+    }
+    
+    
+</script>
 {% endblock %}

@@ -27,122 +27,124 @@
         <div class="spinner"></div>
         <a id="loadingtext"> Loading </a>
     </div>
-    {% if r_and_ds %}
-        <table class="table table-bordered" id="normalTable">
-            {% for field in filter.qs %}
-                <tr>
-                    <tr><th colspan="2" style="background-color: #4CAF50;">Program :</th><td colspan="2" >{{ field.program|default_if_none:"" }}</td></tr>
-                    <tr><th colspan="2" style="background-color: #4CAF50;">Project Nr. :</th><td colspan="2" >{{ field.projectNr|default_if_none:"" }}</td></tr>
+    <div id="tableContainer" >
+        {% if r_and_ds %}
+            <table class="table table-bordered" id="normalTable">
+                {% for field in filter.qs %}
+                    <tr>
+                        <tr><th colspan="2" style="background-color: #4CAF50;">Program :</th><td colspan="2" >{{ field.program|default_if_none:"" }}</td></tr>
+                        <tr><th colspan="2" style="background-color: #4CAF50;">Project Nr. :</th><td colspan="2" >{{ field.projectNr|default_if_none:"" }}</td></tr>
 
-                    <tr><th colspan="2" style="background-color: #4CAF50;">ERMDS Nr. :</th><td colspan="2" >{{ field.ERMDS|default_if_none:"" }}</td></tr>
-                    <tr><th colspan="2" style="background-color: #4CAF50;">Last update :</th><td colspan="2" >{{ field.lastUpdate|default_if_none:"" }}</td></tr>
-                    <tr><th colspan="2" style="background-color: #4CAF50;">Verified by :</th><td colspan="2" >{{ field.verifiedBy|default_if_none:"" }}</td></tr>
-                    <tr><th colspan="2" style="background-color: #4CAF50;">Approved by :</th><td colspan="2" >{{ field.approvedBy|default_if_none:"" }}</td></tr>
-            
-                    <tr style="background-color: #4CAF50;"><th colspan="2" style="background-color: #4CAF50; font-size: large; color: #000;">Materials references</th><td id="vc">Value</td><td id="vc">Comments</td></tr>
-                    <tr><th colspan="2">Fiber</th><td>{{ field.fiber }}</td><td>{{ field.fiberC|default_if_none:"" }}</td></tr>
-                    <tr><th colspan="2">Number of bobbins</th><td >{{ field.numberOfBobbins|default_if_none:"" }}</td><td >{{ field.numberOfBobbinsC|default_if_none:"" }}</td></tr>
-                    <tr><th colspan="2">Resin</th><td>{{ field.resin.resin }}</td><td>{{ field.resinC|default_if_none:"" }}</td></tr>
-                    <tr><th colspan="2">Hardener</th><td>{{ field.resin.hardener|default_if_none:"" }}</td><td>{{ field.hardenerC|default_if_none:""}}</td></tr>
-                    <tr><th colspan="2">Curing cycle (+ ramp) (°C) :</th><td>{{ field.resin.curingCycle|default_if_none:"" }}</td><td>{{ field.curingCycleC|default_if_none:"" }}</td></tr>
-                    
+                        <tr><th colspan="2" style="background-color: #4CAF50;">ERMDS Nr. :</th><td colspan="2" >{{ field.ERMDS|default_if_none:"" }}</td></tr>
+                        <tr><th colspan="2" style="background-color: #4CAF50;">Last update :</th><td colspan="2" >{{ field.lastUpdate|default_if_none:"" }}</td></tr>
+                        <tr><th colspan="2" style="background-color: #4CAF50;">Verified by :</th><td colspan="2" >{{ field.verifiedBy|default_if_none:"" }}</td></tr>
+                        <tr><th colspan="2" style="background-color: #4CAF50;">Approved by :</th><td colspan="2" >{{ field.approvedBy|default_if_none:"" }}</td></tr>
+                
+                        <tr style="background-color: #4CAF50;"><th colspan="2" style="background-color: #4CAF50; font-size: large; color: #000;">Materials references</th><td id="vc">Value</td><td id="vc">Comments</td></tr>
+                        <tr><th colspan="2">Fiber</th><td>{{ field.fiber }}</td><td>{{ field.fiberC|default_if_none:"" }}</td></tr>
+                        <tr><th colspan="2">Number of bobbins</th><td >{{ field.numberOfBobbins|default_if_none:"" }}</td><td >{{ field.numberOfBobbinsC|default_if_none:"" }}</td></tr>
+                        <tr><th colspan="2">Resin</th><td>{{ field.resin.resin }}</td><td>{{ field.resinC|default_if_none:"" }}</td></tr>
+                        <tr><th colspan="2">Hardener</th><td>{{ field.resin.hardener|default_if_none:"" }}</td><td>{{ field.hardenerC|default_if_none:""}}</td></tr>
+                        <tr><th colspan="2">Curing cycle (+ ramp) (°C) :</th><td>{{ field.resin.curingCycle|default_if_none:"" }}</td><td>{{ field.curingCycleC|default_if_none:"" }}</td></tr>
+                        
 
-                    <tr style="background-color: #4CAF50;"><th colspan="2" style="background-color: #4CAF50; font-size: large; color: #000;">Materials individual properties</th><td id="vc">Value</td><td id="vc">Comments</td></tr>
-                    <tr><th colspan="2">Fibre tow :</th><td>{{ field.fiber.towInThousands|default_if_none:"" }}</td><td>{{ field.towC|default_if_none:"" }}</td></tr>
-                    <tr><th colspan="2">Fibre tex (g/1000m) :</th><td>{{ field.fiber.tex|default_if_none:"" }}</td><td>{{ field.texC|default_if_none:"" }}</td></tr>
-                    <tr><th colspan="2">Fibre density (g/cm3) :</th><td>{{ field.fiber.density|default_if_none:"" }}</td><td>{{ field.fiberDensityC|default_if_none:"" }}</td></tr>
-                    <tr><th colspan="2">Matrix density (g/cm3) :</th><td>{{ field.resin.densityR|default_if_none:"" }}</td><td>{{ field.resinDensityC|default_if_none:"" }}</td></tr>
+                        <tr style="background-color: #4CAF50;"><th colspan="2" style="background-color: #4CAF50; font-size: large; color: #000;">Materials individual properties</th><td id="vc">Value</td><td id="vc">Comments</td></tr>
+                        <tr><th colspan="2">Fibre tow :</th><td>{{ field.fiber.towInThousands|default_if_none:"" }}</td><td>{{ field.towC|default_if_none:"" }}</td></tr>
+                        <tr><th colspan="2">Fibre tex (g/1000m) :</th><td>{{ field.fiber.tex|default_if_none:"" }}</td><td>{{ field.texC|default_if_none:"" }}</td></tr>
+                        <tr><th colspan="2">Fibre density (g/cm3) :</th><td>{{ field.fiber.density|default_if_none:"" }}</td><td>{{ field.fiberDensityC|default_if_none:"" }}</td></tr>
+                        <tr><th colspan="2">Matrix density (g/cm3) :</th><td>{{ field.resin.densityR|default_if_none:"" }}</td><td>{{ field.resinDensityC|default_if_none:"" }}</td></tr>
 
 
-                    <tr style="background-color: #4CAF50;"><th colspan="2" style="background-color: #4CAF50; font-size: large; color: #000;">Tools / Parts references</th><td id="vc">Value</td><td id="vc">Comments</td></tr>
-                    <tr><th colspan="2">End-effector N°</th><td >{{ field.endEffector|default_if_none:"" }}</td><td >{{ field.endEffectorC|default_if_none:"" }}</td></tr>
-                    <tr><th colspan="2">Impregnation bath</th><td >{{ field.impregnationBath|default_if_none:"" }}</td><td > {{ field.impregnationBathC|default_if_none:"" }}</td></tr>
-                    <tr><th colspan="2">Entry nozzle diameter (mm)</th><td >{{ field.entryNozzleDiam|default_if_none:"" }}</td><td >{{ field.entryNozzleDiamC|default_if_none:"" }}</td></tr>
-                    <tr><th colspan="2">Exit nozzle diameter (mm)</th><td >{{ field.exitNozzleDiam|default_if_none:"" }}</td><td >{{ field.exitNozzleDiamC|default_if_none:"" }}</td></tr>
+                        <tr style="background-color: #4CAF50;"><th colspan="2" style="background-color: #4CAF50; font-size: large; color: #000;">Tools / Parts references</th><td id="vc">Value</td><td id="vc">Comments</td></tr>
+                        <tr><th colspan="2">End-effector N°</th><td >{{ field.endEffector|default_if_none:"" }}</td><td >{{ field.endEffectorC|default_if_none:"" }}</td></tr>
+                        <tr><th colspan="2">Impregnation bath</th><td >{{ field.impregnationBath|default_if_none:"" }}</td><td > {{ field.impregnationBathC|default_if_none:"" }}</td></tr>
+                        <tr><th colspan="2">Entry nozzle diameter (mm)</th><td >{{ field.entryNozzleDiam|default_if_none:"" }}</td><td >{{ field.entryNozzleDiamC|default_if_none:"" }}</td></tr>
+                        <tr><th colspan="2">Exit nozzle diameter (mm)</th><td >{{ field.exitNozzleDiam|default_if_none:"" }}</td><td >{{ field.exitNozzleDiamC|default_if_none:"" }}</td></tr>
 
-                    <tr style="background-color: #4CAF50;"><th colspan="2" style="background-color: #4CAF50; font-size: large; color: #000;">Winding environment</th><td id="vc">Value</td><td id="vc">Comments</td></tr>
-                    <tr><th colspan="2">Room temperature (°C)</th><td >{{ field.roomTemperature|default_if_none:"" }}</td><td >{{ field.roomTemperatureC|default_if_none:"" }}</td></tr>
-                    <tr><th colspan="2">Room humidity (%)</th><td >{{ field.roomhumidity|default_if_none:"" }}</td><td >{{ field.roomhumidityC|default_if_none:"" }}</td></tr>
+                        <tr style="background-color: #4CAF50;"><th colspan="2" style="background-color: #4CAF50; font-size: large; color: #000;">Winding environment</th><td id="vc">Value</td><td id="vc">Comments</td></tr>
+                        <tr><th colspan="2">Room temperature (°C)</th><td >{{ field.roomTemperature|default_if_none:"" }}</td><td >{{ field.roomTemperatureC|default_if_none:"" }}</td></tr>
+                        <tr><th colspan="2">Room humidity (%)</th><td >{{ field.roomhumidity|default_if_none:"" }}</td><td >{{ field.roomhumidityC|default_if_none:"" }}</td></tr>
 
-                    <tr style="background-color: #4CAF50;"><th colspan="2" style="background-color: #4CAF50; font-size: large; color: #000;">Process parameters references</th><td id="vc">Value</td><td id="vc">Comments</td></tr>
-                    <tr><th colspan="2">Brake force/bobbin (N) (kg) (bar)</th><td >{{ field.brakeForcebobin|default_if_none:"" }}</td><td >{{ field.brakeForcebobinC|default_if_none:"" }}</td></tr>
-                    <tr><th colspan="2">Windng speed range (mm/s)</th><td >{{ field.windingSpeedRange|default_if_none:"" }}</td><td >{{ field.windingSpeedRangeC|default_if_none:"" }}</td></tr>
+                        <tr style="background-color: #4CAF50;"><th colspan="2" style="background-color: #4CAF50; font-size: large; color: #000;">Process parameters references</th><td id="vc">Value</td><td id="vc">Comments</td></tr>
+                        <tr><th colspan="2">Brake force/bobbin (N) (kg) (bar)</th><td >{{ field.brakeForcebobin|default_if_none:"" }}</td><td >{{ field.brakeForcebobinC|default_if_none:"" }}</td></tr>
+                        <tr><th colspan="2">Windng speed range (mm/s)</th><td >{{ field.windingSpeedRange|default_if_none:"" }}</td><td >{{ field.windingSpeedRangeC|default_if_none:"" }}</td></tr>
 
-                    <tr style="background-color: #4CAF50;"><th colspan="2" style="background-color: #4CAF50; font-size: large; color: #000;">Material physical properties / Testing conditions :</th><td id="vc">Value</td><td id="vc">Comments</td></tr>
-                    <tr><th colspan="2">FVR (%)</th><td >{{ field.FVR|default_if_none:"" }}</td><td>{{ field.FVRC|default_if_none:"" }}</td></tr>
-                    <tr><th colspan="2">Composite density ρ (g/cm3)</th><td >{{ field.compositeDensity|default_if_none:"" }}</td><td>{{ field.compositeDensityC|default_if_none:"" }}</td></tr>
-                    <tr><th colspan="2">Porosity (%)</th><td >{{ field.porosity|default_if_none:"" }}</td><td>{{ field.porosityC|default_if_none:"" }}</td></tr>
-                    <tr><th colspan="2">Theoretical sample section (mm²)</th><td>{{ field.theoreticalSampleSection|default_if_none:"" }}</td><td>{{ field.theoreticalSampleSectionC|default_if_none:"" }}</td></tr>
-                    <tr><th colspan="2">Experimental sample section (mm²)</th><td>{{ field.experimentalSampleSection|default_if_none:"" }}</td><td>{{ field.experimentalSampleSectionC|default_if_none:"" }}</td></tr>
-                    <tr><th colspan="2">Aged / Non-aged</th><td>{{ field.aged|default_if_none:"" }}</td><td>{{ field.agedC|default_if_none:"" }}</td></tr>
-                    <tr><th colspan="2">Temperature of the tests</th><td>{{ field.temperatureOfTests|default_if_none:"" }}</td><td>{{ field.temperatureOfTestsC|default_if_none:"" }}</td></tr>
+                        <tr style="background-color: #4CAF50;"><th colspan="2" style="background-color: #4CAF50; font-size: large; color: #000;">Material physical properties / Testing conditions :</th><td id="vc">Value</td><td id="vc">Comments</td></tr>
+                        <tr><th colspan="2">FVR (%)</th><td >{{ field.FVR|default_if_none:"" }}</td><td>{{ field.FVRC|default_if_none:"" }}</td></tr>
+                        <tr><th colspan="2">Composite density ρ (g/cm3)</th><td >{{ field.compositeDensity|default_if_none:"" }}</td><td>{{ field.compositeDensityC|default_if_none:"" }}</td></tr>
+                        <tr><th colspan="2">Porosity (%)</th><td >{{ field.porosity|default_if_none:"" }}</td><td>{{ field.porosityC|default_if_none:"" }}</td></tr>
+                        <tr><th colspan="2">Theoretical sample section (mm²)</th><td>{{ field.theoreticalSampleSection|default_if_none:"" }}</td><td>{{ field.theoreticalSampleSectionC|default_if_none:"" }}</td></tr>
+                        <tr><th colspan="2">Experimental sample section (mm²)</th><td>{{ field.experimentalSampleSection|default_if_none:"" }}</td><td>{{ field.experimentalSampleSectionC|default_if_none:"" }}</td></tr>
+                        <tr><th colspan="2">Aged / Non-aged</th><td>{{ field.aged|default_if_none:"" }}</td><td>{{ field.agedC|default_if_none:"" }}</td></tr>
+                        <tr><th colspan="2">Temperature of the tests</th><td>{{ field.temperatureOfTests|default_if_none:"" }}</td><td>{{ field.temperatureOfTestsC|default_if_none:"" }}</td></tr>
 
-                    <tr style="background-color: #4CAF50;"><th colspan="2" style="background-color: #4CAF50; font-size: large; color: #000;">Samples confiuguration</th><td id="vc">Value</td><td id="vc">Comments</td></tr>
-                    <tr><th colspan="2">Number of samples</th><td>{{ field.numberOfSamples|default_if_none:"" }}</td><td>{{ field.numberOfSamplesC|default_if_none:"" }}</td></tr>
-                    <tr><th colspan="2">Configuration</th><td>{{ field.configurarion|default_if_none:"" }}</td><td>{{ field.configurarionC|default_if_none:"" }}</td></tr>
-                    <tr><th colspan="2">Sample length</th><td>{{ field.sampleLength|default_if_none:"" }}</td><td>{{ field.sampleLengthC|default_if_none:"" }}</td></tr>
-                    <tr><th colspan="2">Number of cycles</th><td>{{ field.numberOfCycles|default_if_none:"" }}</td><td>{{ field.numberOfCyclesC|default_if_none:"" }}</td></tr>
-                    <tr><th colspan="2">Sleeve diameter / height (mm)</th><td>{{ field.sleeve|default_if_none:"" }}</td><td>{{ field.sleeveC|default_if_none:"" }}</td></tr>
+                        <tr style="background-color: #4CAF50;"><th colspan="2" style="background-color: #4CAF50; font-size: large; color: #000;">Samples confiuguration</th><td id="vc">Value</td><td id="vc">Comments</td></tr>
+                        <tr><th colspan="2">Number of samples</th><td>{{ field.numberOfSamples|default_if_none:"" }}</td><td>{{ field.numberOfSamplesC|default_if_none:"" }}</td></tr>
+                        <tr><th colspan="2">Configuration</th><td>{{ field.configurarion|default_if_none:"" }}</td><td>{{ field.configurarionC|default_if_none:"" }}</td></tr>
+                        <tr><th colspan="2">Sample length</th><td>{{ field.sampleLength|default_if_none:"" }}</td><td>{{ field.sampleLengthC|default_if_none:"" }}</td></tr>
+                        <tr><th colspan="2">Number of cycles</th><td>{{ field.numberOfCycles|default_if_none:"" }}</td><td>{{ field.numberOfCyclesC|default_if_none:"" }}</td></tr>
+                        <tr><th colspan="2">Sleeve diameter / height (mm)</th><td>{{ field.sleeve|default_if_none:"" }}</td><td>{{ field.sleeveC|default_if_none:"" }}</td></tr>
 
-                    <tr style="background-color: #4CAF50;"><th colspan="2" style="background-color: #4CAF50; font-size: large; color: #000;">Material thermal properties</th><td id="vc">Value</td><td id="vc">Comments</td></tr>
-                    <tr><th colspan="2">Thermal expansion coefficient A (/K)</th><td>{{ field.thermalExpansionCoefficient|default_if_none:"" }}</td><td>{{ field.thermalExpansionCoefficientC|default_if_none:"" }}</td></tr>
-                    <tr><th colspan="2">Thermal conductivity K (W/(m.K))</th><td>{{ field.thermalConductivity|default_if_none:"" }}</td><td>{{ field.thermalConductivityC|default_if_none:"" }}</td></tr>
+                        <tr style="background-color: #4CAF50;"><th colspan="2" style="background-color: #4CAF50; font-size: large; color: #000;">Material thermal properties</th><td id="vc">Value</td><td id="vc">Comments</td></tr>
+                        <tr><th colspan="2">Thermal expansion coefficient A (/K)</th><td>{{ field.thermalExpansionCoefficient|default_if_none:"" }}</td><td>{{ field.thermalExpansionCoefficientC|default_if_none:"" }}</td></tr>
+                        <tr><th colspan="2">Thermal conductivity K (W/(m.K))</th><td>{{ field.thermalConductivity|default_if_none:"" }}</td><td>{{ field.thermalConductivityC|default_if_none:"" }}</td></tr>
 
-                    <tr style="background-color: #4CAF50;"><th colspan="2" style="background-color: #4CAF50; font-size: large; color: #000;">Material mechanical properties</th><td id="vc">Value</td><td id="vc">Comments</td></tr>
-                    <th rowspan="10">Tensile</th>
-                    <tr><th>Tensile Young's modulus - Average (MPa)</th><td>{{ field.tensileYoungModulus|default_if_none:"" }}</td><td>{{ field.tensileYoungModulusC|default_if_none:"" }}</td></tr>
-                    <tr><th>Tensile Ultimate Stress - Average (MPa)</th><td>{{ field.tensileUltimateStress|default_if_none:"" }}</td><td>{{ field.tensileUltimateStressC|default_if_none:"" }}</td></tr>
-                    <tr><th>Tensile Ultimate Stress - Min A (MPa)</th><td>{{ field.tensileUltimateStressMA|default_if_none:"" }}</td><td>{{ field.tensileUltimateStressMAC|default_if_none:"" }}</td></tr>
-                    <tr><th>Tensile Ultimate Stress - Min B (MPa)</th><td>{{ field.tensileUltimateStressMB|default_if_none:"" }}</td><td>{{ field.tensileUltimateStressMBC|default_if_none:"" }}</td></tr>
-                    <tr><th>Tensile Ultimate Load - Average (kN)</th><td>{{ field.tensileUltimateLoad|default_if_none:"" }}</td><td>{{ field.tensileUltimateLoadC|default_if_none:"" }}</td></tr>
-                    <tr><th>Tensile Yield Stress - Average (MPa)</th><td>{{ field.tensileYieldStress|default_if_none:"" }}</td><td>{{ field.tensileYieldStressC|default_if_none:"" }}</td></tr>
-                    <tr><th>Tensile Yield Stress - Min A (MPa)</th><td>{{ field.tensileYieldStressMA|default_if_none:"" }}</td><td>{{ field.tensileYieldStressMAC|default_if_none:"" }}</td></tr>
-                    <tr><th>Tensile Yield Stress - Min B (MPa)</th><td>{{ field.tensileYieldStressMB|default_if_none:"" }}</td><td>{{ field.tensileYieldStressMBC|default_if_none:"" }}</td></tr>
-                    <tr><th>Tensile Yield Load - Average (kN)</th><td>{{ field.tensileYieldLoad|default_if_none:"" }}</td><td>{{ field.tensileYieldLoadC|default_if_none:"" }}</td></tr>
+                        <tr style="background-color: #4CAF50;"><th colspan="2" style="background-color: #4CAF50; font-size: large; color: #000;">Material mechanical properties</th><td id="vc">Value</td><td id="vc">Comments</td></tr>
+                        <th rowspan="10">Tensile</th>
+                        <tr><th>Tensile Young's modulus - Average (MPa)</th><td>{{ field.tensileYoungModulus|default_if_none:"" }}</td><td>{{ field.tensileYoungModulusC|default_if_none:"" }}</td></tr>
+                        <tr><th>Tensile Ultimate Stress - Average (MPa)</th><td>{{ field.tensileUltimateStress|default_if_none:"" }}</td><td>{{ field.tensileUltimateStressC|default_if_none:"" }}</td></tr>
+                        <tr><th>Tensile Ultimate Stress - Min A (MPa)</th><td>{{ field.tensileUltimateStressMA|default_if_none:"" }}</td><td>{{ field.tensileUltimateStressMAC|default_if_none:"" }}</td></tr>
+                        <tr><th>Tensile Ultimate Stress - Min B (MPa)</th><td>{{ field.tensileUltimateStressMB|default_if_none:"" }}</td><td>{{ field.tensileUltimateStressMBC|default_if_none:"" }}</td></tr>
+                        <tr><th>Tensile Ultimate Load - Average (kN)</th><td>{{ field.tensileUltimateLoad|default_if_none:"" }}</td><td>{{ field.tensileUltimateLoadC|default_if_none:"" }}</td></tr>
+                        <tr><th>Tensile Yield Stress - Average (MPa)</th><td>{{ field.tensileYieldStress|default_if_none:"" }}</td><td>{{ field.tensileYieldStressC|default_if_none:"" }}</td></tr>
+                        <tr><th>Tensile Yield Stress - Min A (MPa)</th><td>{{ field.tensileYieldStressMA|default_if_none:"" }}</td><td>{{ field.tensileYieldStressMAC|default_if_none:"" }}</td></tr>
+                        <tr><th>Tensile Yield Stress - Min B (MPa)</th><td>{{ field.tensileYieldStressMB|default_if_none:"" }}</td><td>{{ field.tensileYieldStressMBC|default_if_none:"" }}</td></tr>
+                        <tr><th>Tensile Yield Load - Average (kN)</th><td>{{ field.tensileYieldLoad|default_if_none:"" }}</td><td>{{ field.tensileYieldLoadC|default_if_none:"" }}</td></tr>
 
-                    
-                    <th rowspan="11">Compression</th>
-                    <tr><th>Compression Young's modulus - Average (MPa)</th><td>{{ field.compressionYoungModulus|default_if_none:"" }}</td><td>{{ field.compressionYoungModulusC|default_if_none:"" }}</td></tr>
-                    <tr><th>Compression Ultimate Stress - Average (MPa)</th><td>{{ field.compressionUltimateStress|default_if_none:"" }}</td><td>{{ field.compressionUltimateStressC|default_if_none:"" }}</td></tr>
-                    <tr><th>Compression Ultimate Stress - Min A (MPa)</th><td>{{ field.compressionUltimateStressMA|default_if_none:"" }}</td><td>{{ field.compressionUltimateStressMAC|default_if_none:"" }}</td></tr>
-                    <tr><th>Compression Ultimate Stress - Min B (MPa)</th><td>{{ field.compressionUltimateStressMB|default_if_none:"" }}</td><td>{{ field.compressionUltimateStressMBC|default_if_none:"" }}</td></tr>
-                    <tr><th>Compression Ultimate Load - Average (kN)</th><td>{{ field.compressionUltimateLoad|default_if_none:"" }}</td><td>{{ field.compressionUltimateLoadC|default_if_none:"" }}</td></tr>
-                    <tr><th>Compression Yield Stress- Average (MPa)</th><td>{{ field.compressionYieldStress|default_if_none:"" }}</td><td>{{ field.compressionYieldStressC|default_if_none:"" }}</td></tr>
-                    <tr><th>Compression Yield Stress - Min A (MPa)</th><td>{{ field.compressionYieldStressMA|default_if_none:"" }}</td><td>{{ field.compressionYieldStressMAC|default_if_none:"" }}</td></tr>
-                    <tr><th>Compression Yield Stress - Min B (MPa)</th><td>{{ field.compressionYieldStressMB|default_if_none:"" }}</td><td>{{ field.compressionYieldStressMBC|default_if_none:"" }}</td></tr>
-                    <tr><th>Compression Yield Load - Average (kN)</th><td>{{ field.compressionYieldLoad|default_if_none:"" }}</td><td>{{ field.compressionYieldLoadC|default_if_none:"" }}</td></tr>
-                    <tr><th>Poisson's ratio ν (-)</th><td>{{ field.poissonRatio|default_if_none:"" }}</td><td>{{ field.poissonRatioC|default_if_none:"" }}</td></tr>
+                        
+                        <th rowspan="11">Compression</th>
+                        <tr><th>Compression Young's modulus - Average (MPa)</th><td>{{ field.compressionYoungModulus|default_if_none:"" }}</td><td>{{ field.compressionYoungModulusC|default_if_none:"" }}</td></tr>
+                        <tr><th>Compression Ultimate Stress - Average (MPa)</th><td>{{ field.compressionUltimateStress|default_if_none:"" }}</td><td>{{ field.compressionUltimateStressC|default_if_none:"" }}</td></tr>
+                        <tr><th>Compression Ultimate Stress - Min A (MPa)</th><td>{{ field.compressionUltimateStressMA|default_if_none:"" }}</td><td>{{ field.compressionUltimateStressMAC|default_if_none:"" }}</td></tr>
+                        <tr><th>Compression Ultimate Stress - Min B (MPa)</th><td>{{ field.compressionUltimateStressMB|default_if_none:"" }}</td><td>{{ field.compressionUltimateStressMBC|default_if_none:"" }}</td></tr>
+                        <tr><th>Compression Ultimate Load - Average (kN)</th><td>{{ field.compressionUltimateLoad|default_if_none:"" }}</td><td>{{ field.compressionUltimateLoadC|default_if_none:"" }}</td></tr>
+                        <tr><th>Compression Yield Stress- Average (MPa)</th><td>{{ field.compressionYieldStress|default_if_none:"" }}</td><td>{{ field.compressionYieldStressC|default_if_none:"" }}</td></tr>
+                        <tr><th>Compression Yield Stress - Min A (MPa)</th><td>{{ field.compressionYieldStressMA|default_if_none:"" }}</td><td>{{ field.compressionYieldStressMAC|default_if_none:"" }}</td></tr>
+                        <tr><th>Compression Yield Stress - Min B (MPa)</th><td>{{ field.compressionYieldStressMB|default_if_none:"" }}</td><td>{{ field.compressionYieldStressMBC|default_if_none:"" }}</td></tr>
+                        <tr><th>Compression Yield Load - Average (kN)</th><td>{{ field.compressionYieldLoad|default_if_none:"" }}</td><td>{{ field.compressionYieldLoadC|default_if_none:"" }}</td></tr>
+                        <tr><th>Poisson's ratio ν (-)</th><td>{{ field.poissonRatio|default_if_none:"" }}</td><td>{{ field.poissonRatioC|default_if_none:"" }}</td></tr>
 
-                    <th rowspan="6">ILSS</th>
-                    <tr><th>Flexural modulus - Average (MPa)</th><td>{{ field.flexuralModulusILSS|default_if_none:"" }}</td><td>{{ field.flexuralModulusILSSC|default_if_none:"" }}</td></tr>
-                    <tr><th>Ultimate Shear Force - Average (kN)</th><td>{{ field.ultimateShearForce|default_if_none:"" }}</td><td>{{ field.ultimateShearForceC|default_if_none:"" }}</td></tr>
-                    <tr><th>Ultimate Shear Stress - Average (MPa)</th><td>{{ field.ultimateShearStress|default_if_none:"" }}</td><td>{{ field.ultimateShearStressC|default_if_none:"" }}</td></tr>
-                    <tr><th>Ultimate Shear Stress - Min A (MPa)</th><td>{{ field.ultimateShearStressMA|default_if_none:"" }}</td><td>{{ field.ultimateShearStressMAC|default_if_none:"" }}</td></tr>
-                    <tr><th>Ultimate Shear Stress - Min B (MPa)</th><td>{{ field.ultimateShearStressMB|default_if_none:"" }}</td><td>{{ field.ultimateShearStressMBC|default_if_none:"" }}</td></tr>
+                        <th rowspan="6">ILSS</th>
+                        <tr><th>Flexural modulus - Average (MPa)</th><td>{{ field.flexuralModulusILSS|default_if_none:"" }}</td><td>{{ field.flexuralModulusILSSC|default_if_none:"" }}</td></tr>
+                        <tr><th>Ultimate Shear Force - Average (kN)</th><td>{{ field.ultimateShearForce|default_if_none:"" }}</td><td>{{ field.ultimateShearForceC|default_if_none:"" }}</td></tr>
+                        <tr><th>Ultimate Shear Stress - Average (MPa)</th><td>{{ field.ultimateShearStress|default_if_none:"" }}</td><td>{{ field.ultimateShearStressC|default_if_none:"" }}</td></tr>
+                        <tr><th>Ultimate Shear Stress - Min A (MPa)</th><td>{{ field.ultimateShearStressMA|default_if_none:"" }}</td><td>{{ field.ultimateShearStressMAC|default_if_none:"" }}</td></tr>
+                        <tr><th>Ultimate Shear Stress - Min B (MPa)</th><td>{{ field.ultimateShearStressMB|default_if_none:"" }}</td><td>{{ field.ultimateShearStressMBC|default_if_none:"" }}</td></tr>
 
-                    <th rowspan="7">Flexural</th>
-                    <tr><th>Flexural modulus - Average (MPa)</th><td>{{ field.flexuralModulusF|default_if_none:"" }}</td><td>{{ field.flexuralModulusFC|default_if_none:"" }}</td></tr>
-                    <tr><th>Flexural Ultimate strength - Average (MPa)</th><td>{{ field.flexuralUltimateStrength|default_if_none:"" }}</td><td>{{ field.flexuralUltimateStrengthC|default_if_none:"" }}</td></tr>
-                    <tr><th>Flexural Ultimate strength - Min A (MPa)</th><td>{{ field.flexuralUltimateStrengthMA|default_if_none:"" }}</td><td>{{ field.flexuralUltimateStrengthMAC|default_if_none:"" }}</td></tr>
-                    <tr><th>Flexural Ultimate strength - Min B (MPa)</th><td>{{ field.flexuralUltimateStrengthMB|default_if_none:"" }}</td><td>{{ field.flexuralUltimateStrengthMBC|default_if_none:"" }}</td></tr>
-                    <tr><th>Strain at ultimate strength (%)</th><td>{{ field.strainUltimateStrength|default_if_none:"" }}</td><td>{{ field.strainUltimateStrengthC|default_if_none:"" }}</td></tr>
-                    <tr><th>Flexural Ultimate Force (N)</th><td>{{ field.flexuralUltimateForce|default_if_none:"" }}</td><td>{{ field.flexuralUltimateForceC|default_if_none:"" }}</td></tr>
+                        <th rowspan="7">Flexural</th>
+                        <tr><th>Flexural modulus - Average (MPa)</th><td>{{ field.flexuralModulusF|default_if_none:"" }}</td><td>{{ field.flexuralModulusFC|default_if_none:"" }}</td></tr>
+                        <tr><th>Flexural Ultimate strength - Average (MPa)</th><td>{{ field.flexuralUltimateStrength|default_if_none:"" }}</td><td>{{ field.flexuralUltimateStrengthC|default_if_none:"" }}</td></tr>
+                        <tr><th>Flexural Ultimate strength - Min A (MPa)</th><td>{{ field.flexuralUltimateStrengthMA|default_if_none:"" }}</td><td>{{ field.flexuralUltimateStrengthMAC|default_if_none:"" }}</td></tr>
+                        <tr><th>Flexural Ultimate strength - Min B (MPa)</th><td>{{ field.flexuralUltimateStrengthMB|default_if_none:"" }}</td><td>{{ field.flexuralUltimateStrengthMBC|default_if_none:"" }}</td></tr>
+                        <tr><th>Strain at ultimate strength (%)</th><td>{{ field.strainUltimateStrength|default_if_none:"" }}</td><td>{{ field.strainUltimateStrengthC|default_if_none:"" }}</td></tr>
+                        <tr><th>Flexural Ultimate Force (N)</th><td>{{ field.flexuralUltimateForce|default_if_none:"" }}</td><td>{{ field.flexuralUltimateForceC|default_if_none:"" }}</td></tr>
 
-                    <th rowspan="5" style="width: 10%;">Torsion</th>
-                    <tr><th style="width: 20%;">Yield Torque (Nm)</th><td style="width: 35%;">{{ field.yieldTorque|default_if_none:"" }}</td><td style="width: 35%;">{{ field.yieldTorqueC|default_if_none:"" }}</td></tr>
-                    <tr><th>Maxi Torque (Nm)</th><td>{{ field.maxiTorque|default_if_none:"" }}</td><td>{{ field.maxiTorqueC|default_if_none:"" }}</td></tr>
-                    <tr><th>Yield angle (°)</th><td>{{ field.yieldAngle|default_if_none:"" }}</td><td>{{ field.yieldAngleC|default_if_none:"" }}</td></tr>
-                    <tr><th>Maxi Twisted Angle (°)</th><td>{{ field.maxiTwistedAngle|default_if_none:"" }}</td><td>{{ field.maxiTwistedAngleC|default_if_none:"" }}</td></tr>
-                </tr>
-            {% empty %}
-                <tr>
-                    <td colspan="3" class="text-center" style="font-size: large;">{{ message }}</td>
-                </tr>
-            {% endfor %}
-        </table>
-    {% else %}
-        <h3 class="text-center" id="NoMessage">{{ message }}</h3>
-    {% endif %}
+                        <th rowspan="5" style="width: 10%;">Torsion</th>
+                        <tr><th style="width: 20%;">Yield Torque (Nm)</th><td style="width: 35%;">{{ field.yieldTorque|default_if_none:"" }}</td><td style="width: 35%;">{{ field.yieldTorqueC|default_if_none:"" }}</td></tr>
+                        <tr><th>Maxi Torque (Nm)</th><td>{{ field.maxiTorque|default_if_none:"" }}</td><td>{{ field.maxiTorqueC|default_if_none:"" }}</td></tr>
+                        <tr><th>Yield angle (°)</th><td>{{ field.yieldAngle|default_if_none:"" }}</td><td>{{ field.yieldAngleC|default_if_none:"" }}</td></tr>
+                        <tr><th>Maxi Twisted Angle (°)</th><td>{{ field.maxiTwistedAngle|default_if_none:"" }}</td><td>{{ field.maxiTwistedAngleC|default_if_none:"" }}</td></tr>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="3" class="text-center" style="font-size: large;">{{ message }}</td>
+                    </tr>
+                {% endfor %}
+            </table>
+        {% else %}
+            <h3 class="text-center" id="NoMessage">{{ message }}</h3>
+        {% endif %}
+    </div>
 </div>
 
 

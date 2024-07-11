@@ -28,50 +28,52 @@
         <div class="spinner"></div>
         <a id="loadingtext"> Loading </a>
     </div>
-    {% if formset.total_form_count > 0 %}
-        <form method="post">
-            {% csrf_token %}
-            {{ formset.management_form }}
-            <table class="table table-bordered" id="fiber-table" id="normalTable">
-                <thead>
-                    <tr>
-                        <th>Material</th>
-                        <th>Manufacturer</th>
-                        <th>Distributor</th>
-                        <th>Grade</th>
-                        <th>Single filament diameter (mm)</th>
-                        <th>Tow</th>
-                        <th>Tow (in thousands)</th>
-                        <th>Tex (g/km)</th>
-                        <th>Density (g/cm3)</th>
-                        <th>Theoretical dry section (mm2)</th>
-                        <th>Tensile strength (MPa)</th>
-                        <th>Tensile modulus (GPa)</th>
-                        <th>Price euros/kg (2021 to febrary 2022)</th>
-                        <th>Price euros/kg (after 02/2022)</th>
-                        <th>Price euros/kg (after 02/2023)</th>
-                        <th>Price euros/kg (after 01/2024)</th>
-                        <th>Validation</th>
-                        <th colspan="2">Operation</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for form in formset %}
-                    <tr class="fiber-form">
-                        {% for field in form %}
-                        <td contenteditable="true">{{ field }}</td>
-                        <span style="color: red;">{{ field.errors.0 }}</span>
+    <div id="tableContainer" >
+        {% if formset.total_form_count > 0 %}
+            <form method="post">
+                {% csrf_token %}
+                {{ formset.management_form }}
+                <table class="table table-bordered" id="fiber-table" id="normalTable">
+                    <thead>
+                        <tr>
+                            <th>Material</th>
+                            <th>Manufacturer</th>
+                            <th>Distributor</th>
+                            <th>Grade</th>
+                            <th>Single filament diameter (mm)</th>
+                            <th>Tow</th>
+                            <th>Tow (in thousands)</th>
+                            <th>Tex (g/km)</th>
+                            <th>Density (g/cm3)</th>
+                            <th>Theoretical dry section (mm2)</th>
+                            <th>Tensile strength (MPa)</th>
+                            <th>Tensile modulus (GPa)</th>
+                            <th>Price euros/kg (2021 to febrary 2022)</th>
+                            <th>Price euros/kg (after 02/2022)</th>
+                            <th>Price euros/kg (after 02/2023)</th>
+                            <th>Price euros/kg (after 01/2024)</th>
+                            <th>Validation</th>
+                            <th colspan="2">Operation</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for form in formset %}
+                        <tr class="fiber-form">
+                            {% for field in form %}
+                            <td contenteditable="true">{{ field }}</td>
+                            <span style="color: red;">{{ field.errors.0 }}</span>
+                            {% endfor %}
+                            <td class="text-center"><button type="button" class="btn btn-danger remove-form">Delete</button></td>
+                        </tr>
                         {% endfor %}
-                        <td class="text-center"><button type="button" class="btn btn-danger remove-form">Delete</button></td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-            <button type="submit" class="btn btn-primary" id="btns">Save</button>
-        </form>
-    {% else %}
-        <h3 class="text-center" id="NoMessage">{{ message }}</h3>
-    {% endif %}
+                    </tbody>
+                </table>
+                <button type="submit" class="btn btn-primary" id="btns">Save</button>
+            </form>
+        {% else %}
+            <h3 class="text-center" id="NoMessage">{{ message }}</h3>
+        {% endif %}
+    </div>
 </div>
 
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">

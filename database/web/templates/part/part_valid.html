@@ -36,87 +36,89 @@
         <div class="spinner"></div>
         <a id="loadingtext"> Loading </a>
     </div>
-    {% if parts %}
-        <table class="table table-bordered" id="normalTable" style=" font-size: 12px">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Part Name</th>
-                    <th>Resin Name</th>
-                    <th>Resin Density [kg/m3]</th>
-                    <th>Fiber Name</th>
-                    <th>Fiber Density [kg/m3]</th>
-                    <th>Number of Spools</th>
-                    <th>Fiber Volume Ratio[%]</th>
-                    <th>Winding Density [kg/m3]</th>
-                    <th>Fiber Section calc.[mm²]</th>
-                    <th>Fiber Section acc.[mm²]</th>
-                    <th>Default Interface Height [mm]</th>
-                    <th>Default Interface Int Diam [mm]</th>
-                    <th>Default Link (Element) Type</th>
-                    <th>Default Link Defined by</th>
-                    <th>Number of Links</th>
-                    <th>Number of Bushings</th>
-                    <th>Total Mass of Links [g]</th>
-                    <th>Total Mass of Accumulation [g]</th>
-                    <th>Total Mass of Winding [g]</th>
-                    <th>Total Mass of Bushing [g]</th>
-                    <th>Additional Masses [g]</th>
-                    <th>Total Mass of Structure [g]</th>
-                    <th>Total Fiber Length [m]</th>
-                    <th>Total Fiber Mass [kg]</th>
-                    <th>Total Resin Mass [g]</th>
-                    <th>Project Image</th>
-                </tr>
-            </thead>
-            <tbody>
-            {% for row in parts %}
+    <div id="tableContainer" >
+        {% if parts %}
+            <table class="table table-bordered" id="normalTable" style=" font-size: 12px">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Part Name</th>
+                        <th>Resin Name</th>
+                        <th>Resin Density [kg/m3]</th>
+                        <th>Fiber Name</th>
+                        <th>Fiber Density [kg/m3]</th>
+                        <th>Number of Spools</th>
+                        <th>Fiber Volume Ratio[%]</th>
+                        <th>Winding Density [kg/m3]</th>
+                        <th>Fiber Section calc.[mm²]</th>
+                        <th>Fiber Section acc.[mm²]</th>
+                        <th>Default Interface Height [mm]</th>
+                        <th>Default Interface Int Diam [mm]</th>
+                        <th>Default Link (Element) Type</th>
+                        <th>Default Link Defined by</th>
+                        <th>Number of Links</th>
+                        <th>Number of Bushings</th>
+                        <th>Total Mass of Links [g]</th>
+                        <th>Total Mass of Accumulation [g]</th>
+                        <th>Total Mass of Winding [g]</th>
+                        <th>Total Mass of Bushing [g]</th>
+                        <th>Additional Masses [g]</th>
+                        <th>Total Mass of Structure [g]</th>
+                        <th>Total Fiber Length [m]</th>
+                        <th>Total Fiber Mass [kg]</th>
+                        <th>Total Resin Mass [g]</th>
+                        <th>Project Image</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for row in parts %}
+                    
+                    <tr>
+                        <td>{{ row.id }}</td>
+                        <td>{{ row.partName }}</td>
+                        <td>{{ row.resin|default_if_none:"" }}</td>
+                        <td>{{ row.calculated_properties.resinDensity|default_if_none:"" }}</td>
+                        <td>{{ row.fiber|default_if_none:"" }}</td>
+                        <td>{{ row.calculated_properties.fiberDensity|default_if_none:"" }}</td>
+                        <td>{{ row.totalTowNumber|default_if_none:"" }}</td>
+                        <td>{{ row.fiberVolumeRatio|default_if_none:"" }}</td>
+                        <td>{{ row.calculated_properties.windingDensity|default_if_none:"" }}</td>
+                        <td>{{ row.fiberSectionCalc|default_if_none:"" }}</td>
+                        <td>{{ row.fiberSectionAcc|default_if_none:"" }}</td>
+                        <td>{{ row.defaultInterfaceHeight|default_if_none:"" }}</td>
+                        <td>{{ row.defaultInterfaceIntDiam|default_if_none:"" }}</td>
+                        <td>{{ row.defaultLinkType|default_if_none:"" }}</td>
+                        <td>{{ row.defaultLinkDefined|default_if_none:"" }}</td>
+                        <td>{{ row.calculated_properties.numberLink|default_if_none:"0" }}</td>
+                        <td>{{ row.calculated_properties.numberBushing|default_if_none:"0" }}</td>
+                        <td>{{ row.calculated_properties.totalMassLink|default_if_none:"" }}</td>
+                        <td>{{ row.calculated_properties.totalMassAccumulation|default_if_none:"" }}</td>
+                        <td>{{ row.calculated_properties.totalMassWinding|default_if_none:"" }}</td>
+                        <td>{{ row.calculated_properties.totalMassBushing|default_if_none:"" }}</td>
+                        <td>{{ row.additionalMass|default_if_none:"" }}</td>
+                        <td>{{ row.calculated_properties.totalMassStructure|default_if_none:"" }}</td>
+                        <td>{{ row.calculated_properties.totalFiberLength|default_if_none:"" }}</td>
+                        <td>{{ row.calculated_properties.totalFiberMass|default_if_none:"" }}</td>
+                        <td>{{ row.calculated_properties.totalResinMass|default_if_none:"" }}</td>
+                        <td>{% if row.projectImage %}
+                            <img src="{{ row.projectImage.url }}" alt="Project Image" class="thumbnail" onclick="showModal('{{ row.projectImage.url }}')">
+                        {% else %}
+                            No image
+                        {% endif %}</td>
+                    </tr>
                 
-                <tr>
-                    <td>{{ row.id }}</td>
-                    <td>{{ row.partName }}</td>
-                    <td>{{ row.resin|default_if_none:"" }}</td>
-                    <td>{{ row.calculated_properties.resinDensity|default_if_none:"" }}</td>
-                    <td>{{ row.fiber|default_if_none:"" }}</td>
-                    <td>{{ row.calculated_properties.fiberDensity|default_if_none:"" }}</td>
-                    <td>{{ row.totalTowNumber|default_if_none:"" }}</td>
-                    <td>{{ row.fiberVolumeRatio|default_if_none:"" }}</td>
-                    <td>{{ row.calculated_properties.windingDensity|default_if_none:"" }}</td>
-                    <td>{{ row.fiberSectionCalc|default_if_none:"" }}</td>
-                    <td>{{ row.fiberSectionAcc|default_if_none:"" }}</td>
-                    <td>{{ row.defaultInterfaceHeight|default_if_none:"" }}</td>
-                    <td>{{ row.defaultInterfaceIntDiam|default_if_none:"" }}</td>
-                    <td>{{ row.defaultLinkType|default_if_none:"" }}</td>
-                    <td>{{ row.defaultLinkDefined|default_if_none:"" }}</td>
-                    <td>{{ row.calculated_properties.numberLink|default_if_none:"0" }}</td>
-                    <td>{{ row.calculated_properties.numberBushing|default_if_none:"0" }}</td>
-                    <td>{{ row.calculated_properties.totalMassLink|default_if_none:"" }}</td>
-                    <td>{{ row.calculated_properties.totalMassAccumulation|default_if_none:"" }}</td>
-                    <td>{{ row.calculated_properties.totalMassWinding|default_if_none:"" }}</td>
-                    <td>{{ row.calculated_properties.totalMassBushing|default_if_none:"" }}</td>
-                    <td>{{ row.additionalMass|default_if_none:"" }}</td>
-                    <td>{{ row.calculated_properties.totalMassStructure|default_if_none:"" }}</td>
-                    <td>{{ row.calculated_properties.totalFiberLength|default_if_none:"" }}</td>
-                    <td>{{ row.calculated_properties.totalFiberMass|default_if_none:"" }}</td>
-                    <td>{{ row.calculated_properties.totalResinMass|default_if_none:"" }}</td>
-                    <td>{% if row.projectImage %}
-                        <img src="{{ row.projectImage.url }}" alt="Project Image" class="thumbnail" onclick="showModal('{{ row.projectImage.url }}')">
-                    {% else %}
-                        No image
-                    {% endif %}</td>
-                </tr>
-            
-            {% empty %}
-                <tr>
-                    <td colspan="27" class="text-center" style="font-size: large;">{{ message }}</td>
-                </tr>
-            {% endfor %}
-            </tbody>
-        </table>
-    {% else %}
-        <h3 class="text-center" id="NoMessage">{{ message }}</h3>
-    {% endif %}
-</div>  
+                {% empty %}
+                    <tr>
+                        <td colspan="27" class="text-center" style="font-size: large;">{{ message }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <h3 class="text-center" id="NoMessage">{{ message }}</h3>
+        {% endif %}
+    </div>  
+</div>
 <div id="myModalImage" class="modalIamge">
     <span class="close" onclick="closeModal()">&times;</span>
     <img class="modal-content" id="modalImage">

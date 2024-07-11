@@ -34,32 +34,34 @@
         <div class="spinner"></div>
         <a id="loadingtext"> Loading </a>
     </div>
-    <table class="table table-bordered" id="normalTable">
-        <thead>
-            <tr>
-                <th style="width: 50%;">User Name</th>
-                <th style="width: 30%;">Department</th>
-                <th style="width: 20%;">Operations</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for row in filter.qs %}
+    <div id="tableContainer" >
+        <table class="table table-bordered" id="normalTable">
+            <thead>
                 <tr>
-                    <td>{{ row.username }}</td>
-                    <td>{{ row.depart }}</td>
-                    <td>
-                        <a class="btn btn-primary btn-xs" href="/user/edit/{{ row.id }}/" style="width: 40px; text-align: center; margin-bottom: 5px;"> Edit </a>
-                        <input type="button" value="Delete" class="btn btn-danger btn-xs" style="width: 50px; text-align: center; margin-bottom: 5px;"
-                            onclick="deleteAction({{ row.id }});"/>
-                    </td>
+                    <th style="width: 50%;">User Name</th>
+                    <th style="width: 30%;">Department</th>
+                    <th style="width: 20%;">Operations</th>
                 </tr>
-            {% empty %}
-                <tr>
-                    <td colspan="3" class="text-center" style="font-size: large;">No data found.</td>
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                {% for row in filter.qs %}
+                    <tr>
+                        <td>{{ row.username }}</td>
+                        <td>{{ row.depart }}</td>
+                        <td>
+                            <a class="btn btn-primary btn-xs" href="/user/edit/{{ row.id }}/" style="width: 40px; text-align: center; margin-bottom: 5px;"> Edit </a>
+                            <input type="button" value="Delete" class="btn btn-danger btn-xs" style="width: 50px; text-align: center; margin-bottom: 5px;"
+                                onclick="deleteAction({{ row.id }});"/>
+                        </td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="3" class="text-center" style="font-size: large;">No data found.</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 </div>
 
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">

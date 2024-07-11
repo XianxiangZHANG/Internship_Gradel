@@ -30,67 +30,56 @@
         <div class="spinner"></div>
         <a id="loadingtext"> Loading </a>
     </div>
-    {% if parts %}
-        <table class="table table-bordered" id="normalTable" >
-            <thead>
-            <tr>
-                <th>ID</th>
-                <th style="width:400px;">Part Name</th>
-                <th>.gh</th>
-                <th>.mod</th>
-                <th>.csv</th>
-                <th>.rs</th>
-                <th>.log</th>
-                <th>.mp4</th>
-                <th>.jpg</th>
-                <th style="width:100px;">Operations</th>
-            </tr>
-            </thead>
-            <tbody>
-            {% for row in parts %}
-                {% if row.valid %} 
-                <tr style="background-color: #67fa6770;">
-                    <td>{{ row.id }}</td>
-                    <td>{{ row.partName }}</td>
-                    <td>{{ row.part_gh|default_if_none:"" }}</td>
-                    <td>{{ row.part_mod|default_if_none:"" }}</td>
-                    <td>{{ row.part_csv|default_if_none:"" }}</td>
-                    <td>{{ row.part_rs|default_if_none:"" }}</td>
-                    <td>{{ row.part_log|default_if_none:"" }}</td>
-                    <td>{{ row.part_mp4|default_if_none:"" }}</td>
-                    <td>{{ row.part_jpg|default_if_none:"" }}</td>
-                    <td>
-                        <a class="btn btn-primary btn-xs" href="/part/edit-doc/{{ row.id }}/" style="width: 70px; text-align: center; margin-bottom: 5px;"> Edit </a>
-                        
-                    </td>
-                </tr>
-                {% else %}
+    <div id="tableContainer" >
+        {% if parts %}
+            <table class="table table-bordered" id="normalTable" >
+                <thead>
                 <tr>
-                    <td>{{ row.id }}</td>
-                    <td>{{ row.partName }}</td>
-                    <td>{{ row.part_gh|default_if_none:"" }}</td>
-                    <td>{{ row.part_mod|default_if_none:"" }}</td>
-                    <td>{{ row.part_csv|default_if_none:"" }}</td>
-                    <td>{{ row.part_rs|default_if_none:"" }}</td>
-                    <td>{{ row.part_log|default_if_none:"" }}</td>
-                    <td>{{ row.part_mp4|default_if_none:"" }}</td>
-                    <td>{{ row.part_jpg|default_if_none:"" }}</td>
-                    <td>
-                        <a class="btn btn-primary btn-xs" href="/part/edit-doc/{{ row.id }}/" style="width: 70px; text-align: center; margin-bottom: 5px;"> Edit </a>
-                        
-                    </td>
+                    <th>ID</th>
+                    <th style="width:400px;">Part Name</th>
+                    <th>.gh</th>
+                    <th>.mod</th>
+                    <th>.csv</th>
+                    <th>.rs</th>
+                    <th>.log</th>
+                    <th>.mp4</th>
+                    <th>.jpg</th>
+                    <th style="width:100px;">Operations</th>
                 </tr>
-                {% endif %}
-                {% empty %}
-                <tr>
-                    <td colspan="11" class="text-center" style="font-size: large;">{{ message }}</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    {% else %}
-        <h3 class="text-center" id="NoMessage">{{ message }}</h3>
-    {% endif %}
+                </thead>
+                <tbody>
+                {% for row in parts %}
+                    {% if row.valid %} 
+                        <tr style="background-color: #67fa6770;">
+                    {% else %}
+                        <tr>
+                    {% endif %}
+                            <td>{{ row.id }}</td>
+                            <td>{{ row.partName }}</td>
+                            <td>{{ row.part_gh|default_if_none:"" }}</td>
+                            <td>{{ row.part_mod|default_if_none:"" }}</td>
+                            <td>{{ row.part_csv|default_if_none:"" }}</td>
+                            <td>{{ row.part_rs|default_if_none:"" }}</td>
+                            <td>{{ row.part_log|default_if_none:"" }}</td>
+                            <td>{{ row.part_mp4|default_if_none:"" }}</td>
+                            <td>{{ row.part_jpg|default_if_none:"" }}</td>
+                            <td>
+                                <a class="btn btn-primary btn-xs" href="/part/edit-doc/{{ row.id }}/" style="width: 70px; text-align: center; margin-bottom: 5px;"> Edit </a>
+                                
+                            </td>
+                        </tr>
+                    
+                    {% empty %}
+                        <tr>
+                            <td colspan="11" class="text-center" style="font-size: large;">{{ message }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <h3 class="text-center" id="NoMessage">{{ message }}</h3>
+        {% endif %}
+    </div>
 </div>
     
 {% endblock %}

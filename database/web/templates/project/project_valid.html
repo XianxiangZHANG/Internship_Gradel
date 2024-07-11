@@ -28,53 +28,55 @@
         <div class="spinner"></div>
         <a id="loadingtext"> Loading </a>
     </div>
-    {% if projects %}
-    <table class="table table-bordered" id="normalTable">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Project Name</th>
-                <th>Program</th>
-                <th>Equipment</th>
-                <th>Customer</th>
-                <th>Project No.</th>
-                <!-- <th>Number Of Parts</th> -->
-                <th>Relative Design</th>
-                <th>Structure Drawing Nb</th>
-                <th>Document No.</th>
-                <th>Revision</th>
-                <th>Last Update</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for row in projects %}
-           
-            <tr>
-                <td>{{ row.id }}</td>
-                <td>{{ row.projectName }}</td>
-                <td>{{ row.program|default_if_none:""  }}</td>
-                <td>{{ row.equipment|default_if_none:"" }}</td>
-                <td>{{ row.customer|default_if_none:"" }}</td>
-                <td>{{ row.projectNo|default_if_none:"" }}</td>
-                <!-- <td>{{ row.partsNumber }}</td> -->
-                <td>{{ row.relativeDesign|default_if_none:"" }}</td>
-                <td>{{ row.structureDrawingNb|default_if_none:"" }}</td>
-                <td>{{ row.documentNb|default_if_none:"" }}</td>
-                <td>{{ row.revision|default_if_none:"" }}</td>
-                <td>{{ row.lastUpdate|default_if_none:""|date:"m/d/Y" }}</td>
-               
-            </tr>
-       
-            {% empty %}
-            <tr>
-                <td colspan="11" class="text-center" style="font-size: large;">{{ message }}</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-    {% else %}
-        <h3 class="text-center" id="NoMessage">{{ message }}</h3>
-    {% endif %}
+    <div id="tableContainer" >
+        {% if projects %}
+        <table class="table table-bordered" id="normalTable">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Project Name</th>
+                    <th>Program</th>
+                    <th>Equipment</th>
+                    <th>Customer</th>
+                    <th>Project No.</th>
+                    <!-- <th>Number Of Parts</th> -->
+                    <th>Relative Design</th>
+                    <th>Structure Drawing Nb</th>
+                    <th>Document No.</th>
+                    <th>Revision</th>
+                    <th>Last Update</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for row in projects %}
+            
+                <tr>
+                    <td>{{ row.id }}</td>
+                    <td>{{ row.projectName }}</td>
+                    <td>{{ row.program|default_if_none:""  }}</td>
+                    <td>{{ row.equipment|default_if_none:"" }}</td>
+                    <td>{{ row.customer|default_if_none:"" }}</td>
+                    <td>{{ row.projectNo|default_if_none:"" }}</td>
+                    <!-- <td>{{ row.partsNumber }}</td> -->
+                    <td>{{ row.relativeDesign|default_if_none:"" }}</td>
+                    <td>{{ row.structureDrawingNb|default_if_none:"" }}</td>
+                    <td>{{ row.documentNb|default_if_none:"" }}</td>
+                    <td>{{ row.revision|default_if_none:"" }}</td>
+                    <td>{{ row.lastUpdate|default_if_none:""|date:"m/d/Y" }}</td>
+                
+                </tr>
+        
+                {% empty %}
+                <tr>
+                    <td colspan="11" class="text-center" style="font-size: large;">{{ message }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+            <h3 class="text-center" id="NoMessage">{{ message }}</h3>
+        {% endif %}
+    </div>
 </div>
 
 

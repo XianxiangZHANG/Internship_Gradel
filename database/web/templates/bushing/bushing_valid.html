@@ -2,33 +2,34 @@
 {% load custom_filters %}
 
 {% block content %}
-    <div  style="margin-bottom: 100px;">
-        <h3>Bushing List:</h3>
-        <details>
-            <summary>
-              <span class="glyphicon glyphicon-question-sign" aria-hidden="true" id="help-title">
-                Help
-              </span>
-            </summary>        
-            <div id="help-content">
-                Here, we can read the value of each record. <br>
-                We can use <a id="help-btn-filter">Filter</a> to select some specific records.<br>
-                Click the <a id="help-btn-filter">Reset</a> button to reset the filter to the original state.<br>
-                Click the <a id="help-btn-download">Download PDF</a> button to download the displayed data(after filtering) as a pdf document.<br><br>
-                In order to avoid loading too much data when entering for the first time, relevant data will be loaded only after clicking <a id="help-btn-filter">Filter</a>. <br>
-                If you want to load all the data in the database, click <a id="help-btn-filter">Filter</a> directly without entering or selecting any keywords in the filter.<br>
-            </div>
-        </details>
-        <form method="get" id="filterForm">
-            {{ filter.form.as_p }}
-            <button type="submit" id="btnf1" name="filter">Filter</button>
-            <button type="reset" id="resetButton" class="btnf2">Reset</button>
-            <a id="download" href="{% url 'download_bushings_pdf' %}?{{ request.GET.urlencode }}">Download PDF</a>
-        </form>
-        <div id="loading" class="loading-overlay">
-            <div class="spinner"></div>
-            <a id="loadingtext"> Loading </a>
+<div  style="margin-bottom: 100px;">
+    <h3>Bushing List:</h3>
+    <details>
+        <summary>
+            <span class="glyphicon glyphicon-question-sign" aria-hidden="true" id="help-title">
+            Help
+            </span>
+        </summary>        
+        <div id="help-content">
+            Here, we can read the value of each record. <br>
+            We can use <a id="help-btn-filter">Filter</a> to select some specific records.<br>
+            Click the <a id="help-btn-filter">Reset</a> button to reset the filter to the original state.<br>
+            Click the <a id="help-btn-download">Download PDF</a> button to download the displayed data(after filtering) as a pdf document.<br><br>
+            In order to avoid loading too much data when entering for the first time, relevant data will be loaded only after clicking <a id="help-btn-filter">Filter</a>. <br>
+            If you want to load all the data in the database, click <a id="help-btn-filter">Filter</a> directly without entering or selecting any keywords in the filter.<br>
         </div>
+    </details>
+    <form method="get" id="filterForm">
+        {{ filter.form.as_p }}
+        <button type="submit" id="btnf1" name="filter">Filter</button>
+        <button type="reset" id="resetButton" class="btnf2">Reset</button>
+        <a id="download" href="{% url 'download_bushings_pdf' %}?{{ request.GET.urlencode }}">Download PDF</a>
+    </form>
+    <div id="loading" class="loading-overlay">
+        <div class="spinner"></div>
+        <a id="loadingtext"> Loading </a>
+    </div>
+    <div id="tableContainer" >
         {% if bushings %}
         <table class="table table-bordered" id="normalTable">
             <thead>
@@ -72,7 +73,8 @@
             <h3 class="text-center" id="NoMessage">{{ message }}</h3>
         {% endif %}
     </div>
-        
+</div>
+    
 
 {% endblock %}
 

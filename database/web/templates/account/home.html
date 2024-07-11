@@ -106,33 +106,7 @@
     </div>
 </div>
 {% endblock %}
-{% block js %}
-<script>
- 
-    function applyFilter(filterName, value) {
-        document.getElementById('filter' + capitalizeFirstLetter(filterName)).value = value;
-    }
 
-    function capitalizeFirstLetter(string) {
-        return string.charAt(0).toUpperCase() + string.slice(1);
-    }
-
-  
-
-    document.getElementById("filterForm").addEventListener("submit", function() {
-        document.getElementById("loading").style.display = "block";
-        document.getElementById("NoMessage").style.display = "none";
-        document.getElementById('normalTable').style.display = 'none';
-    });
-
-
-    document.getElementById("resetButton").addEventListener("click", function() {
-        window.location.href = window.location.pathname;
-    });
-
-</script>
-
-{% endblock %}
 
 {% block css %}
  <style>
@@ -189,4 +163,30 @@
     }
    
 </style>
+{% endblock %}
+
+{% block js %}
+<script>
+ 
+    function applyFilter(filterName, value) {
+        document.getElementById('filter' + capitalizeFirstLetter(filterName)).value = value;
+    }
+
+    function capitalizeFirstLetter(string) {
+        return string.charAt(0).toUpperCase() + string.slice(1);
+    }
+
+  
+
+    $(document).ready(function() {
+        $('#filterForm').on('submit', function() {
+            $('#loading').show();  
+            $('#tableContainer').hide(); 
+        });
+    
+        $('#resetButton').on('click', function() {
+            window.location.href = window.location.pathname; 
+    });
+</script>
+
 {% endblock %}

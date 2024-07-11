@@ -29,46 +29,48 @@
         <div class="spinner"></div>
         <a id="loadingtext"> Loading </a>
     </div>
-    {% if formset.total_form_count > 0 %}
-    <form method="post">
-        {% csrf_token %}
-        {{ formset.management_form }}
-        <table class="table table-bordered" id="bushing-table"  id="normalTable">
-            <thead>
-                <tr>
-                    <th style="width: 22%;">Bushing Name</th>
-                    <th style="width: 22%;">Number Interface</th>
-                    <th style="width: 22%;">Bushing Draw. Nr.</th>
-                    {% comment %} <th style="width: 15.5%;">Acc. On Bushing[g]</th> {% endcomment %}
-                    <th style="width: 22%;">Bushing Mass[g]</th>
-                    {% comment %} <th style="width: 15.5%;">Total Bushing Mass[g]</th> {% endcomment %}
-                    <th colspan="2">Operation</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for field in formset %}
-                <tr class="bushing-form">
-                    {{ field.id }}
-                    <td contenteditable="true">{{ field.bushingName }}
-                        {% if field.numberInterface.value or field.bushingDrawNb.value or field.AccOnBushing.value or field.bushingMass.value or field.totalBushingMass.value %}
-                        {% if not field.bushingName.value %}
-                            <span style="color: red;">{{ bushingError }}</span>
-                        {% endif %}{% endif %}</td>
-                    <td contenteditable="true">{{ field.numberInterface }}</td>
-                    <td contenteditable="true">{{ field.bushingDrawNb }}</td>
-                    {% comment %} <td contenteditable="true">{{ field.AccOnBushing }}</td> {% endcomment %}
-                    <td contenteditable="true">{{ field.bushingMass }}</td>
-                    {% comment %} <td contenteditable="true">{{ field.totalBushingMass }}</td> {% endcomment %}
-                    <td class="text-center"><button type="button" class="btn btn-danger remove-form">Delete</button></td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-        <button type="submit" class="btn btn-primary" id="btns">Save</button>
-    </form>
-    {% else %}
-        <h3 class="text-center" id="NoMessage">{{ message }}</h3>
-    {% endif %}
+    <div id="tableContainer" >
+        {% if formset.total_form_count > 0 %}
+        <form method="post">
+            {% csrf_token %}
+            {{ formset.management_form }}
+            <table class="table table-bordered" id="bushing-table"  id="normalTable">
+                <thead>
+                    <tr>
+                        <th style="width: 22%;">Bushing Name</th>
+                        <th style="width: 22%;">Number Interface</th>
+                        <th style="width: 22%;">Bushing Draw. Nr.</th>
+                        {% comment %} <th style="width: 15.5%;">Acc. On Bushing[g]</th> {% endcomment %}
+                        <th style="width: 22%;">Bushing Mass[g]</th>
+                        {% comment %} <th style="width: 15.5%;">Total Bushing Mass[g]</th> {% endcomment %}
+                        <th colspan="2">Operation</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for field in formset %}
+                    <tr class="bushing-form">
+                        {{ field.id }}
+                        <td contenteditable="true">{{ field.bushingName }}
+                            {% if field.numberInterface.value or field.bushingDrawNb.value or field.AccOnBushing.value or field.bushingMass.value or field.totalBushingMass.value %}
+                            {% if not field.bushingName.value %}
+                                <span style="color: red;">{{ bushingError }}</span>
+                            {% endif %}{% endif %}</td>
+                        <td contenteditable="true">{{ field.numberInterface }}</td>
+                        <td contenteditable="true">{{ field.bushingDrawNb }}</td>
+                        {% comment %} <td contenteditable="true">{{ field.AccOnBushing }}</td> {% endcomment %}
+                        <td contenteditable="true">{{ field.bushingMass }}</td>
+                        {% comment %} <td contenteditable="true">{{ field.totalBushingMass }}</td> {% endcomment %}
+                        <td class="text-center"><button type="button" class="btn btn-danger remove-form">Delete</button></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <button type="submit" class="btn btn-primary" id="btns">Save</button>
+        </form>
+        {% else %}
+            <h3 class="text-center" id="NoMessage">{{ message }}</h3>
+        {% endif %}
+    </div>
 </div>
 
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">

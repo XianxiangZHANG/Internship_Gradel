@@ -35,55 +35,57 @@
         <div class="spinner"></div>
         <a id="loadingtext"> Loading </a>
     </div>
-    {% if resins %}
-        <table class="table table-bordered" id="normalTable">
-            <thead>
-                <tr>
+    <div id="tableContainer" >
+        {% if resins %}
+            <table class="table table-bordered" id="normalTable">
+                <thead>
                     <tr>
-                        <th rowspan="2">ID</th>
-                        <th rowspan="2">Manufacturer</th>
-                        <th colspan="3">Resin system</th>
-                        <th rowspan="2">Flexural strength (MPa)</th>
-                        <th rowspan="2">Flexural modulus (GPa)</th>
-                        <th rowspan="2">Modulus of elasticity (GPa) (tensile)</th>
-                        <th rowspan="2">Tensile strength (MPa)</th>
-                        <th rowspan="2">Elongation at break (%)</th>
-                        <th rowspan="2">Compression ult. strength (MPa)</th>
-                        <th rowspan="2">Compression modulus (GPa)</th>
+                        <tr>
+                            <th rowspan="2">ID</th>
+                            <th rowspan="2">Manufacturer</th>
+                            <th colspan="3">Resin system</th>
+                            <th rowspan="2">Flexural strength (MPa)</th>
+                            <th rowspan="2">Flexural modulus (GPa)</th>
+                            <th rowspan="2">Modulus of elasticity (GPa) (tensile)</th>
+                            <th rowspan="2">Tensile strength (MPa)</th>
+                            <th rowspan="2">Elongation at break (%)</th>
+                            <th rowspan="2">Compression ult. strength (MPa)</th>
+                            <th rowspan="2">Compression modulus (GPa)</th>
+                        </tr>
+                        <tr>
+                            <th id="resinl">Resin</th>
+                            <th id="resinl">Hardener</th>
+                            <th id="resinl">Accelerator</th>
+                        </tr>
                     </tr>
-                    <tr>
-                        <th id="resinl">Resin</th>
-                        <th id="resinl">Hardener</th>
-                        <th id="resinl">Accelerator</th>
-                    </tr>
-                </tr>
-            </thead>
-            <tbody>
-                {% for row in resins %}
-                    <tr>
-                        <td>{{ row.id }}</td>
-                        <td>{{ row.manufacturer|default_if_none:"" }}</td>
-                        <td>{{ row.resin|default_if_none:"" }}</td>
-                        <td>{{ row.hardener|default_if_none:"" }}</td>
-                        <td>{{ row.accelerator|default_if_none:"" }}</td>
-                        <td>{{ row.flexuralStrength|default_if_none:"" }}</td>
-                        <td>{{ row.flexuralmodulus|default_if_none:"" }}</td>
-                        <td>{{ row.modulusElasticity|default_if_none:"" }}</td>
-                        <td>{{ row.tensileStrength|default_if_none:"" }}</td>
-                        <td>{{ row.elongationBreak|default_if_none:"" }}</td>
-                        <td>{{ row.compressionUltStrength|default_if_none:"" }}</td>
-                        <td>{{ row.compressionModulus|default_if_none:"" }}</td>
-                    </tr>
-                {% empty %}
-                    <tr>
-                        <td colspan="12" class="text-center" style="font-size: large;">{{ message }}</td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    {% else %}
-        <h3 class="text-center" id="NoMessage">{{ message }}</h3>
-    {% endif %}
+                </thead>
+                <tbody>
+                    {% for row in resins %}
+                        <tr>
+                            <td>{{ row.id }}</td>
+                            <td>{{ row.manufacturer|default_if_none:"" }}</td>
+                            <td>{{ row.resin|default_if_none:"" }}</td>
+                            <td>{{ row.hardener|default_if_none:"" }}</td>
+                            <td>{{ row.accelerator|default_if_none:"" }}</td>
+                            <td>{{ row.flexuralStrength|default_if_none:"" }}</td>
+                            <td>{{ row.flexuralmodulus|default_if_none:"" }}</td>
+                            <td>{{ row.modulusElasticity|default_if_none:"" }}</td>
+                            <td>{{ row.tensileStrength|default_if_none:"" }}</td>
+                            <td>{{ row.elongationBreak|default_if_none:"" }}</td>
+                            <td>{{ row.compressionUltStrength|default_if_none:"" }}</td>
+                            <td>{{ row.compressionModulus|default_if_none:"" }}</td>
+                        </tr>
+                    {% empty %}
+                        <tr>
+                            <td colspan="12" class="text-center" style="font-size: large;">{{ message }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <h3 class="text-center" id="NoMessage">{{ message }}</h3>
+        {% endif %}
+    </div>
 </div>
 
 {% endblock %}

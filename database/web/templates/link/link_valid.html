@@ -28,61 +28,63 @@
         <div class="spinner"></div>
         <a id="loadingtext"> Loading </a>
     </div>
-    {% if links %}
-        <table class="table table-bordered" id="normalTable">
-            <thead>
-            <tr>
-                <th>ID</th>
-                <th>Part Name</th>
-                <th style="width: 90px;">Link Name</th> 
-                <th style="width: 80px;">Interface1 Name</th>
-                <th style="width: 80px;">Interface2 Name</th>
-                <th style="width: 100px;">Length[mm]</th>
-                <th style="width: 400px;">Sequence</th>
-                <th style="width: 80px;">Ratio</th>
-                <th style="width: 100px;">Arm Diam.[mm]</th>
-                <th style="width: 100px;">Arm Section[mm²]</th>
-                <th>Cycle #</th>
-                <th>Fin. Arm Sec. [mm²]</th>
-                <th>Fin. Arm diam. [mm]</th>
-                <th>Fin. Arm radius [m]</th>
-                <th>Mass [g]</th>
-                <th>*Angle*</th>
-                
-            </tr>
-            </thead>
-            <tbody>
-            {% for row in links %}
+    <div id="tableContainer" >
+        {% if links %}
+            <table class="table table-bordered" id="normalTable">
+                <thead>
                 <tr>
-                    <td>{{ row.id }}</td>
-                    <td>{{ row.part.partName }}</td>
-                    <td>{{ row.linkName }}</td>
-                    <td>{{ row.interface1 }}</td>
-                    <td>{{ row.interface2 }}</td>
-                    <td>{{ row.calculated_properties.length|format_decimal:2|default_if_none:"" }}</td>
-                    <td>{{ row.sequence|default_if_none:"" }}</td>
-                    <td>{{ row.calculated_properties.ratio|format_decimal:2|default_if_none:"" }}</td>
-                    <td>{{ row.armDiam|default_if_none:"" }}</td>
-                    <td>{{ row.armSection|default_if_none:"" }}</td>
-                    <td>{{ row.cycle|default_if_none:"" }}</td>
+                    <th>ID</th>
+                    <th>Part Name</th>
+                    <th style="width: 90px;">Link Name</th> 
+                    <th style="width: 80px;">Interface1 Name</th>
+                    <th style="width: 80px;">Interface2 Name</th>
+                    <th style="width: 100px;">Length[mm]</th>
+                    <th style="width: 400px;">Sequence</th>
+                    <th style="width: 80px;">Ratio</th>
+                    <th style="width: 100px;">Arm Diam.[mm]</th>
+                    <th style="width: 100px;">Arm Section[mm²]</th>
+                    <th>Cycle #</th>
+                    <th>Fin. Arm Sec. [mm²]</th>
+                    <th>Fin. Arm diam. [mm]</th>
+                    <th>Fin. Arm radius [m]</th>
+                    <th>Mass [g]</th>
+                    <th>*Angle*</th>
                     
-                    <td>{{ row.calculated_properties.finArmSection|format_decimal:2|default_if_none:"" }}</td>
-                    <td>{{ row.calculated_properties.finArmDiam|format_decimal:2|default_if_none:"" }}</td>
-                    <td>{{ row.calculated_properties.finArmRadius|format_decimal:6|default_if_none:"" }}</td>
-                    <td>{{ row.calculated_properties.mass|format_decimal:2|default_if_none:"" }}</td>
-                    <td>{{ row.angle|default_if_none:"" }}</td>
-                
                 </tr>
-                {% empty %}
-                <tr>
-                    <td colspan="16" class="text-center" style="font-size: large;">{{ message }}</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    {% else %}
-        <h3 class="text-center" id="NoMessage">{{ message }}</h3>
-    {% endif %}
+                </thead>
+                <tbody>
+                {% for row in links %}
+                    <tr>
+                        <td>{{ row.id }}</td>
+                        <td>{{ row.part.partName }}</td>
+                        <td>{{ row.linkName }}</td>
+                        <td>{{ row.interface1 }}</td>
+                        <td>{{ row.interface2 }}</td>
+                        <td>{{ row.calculated_properties.length|format_decimal:2|default_if_none:"" }}</td>
+                        <td>{{ row.sequence|default_if_none:"" }}</td>
+                        <td>{{ row.calculated_properties.ratio|format_decimal:2|default_if_none:"" }}</td>
+                        <td>{{ row.armDiam|default_if_none:"" }}</td>
+                        <td>{{ row.armSection|default_if_none:"" }}</td>
+                        <td>{{ row.cycle|default_if_none:"" }}</td>
+                        
+                        <td>{{ row.calculated_properties.finArmSection|format_decimal:2|default_if_none:"" }}</td>
+                        <td>{{ row.calculated_properties.finArmDiam|format_decimal:2|default_if_none:"" }}</td>
+                        <td>{{ row.calculated_properties.finArmRadius|format_decimal:6|default_if_none:"" }}</td>
+                        <td>{{ row.calculated_properties.mass|format_decimal:2|default_if_none:"" }}</td>
+                        <td>{{ row.angle|default_if_none:"" }}</td>
+                    
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="16" class="text-center" style="font-size: large;">{{ message }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <h3 class="text-center" id="NoMessage">{{ message }}</h3>
+        {% endif %}
+    </div>
 </div>
     
 
