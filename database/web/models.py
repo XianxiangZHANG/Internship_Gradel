@@ -303,7 +303,7 @@ class Part(models.Model):
     part_log = models.CharField(verbose_name="Document.log", max_length=50, null=True, blank=True)
     part_mp4 = models.CharField(verbose_name="Document.mp4", max_length=50, null=True, blank=True)
     part_jpg = models.CharField(verbose_name="Document.jpg", max_length=50, null=True, blank=True)
-    project = models.ForeignKey(verbose_name="Project Name", to=Project, on_delete=models.CASCADE, to_field='id')
+    project = models.ForeignKey(verbose_name="Project Name", to=Project, on_delete=models.CASCADE, to_field='id', related_name='parts')
     valid = models.BooleanField(verbose_name="Validation", default=False)
 
     def __str__(self):

@@ -4,6 +4,7 @@ from django import forms
 from openpyxl import load_workbook
 from django.forms.widgets import DateInput
 from datetime import date, datetime
+import datetime
 from reportlab.lib.pagesizes import letter
 from reportlab.pdfgen import canvas
 from web import models
@@ -113,7 +114,7 @@ class CustomDateInput(DateInput):
 class ProjectEditModelForm(forms.ModelForm):
     class Meta:
         model = models.Project
-        fields = ['projectName', 'program', 'equipment', 'customer', 'projectNo', 'relativeDesign', 'structureDrawingNb', 'documentNb', 'revision', 'lastUpdate','valid']
+        fields = ['projectName', 'program', 'equipment', 'customer', 'projectNo', 'relativeDesign', 'structureDrawingNb', 'documentNb', 'revision', 'lastUpdate',]
         widgets = {
             'lastUpdate': CustomDateInput(),
         }
@@ -188,7 +189,7 @@ def handle_uploaded_file_project(f):
                 project_data['revision'] = sheet.cell(row=cell.row, column=cell.column + 1).value
             elif cell.value == "Last update :":
                 last_update = sheet.cell(row=cell.row, column=cell.column + 1).value
-                if isinstance(last_update, datetime):
+                if isinstance(last_update, (datetime.date, datetime.datetime)):
                     project_data['lastUpdate'] = last_update.strftime('%m/%d/%Y')
                 else:
                     project_data['lastUpdate'] = last_update

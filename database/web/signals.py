@@ -1,11 +1,23 @@
 # web/signals.py
 from django.db.models.signals import pre_save, post_save, post_delete
 from django.dispatch import receiver
+from datetime import datetime
 from django.forms import model_to_dict
 from web import models
 from django.db.models import ForeignKey
 from django.utils.timezone import now, localtime
 import pytz
+
+@receiver(post_save, sender=models.Part)
+@receiver(post_delete, sender=models.Part)
+def update_project_validation(sender, instance, **kwargs):
+    project = instance.project
+    if project.parts.all().exists() and all(part.valid for part in project.parts.all()):
+        project.valid = True
+    else:
+        project.valid = False
+    project.save()
+
 
 @receiver(pre_save)
 def store_old_instance(sender, instance, **kwargs):
