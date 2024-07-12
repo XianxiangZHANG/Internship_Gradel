@@ -4,6 +4,7 @@ from django import forms
 from django.forms import modelformset_factory
 from reportlab.lib.pagesizes import letter
 from reportlab.pdfgen import canvas
+from django.db.models import Q
 
 from web import models
 import django_filters
@@ -248,8 +249,13 @@ class ResinModelFormTT(forms.ModelForm):
             field_object.widget.attrs = {"class": "form-control"}
 
 def resin_add_mechanical_properties(request):
+    empty_conditions = Q(flexuralStrength__isnull=True, flexuralmodulus__isnull=True, 
+                         modulusElasticity__isnull=True, tensileStrength__isnull=True, 
+                         elongationBreak__isnull=True, compressionUltStrength__isnull=True, 
+                         compressionModulus__isnull=True)
+    
     # Get filtered data
-    resin_filter = ResinFilter(request.GET, queryset=models.Resin.objects.all())
+    resin_filter = ResinFilter(request.GET, queryset=models.Resin.objects.filter(empty_conditions))
     
     # Define form set
     ResinFormSet = modelformset_factory(models.Resin, form=ResinModelFormM, extra=0)
@@ -275,10 +281,15 @@ def resin_add_mechanical_properties(request):
         'formset': formset,
     })
   
-
+  
 def resin_add_thermophysical_toughness_properties(request):
+    empty_conditions = Q(thermalExpansionCoefficient__isnull=True, charpyimpact__isnull=True, 
+                         fractureToughness__isnull=True, fractureEnergy__isnull=True, 
+                         totalShrinkage__isnull=True, hardness__isnull=True, 
+                         waterAbsorption__isnull=True)
+    
     # Get filtered data
-    resin_filter = ResinFilter(request.GET, queryset=models.Resin.objects.all())
+    resin_filter = ResinFilter(request.GET, queryset=models.Resin.objects.filter(empty_conditions))
     
     # Define form set
     ResinFormSet = modelformset_factory(models.Resin, form=ResinModelFormTT, extra=0)
