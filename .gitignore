@@ -1,15 +1,22 @@
-# 忽略所有的 .cache 文件夹
-.__pycache__
+# Ignore all .cache folders
 .vscode
-# 忽略特定文件类型，例如所有的 .log 文件
-*.log
 
-# 忽略某个特定的文件夹及其所有内容
+# Ignore specific file types, such as all .log files
+# *.log
+
+# Ignore a specific folder and all its contents
 database/media/images
+database/database/__pycache__
+database/utils/__pycache__
+database/web/__pycache__
+database/web/migrations/__pycache__
+database/web/views/__pycache__
+database/management/__pycache__
+database/management/commands/__pycache__
 
-# 忽略某个特定的文件
+# Ignore a specific file
 database/n.py
 
-# 忽略某个文件夹中的所有内容，但包含特定文件
-# my_folder/*
-# !my_folder/important_file.txt
+# Ignore everything in a folder but include specific files
+database/web/migrations/*
+!database/web/migrations/__init__.py
