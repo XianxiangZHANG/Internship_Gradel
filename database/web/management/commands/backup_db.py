@@ -1,31 +1,89 @@
 import os
+import shutil
 from datetime import datetime
 from django.core.management.base import BaseCommand
 from django.conf import settings
 
+import logging
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.INFO)
+handler = logging.FileHandler('backup.log')
+handler.setLevel(logging.INFO)
+formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+handler.setFormatter(formatter)
+logger.addHandler(handler)
+
 class Command(BaseCommand):
     help = 'Backup the database'
 
-    def handle(self, *args, **kwargs):
-        db_name = settings.DATABASES['default']['NAME']
-        db_user = settings.DATABASES['default'].get('USER', '')
-        db_password = settings.DATABASES['default'].get('PASSWORD', '')
-        db_host = settings.DATABASES['default'].get('HOST', '')
-        db_port = settings.DATABASES['default'].get('PORT', '')
+    def add_arguments(self, parser):
+        parser.add_argument('--backup-dir', type=str, help='Directory to store backups')
 
-        backup_dir = os.path.join(settings.BASE_DIR, 'backups')
+    def handle(self, *args, **options):
+        backup_dir = options.get('backup_dir') or os.path.join(settings.BASE_DIR, 'backups')
         os.makedirs(backup_dir, exist_ok=True)
-        backup_file = os.path.join(backup_dir, f'{db_name}_backup_{datetime.now().strftime("%m%d%Y%H%M%S")}.sql')
 
-        if 'postgresql' in settings.DATABASES['default']['ENGINE']:
-            dump_command = f'pg_dump -U {db_user} -h {db_host} -p {db_port} {db_name} > {backup_file}'
-        elif 'mysql' in settings.DATABASES['default']['ENGINE']:
-            dump_command = f'mysqldump -u {db_user} -p{db_password} -h {db_host} -P {db_port} {db_name} > {backup_file}'
-        elif 'sqlite3' in settings.DATABASES['default']['ENGINE']:
-            dump_command = f'sqlite3 {db_name} .dump > {backup_file}'
+        db_settings = settings.DATABASES['default']
+        db_engine = db_settings['ENGINE']
+        db_name = db_settings['NAME']
+        timestamp = datetime.now().strftime("%m%d%Y%H%M%S")
+        backup_file = os.path.join(backup_dir, f'{db_name}_backup_{timestamp}.bak')
+
+        if 'postgresql' in db_engine:
+            self.backup_postgresql(db_settings, db_name, backup_file)
+        elif 'mysql' in db_engine:
+            self.backup_mysql(db_settings, db_name, backup_file)
+        elif 'sqlite3' in db_engine:
+            self.backup_sqlite(db_settings, backup_file)
+        elif 'mssql' in db_engine:
+            self.backup_mssql(db_settings, db_name, backup_file)
         else:
             self.stdout.write(self.style.ERROR('Unsupported database backend'))
             return
 
-        os.system(dump_command)
-        self.stdout.write(self.style.SUCCESS(f'Database backup created at {backup_file}'))
+        if os.path.exists(backup_file):
+            self.stdout.write(self.style.SUCCESS(f'Database backup created at {backup_file}'))
+            logger.info(f'Database backup created at {backup_file}.')
+        else:
+            self.stdout.write(self.style.ERROR('Failed to create backup file'))
+            logger.error('Failed to create backup file.')
+
+    def backup_postgresql(self, db_settings, db_name, backup_file):
+        user = db_settings.get('USER', '')
+        password = db_settings.get('PASSWORD', '')
+        host = db_settings.get('HOST', '')
+        port = db_settings.get('PORT', '')
+        command = f'pg_dump -U {user} -h {host} -p {port} {db_name} > {backup_file}'
+        self.run_backup(command)
+
+    def backup_mysql(self, db_settings, db_name, backup_file):
+        user = db_settings.get('USER', '')
+        password = db_settings.get('PASSWORD', '')
+        host = db_settings.get('HOST', '')
+        port = db_settings.get('PORT', '')
+        command = f'mysqldump -u {user} -p{password} -h {host} -P {port} {db_name} > {backup_file}'
+        self.run_backup(command)
+
+    def backup_sqlite(self, db_settings, backup_file):
+        db_file = db_settings['NAME']
+        command = f'sqlite3 {db_file} .dump > {backup_file}'
+        self.run_backup(command)
+
+    def backup_mssql(self, db_settings, db_name, backup_file):
+        user = db_settings.get('USER', '')
+        password = db_settings.get('PASSWORD', '')
+        host = db_settings.get('HOST', '')
+        local_backup_file = f'/var/opt/mssql/data/{db_name}_backup_{datetime.now().strftime("%m%d%Y%H%M%S")}.bak'
+        command = f'sqlcmd -S {host} -U {user} -P {password} -C -Q "BACKUP DATABASE [{db_name}] TO DISK=\'{local_backup_file}\'"'
+        self.run_backup(command, local_backup_file, backup_file)
+
+    def run_backup(self, command, local_file=None, destination_file=None):
+        try:
+            os.system(command)
+            logger.info('Database backup command executed.')
+            if local_file and destination_file:
+                shutil.move(local_file, destination_file)
+                logger.info(f'Backup file moved from {local_file} to {destination_file}.')
+        except Exception as e:
+            logger.error(f'Error executing backup command: {e}')
+            self.stdout.write(self.style.ERROR(f'Error executing backup command: {e}'))
