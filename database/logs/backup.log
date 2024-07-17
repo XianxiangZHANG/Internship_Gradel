@@ -16,3 +16,6 @@
 2024-07-17 11:36:14,553 - web.management.commands.backup_db - INFO - Database backup command executed.
 2024-07-17 11:36:14,554 - web.management.commands.backup_db - ERROR - Error executing backup command: [Errno 13] Permission denied: '/tmp/TestDB3_backup_07172024113614.bak'
 2024-07-17 11:36:14,554 - web.management.commands.backup_db - ERROR - Failed to create backup file.
+2024-07-17 11:37:11,800 - web.management.commands.backup_db - INFO - Database backup command executed.
+2024-07-17 11:37:11,801 - web.management.commands.backup_db - ERROR - Error executing backup command: [Errno 13] Permission denied: '/tmp/TestDB3_backup_07172024113711.bak'
+2024-07-17 11:37:11,801 - web.management.commands.backup_db - ERROR - Failed to create backup file.
