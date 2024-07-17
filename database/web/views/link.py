@@ -282,15 +282,15 @@ def link_delete_mult(request):
     except models.Fiber.DoesNotExist:
         return JsonResponse({"status": False, "error": "Fiber not found"})
 
-def custom_warning_filter(message, category, filename, lineno, file=None, line=None):
-    if "Unknown extension is not supported and will be removed" in str(message) or \
-       "Conditional Formatting extension is not supported and will be removed" in str(message):
-        return
-    else:
-        warnings.showwarning(message, category, filename, lineno, file, line)
+# def custom_warning_filter(message, category, filename, lineno, file=None, line=None):
+#     if "Unknown extension is not supported and will be removed" in str(message) or \
+#        "Conditional Formatting extension is not supported and will be removed" in str(message):
+#         return
+#     else:
+#         warnings.showwarning(message, category, filename, lineno, file, line)
 
-# Apply custom warning filter
-warnings.showwarning = custom_warning_filter
+# # Apply custom warning filter
+# warnings.showwarning = custom_warning_filter
 
 
 def handle_uploaded_file_link(f):

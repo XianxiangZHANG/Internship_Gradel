@@ -142,7 +142,16 @@ DATABASES = {
 CELERY_BEAT_SCHEDULE = {
     'backup-database-every-day': {
         'task': 'web.tasks.backup_database',
-        'schedule': crontab(hour=11, minute=5),  # 2:00 AM
+        'schedule': crontab(hour=2, minute=0),  # 2:00 AM
+        'options': {
+            'retry': True,
+            'retry_policy': {
+                'max_retries': 3,
+                'interval_start': 0,
+                'interval_step': 60,
+                'interval_max': 180,
+            },
+        },
     },
 }
 
@@ -152,6 +161,7 @@ CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TIMEZONE = 'Europe/Luxembourg'
+CELERY_BROKER_CONNECTION_RETRY_ON_STARTUP = True
 
 REST_FRAMEWORK = {
     'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema'
