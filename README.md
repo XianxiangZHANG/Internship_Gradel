@@ -4,6 +4,16 @@
 
 Created a database by Django.
 
+
+### Create migration files:
+```
+python3 manage.py makemigrations
+```
+### Apply migration:
+```
+python3 manage.py migrate
+```
+
 ### Run the project:
 ```
 python manage.py runserver
