@@ -5,9 +5,17 @@ from django.core.management.base import BaseCommand
 from django.conf import settings
 
 import logging
+
+# 定义日志文件路径
+log_file_path = os.path.join(settings.BASE_DIR, 'logs', 'backup.log')
+print(log_file_path)
+
+# 确保日志目录存在
+os.makedirs(os.path.dirname(log_file_path), exist_ok=True)
+
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
-handler = logging.FileHandler('backup.log')
+handler = logging.FileHandler(log_file_path)
 handler.setLevel(logging.INFO)
 formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 handler.setFormatter(formatter)
@@ -73,7 +81,8 @@ class Command(BaseCommand):
         user = db_settings.get('USER', '')
         password = db_settings.get('PASSWORD', '')
         host = db_settings.get('HOST', '')
-        local_backup_file = f'/var/opt/mssql/data/{db_name}_backup_{datetime.now().strftime("%m%d%Y%H%M%S")}.bak'
+        # local_backup_file = f'/var/opt/mssql/data/{db_name}_backup_{datetime.now().strftime("%m%d%Y%H%M%S")}.bak'
+        local_backup_file = f'/tmp/{db_name}_backup_{datetime.now().strftime("%m%d%Y%H%M%S")}.bak'
         command = f'sqlcmd -S {host} -U {user} -P {password} -C -Q "BACKUP DATABASE [{db_name}] TO DISK=\'{local_backup_file}\'"'
         self.run_backup(command, local_backup_file, backup_file)
 

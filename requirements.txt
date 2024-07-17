@@ -5,3 +5,5 @@ openpyxl
 pillow
 celery
 django-celery-beat
+djangorestframework
+drf-yasg

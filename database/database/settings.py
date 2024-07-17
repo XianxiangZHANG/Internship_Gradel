@@ -142,7 +142,7 @@ DATABASES = {
 CELERY_BEAT_SCHEDULE = {
     'backup-database-every-day': {
         'task': 'web.tasks.backup_database',
-        'schedule': crontab(hour=18, minute=8),  # 2:00 AM
+        'schedule': crontab(hour=11, minute=5),  # 2:00 AM
     },
 }
 
