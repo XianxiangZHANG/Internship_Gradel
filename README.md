@@ -7,11 +7,11 @@ Created a database by Django.
 
 ### Create migration files:
 ```
-python3 manage.py makemigrations
+python manage.py makemigrations
 ```
 ### Apply migration:
 ```
-python3 manage.py migrate
+python manage.py migrate
 ```
 
 ### Run the project:
