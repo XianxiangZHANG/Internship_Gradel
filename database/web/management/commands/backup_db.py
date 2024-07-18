@@ -1,11 +1,11 @@
 import os
 import shutil
-from datetime import datetime
+from datetime import datetime, timedelta
 from django.core.management.base import BaseCommand
 from django.conf import settings
 import logging
 
-log_file_path = os.path.join(settings.BASE_DIR, 'database', 'backups', 'backup.log')
+log_file_path = os.path.join(settings.BASE_DIR, 'backups', 'backup.log')
 
 os.makedirs(os.path.dirname(log_file_path), exist_ok=True)
 
@@ -18,15 +18,17 @@ handler.setFormatter(formatter)
 logger.addHandler(handler)
 
 class Command(BaseCommand):
-    help = 'Backup the database'
+    help = 'Backup the database and delete old backups'
 
     def add_arguments(self, parser):
         parser.add_argument('--backup-dir', type=str, help='Directory to store backups')
+        parser.add_argument('--days-to-keep', type=int, default=1, help='Days to keep the backups')
 
     def handle(self, *args, **options):
-        backup_dir = options.get('backup_dir') or os.path.join(settings.BASE_DIR, 'database', 'backups')
+        backup_dir = options.get('backup_dir') or os.path.join(settings.BASE_DIR, 'backups')
+        days_to_keep = options.get('days_to_keep')
         os.makedirs(backup_dir, exist_ok=True)
-        os.chmod(backup_dir, 0o777)  
+        os.chmod(backup_dir, 0o777)
 
         db_settings = settings.DATABASES['default']
         db_engine = db_settings['ENGINE']
@@ -56,6 +58,9 @@ class Command(BaseCommand):
         except Exception as e:
             self.stdout.write(self.style.ERROR(f'ERROR:{e}'))
             logger.error(f'ERROR：{e}')
+
+        # Call the method to delete old backups
+        self.delete_old_backups(backup_dir, days_to_keep)
 
     def backup_postgresql(self, db_settings, db_name, backup_file):
         user = db_settings.get('USER', '')
@@ -97,3 +102,16 @@ class Command(BaseCommand):
         except Exception as e:
             logger.error(f'Error executing backup command: {e}')
             self.stdout.write(self.style.ERROR(f'Error executing backup command: {e}'))
+
+    def delete_old_backups(self, directory, days_to_keep):
+        """Deletes files older than a specified number of days in a directory."""
+        now = datetime.now()
+        cutoff = now - timedelta(days=days_to_keep)
+
+        for filename in os.listdir(directory):
+            file_path = os.path.join(directory, filename)
+            if os.path.isfile(file_path):
+                file_modified = datetime.fromtimestamp(os.path.getmtime(file_path))
+                if file_modified < cutoff:
+                    os.remove(file_path)
+                    logger.info(f"Deleted old backup: {file_path}")
