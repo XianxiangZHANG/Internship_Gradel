@@ -7,7 +7,7 @@
 # Ignore a specific folder and all its contents
 database/media/images
 database/database/__pycache__
-database/database/backups
+database/backups
 database/utils/__pycache__
 database/web/__pycache__
 database/web/migrations/__pycache__
