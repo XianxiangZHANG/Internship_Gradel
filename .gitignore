@@ -14,7 +14,7 @@ database/web/migrations/__pycache__
 database/web/views/__pycache__
 database/web/management/__pycache__
 database/web/management/commands/__pycache__
-database/web/templatetags/commands/__pycache__
+database/web/templatetags/__pycache__
 
 # Ignore a specific file
 database/n.py
