@@ -121,7 +121,7 @@ class R_and_D(models.Model):
     roomhumidity = models.CharField(verbose_name="Room humidity (%)", max_length=30, null=True, blank=True)
 
     brakeForcebobin = models.CharField(verbose_name="Brake force/bobbin (N) (kg) (bar)", max_length=30, null=True, blank=True)
-    windingSpeedRange = models.CharField(verbose_name="Windng speed range (mm/s)", max_length=30, null=True, blank=True)
+    windingSpeedRange = models.CharField(verbose_name="Winding speed range (mm/s)", max_length=30, null=True, blank=True)
 
     FVR = models.CharField(verbose_name="FVR (%)", max_length=30, null=True, blank=True)
     compositeDensity = models.CharField(verbose_name="Composite density ρ (g/cm3)", max_length=30, null=True, blank=True)
