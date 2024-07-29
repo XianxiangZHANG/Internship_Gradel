@@ -1,0 +1,97 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login GLW</title>
+    <link rel="stylesheet" href="static/plugins/bootstrap-3.4.1/css/bootstrap.min.css">
+    <style>
+        .login-box {
+            width: 400px;
+            margin-left: auto;
+            margin-right: auto;
+            border: 1px solid #dddddd;
+            margin-top: 150px;
+            padding-left: 20px;
+            padding-right: 20px;
+            padding-bottom: 20px
+        }
+
+        .login-box h2 {
+            text-align: center;
+        }
+        .input__icon {
+            position: absolute;
+            margin-left: 320px; 
+            margin-top: -32px;
+            cursor: pointer;
+            height: 30px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="login-box">
+    <a style="margin-left: 70px;">
+        <img src="static/images/logo_gradel.png" alt="Gradel Logo" width="200" height="100">
+    </a>
+    <h2>Login</h2>
+    
+    <form method="post" action="robots.txt.html" novalidate>
+        <input type="hidden" name="csrfmiddlewaretoken" value="yn9YHVbJmxlYyCUOs0FmqzmS6uUoVxzjHuWlevBy59EcDbSnYPwB9suBnkNeIr7W">
+        <div class="form-group">
+            <label>Username</label>
+            <input type="text" name="username" class="form-control" placeholder="Please enter your username" required id="id_username">
+            <span style="color: red;"></span>
+        </div>
+        <div class="form-group">
+            <label>Password</label>
+            <input type="password" name="password" class="form-control" placeholder="Please enter your passwaord" required id="id_password">
+            <img alt="Toggle Visibility" src="static/images/eye.svg" class="input__icon" data-toggle="password">
+            <br>
+            <span style="color: red;"></span>
+        </div>
+        <div class="form-group">
+            <label>Code</label>
+            <div class="row">
+                <div class="col-xs-6">
+                    <input type="text" name="code" class="form-control" placeholder="Please enter the code" required id="id_code">
+                </div>
+                <div class="col-xs-6">
+                    <img src="img/code/index.html" id="codeImage"/>
+                </div>
+            </div>
+            <span style="color: red;"></span>
+        </div>
+
+        <button type="submit" class="btn btn-primary" style="width: 165px;">Submit</button>
+        <span style="color: red;"></span>
+    </form>
+</div>
+
+<script src="static/js/jquery-3.6.0.min.js"></script>
+<script>
+    $(function () {
+        $("#codeImage").click(function () {
+            var url = $(this).attr('src');  // "/img/code/?"
+            $(this).attr('src', url + "?");
+        });
+    });
+
+
+    $(function(){
+        
+        $('.input__icon').click(function() {
+            var inputId = $(this).data('toggle');
+            var input = $(`input[id='id_${inputId}']`); // Assume the ID of the input box is 'id_old_password', 'id_new_password', 'id_confirm_password'
+            var newType = input.attr('type') === 'password' ? 'text' : 'password';
+            input.attr('type', newType);
+            var newSrc = newType === 'password' ? '/static/images/eye.svg' : '/static/images/eye-off.svg';
+            $(this).attr('src', newSrc);
+        });
+    });
+
+</script>
+</body>
+</html>

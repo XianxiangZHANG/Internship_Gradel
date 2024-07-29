@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'django_celery_beat',
     'rest_framework',
     'drf_yasg',
+    'medusa',
 ]
 
 MIDDLEWARE = [
@@ -167,6 +168,8 @@ REST_FRAMEWORK = {
     'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema'
 }
 
+MEDUSA_RENDERER_CLASS = 'django_medusa.renderers.FilesystemStaticSiteRenderer'
+MEDUSA_OUTPUT_DIR = 'static_site'
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
