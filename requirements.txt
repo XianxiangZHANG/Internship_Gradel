@@ -1,9 +1,0 @@
-django == 4.2.11
-django-filter
-mssql-django
-openpyxl
-pillow
-celery
-django-celery-beat
-djangorestframework
-drf-yasg
