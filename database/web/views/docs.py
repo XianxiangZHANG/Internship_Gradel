@@ -31,7 +31,7 @@ def upload_docs(request):
         uploaded_file = request.FILES['zip_file']
         docs_dir = os.path.join(settings.STATICFILES_DIRS[0], 'docs')
 
-        # 清空docs文件夹
+        # clean /docs
         for filename in os.listdir(docs_dir):
             file_path = os.path.join(docs_dir, filename)
             try:
@@ -42,24 +42,22 @@ def upload_docs(request):
             except Exception as e:
                 return JsonResponse({'status': 'error', 'message': str(e)}, status=500)
 
-        # 确保上传的是一个zip文件
+        # make sure a zip file
         if not uploaded_file.name.endswith('.zip'):
             return JsonResponse({'status': 'error', 'message': 'Uploaded file is not a zip file'}, status=400)
 
-        # 将上传的zip文件保存到临时位置
         temp_zip_path = os.path.join(settings.BASE_DIR, 'temp.zip')
         with open(temp_zip_path, 'wb+') as temp_zip:
             for chunk in uploaded_file.chunks():
                 temp_zip.write(chunk)
 
-        # 解压zip文件到docs目录
         try:
             with zipfile.ZipFile(temp_zip_path, 'r') as zip_ref:
                 zip_ref.extractall(docs_dir)
         except zipfile.BadZipFile:
             return JsonResponse({'status': 'error', 'message': 'Invalid zip file'}, status=400)
         finally:
-            os.remove(temp_zip_path)  # 删除临时zip文件
+            os.remove(temp_zip_path)
 
         return JsonResponse({'status': 'success', 'message': 'Files uploaded successfully'})
 
