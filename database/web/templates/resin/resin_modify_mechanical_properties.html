@@ -24,11 +24,11 @@
         {{ filter.form.as_p }}
         <button type="submit" id="btnf1" name="filter">Filter</button>
         <button type="reset" id="resetButton" class="btnf2">Reset</button>
-        <a class="btn btn-success" href="/resin/modify-multiple/" id="btnmore">
+        <a class="btn btn-success" href="/resin/modify-multiple/" id="btnmore1">
             <span class="glyphicon glyphicon-pencil" aria-hidden="true" id="pic"></span> Modify Resin List
         </a>
    
-        <a class="btn btn-success" href="/resin/modify-thermophysical-toughness-properties/" id="btnmore">
+        <a class="btn btn-success" href="/resin/modify-thermophysical-toughness-properties/" id="btnmore2">
             <span class="glyphicon glyphicon-pencil" aria-hidden="true" id="pic"></span> Modify Thermophysical Toughness Properties of Resin List
         </a>
     </form>
@@ -127,8 +127,19 @@
     #Flex {
         width: 100px;
     }
-    #btnmore {
-        width: 500px; 
+    #btnmore1 {
+        width: 15vw; 
+        background-color: #49b7be; 
+        color: white; 
+        padding: 5px 10px; 
+
+        margin-left: 100px;
+        border: none; 
+        border-radius: 4px;
+        cursor: pointer; 
+    }
+    #btnmore2 {
+        width: 30vw; 
         background-color: #49b7be; 
         color: white; 
         padding: 5px 10px; 
