@@ -1,9 +1,6 @@
-# Internship_GRADEL
-## Database of Gradel
- Auther: Xianxiang ZHANG
+# Project: A database system created by Django.
 
-Created a database by Django.
-
+Auther: Xianxiang ZHANG
 
 ### Create migration files:
 ```
