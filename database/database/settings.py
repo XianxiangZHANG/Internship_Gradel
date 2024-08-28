@@ -147,6 +147,8 @@ DATABASES = {
 CELERY_BEAT_SCHEDULE = {
     'backup-database-every-day': {
         'task': 'web.tasks.backup_database',
+        # 'schedule': crontab(hour=2, minute=0, day_of_month=1, month_of_year='1,4,7,10'),  # Every January, April, July, and October 1st at 2:00 AM
+        # 'schedule': crontab(hour=2, minute=0, day_of_month=1),  # Every first day of the month 2:00 AM
         'schedule': crontab(hour=2, minute=0),  # 2:00 AM
         'options': {
             'retry': True,
