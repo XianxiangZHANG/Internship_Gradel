@@ -211,6 +211,7 @@ def format_value(value):
         return str(value) if value else "--"
 
 def download_projects_pdf(request):
+    
     f = ProjectFilterValid(request.GET, queryset=models.Project.objects.filter(valid=True))
     projects = f.qs
 
@@ -220,50 +221,58 @@ def download_projects_pdf(request):
     p = canvas.Canvas(response, pagesize=letter)
     width, height = letter
 
-    p.setFont("Helvetica-Bold", 12)
-    p.drawString(50, height - 40, "Projects List")
-    p.setFont("Helvetica-Bold", 10)
-    p.drawString(150, height - 40, "\"--\" means the value is None")
-
-    # p.setFont("Helvetica", 10)
-    x = 50
-    xx = 200
-    y = height - 90
-    l = 20
-    i = 1
-    for index, project in enumerate(projects):
-        p.line(x/2, y +15 , width - x/2, y+15)
-        p.setFont("Helvetica-Bold", 10)
-        p.drawString(x, y, "Project Name")
-        p.drawString(x, y-l, "Program")
-        p.drawString(x, y-2*l, "Equipment")
-        p.drawString(x, y-3*l, "Customer")
-        p.drawString(x, y-4*l, "Project No")
-        p.drawString(x, y-5*l, "Relative Design")
-        p.drawString(x, y-6*l, "Structure Drawing Nb")
-        p.drawString(x, y-7*l, "Document Nb")
-        p.drawString(x, y-8*l, "Revision")
-        p.drawString(x, y-9*l, "Last Update")
+    if not projects:
+        
+        p.setFont("Helvetica-Bold", 12)
+        p.drawString(50, height - 40, "Projects List")
         p.setFont("Helvetica", 10)
-        p.drawString(xx, y, format_value(project.projectName))
-        p.drawString(xx, y-l, format_value(project.program))
-        p.drawString(xx, y-2*l, format_value(project.equipment))
-        p.drawString(xx, y-3*l, format_value(project.customer))
-        p.drawString(xx, y-4*l, format_value(project.projectNo))
-        p.drawString(xx, y-5*l, format_value(project.relativeDesign))
-        p.drawString(xx, y-6*l, format_value(project.structureDrawingNb))
-        p.drawString(xx, y-7*l, format_value(project.documentNb))
-        p.drawString(xx, y-8*l, format_value(project.revision))
-        p.drawString(xx, y-9*l, format_value(project.lastUpdate.strftime("%m-%d-%Y") ))
-        y -= 220
-        if y < 250 and index < len(projects) - 1:
-            p.showPage()
-            p.setFont("Helvetica-Bold", 12)
-            p.drawString(50, height - 40, "Projects List")
+        p.drawString(50, height - 60, "No projects found. Please adjust your filters and try again.")
+
+    else:
+        p.setFont("Helvetica-Bold", 12)
+        p.drawString(50, height - 40, "Projects List")
+        p.setFont("Helvetica-Bold", 10)
+        p.drawString(150, height - 40, "\"--\" means the value is None")
+
+        # p.setFont("Helvetica", 10)
+        x = 50
+        xx = 200
+        y = height - 90
+        l = 20
+        i = 1
+        for index, project in enumerate(projects):
+            p.line(x/2, y +15 , width - x/2, y+15)
             p.setFont("Helvetica-Bold", 10)
-            p.drawString(150, height - 40, "\"--\" means the value is None")
-            y = height - 90
-          
+            p.drawString(x, y, "Project Name")
+            p.drawString(x, y-l, "Program")
+            p.drawString(x, y-2*l, "Equipment")
+            p.drawString(x, y-3*l, "Customer")
+            p.drawString(x, y-4*l, "Project No")
+            p.drawString(x, y-5*l, "Relative Design")
+            p.drawString(x, y-6*l, "Structure Drawing Nb")
+            p.drawString(x, y-7*l, "Document Nb")
+            p.drawString(x, y-8*l, "Revision")
+            p.drawString(x, y-9*l, "Last Update")
+            p.setFont("Helvetica", 10)
+            p.drawString(xx, y, format_value(project.projectName))
+            p.drawString(xx, y-l, format_value(project.program))
+            p.drawString(xx, y-2*l, format_value(project.equipment))
+            p.drawString(xx, y-3*l, format_value(project.customer))
+            p.drawString(xx, y-4*l, format_value(project.projectNo))
+            p.drawString(xx, y-5*l, format_value(project.relativeDesign))
+            p.drawString(xx, y-6*l, format_value(project.structureDrawingNb))
+            p.drawString(xx, y-7*l, format_value(project.documentNb))
+            p.drawString(xx, y-8*l, format_value(project.revision))
+            p.drawString(xx, y-9*l, format_value(project.lastUpdate.strftime("%m-%d-%Y") ))
+            y -= 220
+            if y < 250 and index < len(projects) - 1:
+                p.showPage()
+                p.setFont("Helvetica-Bold", 12)
+                p.drawString(50, height - 40, "Projects List")
+                p.setFont("Helvetica-Bold", 10)
+                p.drawString(150, height - 40, "\"--\" means the value is None")
+                y = height - 90
+            
 
     p.showPage()
     p.save()

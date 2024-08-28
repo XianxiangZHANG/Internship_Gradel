@@ -372,8 +372,9 @@ def format_value(value):
 
 
 def download_bushings_pdf(request):
-    f = BushingFilter(request.GET, queryset=models.Bushing.objects.filter(part__valid=True))
-    bushings = f.qs
+    bushing_filter, bushings, message = get_filtered_bushings(BushingFilter, request, valid=True)
+    # f = BushingFilter(request.GET, queryset=models.Bushing.objects.filter(part__valid=True))
+    # bushings = f.qs
 
     response = HttpResponse(content_type='application/pdf')
     response['Content-Disposition'] = 'attachment; filename="bushings.pdf"'
@@ -382,90 +383,86 @@ def download_bushings_pdf(request):
     width, height = letter
     styles = getSampleStyleSheet()
 
-    p.setFont("Helvetica-Bold", 12)
-    p.drawString(30, height - 40, "Bushings List")
-    p.setFont("Helvetica-Bold", 10)
-    p.drawString(150, height - 40, "\"--\" means the value is None")
-    p.setDash() 
-    p.setLineWidth(1)
-    p.line(30, height - 50, width - 30, height - 50)
-    p.setFont("Helvetica-Bold", 10)
-    y_start = height - 70
-    x_offset = 30
-    y_offset = 20  
-    headers = ["Bushing Name", "Number of Interface", "Bushing Draw. Nb", "Acc. On Bushing[g]", "Bushing Mass[g]", "Total Bushing Mass[g]"]
-    column_widths = [80, 80, 100, 90, 90, 90]  
+    if not bushings:
+        
+        p.setFont("Helvetica-Bold", 12)
+        p.drawString(30, height - 40, "Bushings List")
+        p.setFont("Helvetica-Bold", 10)
+        p.drawString(150, height - 40, "\"--\" means the value is None")
+        p.setFont("Helvetica", 10)
+        p.drawString(50, height - 60, "No bushings found. Please adjust your filters and try again.")
 
-    current_project = None
-    current_part = None
+    else:
+        p.setFont("Helvetica-Bold", 12)
+        p.drawString(30, height - 40, "Bushings List")
+        p.setFont("Helvetica-Bold", 10)
+        p.drawString(150, height - 40, "\"--\" means the value is None")
+        p.setDash() 
+        p.setLineWidth(1)
+        p.line(30, height - 50, width - 30, height - 50)
+        p.setFont("Helvetica-Bold", 10)
+        y_start = height - 70
+        x_offset = 30
+        y_offset = 20  
+        headers = ["Bushing Name", "Number of Interface", "Bushing Draw. Nb", "Acc. On Bushing[g]", "Bushing Mass[g]", "Total Bushing Mass[g]"]
+        column_widths = [80, 80, 100, 90, 90, 90]  
 
-    p.setFont("Helvetica", 10)
-    y = y_start
+        current_project = None
+        current_part = None
 
-    for index, bushing in enumerate(bushings):
-        next_is_title = (index + 1 < len(bushings)) and (
-            bushings[index + 1].project.projectName != bushing.project.projectName or 
-            bushings[index + 1].part.partName != bushing.part.partName
-        )
+        p.setFont("Helvetica", 10)
+        y = y_start
 
-        if bushing.project.projectName != current_project or bushing.part.partName != current_part:
-            if current_project is not None:
-                y -= 10  
-                p.setDash() 
+        for index, bushing in enumerate(bushings):
+            next_is_title = (index + 1 < len(bushings)) and (
+                bushings[index + 1].project.projectName != bushing.project.projectName or 
+                bushings[index + 1].part.partName != bushing.part.partName
+            )
+
+            if bushing.project.projectName != current_project or bushing.part.partName != current_part:
+                if current_project is not None:
+                    y -= 10  
+                    p.setDash() 
+                    p.setLineWidth(1)
+                    p.line(x_offset, y, width - x_offset, y)
+
+                current_project = bushing.project.projectName
+                current_part = bushing.part.partName
+                y -= y_offset
+
+                p.setFont("Helvetica-Bold", 10)
+                p.drawString(x_offset, y, "Project Name: " + current_project)
+                y -= y_offset
+                p.drawString(x_offset, y, "Part      Name: " + current_part)
+                y -= y_offset
+                p.setDash(1, 2) 
                 p.setLineWidth(1)
                 p.line(x_offset, y, width - x_offset, y)
+                y -= y_offset
 
-            current_project = bushing.project.projectName
-            current_part = bushing.part.partName
+                for i, header in enumerate(headers):
+                    frame = Frame(x_offset + sum(column_widths[:i]), y-y_offset, column_widths[i], 2*y_offset, showBoundary=0)
+                    paragraph = Paragraph(header, styles['Normal'])
+                    frame.addFromList([paragraph], p)
+                y -= 2*y_offset
+
+                p.setFont("Helvetica", 10)
+
+            p.drawString(20+x_offset, y, format_value(bushing.bushingName))
+            p.drawString(20+x_offset + sum(column_widths[:1]), y, format_value(bushing.numberInterface))
+            p.drawString(20+x_offset + sum(column_widths[:2]), y, format_value(bushing.bushingDrawNb))
+            p.drawString(20+x_offset + sum(column_widths[:3]), y, format_value(bushing.calculated_properties.get('accOnBushing')))
+            p.drawString(20+x_offset + sum(column_widths[:4]), y, format_value(bushing.bushingMass))
+            p.drawString(20+x_offset + sum(column_widths[:5]), y, format_value(bushing.calculated_properties.get('totalBushingMass')))
+
             y -= y_offset
-
-            p.setFont("Helvetica-Bold", 10)
-            p.drawString(x_offset, y, "Project Name: " + current_project)
-            y -= y_offset
-            p.drawString(x_offset, y, "Part      Name: " + current_part)
-            y -= y_offset
-            p.setDash(1, 2) 
-            p.setLineWidth(1)
-            p.line(x_offset, y, width - x_offset, y)
-            y -= y_offset
-
-            for i, header in enumerate(headers):
-                frame = Frame(x_offset + sum(column_widths[:i]), y-y_offset, column_widths[i], 2*y_offset, showBoundary=0)
-                paragraph = Paragraph(header, styles['Normal'])
-                frame.addFromList([paragraph], p)
-            y -= 2*y_offset
-
-            p.setFont("Helvetica", 10)
-
-        p.drawString(20+x_offset, y, format_value(bushing.bushingName))
-        p.drawString(20+x_offset + sum(column_widths[:1]), y, format_value(bushing.numberInterface))
-        p.drawString(20+x_offset + sum(column_widths[:2]), y, format_value(bushing.bushingDrawNb))
-        p.drawString(20+x_offset + sum(column_widths[:3]), y, format_value(bushing.AccOnBushing))
-        p.drawString(20+x_offset + sum(column_widths[:4]), y, format_value(bushing.bushingMass))
-        p.drawString(20+x_offset + sum(column_widths[:5]), y, format_value(bushing.totalBushingMass))
-
-        y -= y_offset
-        if next_is_title:
-            
-            p.showPage()
-            p.setFont("Helvetica-Bold", 12)
-            p.drawString(30, height - 40, "Bushings List")
-            p.setFont("Helvetica-Bold", 10)
-            p.drawString(150, height - 40, "\"--\" means the value is None")
-            p.setDash(1, 2) 
-            p.setLineWidth(1)
-            p.line(30, height - 50, width - 30, height - 50)
-            p.setFont("Helvetica-Bold", 10)
-            y = height - 70
-            current_project = None
-            current_part = None 
-        else:
-            if y < 50 :
+            if next_is_title:
+                
                 p.showPage()
                 p.setFont("Helvetica-Bold", 12)
-                p.drawString(30, height - 40, "Bushings List (continued)")
+                p.drawString(30, height - 40, "Bushings List")
                 p.setFont("Helvetica-Bold", 10)
-                p.drawString(250, height - 40, "\"--\" means the value is None")
+                p.drawString(150, height - 40, "\"--\" means the value is None")
                 p.setDash(1, 2) 
                 p.setLineWidth(1)
                 p.line(30, height - 50, width - 30, height - 50)
@@ -473,6 +470,20 @@ def download_bushings_pdf(request):
                 y = height - 70
                 current_project = None
                 current_part = None 
+            else:
+                if y < 50 :
+                    p.showPage()
+                    p.setFont("Helvetica-Bold", 12)
+                    p.drawString(30, height - 40, "Bushings List (continued)")
+                    p.setFont("Helvetica-Bold", 10)
+                    p.drawString(250, height - 40, "\"--\" means the value is None")
+                    p.setDash(1, 2) 
+                    p.setLineWidth(1)
+                    p.line(30, height - 50, width - 30, height - 50)
+                    p.setFont("Helvetica-Bold", 10)
+                    y = height - 70
+                    current_project = None
+                    current_part = None 
 
     p.showPage()
     p.save()

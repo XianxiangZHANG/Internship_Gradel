@@ -427,8 +427,9 @@ def format_value(value):
         return str(value) if value else "--"
 
 def download_interfaces_pdf(request):
-    f = InterfaceFilter(request.GET, queryset=models.Interface.objects.filter(part__valid=True))
-    interfaces = f.qs
+    interface_filter, interfaces, message = get_filtered_interfaces(InterfaceFilter, request, valid=True)
+    # f = InterfaceFilter(request.GET, queryset=models.Interface.objects.filter(part__valid=True))
+    # interfaces = f.qs
 
     response = HttpResponse(content_type='application/pdf')
     response['Content-Disposition'] = 'attachment; filename="interfaces.pdf"'
@@ -437,106 +438,102 @@ def download_interfaces_pdf(request):
     width, height = letter
     styles = getSampleStyleSheet()
 
-    p.setFont("Helvetica-Bold", 12)
-    p.drawString(30, height - 40, "Interfaces List")
-    p.setFont("Helvetica-Bold", 10)
-    p.drawString(150, height - 40, "\"--\" means the value is None")
-    p.setDash() 
-    p.setLineWidth(1)
-    p.line(30, height - 50, width - 30, height - 50)
-    p.setFont("Helvetica-Bold", 10)
-    y_start = height - 70
-    x_offset = 30
-    y_offset = 20  
-    
-    headers = ["Interface Name", "Height [mm]", "Int. Diameter [mm]", "Total Link",
-               "Total Arm", "Total Section [mm²]", "Ext. Diameter [mm]", "Acc. Mass [g]",
-               "Fin. O. Diam. [mm]", "Fin. Acc. section [mm²]", "Safety Factor [%]", "Interface's center X [mm]",
-               "Interface's center Y [mm]", "Interface's center Z [mm]", "Direction vector X [mm]", "Direction vector Y [mm]",
-               "Direction vector Z [mm]","Division Step"]
-    column_widths = [30, 18, 18, 18,
-                     18, 35, 35, 35,
-                     35, 35, 35, 38,
-                     38, 38, 38, 38, 
-                     38, 18]
+    if not interfaces:
+        
+        p.setFont("Helvetica-Bold", 12)
+        p.drawString(30, height - 40, "Interfaces List")
+        p.setFont("Helvetica-Bold", 10)
+        p.drawString(150, height - 40, "\"--\" means the value is None")
+        p.setFont("Helvetica", 10)
+        p.drawString(50, height - 60, "No Interfaces found. Please adjust your filters and try again.")
 
-    current_project = None
-    current_part = None
+    else:
+        p.setFont("Helvetica-Bold", 12)
+        p.drawString(30, height - 40, "Interfaces List")
+        p.setFont("Helvetica-Bold", 10)
+        p.drawString(150, height - 40, "\"--\" means the value is None")
+        p.setDash() 
+        p.setLineWidth(1)
+        p.line(30, height - 50, width - 30, height - 50)
+        p.setFont("Helvetica-Bold", 10)
+        y_start = height - 70
+        x_offset = 30
+        y_offset = 20  
+        
+        headers = ["Interface Name", "Height [mm]", "Int. Diameter [mm]", "Total Link",
+                "Total Arm", "Total Section [mm²]", "Ext. Diameter [mm]", "Acc. Mass [g]",
+                "Fin. O. Diam. [mm]", "Fin. Acc. section [mm²]", "Safety Factor [%]", "Interface's center X [mm]",
+                "Interface's center Y [mm]", "Interface's center Z [mm]", "Direction vector X [mm]", "Direction vector Y [mm]",
+                "Direction vector Z [mm]","Division Step"]
+        column_widths = [30, 18, 18, 18,
+                        18, 35, 35, 35,
+                        35, 35, 35, 38,
+                        38, 38, 38, 38, 
+                        38, 18]
 
-    p.setFont("Helvetica", 7)
-    y = y_start
+        current_project = None
+        current_part = None
 
-    for index, interface in enumerate(interfaces):
-        next_is_title = (index + 1 < len(interfaces)) and (
-            interfaces[index + 1].project.projectName != interface.project.projectName or 
-            interfaces[index + 1].part.partName != interface.part.partName
-        )
+        p.setFont("Helvetica", 7)
+        y = y_start
 
-        if interface.project.projectName != current_project or interface.part.partName != current_part:
-            if current_project is not None:
-                y -= 10  
+        for index, interface in enumerate(interfaces):
+            next_is_title = (index + 1 < len(interfaces)) and (
+                interfaces[index + 1].project.projectName != interface.project.projectName or 
+                interfaces[index + 1].part.partName != interface.part.partName
+            )
+
+            if interface.project.projectName != current_project or interface.part.partName != current_part:
+                if current_project is not None:
+                    y -= 10  
+                    p.setDash() 
+                    p.setLineWidth(1)
+                    p.line(x_offset, y, width - x_offset, y)
+
+                current_project = interface.project.projectName
+                current_part = interface.part.partName
+                y -= y_offset
+
+                p.setFont("Helvetica-Bold", 10)
+                p.drawString(x_offset, y, "Project Name: " + current_project)
+                y -= y_offset
+                p.drawString(x_offset, y, "Part      Name: " + current_part)
+                y -= y_offset
                 p.setDash() 
                 p.setLineWidth(1)
                 p.line(x_offset, y, width - x_offset, y)
+                y -= y_offset
 
-            current_project = interface.project.projectName
-            current_part = interface.part.partName
-            y -= y_offset
+                for i, header in enumerate(headers):
+                    draw_rotated_header(p, x_offset + sum(column_widths[:i]) + column_widths[i] / 2, y - 5 * y_offset, header, 200,200,  90)
+                y -= 6 * y_offset
 
-            p.setFont("Helvetica-Bold", 10)
-            p.drawString(x_offset, y, "Project Name: " + current_project)
-            y -= y_offset
-            p.drawString(x_offset, y, "Part      Name: " + current_part)
-            y -= y_offset
-            p.setDash() 
+
+                p.setFont("Helvetica", 9)
+
+            
+            p.setDash(1, 2) 
             p.setLineWidth(1)
-            p.line(x_offset, y, width - x_offset, y)
+            values = [
+                format_value(interface.interfaceName), format_value(interface.height), format_value(interface.intDiameter), format_value(interface.calculated_properties.get('totalLink')),
+                format_value(interface.calculated_properties.get('totalArm')), format_value(f"{interface.calculated_properties.get('totalSection', 0):.2f}"), format_value(f"{interface.calculated_properties.get('extDiameter', 0):.2f}"), format_value(f"{interface.calculated_properties.get('accMass', 0):.2f}"),
+                format_value(interface.finODiam), format_value(interface.finAccSection), format_value(interface.calculated_properties.get('safetyFactor')), format_value(interface.interfaceCenterX),
+                format_value(interface.interfaceCenterY), format_value(interface.interfaceCenterZ), format_value(interface.directionVectorX), format_value(interface.directionVectorY),
+                format_value(interface.directionVectorZ), format_value(interface.divisionStep)
+            ]
+
+            p.drawString(x_offset, y, values[0])
+            for i in range(1, len(values)):
+                p.line(x_offset + sum(column_widths[:i]) - 4, y + y_offset / 2, x_offset + sum(column_widths[:i]) - 4, y - y_offset / 2)
+                p.drawString(x_offset + sum(column_widths[:i]), y, values[i])
+
             y -= y_offset
-
-            for i, header in enumerate(headers):
-                draw_rotated_header(p, x_offset + sum(column_widths[:i]) + column_widths[i] / 2, y - 5 * y_offset, header, 200,200,  90)
-            y -= 6 * y_offset
-
-
-            p.setFont("Helvetica", 9)
-
-        
-        p.setDash(1, 2) 
-        p.setLineWidth(1)
-        values = [
-            format_value(interface.interfaceName), format_value(interface.height), format_value(interface.intDiameter), format_value(interface.totalLink),
-            format_value(interface.totalArm), format_value(interface.totalSectionShow), format_value(interface.extDiameterShow), format_value(interface.accMassShow),
-            format_value(interface.finODiam), format_value(interface.finAccSection), format_value(interface.safetyFactor), format_value(interface.interfaceCenterX),
-            format_value(interface.interfaceCenterY), format_value(interface.interfaceCenterZ), format_value(interface.directionVectorX), format_value(interface.directionVectorY),
-            format_value(interface.directionVectorZ), format_value(interface.divisionStep)
-        ]
-
-        p.drawString(x_offset, y, values[0])
-        for i in range(1, len(values)):
-            p.line(x_offset + sum(column_widths[:i]) - 4, y + y_offset / 2, x_offset + sum(column_widths[:i]) - 4, y - y_offset / 2)
-            p.drawString(x_offset + sum(column_widths[:i]), y, values[i])
-
-        y -= y_offset
-        if next_is_title:
-            p.showPage()
-            p.setFont("Helvetica-Bold", 12)
-            p.drawString(30, height - 40, "Interfaces List")
-            p.setFont("Helvetica-Bold", 10)
-            p.drawString(150, height - 40, "\"--\" means the value is None")
-            p.setDash() 
-            p.setLineWidth(1)
-            p.line(30, height - 50, width - 30, height - 50)
-            p.setFont("Helvetica-Bold", 10)
-            y = height - 70
-            current_project = None
-            current_part = None 
-        else:
-            if y < 100 :
+            if next_is_title:
                 p.showPage()
                 p.setFont("Helvetica-Bold", 12)
-                p.drawString(30, height - 40, "Interfaces List (continued)")
+                p.drawString(30, height - 40, "Interfaces List")
                 p.setFont("Helvetica-Bold", 10)
-                p.drawString(200, height - 40, "\"--\" means the value is None")
+                p.drawString(150, height - 40, "\"--\" means the value is None")
                 p.setDash() 
                 p.setLineWidth(1)
                 p.line(30, height - 50, width - 30, height - 50)
@@ -544,6 +541,20 @@ def download_interfaces_pdf(request):
                 y = height - 70
                 current_project = None
                 current_part = None 
+            else:
+                if y < 100 :
+                    p.showPage()
+                    p.setFont("Helvetica-Bold", 12)
+                    p.drawString(30, height - 40, "Interfaces List (continued)")
+                    p.setFont("Helvetica-Bold", 10)
+                    p.drawString(200, height - 40, "\"--\" means the value is None")
+                    p.setDash() 
+                    p.setLineWidth(1)
+                    p.line(30, height - 50, width - 30, height - 50)
+                    p.setFont("Helvetica-Bold", 10)
+                    y = height - 70
+                    current_project = None
+                    current_part = None 
 
     p.showPage()
     p.save()

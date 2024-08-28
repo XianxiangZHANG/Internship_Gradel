@@ -369,8 +369,9 @@ def format_value(value):
     return str(value) if value else "--"
 
 def download_parts_pdf(request):
-    f = PartFilterValid(request.GET, queryset=models.Part.objects.filter(valid=True))
-    parts = f.qs
+    part_filter, parts, message = get_filtered_parts(PartFilterValid, request, valid=True)
+    # f = PartFilterValid(request.GET, queryset=models.Part.objects.filter(valid=True))
+    # parts = f.qs
 
     response = HttpResponse(content_type='application/pdf')
     response['Content-Disposition'] = 'attachment; filename="parts.pdf"'
@@ -378,73 +379,81 @@ def download_parts_pdf(request):
     p = canvas.Canvas(response, pagesize=letter)
     width, height = letter
 
-    p.setFont("Helvetica-Bold", 12)
-    p.drawString(50, height - 40, "Parts List")
-    p.setFont("Helvetica-Bold", 10)
-    p.drawString(150, height - 40, "\"--\" means the value is None")
-
-    # p.setFont("Helvetica", 10)
-    x = 50
-    xx = 200
-    y = height - 90
-    l = 20
-    i = 1
-    for index, part in enumerate(parts):
-        p.line(x/2, y +15 , width - x/2, y+15)
-        p.setFont("Helvetica-Bold", 10)
-        p.drawString(x, y, "Project Name")
-        p.drawString(x, y-l, "Part Name")
-        p.drawString(x, y-2*l, "Default Interface Height")
-        p.drawString(x, y-3*l, "Default Interface Int Diam")
-        p.drawString(x, y-4*l, "Default Link Type")
-        p.drawString(x, y-5*l, "Default Link Defined")
-        p.drawString(x, y-6*l, "Number of Links")
-        p.drawString(x, y-7*l, "Number of Bushings")
-        p.drawString(x, y-8*l, "Total Mass Link")
-        p.drawString(x, y-9*l, "Total Mass Accumulation")
-        p.drawString(x, y-10*l, "Total Mass Winding")
-        p.drawString(x, y-11*l, "Total Mass Bushing")
-        p.drawString(x, y-12*l, "Additional Mass")
-        p.drawString(x, y-13*l, "Total Mass Structure")
-        p.drawString(x, y-14*l, "Total Fiber Length")
-        p.drawString(x, y-15*l, "Total Fiber Mass")
-        p.drawString(x, y-16*l, "Total Resin Mass")
-        p.drawString(x, y-17*l, "Project Image")
+    if not parts:
+        
+        p.setFont("Helvetica-Bold", 12)
+        p.drawString(50, height - 40, "Parts List")
         p.setFont("Helvetica", 10)
-        p.drawString(xx, y, format_value(part.project.projectName))
-        p.drawString(xx, y-l, format_value(part.partName))
-        p.drawString(xx, y-2*l, format_value(part.defaultInterfaceHeight))
-        p.drawString(xx, y-3*l, format_value(part.defaultInterfaceIntDiam))
-        p.drawString(xx, y-4*l, format_value(part.defaultLinkType))
-        p.drawString(xx, y-5*l, format_value(part.defaultLinkDefined))
-        p.drawString(xx, y-6*l, format_value(part.numberLink))
-        p.drawString(xx, y-7*l, format_value(part.numberBushing))
-        p.drawString(xx, y-8*l, format_value(part.totalMassLink))
-        p.drawString(xx, y-9*l, format_value(part.totalMassAccumulation))
-        p.drawString(xx, y-10*l, format_value(part.totalMassWinding))
-        p.drawString(xx, y-11*l, format_value(part.totalMassBushing))
-        p.drawString(xx, y-12*l, format_value(part.additionalMass))
-        p.drawString(xx, y-13*l, format_value(part.totalMassStructure))
-        p.drawString(xx, y-14*l, format_value(part.totalFiberLength))
-        p.drawString(xx, y-15*l, format_value(part.totalFiberMass))
-        p.drawString(xx, y-16*l, format_value(part.totalResinMass))
+        p.drawString(50, height - 60, "No parts found. Please adjust your filters and try again.")
+    else:
+            
+        p.setFont("Helvetica-Bold", 12)
+        p.drawString(50, height - 40, "Parts List")
+        p.setFont("Helvetica-Bold", 10)
+        p.drawString(150, height - 40, "\"--\" means the value is None")
 
-        if part.projectImage:
-
-            image_path = str(BASE_DIR) + part.projectImage.url
-            print(image_path)
-            p.drawImage(image_path, xx, y-17*l - 300, width = 200, height = 300, preserveAspectRatio=True, mask='auto' )
-        else:
-            p.drawString(xx, y-17*l, "--")
-        y -= 380
-        if index < len(parts) - 1:  
-            p.showPage()
-            p.setFont("Helvetica-Bold", 12)
-            p.drawString(50, height - 40, "Parts List")
+        # p.setFont("Helvetica", 10)
+        x = 50
+        xx = 200
+        y = height - 90
+        l = 20
+        i = 1
+        for index, part in enumerate(parts):
+            p.line(x/2, y +15 , width - x/2, y+15)
             p.setFont("Helvetica-Bold", 10)
-            p.drawString(150, height - 40, "\"--\" means the value is None")
-            y = height - 90
-          
+            p.drawString(x, y, "Project Name")
+            p.drawString(x, y-l, "Part Name")
+            p.drawString(x, y-2*l, "Default Interface Height")
+            p.drawString(x, y-3*l, "Default Interface Int Diam")
+            p.drawString(x, y-4*l, "Default Link Type")
+            p.drawString(x, y-5*l, "Default Link Defined")
+            p.drawString(x, y-6*l, "Number of Links")
+            p.drawString(x, y-7*l, "Number of Bushings")
+            p.drawString(x, y-8*l, "Total Mass Link")
+            p.drawString(x, y-9*l, "Total Mass Accumulation")
+            p.drawString(x, y-10*l, "Total Mass Winding")
+            p.drawString(x, y-11*l, "Total Mass Bushing")
+            p.drawString(x, y-12*l, "Additional Mass")
+            p.drawString(x, y-13*l, "Total Mass Structure")
+            p.drawString(x, y-14*l, "Total Fiber Length")
+            p.drawString(x, y-15*l, "Total Fiber Mass")
+            p.drawString(x, y-16*l, "Total Resin Mass")
+            p.drawString(x, y-17*l, "Project Image")
+            p.setFont("Helvetica", 10)
+            p.drawString(xx, y, format_value(part.project.projectName))
+            p.drawString(xx, y-l, format_value(part.partName))
+            p.drawString(xx, y-2*l, format_value(part.defaultInterfaceHeight))
+            p.drawString(xx, y-3*l, format_value(part.defaultInterfaceIntDiam))
+            p.drawString(xx, y-4*l, format_value(part.defaultLinkType))
+            p.drawString(xx, y-5*l, format_value(part.defaultLinkDefined))
+            p.drawString(xx, y-6*l, format_value(part.calculated_properties.get('numberLink')))
+            p.drawString(xx, y-7*l, format_value(part.calculated_properties.get('numberBushing')))
+            p.drawString(xx, y-8*l, format_value(part.calculated_properties.get('totalMassLink')))
+            p.drawString(xx, y-9*l, format_value(part.calculated_properties.get('totalMassAccumulation')))
+            p.drawString(xx, y-10*l, format_value(part.calculated_properties.get('totalMassWinding')))
+            p.drawString(xx, y-11*l, format_value(part.calculated_properties.get('totalMassBushing')))
+            p.drawString(xx, y-12*l, format_value(part.additionalMass))
+            p.drawString(xx, y-13*l, format_value(part.calculated_properties.get('totalMassStructure')))
+            p.drawString(xx, y-14*l, format_value(part.calculated_properties.get('totalFiberLength')))
+            p.drawString(xx, y-15*l, format_value(part.calculated_properties.get('totalFiberMass')))
+            p.drawString(xx, y-16*l, format_value(part.calculated_properties.get('totalResinMass')))
+
+            if part.projectImage:
+
+                image_path = str(BASE_DIR) + part.projectImage.url
+                print(image_path)
+                p.drawImage(image_path, xx, y-17*l - 300, width = 200, height = 300, preserveAspectRatio=True, mask='auto' )
+            else:
+                p.drawString(xx, y-17*l, "--")
+            y -= 380
+            if index < len(parts) - 1:  
+                p.showPage()
+                p.setFont("Helvetica-Bold", 12)
+                p.drawString(50, height - 40, "Parts List")
+                p.setFont("Helvetica-Bold", 10)
+                p.drawString(150, height - 40, "\"--\" means the value is None")
+                y = height - 90
+            
 
     p.showPage()
     p.save()
